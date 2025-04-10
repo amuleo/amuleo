@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پیش‌نمایش دامنه</title>
+    <style>
+        @font-face {
+    font-family: 'Yekan'; /* اسم فونت */
+    src: url('fonts/YekanBakh-Regular.ttf') format('truetype'); /* مسیر فونت و فرمت */
+         }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            font-family: 'Yekan', sans-serif;
+            color: #fff;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .person {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .text {
+            font-size: 1.2em;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .social-media {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-media a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .social-media a:hover {
+            background-color: #fff;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="person.png" alt="عمو لئو" class="person">
+        <div class="text">
+            <p>عمو لئو هستم،</p>
+            <p>هدفم فعلا درس خوندنه، ولی کارای گرافیکی خفنی هم میزنم</p>
+        </div>
+        <div class="social-media">
+            <a href="https://instagram.com" target="_blank">اینستاگرام</a>
+            <a href="https://twitter.com" target="_blank">توییتر</a>
+            <a href="https://linkedin.com" target="_blank">لینکدین</a>
+        </div>
+    </div>
+</body>
+</html>
