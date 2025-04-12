@@ -6,20 +6,19 @@
     <title>عمو لئو</title>
     <style>
         @font-face {
-            font-family: 'YekanBakh'; /* اسم فونت */
-            src: url('fonts/YekanBakh-Regular.ttf') format('truetype'); /* مسیر فونت و فرمت */
+            font-family: 'YekanBakh';
+            src: url('fonts/YekanBakh-Regular.ttf') format('truetype');
         }
 
         body {
             margin: 0;
             padding: 0;
-            background-color: #000;
+            background-color: #3e2723; /* رنگ قهوه‌ای تیره */
             font-family: 'YekanBakh', sans-serif;
-            color: #fff;
+            color: #ffffff; /* رنگ سفید برای متن */
             text-align: center;
-            text-align: right; /* راست‌چین کردن متن */
-            direction: rtl; /* جهت‌دهی راست به چپ */
-			font-size: 2vw; /* اندازه متن بر اساس عرض صفحه */
+            direction: rtl;
+            font-size: 2vw;
         }
 
         .container {
@@ -33,91 +32,98 @@
         .profile {
             max-width: 200px;
             margin-bottom: 20px;
-			margin-top: 50px;
+            margin-top: 50px;
+            border-radius: 50%; /* گرد کردن تصویر برای زیبایی */
         }
 
         .text {
-            font-size: 2vw; /* متن بر اساس عرض صفحه */
+            font-size: 2vw;
             line-height: 1.5;
             margin-bottom: 20px;
+			width: 90%; /* عرض کلی تنظیم شده */
         }
 
         .social-media {
             display: flex;
-            gap: 15px;
-            margin-top: -5px;
-            justify-content: flex-end; /* لینک‌ها از راست به چپ */
-            direction: rtl; /* ترتیب راست به چپ المان‌ها */
+            flex-direction: column; /* آیتم‌ها به صورت عمودی زیر هم */
+            align-items: center; /* وسط‌چین کردن آیتم‌ها */
+            gap: 10px; /* فاصله بین آیتم‌ها */
+            width: 90%; /* عرض کلی تنظیم شده */
+            margin: 0 auto; /* وسط‌چین شدن در کل صفحه */
+            text-align: center; /* متن دکمه‌ها وسط‌چین شود */
         }
 
         .social-media a {
-            text-decoration: none;
-            color: #fff;
-            font-size: 1.5vw;
-            padding: 10px 20px;
-            border: 2px solid #fff;
-            border-radius: 10px;
-            transition: 0.3s;
+            display: block; /* دکمه‌ها عرض کامل بگیرند */
+            font-size: 2vw; /* اندازه متن دکمه‌ها */
+            padding: 10px 15px; /* فضای داخلی دکمه‌ها */
+            width: 100%; /* تمام عرض والد را پر کنند */
+            box-sizing: border-box; /* در نظر گرفتن حاشیه و پدینگ در عرض */
+            text-decoration: none; /* حذف خط زیر متن */
+            color: #ffd700; /* رنگ طلایی */
+            border: 2px solid #ffd700; /* حاشیه طلایی */
+            border-radius: 10px; /* گوشه‌های گرد */
+            transition: 0.3s; /* انیمیشن برای هاور */
         }
 
         .social-media a:hover {
-            background-color: #fff;
-            color: #000;
+            background-color: #ffd700; /* رنگ زمینه طلایی در هاور */
+            color: #3e2723; /* تغییر رنگ متن به قهوه‌ای */
         }
 
         p {
-            line-height: 1.5; /* تنظیم فاصله خطوط برای خوانایی */
-            text-align: justify; /* جاستیفای کردن متن */
-            direction: rtl; /* جهت‌دهی راست به چپ */
-            margin: 0 auto; /* وسط‌چین کردن پاراگراف */
+            line-height: 1.5;
+            text-align: justify;
+            direction: rtl;
+            margin: 0 auto;
         }
 
         .text-centered {
-            text-align: center; /* وسط‌چین کردن متن */
-            direction: rtl; /* راست به چپ */
+            text-align: center;
+            direction: rtl;
         }
+
         @media (max-width: 768px) {
-    body {
-       font-size: 3vw; /* اندازه متن برای صفحات کوچک‌تر */
-    }
+            body {
+                font-size: 3vw;
+            }
 
-    .container {
-        height: auto; /* ارتفاع انعطاف‌پذیر برای صفحات کوچک‌تر */
-        padding: 10px; /* فضای داخلی بیشتر برای راحتی */
-    }
+            .container {
+                height: auto;
+                padding: 10px;
+            }
 
-    .profile {
-        max-width: 150px; /* کاهش اندازه تصویر پروفایل */
-        margin-bottom: 15px;
-    }
+            .profile {
+                max-width: 150px;
+                margin-bottom: 15px;
+            }
 
-    .text {
-        font-size: 4vw; /* تنظیم اندازه متن در صفحات کوچک‌تر */
-        line-height: 1.8;
-        margin-bottom: 15px;
-		width: 90%; /* عرض کلی دکمه‌ها به 90% صفحه */
-    }
+            .text {
+                font-size: 4vw;
+                line-height: 1.8;
+                margin-bottom: 15px;
+                width: 90%;
+            }
 
-    .social-media {
-        display: flex;
-        flex-direction: column; /* لینک‌ها به صورت عمودی مرتب شوند */
-        align-items: center; /* وسط‌چین کردن دکمه‌ها */
-        gap: 10px;
-        margin-top: 15px;
-        width: 90%; /* عرض کلی دکمه‌ها به 90% صفحه */
-        margin: 0 auto; /* وسط‌چین کردن کل بخش */
-        text-align: center; /* متن دکمه‌ها وسط‌چین شود */
-    }
+            .social-media {
+                display: flex;
+                flex-direction: column; /* آیتم‌ها در موبایل زیر هم */
+                align-items: center;
+                gap: 10px;
+                margin-top: 15px;
+                width: 90%;
+                margin: 0 auto;
+                text-align: center;
+            }
 
-    .social-media a {
-        display: block; /* لینک‌ها بلاک شوند برای عرض کامل */
-        font-size: 4vw; /* متن دکمه‌ها کوچک‌تر شود */
-        padding: 8px 15px; /* کاهش فضای داخلی لینک‌ها */
-        width: 100%; /* تمام عرض بخش والد را پر کنند */
-        box-sizing: border-box; /* در نظر گرفتن حاشیه و پدینگ در عرض */
-    }
-	}		
-
+            .social-media a {
+                display: block; /* آیتم‌ها عرض کامل بگیرند */
+                font-size: 4vw; /* متن آیتم‌ها در موبایل */
+                padding: 8px 15px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
     </style>
 </head>
 <body>
@@ -125,16 +131,13 @@
         <img src="pics/profile.png" alt="عمو لئو" class="profile">
         <div class="text">
             <p class="text-centered">عمو لئو هستم،</p>
-            <p>
-			هدفم فعلا درس خوندنه، کارای گرافیکی هم انجام میدم،
-			به تولید محـــتــوای ویدیویی هم علاقۀ زیــــــــــــــــــــادی دارم.
-			</p>
+            <p>هدفم فعلا درس خوندنه، کارای گرافیکی هم انجام میدم، به تولید محـــتــوای ویدیویی هم علاقۀ زیــــــــــــــــــــادی دارم.ا دروس مورد علاقم هم زیست و ریاضین.</p>
         </div>
         <div class="social-media">
             <a href="https://eliwe.ir" target="_blank">سایت قبلیم</a>
-            <a href="https://amuleo.github.io/rounding-rectangle/rore.html" target="_blank">ابزار آنلاین  گرافیکی من</a>
-            <a href="https://link.yeolpumta.com/P3R5cGU9Z3JvdXBJbnZpdGUmaWQ9NDc4NzI4MA==">گروه درسی نبض جنگجو</a>
-			<a href="https://robustaclub.ir" target="_blank">باشگاه مطالعاتی روبوستا</a>
+            <a href="https://amuleo.github.io/rounding-rectangle/rore.html" target="_blank">ابزار آنلاین گرافیکی من</a>
+            <a href="https://link.yeolpumta.com/P3R5cGU9Z3JvdXBJbnZpdGUmaWQ9NDc4NzI4MA==" target="_blank">گروه درسی نبض جنگجو</a>
+            <a href="https://robustaclub.ir" target="_blank">باشگاه مطالعاتی روبوستا</a>
         </div>
     </div>
 </body>
