@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نام نویسنده وبلاگ</title>
+    <title>نمایش خطاها</title>
     <style>
         body {
             font-family: 'YekanBakh', sans-serif;
@@ -23,11 +23,23 @@
             font-size: 18px;
             color: #404040;
         }
+
+        .error {
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #fdd;
+            border-radius: 10px;
+            max-width: 600px;
+            text-align: left;
+            font-size: 16px;
+            color: #d33;
+        }
     </style>
 </head>
 <body>
     <h1>نام نویسنده وبلاگ</h1>
-    <div id="authorName">در حال بارگذاری...</div>
+    <div id="authorName" class="author">در حال بارگذاری...</div>
+    <div id="errorLog" class="error" style="display:none;">در حال بررسی خطا...</div>
 
     <script>
         const blogUrl = 'https://amuleo.blogfa.com/';
@@ -35,25 +47,28 @@
         fetch(blogUrl)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('خطا در دریافت داده');
+                    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
                 }
-                return response.text(); // دریافت محتوای HTML به‌صورت متن
+                return response.text(); // دریافت محتوای HTML به صورت متن
             })
             .then(data => {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(data, 'text/html');
 
-                // انتخاب اولین تگ h1
-                const authorElement = doc.querySelector('h1');
+                // انتخاب تگ h1 با کلاس مشخص‌شده
+                const authorElement = doc.querySelector('h1.text-base\\2F loose.font-semibold');
                 const authorName = authorElement?.textContent?.trim() || 'نام نویسنده یافت نشد';
 
                 const authorDiv = document.getElementById('authorName');
-                authorDiv.className = 'author';
                 authorDiv.textContent = `نویسنده: ${authorName}`;
             })
             .catch(error => {
                 console.error('خطا:', error);
-                document.getElementById('authorName').textContent = 'خطا در بارگذاری نام نویسنده.';
+
+                // نمایش خطا در صفحه
+                const errorLogDiv = document.getElementById('errorLog');
+                errorLogDiv.style.display = 'block'; // نمایش قسمت خطا
+                errorLogDiv.textContent = `خطای رخ داده: ${error.message}`;
             });
     </script>
 </body>
