@@ -32,35 +32,31 @@
             font-size: 14px;
             color: #555;
         }
+
+        iframe {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <h1>سه پست آخر وبلاگ</h1>
     <div id="blogPosts">در حال بارگذاری...</div>
+    <iframe id="blogFrame" src="https://amuleo.blogfa.com/"></iframe>
 
     <script>
-        // درخواست به وبلاگ
-        const blogUrl = 'https://amuleo.blogfa.com/';
+        // بارگذاری iframe
+        const iframe = document.getElementById('blogFrame');
+        iframe.onload = () => {
+            try {
+                const iframeDocument = iframe.contentDocument || iframe.contentWindow.document; // دسترسی به محتوای iframe
+                const posts = iframeDocument.querySelectorAll('div.prose'); // انتخاب دیوها با کلاس مشخص
 
-        fetch(blogUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('خطا در دریافت داده');
-                }
-                return response.text(); // دریافت محتوای HTML به‌صورت متن
-            })
-            .then(data => {
-                // تجزیه HTML وبلاگ
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(data, 'text/html');
-                const posts = doc.querySelectorAll('div.prose'); // انتخاب دیوهایی با کلاس مشخص
-
-                // محدود کردن به سه پست آخر
                 const blogPostsDiv = document.getElementById('blogPosts');
                 blogPostsDiv.innerHTML = ''; // پاک کردن محتوای قبلی
+
                 posts.forEach((post, index) => {
-                    if (index < 3) { // فقط سه پست آخر
-                        const content = post.querySelector('p')?.textContent || 'محتوای پست موجود نیست';
+                    if (index < 3) { // فقط ۳ پست آخر
+                        const content = post.querySelector('p')?.textContent || 'محتوا یافت نشد';
                         const postDiv = document.createElement('div');
                         postDiv.className = 'post';
                         postDiv.innerHTML = `
@@ -70,11 +66,11 @@
                         blogPostsDiv.appendChild(postDiv);
                     }
                 });
-            })
-            .catch(error => {
-                console.error(error);
-                document.getElementById('blogPosts').textContent = 'خطا در دریافت داده‌ها.';
-            });
+            } catch (error) {
+                console.error('خطا در دسترسی به iframe:', error);
+                document.getElementById('blogPosts').textContent = 'خطا در بارگذاری پست‌ها.';
+            }
+        };
     </script>
 </body>
 </html>
