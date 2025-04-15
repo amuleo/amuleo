@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سه پست آخر وبلاگ</title>
+    <style>
+        body {
+            font-family: 'YekanBakh', sans-serif;
+            background-color: #f3f3f3;
+            color: #333333;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .post {
+            margin: 10px auto;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 10px;
+            max-width: 600px;
+            text-align: left;
+        }
+
+        .post h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #404040;
+        }
+
+        .post p {
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>سه پست آخر وبلاگ</h1>
+    <div id="blogPosts">در حال بارگذاری...</div>
+
+    <script>
+        // درخواست به وبلاگ
+        const blogUrl = 'https://amuleo.blogfa.com/';
+
+        fetch(blogUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('خطا در دریافت داده');
+                }
+                return response.text(); // دریافت محتوای HTML به‌صورت متن
+            })
+            .then(data => {
+                // تجزیه HTML وبلاگ
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+                const posts = doc.querySelectorAll('div.prose'); // انتخاب دیوهایی با کلاس مشخص
+
+                // محدود کردن به سه پست آخر
+                const blogPostsDiv = document.getElementById('blogPosts');
+                blogPostsDiv.innerHTML = ''; // پاک کردن محتوای قبلی
+                posts.forEach((post, index) => {
+                    if (index < 3) { // فقط سه پست آخر
+                        const content = post.querySelector('p')?.textContent || 'محتوای پست موجود نیست';
+                        const postDiv = document.createElement('div');
+                        postDiv.className = 'post';
+                        postDiv.innerHTML = `
+                            <h3>پست شماره ${index + 1}</h3>
+                            <p>${content}</p>
+                        `;
+                        blogPostsDiv.appendChild(postDiv);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error(error);
+                document.getElementById('blogPosts').textContent = 'خطا در دریافت داده‌ها.';
+            });
+    </script>
+</body>
+</html>
