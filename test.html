@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اطلاعات وبلاگ</title>
+    <title>سه پست اخیر وبلاگ</title>
 </head>
 <body>
-    <h1>اطلاعات وبلاگ</h1>
-    <div id="blogInfo">در حال بارگذاری...</div>
+    <h1>سه پست اخیر وبلاگ</h1>
+    <div id="blogPosts">در حال بارگذاری...</div>
 
     <script>
         const proxyUrl = 'https://api.allorigins.win/get?url=';
@@ -23,22 +23,32 @@
             .then(data => {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(data.contents, 'application/xml'); // محتوای اصلی RSS
+                const items = xmlDoc.querySelectorAll('item'); // انتخاب تمام پست‌ها
 
-                // استخراج اطلاعات از RSS
-                const title = xmlDoc.querySelector('channel > title')?.textContent || 'عنوان یافت نشد';
-                const description = xmlDoc.querySelector('channel > description')?.textContent || 'توضیحات یافت نشد';
+                const blogPostsDiv = document.getElementById('blogPosts');
+                blogPostsDiv.innerHTML = ''; // پاک کردن محتوای قبلی
 
-                const blogInfoDiv = document.getElementById('blogInfo');
-                blogInfoDiv.innerHTML = `
-                    <p><strong>نام نویسنده:</strong> ${title}</p>
-                    <p><strong>توضیحات وبلاگ:</strong> ${description}</p>
-                `;
+                // فقط سه پست اخیر رو نمایش بده
+                items.forEach((item, index) => {
+                    if (index < 3) { // محدود به ۳ پست
+                        const title = item.querySelector('title')?.textContent || 'عنوان یافت نشد';
+                        const description = item.querySelector('description')?.textContent || 'توضیحات یافت نشد';
+                        const link = item.querySelector('link')?.textContent || '#';
+
+                        const postDiv = document.createElement('div');
+                        postDiv.innerHTML = `
+                            <h3><a href="${link}" target="_blank">${title}</a></h3>
+                            <p>${description}</p>
+                        `;
+                        blogPostsDiv.appendChild(postDiv);
+                    }
+                });
             })
             .catch(error => {
                 console.error('خطا:', error);
 
-                const blogInfoDiv = document.getElementById('blogInfo');
-                blogInfoDiv.textContent = `خطا در بارگذاری اطلاعات وبلاگ: ${error.toString()}`;
+                const blogPostsDiv = document.getElementById('blogPosts');
+                blogPostsDiv.textContent = `خطا در بارگذاری پست‌ها: ${error.toString()}`;
             });
     </script>
 </body>
