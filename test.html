@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نمایش خطاها</title>
+    <title>اطلاعات وبلاگ</title>
     <style>
         body {
             font-family: 'YekanBakh', sans-serif;
@@ -13,7 +13,7 @@
             text-align: center;
         }
 
-        .author {
+        .info {
             margin: 20px auto;
             padding: 15px;
             background-color: #fff;
@@ -23,52 +23,41 @@
             font-size: 18px;
             color: #404040;
         }
-
-        .error {
-            margin: 20px auto;
-            padding: 15px;
-            background-color: #fdd;
-            border-radius: 10px;
-            max-width: 600px;
-            text-align: left;
-            font-size: 16px;
-            color: #d33;
-        }
     </style>
 </head>
 <body>
-    <h1>نام نویسنده وبلاگ</h1>
-    <div id="authorName" class="author">در حال بارگذاری...</div>
-    <div id="errorLog" class="error" style="display:none;">در حال بررسی خطا...</div>
+    <h1>اطلاعات وبلاگ</h1>
+    <div id="blogInfo" class="info">در حال بارگذاری...</div>
 
     <script>
-        const blogUrl = 'https://amuleo.blogfa.com/';
+        const rssUrl = 'https://amuleo.blogfa.com/rss';
 
-        fetch(blogUrl)
+        fetch(rssUrl)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
                 }
-                return response.text(); // دریافت محتوای HTML به صورت متن
+                return response.text(); // دریافت محتوای RSS به صورت متن
             })
             .then(data => {
                 const parser = new DOMParser();
-                const doc = parser.parseFromString(data, 'text/html');
+                const xmlDoc = parser.parseFromString(data, 'application/xml');
 
-                // انتخاب تگ h1 با کلاس مشخص‌شده
-                const authorElement = doc.querySelector('h1.text-base\\2F loose.font-semibold');
-                const authorName = authorElement?.textContent?.trim() || 'نام نویسنده یافت نشد';
+                // استخراج نام نویسنده و توضیحات وبلاگ
+                const author = xmlDoc.querySelector('channel > managingEditor')?.textContent || 'نام نویسنده یافت نشد';
+                const description = xmlDoc.querySelector('channel > description')?.textContent || 'توضیحات وبلاگ یافت نشد';
 
-                const authorDiv = document.getElementById('authorName');
-                authorDiv.textContent = `نویسنده: ${authorName}`;
+                const blogInfoDiv = document.getElementById('blogInfo');
+                blogInfoDiv.innerHTML = `
+                    <p><strong>نویسنده:</strong> ${author}</p>
+                    <p><strong>توضیحات:</strong> ${description}</p>
+                `;
             })
             .catch(error => {
                 console.error('خطا:', error);
 
-                // نمایش خطا در صفحه
-                const errorLogDiv = document.getElementById('errorLog');
-                errorLogDiv.style.display = 'block'; // نمایش قسمت خطا
-                errorLogDiv.textContent = `خطای رخ داده: ${error.message}`;
+                const blogInfoDiv = document.getElementById('blogInfo');
+                blogInfoDiv.textContent = `خطا در بارگذاری اطلاعات وبلاگ: ${error.toString()}`;
             });
     </script>
 </body>
