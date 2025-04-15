@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سه پست آخر وبلاگ</title>
+    <title>نام نویسنده وبلاگ</title>
     <style>
         body {
             font-family: 'YekanBakh', sans-serif;
@@ -13,64 +13,48 @@
             text-align: center;
         }
 
-        .post {
-            margin: 10px auto;
+        .author {
+            margin: 20px auto;
             padding: 15px;
             background-color: #fff;
             border-radius: 10px;
             max-width: 600px;
-            text-align: left;
-        }
-
-        .post h3 {
-            margin: 0;
+            text-align: center;
             font-size: 18px;
             color: #404040;
-        }
-
-        .post p {
-            font-size: 14px;
-            color: #555;
-        }
-
-        iframe {
-            display: none;
         }
     </style>
 </head>
 <body>
-    <h1>سه پست آخر وبلاگ</h1>
-    <div id="blogPosts">در حال بارگذاری...</div>
-    <iframe id="blogFrame" src="https://amuleo.blogfa.com/"></iframe>
+    <h1>نام نویسنده وبلاگ</h1>
+    <div id="authorName">در حال بارگذاری...</div>
 
     <script>
-        // بارگذاری iframe
-        const iframe = document.getElementById('blogFrame');
-        iframe.onload = () => {
-            try {
-                const iframeDocument = iframe.contentDocument || iframe.contentWindow.document; // دسترسی به محتوای iframe
-                const posts = iframeDocument.querySelectorAll('div.prose'); // انتخاب دیوها با کلاس مشخص
+        const blogUrl = 'https://amuleo.blogfa.com/';
 
-                const blogPostsDiv = document.getElementById('blogPosts');
-                blogPostsDiv.innerHTML = ''; // پاک کردن محتوای قبلی
+        fetch(blogUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('خطا در دریافت داده');
+                }
+                return response.text(); // دریافت محتوای HTML به‌صورت متن
+            })
+            .then(data => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
 
-                posts.forEach((post, index) => {
-                    if (index < 3) { // فقط ۳ پست آخر
-                        const content = post.querySelector('p')?.textContent || 'محتوا یافت نشد';
-                        const postDiv = document.createElement('div');
-                        postDiv.className = 'post';
-                        postDiv.innerHTML = `
-                            <h3>پست شماره ${index + 1}</h3>
-                            <p>${content}</p>
-                        `;
-                        blogPostsDiv.appendChild(postDiv);
-                    }
-                });
-            } catch (error) {
-                console.error('خطا در دسترسی به iframe:', error);
-                document.getElementById('blogPosts').textContent = 'خطا در بارگذاری پست‌ها.';
-            }
-        };
+                // انتخاب اولین تگ h1
+                const authorElement = doc.querySelector('h1');
+                const authorName = authorElement?.textContent?.trim() || 'نام نویسنده یافت نشد';
+
+                const authorDiv = document.getElementById('authorName');
+                authorDiv.className = 'author';
+                authorDiv.textContent = `نویسنده: ${authorName}`;
+            })
+            .catch(error => {
+                console.error('خطا:', error);
+                document.getElementById('authorName').textContent = 'خطا در بارگذاری نام نویسنده.';
+            });
     </script>
 </body>
 </html>
