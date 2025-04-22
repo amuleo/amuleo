@@ -36,6 +36,17 @@ body {
     width: 90%; /* عرض کلی تنظیم شده */
 }
 
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.text-centered {
+    text-align: center;
+}
+
 .social-media {
     display: flex;
     flex-direction: column; /* آیتم‌ها به صورت عمودی زیر هم */
@@ -65,16 +76,29 @@ body {
     color: #cfcab9; /* تغییر رنگ متن به قهوه‌ای */
 }
 
-p {
-    line-height: 1.5;
-    text-align: justify;
-    direction: rtl;
-    margin: 0 auto;
+button.theme-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background-color: #cfcab9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.text-centered {
-    text-align: center;
-    direction: rtl;
+button.theme-button i {
+    font-size: 18px;
+    color: #333;
+}
+
+body.dark {
+    --bg-color: #333;
+    --card-color: #4d4d4d;
+    --border-color: #777;
+    --text-color: #f0f0f0;
 }
 
 @media (max-width: 768px) {
