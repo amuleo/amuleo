@@ -4,11 +4,158 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>عمو لئو</title>
-    <link rel="stylesheet" href="styles.css">
     <meta name="description" content="سایت شخصی عمو لئو | بیوگرافی، دل نوشته، روز نوشت و تجربیات زندگی کنکوری.">
     <meta name="keywords" content="عمو لئو, بیوگرافی, دل نوشته, روز نوشت, دل نوشت, تجربیات زندگی, کنکوری, عمو لئو, افکار, سایت شخصی">
     <meta name="author" content="عمو لئو">
     <meta name="robots" content="index, follow">
+
+    <style>
+        @font-face {
+            font-family: 'YekanBakh';
+            src: url('fonts/YekanBakh-Regular.ttf') format('truetype');
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #b4a990; /* رنگ قهوه‌ای تیره */
+            font-family: 'YekanBakh', sans-serif;
+            color: #333333; /* سفید برای متن */
+            text-align: center;
+            direction: rtl;
+            font-size: 2vw;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .profile {
+            max-width: 200px;
+            margin-bottom: 20px;
+            margin-top: 50px;
+            border-radius: 50%; /* گرد کردن تصویر برای زیبایی */
+        }
+
+        .text {
+            font-size: 2vw;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            width: 90%; /* عرض کلی تنظیم شده */
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .text-centered {
+            text-align: center;
+        }
+
+        .social-media {
+            display: flex;
+            flex-direction: column; /* آیتم‌ها به صورت عمودی زیر هم */
+            align-items: center; /* وسط‌چین کردن آیتم‌ها */
+            gap: 10px; /* فاصله بین آیتم‌ها */
+            width: 90%; /* عرض کلی تنظیم شده */
+            margin: 0 auto; /* وسط‌چین شدن در کل صفحه */
+            text-align: center; /* متن دکمه‌ها وسط‌چین شود */
+        }
+
+        .social-media a {
+            display: block; /* دکمه‌ها عرض کامل بگیرند */
+            font-size: 2vw; /* اندازه متن دکمه‌ها */
+            padding: 10px 15px; /* فضای داخلی دکمه‌ها */
+            width: 100%; /* تمام عرض والد را پر کنند */
+            box-sizing: border-box; /* در نظر گرفتن حاشیه و پدینگ در عرض */
+            text-decoration: none; /* حذف خط زیر متن */
+            color: #4b3e38; /* رنگ طلایی */
+            border: 2px solid #9e8e71; /* حاشیه طلایی */
+            border-radius: 10px; /* گوشه‌های گرد */
+            transition: 0.3s; /* انیمیشن برای هاور */
+            background-color: #cfcab9;
+        }
+
+        .social-media a:hover {
+            background-color: #4b3e38; /* رنگ زمینه طلایی در هاور */
+            color: #cfcab9; /* تغییر رنگ متن به قهوه‌ای */
+        }
+
+        button.theme-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            background-color: #cfcab9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button.theme-button i {
+            font-size: 18px;
+            color: #333;
+        }
+
+        body.dark {
+            --bg-color: #333;
+            --card-color: #4d4d4d;
+            --border-color: #777;
+            --text-color: #f0f0f0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 3vw;
+            }
+
+            .container {
+                height: auto;
+                padding: 10px;
+            }
+
+            .profile {
+                max-width: 150px;
+                margin-bottom: 15px;
+            }
+
+            .text {
+                font-size: 4vw;
+                line-height: 1.8;
+                margin-bottom: 15px;
+                width: 90%;
+            }
+
+            .social-media {
+                display: flex;
+                flex-direction: column; /* آیتم‌ها در موبایل زیر هم */
+                align-items: center;
+                gap: 10px;
+                margin-top: 15px;
+                width: 90%;
+                margin: 0 auto;
+                text-align: center;
+            }
+
+            .social-media a {
+                display: block; /* آیتم‌ها عرض کامل بگیرند */
+                font-size: 4vw; /* متن آیتم‌ها در موبایل */
+                padding: 8px 15px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
