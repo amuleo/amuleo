@@ -4,180 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>عمو لئو</title>
+    <link rel="stylesheet" href="styles.css">
     <meta name="description" content="سایت شخصی عمو لئو | بیوگرافی، دل نوشته، روز نوشت و تجربیات زندگی کنکوری.">
     <meta name="keywords" content="عمو لئو, بیوگرافی, دل نوشته, روز نوشت, دل نوشت, تجربیات زندگی, کنکوری, عمو لئو, افکار, سایت شخصی">
     <meta name="author" content="عمو لئو">
     <meta name="robots" content="index, follow">
-    
-    <style>
-        @font-face { 
-            font-family: 'YekanBakh';
-            src: url('fonts/YekanBakh-Regular.ttf') format('truetype');
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #b4a990;
-            font-family: 'YekanBakh', sans-serif;
-            color: #333333;
-            text-align: center;
-            direction: rtl;
-            font-size: 2vw;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .profile {
-            max-width: 200px;
-            margin-bottom: 20px;
-            margin-top: 50px;
-            border-radius: 50%;
-        }
-
-        .header-row {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            width: 90%;
-        }
-
-        .header-row .text-centered {
-            text-align: justify;
-            flex-grow: 1;
-        }
-
-        .theme-button {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            border: none;
-            background-color: #cfcab9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .theme-button i {
-            font-size: 18px;
-            color: #333333;
-        }
-
-        .text {
-            font-size: 2vw;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            width: 90%;
-        }
-
-        .social-media {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            width: 90%;
-            margin: 0 auto;
-        }
-
-        .social-media a {
-            display: block;
-            font-size: 2vw;
-            padding: 10px 15px;
-            width: 100%;
-            box-sizing: border-box;
-            text-decoration: none;
-            color: #4b3e38;
-            border: 2px solid #9e8e71;
-            border-radius: 10px;
-            transition: 0.3s;
-            background-color: #cfcab9;
-        }
-
-        .social-media a:hover {
-            background-color: #4b3e38;
-            color: #cfcab9;
-        }
-
-        p {
-            line-height: 1.5;
-            text-align: justify;
-            direction: rtl;
-            margin: 0 auto;
-        }
-
-        .text-centered {
-            text-align: justify;
-        }
-
-        body.dark {
-            background-color: #333333;
-            color: #f0f0f0;
-        }
-
-        body.dark .theme-button {
-            background-color: #444444;
-        }
-
-        body.dark .theme-button i {
-            color: #f0f0f0;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                font-size: 3vw;
-            }
-
-            .container {
-                height: auto;
-                padding: 10px;
-            }
-
-            .profile {
-                max-width: 150px;
-                margin-bottom: 15px;
-            }
-
-            .text {
-                font-size: 4vw;
-                line-height: 1.8;
-                margin-bottom: 15px;
-                width: 90%;
-            }
-
-            .social-media {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-                margin-top: 15px;
-                width: 90%;
-            }
-
-            .social-media a {
-                font-size: 4vw;
-                padding: 8px 15px;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="container">
         <img src="pics/profile.png" alt="عمو لئو" class="profile">
-        <div class="header-row">
-            <p class="text-centered">عمو لئو هستم،</p>
-            <button class="theme-button" id="themeToggle" title="تغییر حالت">
-                <i id="themeIcon" class="fas fa-sun"></i>
-            </button>
-        </div>
         <div class="text">
+            <div class="header">
+                <p class="text-centered">عمو لئو هستم،</p>
+                <button class="theme-button" id="themeToggle" title="تغییر حالت">
+                    <i id="themeIcon" class="fas fa-sun"></i>
+                </button>
+            </div>
             <p>هدفم فعلا درس خوندنه، کارای گرافیکی هم انجام میدم، به تولید محـــتــوای ویدیویی هم علاقۀ زیــــــــــــــــــــادی دارم. دروس مورد علاقم هم زیست و ریاضین.</p>
         </div>
         <div class="social-media">
@@ -189,7 +31,8 @@
     </div>
 
     <script>
-        document.getElementById("themeToggle").addEventListener("click", () => {
+        const themeToggle = document.getElementById("themeToggle");
+        themeToggle.addEventListener("click", () => {
             document.body.classList.toggle("dark");
             const icon = document.getElementById("themeIcon");
             const isDark = document.body.classList.contains("dark");
