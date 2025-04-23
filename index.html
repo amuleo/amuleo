@@ -1,205 +1,193 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عمو لئو</title>
-    <meta name="description" content="سایت شخصی عمو لئو | بیوگرافی، دل نوشته، روز نوشت و تجربیات زندگی کنکوری.">
-    <meta name="keywords" content="عمو لئو, بیوگرافی, دل نوشته, روز نوشت, دل نوشت, تجربیات زندگی, کنکوری, عمو لئو, افکار, سایت شخصی">
-    <meta name="author" content="عمو لئو">
-    <meta name="robots" content="index, follow">
-    
-    <style>
-        @font-face { 
-            font-family: 'YekanBakh';
-            src: url('fonts/YekanBakh-Regular.ttf') format('truetype');
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>عمو لئو</title>
+  <meta name="description" content="سایت شخصی عمو لئو | بیوگرافی، دل نوشته، روز نوشت و تجربیات زندگی کنکوری.">
+  <meta name="keywords" content="عمو لئو, بیوگرافی, دل نوشته, روز نوشت, دل نوشت, تجربیات زندگی, کنکوری, عمو لئو, افکار, سایت شخصی">
+  <meta name="author" content="عمو لئو">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    @font-face {
+      font-family: 'YekanBakh';
+      src: url('fonts/YekanBakh-Regular.ttf') format('truetype');
+    }
 
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #b4a990; /* رنگ قهوه‌ای تیره */
-            font-family: 'YekanBakh', sans-serif;
-            color: #333333;
-            text-align: center;
-            direction: rtl;
-            font-size: 2vw;
-        }
+    :root {
+      --bg: #b4a990;
+      --card: #cfcab9;
+      --border: #9e8e71;
+      --text: #333;
+    }
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'YekanBakh', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      text-align: center;
+      direction: rtl;
+      font-size: 2vw;
+      transition: background-color 0.3s, color 0.3s;
+    }
 
-        .profile {
-            max-width: 200px;
-            margin-bottom: 20px;
-            margin-top: 50px;
-            border-radius: 50%; /* گرد کردن تصویر برای زیبایی */
-        }
+    body.dark {
+      --bg: #2c2c2c;
+      --card: #444;
+      --border: #666;
+      --text: #f0f0f0;
+    }
 
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            width: 100%;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
 
-        .text-centered {
-            font-size: 2.5vw;
-            margin: 0;
-        }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--card);
+      width: 90%;
+      padding: 10px 15px;
+      border-radius: 12px;
+      margin-top: 20px;
+      max-width: 700px;
+    }
 
-        .theme-button {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background-color: #cfcab9;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+    .header p {
+      font-size: 1.2rem;
+      margin: 0;
+    }
 
-        .theme-button i {
-            font-size: 16px;
-            color: #333;
-        }
+    .theme-toggle {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: none;
+      background-color: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
 
-        .text {
-            font-size: 2vw;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            width: 90%;
-            text-align: justify;
-        }
+    .theme-toggle i {
+      color: var(--text);
+      font-size: 16px;
+    }
 
-        .social-media {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            width: 90%;
-            margin: 0 auto;
-            text-align: center;
-        }
+    .profile {
+      max-width: 200px;
+      border-radius: 50%;
+      margin: 30px 0 20px;
+    }
 
-        .social-media a {
-            display: block;
-            font-size: 2vw;
-            padding: 10px 15px;
-            width: 100%;
-            box-sizing: border-box;
-            text-decoration: none;
-            color: #4b3e38;
-            border: 2px solid #9e8e71;
-            border-radius: 10px;
-            transition: 0.3s;
-            background-color: #cfcab9;
-        }
+    .text {
+      width: 90%;
+      max-width: 700px;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      text-align: justify;
+    }
 
-        .social-media a:hover {
-            background-color: #4b3e38;
-            color: #cfcab9;
-        }
+    .social-media {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 90%;
+      max-width: 700px;
+    }
 
-        @media (max-width: 768px) {
-            body {
-                font-size: 3vw;
-            }
+    .social-media a {
+      padding: 10px;
+      font-size: 1rem;
+      text-decoration: none;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      background-color: var(--card);
+      color: #4b3e38;
+      transition: 0.3s;
+    }
 
-            .container {
-                height: auto;
-                padding: 10px;
-            }
+    .social-media a:hover {
+      background-color: #4b3e38;
+      color: var(--card);
+    }
 
-            .profile {
-                max-width: 150px;
-                margin-bottom: 15px;
-            }
+    @media (max-width: 768px) {
+      body {
+        font-size: 3.5vw;
+      }
 
-            .text {
-                font-size: 4vw;
-                line-height: 1.8;
-                margin-bottom: 15px;
-                width: 90%;
-            }
+      .header {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 8px 12px;
+      }
 
-            .social-media {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-                margin-top: 15px;
-                width: 90%;
-                margin: 0 auto;
-                text-align: center;
-            }
+      .header p {
+        font-size: 1rem;
+      }
 
-            .social-media a {
-                display: block;
-                font-size: 4vw;
-                padding: 8px 15px;
-                width: 100%;
-                box-sizing: border-box;
-            }
-        }
+      .theme-toggle {
+        width: 30px;
+        height: 30px;
+      }
 
-        body.dark {
-            --bg-color: #333;
-            --card-color: #4d4d4d;
-            --border-color: #777;
-            --text-color: #f0f0f0;
-        }
-    </style>
+      .theme-toggle i {
+        font-size: 14px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <img src="pics/profile.png" alt="عمو لئو" class="profile">
-        
-        <div class="header">
-            <p class="text-centered">عمو لئو هستم،</p>
-            <button class="theme-button" id="themeToggle" title="تغییر حالت">
-                <i id="themeIcon" class="fas fa-sun"></i>
-            </button>
-        </div>
-        
-        <div class="text">
-            <p>هدفم فعلا درس خوندنه، کارای گرافیکی هم انجام میدم، به تولید محـــتــوای ویدیویی هم علاقۀ زیــــــــــــــــــــادی دارم. دروس مورد علاقم هم زیست و ریاضین.</p>
-        </div>
-        
-        <div class="social-media">
-            <a href="https://amuleo.blogfa.com/" target="_blank">خوندن نوشته های من</a>
-            <a href="https://link.yeolpumta.com/P3R5cGU9Z3JvdXBJbnZpdGUmaWQ9NDc4NzI4MA==" target="_blank">گروه درسی نبض جنگجو</a>
-            <a href="https://robustaclub.ir" target="_blank">باشگاه مطالعاتی روبوستا</a>
-            <a href="https://amuleo.github.io/rounding-rectangle/rore.html" target="_blank">ابزار آنلاین گرافیکی من</a>
-        </div>
+  <div class="container">
+    <div class="header">
+      <p>عمو لئو هستم،</p>
+      <button class="theme-toggle" id="themeBtn" title="تغییر حالت">
+        <i class="fas fa-sun" id="themeIcon"></i>
+      </button>
     </div>
 
-    <script>
-        const themeToggle = document.getElementById("themeToggle");
-        themeToggle.addEventListener("click", () => {
-            document.body.classList.toggle("dark");
-            const icon = document.getElementById("themeIcon");
-            const isDark = document.body.classList.contains("dark");
-            icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
-            localStorage.setItem("theme", isDark ? "dark" : "light");
-        });
+    <img src="pics/profile.png" alt="عمو لئو" class="profile" />
 
-        window.onload = () => {
-            const saved = localStorage.getItem("theme");
-            if (saved === "dark") {
-                document.body.classList.add("dark");
-                document.getElementById("themeIcon").className = "fas fa-moon";
-            }
-        };
-    </script>
+    <div class="text">
+      <p>هدفم فعلا درس خوندنه، کارای گرافیکی هم انجام میدم، به تولید محـــتــوای ویدیویی هم علاقۀ زیــــــــــــــــــــادی دارم. دروس مورد علاقم هم زیست و ریاضین.</p>
+    </div>
+
+    <div class="social-media">
+      <a href="https://amuleo.blogfa.com/" target="_blank">خوندن نوشته‌های من</a>
+      <a href="https://link.yeolpumta.com/P3R5cGU9Z3JvdXBJbnZpdGUmaWQ9NDc4NzI4MA==" target="_blank">گروه درسی نبض جنگجو</a>
+      <a href="https://robustaclub.ir" target="_blank">باشگاه مطالعاتی روبوستا</a>
+      <a href="https://amuleo.github.io/rounding-rectangle/rore.html" target="_blank">ابزار آنلاین گرافیکی من</a>
+    </div>
+  </div>
+
+  <script>
+    const btn = document.getElementById("themeBtn");
+    const icon = document.getElementById("themeIcon");
+
+    btn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      const isDark = document.body.classList.contains("dark");
+      icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+
+    window.addEventListener("load", () => {
+      const saved = localStorage.getItem("theme");
+      if (saved === "dark") {
+        document.body.classList.add("dark");
+        icon.className = "fas fa-moon";
+      }
+    });
+  </script>
 </body>
 </html>
