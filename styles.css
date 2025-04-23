@@ -1,4 +1,4 @@
-@font-face {
+@font-face { 
     font-family: 'YekanBakh';
     src: url('fonts/YekanBakh-Regular.ttf') format('truetype');
 }
@@ -29,22 +29,49 @@ body {
     border-radius: 50%; /* گرد کردن تصویر برای زیبایی */
 }
 
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.text-and-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.text-centered {
+    font-size: 2.5vw;
+    margin: 0;
+}
+
+.theme-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: none;
+    background-color: #cfcab9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.theme-button i {
+    font-size: 18px;
+    color: #333;
+}
+
 .text {
     font-size: 2vw;
     line-height: 1.5;
     margin-bottom: 20px;
     width: 90%; /* عرض کلی تنظیم شده */
-}
-
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.text-centered {
-    text-align: center;
+    text-align: justify;
 }
 
 .social-media {
@@ -74,31 +101,6 @@ body {
 .social-media a:hover {
     background-color: #4b3e38; /* رنگ زمینه طلایی در هاور */
     color: #cfcab9; /* تغییر رنگ متن به قهوه‌ای */
-}
-
-button.theme-button {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    border: none;
-    background-color: #cfcab9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-button.theme-button i {
-    font-size: 18px;
-    color: #333;
-}
-
-body.dark {
-    --bg-color: #333;
-    --card-color: #4d4d4d;
-    --border-color: #777;
-    --text-color: #f0f0f0;
 }
 
 @media (max-width: 768px) {
@@ -141,4 +143,11 @@ body.dark {
         width: 100%;
         box-sizing: border-box;
     }
+}
+
+body.dark {
+    --bg-color: #333;
+    --card-color: #4d4d4d;
+    --border-color: #777;
+    --text-color: #f0f0f0;
 }
