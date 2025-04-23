@@ -36,9 +36,11 @@
 
     body.dark {
       --bg: #2c2c2c;
-      --card: #444;
+      --card: #3c3c3c;
       --border: #666;
       --text: #f0f0f0;
+      background-color: var(--bg);
+      color: var(--text);
     }
 
     .container {
@@ -63,6 +65,7 @@
     .header p {
       font-size: 1.2rem;
       margin: 0;
+      color: var(--text);
     }
 
     .theme-toggle {
@@ -94,6 +97,7 @@
       font-size: 1.1rem;
       line-height: 1.7;
       text-align: justify;
+      color: var(--text);
     }
 
     .social-media {
@@ -114,6 +118,10 @@
       background-color: var(--card);
       color: #4b3e38;
       transition: 0.3s;
+    }
+
+    body.dark .social-media a {
+      color: var(--text);
     }
 
     .social-media a:hover {
