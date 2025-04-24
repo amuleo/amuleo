@@ -8,7 +8,9 @@
   <meta name="keywords" content="عمو لئو, بیوگرافی, دل نوشته, روز نوشت, دل نوشت, تجربیات زندگی, کنکوری, عمو لئو, افکار, سایت شخصی">
   <meta name="author" content="عمو لئو">
   <meta name="robots" content="index, follow">
-  
+  <meta name="theme-color" content="#6c757d">
+  <meta name="msapplication-navbutton-color" content="#333">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#6c757d">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     @font-face {
@@ -198,10 +200,6 @@
     const isDark = document.body.classList.contains("dark");
     icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
     setCookie("theme", isDark ? "dark" : "light", 365); // ذخیره وضعیت در کوکی برای یک سال
-    document.documentElement.classList.toggle('dark-mode');
-    const isDarkMode = document.documentElement.classList.contains('dark-mode');
-    updateThemeColor(isDarkMode ? '#333' : '#f9fafd');
-
   });
 
   // بارگذاری وضعیت حالت شب/روز از کوکی هنگام بارگذاری صفحه
