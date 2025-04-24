@@ -193,8 +193,20 @@
     return "";
   }
 
-    const themeColor = document.querySelector('meta[name="theme-color"]');
-    themeColor.setAttribute('content', '#f9fafd'); // تغییر رنگ بر اساس شرایط
+        // گرفتن مقدار از CSS variables
+    const rootStyles = getComputedStyle(document.documentElement);
+    const bgColor = rootStyles.getPropertyValue('--bg').trim();
+    
+    // ایجاد متا تگ در صورت عدم وجود
+    let themeMetaTag = document.querySelector('meta[name="theme-color"]');
+    if (!themeMetaTag) {
+        themeMetaTag = document.createElement('meta');
+        themeMetaTag.setAttribute('name', 'theme-color');
+        document.head.appendChild(themeMetaTag);
+    }
+    
+    // اختصاص رنگ به متا تگ
+    themeMetaTag.setAttribute('content', bgColor);
 
   
   // تغییر حالت شب و روز
