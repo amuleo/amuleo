@@ -193,13 +193,23 @@
     return "";
   }
 
-  
+  function updateThemeColor(color) {
+    let themeMetaTag = document.querySelector('meta[name="theme-color"]');
+    if (!themeMetaTag) {
+        themeMetaTag = document.createElement('meta');
+        themeMetaTag.setAttribute('name', 'theme-color');
+        document.head.appendChild(themeMetaTag);
+    }
+    themeMetaTag.setAttribute('content', color);
+}
+
   // تغییر حالت شب و روز
   btn.addEventListener("click", () => {
     document.body.classList.toggle("dark");
     const isDark = document.body.classList.contains("dark");
     icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
     setCookie("theme", isDark ? "dark" : "light", 365); // ذخیره وضعیت در کوکی برای یک سال
+     updateThemeColor(isDark ? "#333" : "#f9fafd"); // تغییر رنگ بر اساس تم
   });
 
   // بارگذاری وضعیت حالت شب/روز از کوکی هنگام بارگذاری صفحه
@@ -210,6 +220,7 @@
       icon.className = "fas fa-moon";
     } else {
       icon.className = "fas fa-sun";
+       updateThemeColor(isDark ? "#333" : "#f9fafd"); // تغییر رنگ بر اساس تم
     }
   });
       </script>
