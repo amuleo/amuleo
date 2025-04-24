@@ -193,6 +193,10 @@
     return "";
   }
 
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    themeColor.setAttribute('content', '#f9fafd'); // تغییر رنگ بر اساس شرایط
+
+  
   // تغییر حالت شب و روز
   btn.addEventListener("click", () => {
     document.body.classList.toggle("dark");
