@@ -200,6 +200,10 @@
     const isDark = document.body.classList.contains("dark");
     icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
     setCookie("theme", isDark ? "dark" : "light", 365); // ذخیره وضعیت در کوکی برای یک سال
+    document.documentElement.classList.toggle('dark-mode');
+    const isDarkMode = document.documentElement.classList.contains('dark-mode');
+    updateThemeColor(isDarkMode ? '#333' : '#f9fafd');
+
   });
 
   // بارگذاری وضعیت حالت شب/روز از کوکی هنگام بارگذاری صفحه
