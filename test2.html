@@ -11,7 +11,14 @@
     <div id="header"></div>
     <p> hiiiii inam shodddd </p>
 <script src="headerLoader.js"></script>
-<script>loadHeader();</script>
 <script src="theme.js" defer></script>
+<script>
+    function loadHeaderAndTheme() {
+    loadComponent("header", "header.html", () => {
+        loadScript("theme.js"); // تم فقط بعد از لود شدن هدر اجرا شود
+    });
+}
+();
+</script>
 </body>
 </html>
