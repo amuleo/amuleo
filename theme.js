@@ -53,12 +53,12 @@ const btn = document.getElementById("themeBtn");
   });
 
   document.addEventListener("DOMContentLoaded", () => {
-    const saved = getCookie("theme");
-    const isDark = saved === "dark";
+    const savedTheme = getCookie("theme");
+    const isDark = savedTheme === "dark";
     
-    // اعمال حالت ذخیره شده
+    // اعمال حالت ذخیره‌شده
     document.body.classList.toggle("dark", isDark);
-    icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
+    document.getElementById("themeIcon").className = isDark ? "fas fa-moon" : "fas fa-sun";
 
     // تنظیم رنگ تم مرورگر
     updateThemeColor(isDark ? "#333" : "#f9fafd");
