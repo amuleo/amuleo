@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بارگذاری هدر داینامیک</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بارگذاری هدر داینامیک</title>
 </head>
 <body>
 
-    <!-- بخش هدر که داینامیک بارگذاری می‌شود -->
-    <div id="header"></div>
-    <p> hiiiii inam shodddd </p>
+  <!-- بخش هدر که داینامیک بارگذاری می‌شود -->
+  <div id="header"></div>
 
- <script src="headerLoader.js"></script>
-<script>
-  // بارگذاری فایل header.html داخل div با id="header"
-  loadComponent("header", "header.html");
-</script>
+  <p>hiiiii inam shodddd</p>
+
+  <!-- لود اسکریپت‌ها بعد از DOM -->
+  <script src="headerLoader.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      loadComponent("header", "header.html");
+    });
+  </script>
 
 </body>
 </html>
