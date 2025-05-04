@@ -10,18 +10,21 @@
     <!-- بخش هدر که داینامیک بارگذاری می‌شود -->
     <div id="header"></div>
     <p> hiiiii inam shodddd </p>
-<script src="headerLoader.js"></script>
-<script src="theme.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        loadHeaderAndTheme(); // اینجا فراخوانی می‌شه!
-    });
 
-    function loadHeaderAndTheme() {
-        loadComponent("header", "header.html", () => {
-            loadScript("theme.js"); // تم فقط بعد از لود شدن هدر اجرا شود
+    <!-- بارگذاری اسکریپت‌ها -->
+    <script src="headerLoader.js"></script>
+    <script src="theme.js" defer></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            loadHeaderAndTheme(); // اجرای تابع بعد از بارگذاری صفحه
         });
-    }
-</script>
+
+        function loadHeaderAndTheme() {
+            loadComponent("header", "header.html", () => {
+                loadScript("theme.js"); // تم فقط بعد از لود شدن هدر اجرا شود
+            });
+        }
+    </script>
+
 </body>
 </html>
