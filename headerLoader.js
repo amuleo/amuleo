@@ -14,7 +14,4 @@ function loadHeader() {
         }
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        loadComponent("header", "header.html");
-    });
 }
