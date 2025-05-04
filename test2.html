@@ -14,9 +14,16 @@
     <!-- بارگذاری اسکریپت‌ها -->
     <script src="headerLoader.js"></script>
 <script>
-    
-</script>
+    document.addEventListener("DOMContentLoaded", () => {
+    loadComponent("header", "header.html", () => {
+        // وقتی هدر لود شد، اسکریپت تم رو اجرا کن
+        let script = document.createElement("script");
+        script.src = "theme.js";
+        document.body.appendChild(script);
+    });
+})
 
+</script>
 
 </body>
 </html>
