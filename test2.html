@@ -12,7 +12,11 @@
     <p> hiiiii inam shodddd </p>
 
 <script src="headerLoader.js"></script>
- <script>loadHeader();</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        loadComponent("header", "header.html"); // فراخوانی تابع بارگذاری هدر
+    });
+</script>
     
 </body>
 </html>
