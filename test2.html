@@ -15,15 +15,11 @@
     <script src="headerLoader.js"></script>
     <script src="theme.js" defer></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            loadHeaderAndTheme(); // اجرای تابع بعد از بارگذاری صفحه
-        });
-
-        function loadHeaderAndTheme() {
-            loadComponent("header", "header.html", () => {
-                loadScript("theme.js"); // تم فقط بعد از لود شدن هدر اجرا شود
-            });
-        }
+document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => { // تاخیر کوتاه برای اطمینان از لود کامل هدر
+        loadHeaderAndTheme();
+    }, 100);
+});
     </script>
 
 </body>
