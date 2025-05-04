@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بارگذاری هدر داینامیک</title>
+</head>
+<body>
+
+    <!-- بخش هدر که داینامیک بارگذاری می‌شود -->
+    <div id="header"></div>
+
+    <script>
+        async function loadComponent(id, file) {
+            try {
+                const response = await fetch(file);
+                if (!response.ok) throw new Error('خطا در بارگذاری فایل');
+                document.getElementById(id).innerHTML = await response.text();
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadComponent("header", "header.html");
+        });
+    </script>
+
+</body>
+</html>
