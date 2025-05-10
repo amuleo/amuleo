@@ -213,12 +213,12 @@
       pointer-events: none;
     }
     .spinner {
-      width: 50px;
-      height: 50px;
-      border: 4px solid var(--border);
-      border-top: 4px solid var(--text);
+      width: 25px;
+      height: 25px;
+      border: 3px solid var(--border);
+      border-top: 3px solid var(--text);
       border-radius: 50%;
-      animation: spin 1.5s linear infinite;
+      animation: spin 1.2s linear infinite;
     }
     @keyframes spin {
       0% { transform: rotate(0deg); }
@@ -438,7 +438,7 @@
       loadLatestBooks();
       loadLatestPosts();
 
-      // حذف صفحه پروگرس پس از 1.5 ثانیه و اعمال انیمیشن محو شدن به مدت 0.5 ثانیه
+      // حذف صفحه پروگرس پس از 1 ثانیه و اعمال انیمیشن محو شدن به مدت 0.5 ثانیه
       setTimeout(() => {
         const loadingScreen = document.getElementById("loadingScreen");
         if (loadingScreen) {
@@ -447,7 +447,7 @@
             loadingScreen.remove();
           }, 500);
         }
-      }, 1500);
+      }, 1000);
     });
   </script>
 </body>
