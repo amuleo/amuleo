@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>نمایش پست‌ها</title>
+</head>
+<body>
+  <!-- این کانتینر تمام پست‌ها را در خود جای می‌دهد -->
+  <div id="posts-container"></div>
+
+  <script>
+    // آدرس Worker شما که خروجی JSON ایجاد می‌کند.
+    const apiUrl = "https://blog-postviewer.immohammaddavoodi.workers.dev/";
+
+    // دریافت داده‌ها از Worker
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById("posts-container");
+
+        // برای هر پست یک div ایجاد می‌کنیم
+        data.forEach(post => {
+          const postDiv = document.createElement("div");
+          // تنظیم نشانگر جهت نمایش قابل کلیک بودن
+          postDiv.style.cursor = "pointer";
+
+          // افزودن رویداد کلیک برای باز کردن لینک در تب جدید
+          postDiv.addEventListener("click", () => {
+            window.open(post.link, "_blank");
+          });
+
+          // ایجاد و افزودن عنوان مطلب
+          const titleElem = document.createElement("h3");
+          titleElem.textContent = post.title;
+
+          // ایجاد و افزودن توضیحات مطلب
+          const summaryPara = document.createElement("p");
+          summaryPara.textContent = post.summary;
+
+          // اضافه کردن عنوان و توضیحات به دایو مربوطه
+          postDiv.appendChild(titleElem);
+          postDiv.appendChild(summaryPara);
+
+          // افزودن دایو پست به کانتینر اصلی
+          container.appendChild(postDiv);
+        });
+      })
+      .catch(err => {
+        console.error("خطا در دریافت داده‌ها:", err);
+      });
+  </script>
+</body>
+</html>
