@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>Memo Page</title>
+  <style>
+    /* استایل‌های پایه برای صفحه و پروگرس بار */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: sans-serif;
+      background: #f5f5f5;
+    }
+    /* پوشش پروگرس بار که کل صفحه را می‌پوشاند */
+    #progress-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    /* استایل برای پروگرس بار */
+    #progress-bar {
+      width: 80%;
+      height: 20px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    #progress {
+      height: 100%;
+      width: 0;
+      background: #3498db;
+      transition: width 0.3s ease;
+    }
+    /* محتوای اصلی صفحه که پس از بارگذاری نمایش داده می‌شود */
+    #content {
+      display: none;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- پوشش پروگرس بار -->
+  <div id="progress-overlay">
+    <h2>در حال بارگذاری...</h2>
+    <div id="progress-bar">
+      <div id="progress"></div>
+    </div>
+  </div>
+  
+  <!-- محتوای اصلی صفحه -->
+  <div id="content">
+    <!-- اینجا می‌توانید محتوای اصلی (مثلاً از Worker دریافت شده یا ثابت) را قرار دهید -->
+    <h1>صفحه‌ی یادداشت</h1>
+    <p>این بخش مربوط به محتوای اصلی صفحه است.</p>
+    <!-- برای مثال می‌توانید از iframe یا فراخوانی Ajax برای دریافت محتوای یک Worker استفاده کنید -->
+  </div>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var progressElement = document.getElementById("progress");
+      var overlay = document.getElementById("progress-overlay");
+      var content = document.getElementById("content");
+      
+      var minLoadingTime = 1500; // حداقل 1.5 ثانیه
+      var startTime = Date.now();
+      var progress = 0;
+      
+      // شبیه‌سازی پیشرفت پروگرس بار
+      var progressInterval = setInterval(function() {
+        // افزایش تصادفی اما کنترل شده برای نشان دادن حالت پویا
+        progress += Math.random() * 10;
+        if (progress > 90) progress = 90; // تا 90 درصد پیشرفت می‌دهیم تا زمان واقعی بارگذاری برسد
+        progressElement.style.width = progress + "%";
+      }, 100);
+      
+      // فرض می‌کنیم محتوا پس از بارگذاری پنجره (window.load) آماده است.
+      // اگر بخواهید از فراخوانی Ajax یا رویدادهای دیگری استفاده کنید، بخش زیر را تغییر دهید.
+      window.addEventListener("load", function() {
+        var elapsed = Date.now() - startTime;
+        var remainingTime = (elapsed < minLoadingTime) ? (minLoadingTime - elapsed) : 0;
+        setTimeout(function() {
+          clearInterval(progressInterval);
+          progressElement.style.width = "100%";
+          // فید شدن پوشش پروگرس بار
+          overlay.style.transition = "opacity 0.5s ease";
+          overlay.style.opacity = "0";
+          setTimeout(function() {
+            overlay.style.display = "none";
+            content.style.display = "block";
+          }, 500);
+        }, remainingTime);
+      });
+    });
+  </script>
+</body>
+</html>
