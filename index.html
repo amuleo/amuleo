@@ -88,7 +88,7 @@
     .profile {
       max-width: 200px;
       border-radius: 25%;
-      margin: 30px 0 20px;
+      margin: 15px 15px;
     }
     .social-media {
       display: flex;
@@ -165,7 +165,7 @@
       color: var(--span);
     }
     #posts-container {
-      margin-top: 50px;
+      margin-top: 10px;
     }
     #latestBooks {
       margin-top: 30px;
@@ -180,10 +180,10 @@
       border: 0;
       border-radius: 10px;
       background-color: var(--card);
-      color: #4b3e38;
       transition: 0.3s;
       cursor: pointer;
       outline: none;
+      font-family: 'YekanBakh', sans-serif;
     }
     .more-btn:hover {
       background-color: var(--hover);
@@ -374,7 +374,7 @@
         });
         const moreBtn = document.createElement('button');
         moreBtn.className = 'more-btn';
-        moreBtn.textContent = 'دیگر لینک های من';
+        moreBtn.textContent = '▼ دیگر لینک های من ▼';
         socialLinks[2].insertAdjacentElement('afterend', moreBtn);
         moreBtn.addEventListener('click', function() {
           hiddenLinks.forEach((link, index) => {
