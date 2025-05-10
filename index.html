@@ -199,6 +199,7 @@ html {
     /* استایل دکمه‌ی نمایش لینک‌های اضافی – مشابه استایل لینک‌ها */
     .more-btn {
       padding: 10px;
+      color: var(--text);
       font-size: 1rem;
       text-decoration: none;
       border: 0;
@@ -434,7 +435,7 @@ html {
         });
         const moreBtn = document.createElement('button');
         moreBtn.className = 'more-btn';
-        moreBtn.textContent = '▼ دیگر لینک های من ▼';
+        moreBtn.textContent = '+ دیگر لینک های من +';
         socialLinks[2].insertAdjacentElement('afterend', moreBtn);
         moreBtn.addEventListener('click', function() {
           hiddenLinks.forEach((link, index) => {
