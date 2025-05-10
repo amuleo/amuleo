@@ -27,15 +27,15 @@
     }
 
     body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg);
-            font-family: 'YekanBakh', sans-serif;
-            color: var(--text);
-            direction: rtl;
-            font-size: 1.1rem;
-            text-align: center;
-            transition: background-color 0.3s, color 0.3s;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      font-family: 'YekanBakh', sans-serif;
+      color: var(--text);
+      direction: rtl;
+      font-size: 1.1rem;
+      text-align: center;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     body.dark {
@@ -49,10 +49,10 @@
     }
 
     .container {
-            max-width: 800px;
-            margin: auto;
-            padding: 120px 10px;
-      }
+      max-width: 800px;
+      margin: auto;
+      padding: 120px 10px;
+    }
 
     .header {
       display: flex;
@@ -70,10 +70,10 @@
     }
 
     .header h1 {
-            margin-right: 30px;
-            color: var(--text); /* رنگ متن هدر */
-            font-size: 1.5rem;
-        }
+      margin-right: 30px;
+      color: var(--text); /* رنگ متن هدر */
+      font-size: 1.5rem;
+    }
 
     .theme-toggle {
       width: 40px;
@@ -98,9 +98,6 @@
       border-radius: 25%;
       margin: 30px 0 20px;
     }
-
-
-    
 
     .social-media {
       display: flex;
@@ -129,7 +126,7 @@
     }
 
     p {
-       text-align: justify;
+      text-align: justify;
     }
     
     @media (max-width: 480px) {
@@ -137,13 +134,38 @@
         font-size: 1rem;
       }
       .container {
-            padding: 100px 20px;
+        padding: 100px 20px;
       }
-       .header {
+      .header {
         height: 40px;
-    }    
+      }    
     }
-      
+    
+    /* سبک جدید برای بخش آخرین کتاب‌های خوانده شده */
+    #latestBooks {
+      margin-top: 30px;
+    }
+    #latestBooks h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--text);
+    }
+    .card {
+      background-color: var(--card);
+      border: none;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px auto;
+      max-width: 800px;
+      width: 100%;
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-content {
+      text-align: justify;
+      font-size: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -169,74 +191,129 @@
       <a href="https://lastproject.blogfa.com" target="_blank">آخرین پروژم</a>
       <a href="https://books.amuleo.ir" target="_blank">کتابخونۀ من</a>
     </div>
+
+    <!-- بخش جدید برای نمایش آخرین کتاب‌های خوانده شده -->
+    <div id="latestBooks">
+      <h2>آخرین کتاب‌های خوانده شده</h2>
+      <div id="latestBooksContainer"></div>
+    </div>
+
   </div>
-<script>
-  const btn = document.getElementById("themeBtn");
-  const icon = document.getElementById("themeIcon");
 
-  // تابع برای تنظیم کوکی
-  function setCookie(name, value, days) {
-    const d = new Date();
-    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000)); // مدت زمان انقضای کوکی
-    let expires = "expires=" + d.toUTCString();
-    document.cookie = name + "=" + value + ";" + expires + ";path=/";
-  }
+  <script>
+    const btn = document.getElementById("themeBtn");
+    const icon = document.getElementById("themeIcon");
 
-  // تابع برای خواندن مقدار کوکی
-  function getCookie(name) {
-    let nameEq = name + "=";
-    let ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-      if (c.indexOf(nameEq) == 0) return c.substring(nameEq.length, c.length);
+    // توابع مربوط به کوکی
+    function setCookie(name, value, days) {
+      const d = new Date();
+      d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+      let expires = "expires=" + d.toUTCString();
+      document.cookie = name + "=" + value + ";" + expires + ";path=/";
     }
-    return "";
-  }
 
-  function updateThemeColor(color) {
-    let themeMetaTag = document.querySelector('meta[name="theme-color"]');
-    if (!themeMetaTag) {
-        themeMetaTag = document.createElement('meta');
-        themeMetaTag.setAttribute('name', 'theme-color');
-        document.head.appendChild(themeMetaTag);
+    function getCookie(name) {
+      let nameEq = name + "=";
+      let ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1);
+        if (c.indexOf(nameEq) == 0) return c.substring(nameEq.length, c.length);
+      }
+      return "";
     }
-    themeMetaTag.setAttribute('content', color);
-}
 
-  // تغییر حالت شب و روز
-  btn.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-    const isDark = document.body.classList.contains("dark");
-    icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
-    setCookie("theme", isDark ? "dark" : "light", 365); // ذخیره وضعیت در کوکی برای یک سال
-     updateThemeColor(isDark ? "#333" : "#f9fafd"); // تغییر رنگ بر اساس تم
-  });
-
-  // بارگذاری وضعیت حالت شب/روز از کوکی هنگام بارگذاری صفحه
-  window.addEventListener("load", () => {
-    const saved = getCookie("theme");
-    if (saved === "dark") {
-      document.body.classList.add("dark");
-      icon.className = "fas fa-moon";
-    } else {
-      icon.className = "fas fa-sun";
-       updateThemeColor(isDark ? "#333" : "#f9fafd"); // تغییر رنگ بر اساس تم
+    function updateThemeColor(color) {
+      let themeMetaTag = document.querySelector('meta[name="theme-color"]');
+      if (!themeMetaTag) {
+          themeMetaTag = document.createElement('meta');
+          themeMetaTag.setAttribute('name', 'theme-color');
+          document.head.appendChild(themeMetaTag);
+      }
+      themeMetaTag.setAttribute('content', color);
     }
-  });
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const saved = getCookie("theme");
-    const isDark = saved === "dark";
-    
-    // اعمال حالت ذخیره شده
-    document.body.classList.toggle("dark", isDark);
-    icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
+    // تغییر حالت شب و روز
+    btn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      const isDark = document.body.classList.contains("dark");
+      icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
+      setCookie("theme", isDark ? "dark" : "light", 365);
+      updateThemeColor(isDark ? "#333" : "#f9fafd");
+    });
 
-    // تنظیم رنگ تم مرورگر
-    updateThemeColor(isDark ? "#333" : "#f9fafd");
-});
+    // بارگذاری حالت بر اساس کوکی هنگام لود صفحه
+    window.addEventListener("load", () => {
+      const saved = getCookie("theme");
+      if (saved === "dark") {
+        document.body.classList.add("dark");
+        icon.className = "fas fa-moon";
+      } else {
+        icon.className = "fas fa-sun";
+        updateThemeColor(document.body.classList.contains("dark") ? "#333" : "#f9fafd");
+      }
+    });
 
-      </script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const saved = getCookie("theme");
+      const isDark = saved === "dark";
+      document.body.classList.toggle("dark", isDark);
+      icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
+      updateThemeColor(isDark ? "#333" : "#f9fafd");
+
+      // فراخوانی تابع نمایش آخرین کتاب‌ها پس از بارگذاری صفحه
+      loadLatestBooks();
+    });
+
+    // تابعی جهت دریافت آخرین کتاب‌های خوانده شده از Cloudflare Worker
+    async function loadLatestBooks() {
+      try {
+        // فراخوانی API برای دریافت لیست کتاب‌ها
+        const response = await fetch("https://book-manager-worker.immohammaddavoodi.workers.dev/list-books");
+        if (!response.ok) throw new Error("خطا در دریافت اطلاعات از سرور");
+        
+        const data = await response.json();
+        let books = [];
+        // استخراج داده‌ها با توجه به ساختار برگشتی
+        if (Array.isArray(data)) {
+          books = data;
+        } else if (data.success) {
+          if (data.results && Array.isArray(data.results.results)) {
+            books = data.results.results;
+          } else if (data.results && Array.isArray(data.results)) {
+            books = data.results;
+          } else {
+            throw new Error("داده‌های دریافتی معتبر نیستند.");
+          }
+        } else {
+          throw new Error("خطا در دریافت اطلاعات.");
+        }
+        
+        // انتخاب ۳ کتاب آخر (فرض بر این است که آرایه به ترتیب زمانی مرتب شده است)
+        const latest = books.slice(-3);
+        const latestBooksContainer = document.getElementById("latestBooksContainer");
+        latestBooksContainer.innerHTML = "";
+        latest.forEach(book => {
+          const card = document.createElement("div");
+          card.className = "card";
+          const content = document.createElement("div");
+          content.className = "card-content";
+          content.innerHTML = `
+            <p>نام کتاب: ${book.name || book.title}</p>
+            <hr>
+            <p>نویسنده: ${book.author}</p>
+            <hr>
+            <p>تعداد صفحات: ${book.pages || book.page}</p>
+            <hr>
+            <p>سال مطالعه: ${book.year}</p>
+          `;
+          card.appendChild(content);
+          latestBooksContainer.appendChild(card);
+        });
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  </script>
 </body>
 </html>
