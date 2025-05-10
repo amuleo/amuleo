@@ -24,7 +24,7 @@
       --border: #e5e5e5;
       --text: #333;
       --hover: #dbdce0;
-      --span: #9e8e7; /* رنگ مورد نظر برای عناوین داخل هر آیتم */
+      --span: #9e8e71; /* رنگ مورد نظر برای عناوین داخل هر آیتم */
     }
 
     body {
@@ -302,10 +302,10 @@
           content.className = "card-content";
           content.innerHTML = `
             <p>
-              <span class="label">نام کتاب:</span> ${book.name || book.title} &nbsp; – &nbsp;
-              <span class="label">نویسنده:</span> ${book.author} &nbsp; – &nbsp;
-              <span class="label">تعداد صفحات:</span> ${book.pages || book.page} &nbsp; – &nbsp;
-              <span class="label">سال مطالعه:</span> ${book.year}
+              <span class="label">نام کتاب:</span> ${book.name || book.title}، &nbsp;
+              <span class="label">نویسنده:</span> ${book.author}، &nbsp;
+              <span class="label">تعداد صفحات:</span> ${book.pages || book.page}، &nbsp;
+              <span class="label">سال مطالعه:</span> ${book.year}.
             </p>
           `;
           card.appendChild(content);
