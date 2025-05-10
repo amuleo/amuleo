@@ -128,9 +128,10 @@
       }    
     }
     
-    /* سبک جدید برای بخش آخرین کتاب‌های خوانده شده */
+    /* سبک بخش آخرین کتاب‌های خوانده شده */
     #latestBooks {
       margin-top: 30px;
+      margin-bottom: 40px; /* افزایش فاصله با بخش بعدی */
     }
     #latestBooks h2 {
       font-size: 1.5rem;
@@ -158,9 +159,9 @@
       color: var(--span);
     }
     
-    /* سبک برای بخش آخرین نوشته هام */
+    /* سبک بخش آخرین نوشته هام */
     #posts-container {
-      margin-top: 30px;
+      margin-top: 50px; /* افزایش فاصله نسبت به آخرین کتاب‌ها */
     }
     #posts-container h2 {
       font-size: 1.5rem;
@@ -199,7 +200,7 @@
       <div id="latestBooksContainer"></div>
     </div>
 
-    <!-- بخش نمایش آخرین نوشته هام -->
+    <!-- بخش نمایش آخرین نوشته هام با عنوان سمت بالا -->
     <div id="posts-container">
       <h2>آخرین نوشته هام</h2>
       <!-- پست‌ها به صورت داینامیک در اینجا اضافه خواهند شد -->
@@ -262,7 +263,7 @@
       updateThemeColor(isDark ? "#333" : "#f9fafd");
     });
 
-    // بارگذاری وضعیت تم از کوکی وقتی صفحه لود می‌شود
+    // بارگذاری وضعیت تم از کوکی در زمان لود صفحه
     window.addEventListener("load", () => {
       const saved = getCookie("theme");
       if (saved === "dark") {
@@ -299,13 +300,19 @@
           throw new Error("خطا در دریافت اطلاعات.");
         }
         
-        // انتخاب ۳ کتاب آخر به طوری که جدیدترین در بالا نمایش داده شود
-        const latest = books.slice(-3).reverse();
+        // انتخاب ۳ کتاب آخر به ترتیب طبیعی (از بالا به پایین)
+        const latest = books.slice(-3);
         const latestBooksContainer = document.getElementById("latestBooksContainer");
         latestBooksContainer.innerHTML = "";
         latest.forEach(book => {
           const card = document.createElement("div");
           card.className = "card";
+          // افزودن استایل کلیک‌پذیری به کارت کتاب
+          card.style.cursor = "pointer";
+          // اضافه کردن رویداد کلیک جهت هدایت به صفحه کتابخونۀ من
+          card.addEventListener("click", () => {
+            window.open("https://books.amuleo.ir", "_blank");
+          });
           const content = document.createElement("div");
           content.className = "card-content";
           content.innerHTML = `
@@ -327,7 +334,7 @@
     /**
      * تابع loadLatestPosts:
      * دریافت آخرین نوشته‌های وبلاگ از Cloudflare Worker
-     * و نمایش ۳ پست اخیر به ترتیب از جدید به قدیم.
+     * و نمایش ۳ پست اخیر به ترتیب از بالا به پایین (ترتیب طبیعی داده‌ها).
      */
     async function loadLatestPosts() {
       const apiUrl = "https://blog-postviewer.immohammaddavoodi.workers.dev/";
@@ -337,41 +344,36 @@
         
         // گرفتن داده‌های JSON از سرور
         const postsData = await response.json();
-        // بررسی آرایه بودن داده‌ها و انتخاب ۳ پست آخر به ترتیب معکوس (جدیدترین در بالا)
-        const posts = Array.isArray(postsData) ? postsData.slice(-3).reverse() : [];
+        // انتخاب ۳ پست آخر بدون تغییر ترتیب (ترتیب طبیعی)
+        const posts = Array.isArray(postsData) ? postsData.slice(-3) : [];
         
         // انتخاب المان کانتینر پست‌ها
         const postsContainer = document.getElementById("posts-container");
-        // حذف پست‌های قبلی (اگر بارگذاری مجدد شود)، حفظ عنوان اصلی (تگ h2)
+        // حفظ عنوان اصلی (تگ h2) و حذف پست‌های قبلی در صورت بارگذاری مجدد
         while (postsContainer.childNodes.length > 1) {
           postsContainer.removeChild(postsContainer.lastChild);
         }
         
-        // ساخت کارت برای هر پست
+        // ساخت کارت برای هر پست به صورت مینیمال مشابه ساختار کتاب‌ها
         posts.forEach(post => {
-          // ساخت یک div با کلاس card برای پست
           const postCard = document.createElement("div");
           postCard.className = "card";
-          postCard.style.cursor = "pointer"; // افزودن استایل کلیک پذیری
-
-          // افزودن رویداد کلیک جهت باز کردن لینک پست در تب جدید
+          postCard.style.cursor = "pointer"; // افزودن قابلیت کلیک
+          
+          // افزودن رویداد کلیک برای هدایت به لینک پست در تب جدید
           postCard.addEventListener("click", () => {
             window.open(post.link, "_blank");
           });
           
-          // ایجاد المان عنوان (h3) برای نمایش عنوان پست
-          const titleElement = document.createElement("h3");
-          titleElement.textContent = post.title;
+          // ایجاد div برای محتوای کارت پست به سبک مینیمال
+          const content = document.createElement("div");
+          content.className = "card-content";
+          content.innerHTML = `
+            <h3>${post.title}</h3>
+            <p>${post.summary}</p>
+          `;
           
-          // ایجاد پاراگراف برای نمایش خلاصه پست
-          const summaryElement = document.createElement("p");
-          summaryElement.textContent = post.summary;
-          
-          // افزودن عنوان و خلاصه به کارت پست
-          postCard.appendChild(titleElement);
-          postCard.appendChild(summaryElement);
-          
-          // افزودن کارت پست به کانتینر اصلی پست‌ها
+          postCard.appendChild(content);
           postsContainer.appendChild(postCard);
         });
       } catch (error) {
@@ -379,7 +381,7 @@
       }
     }
 
-    // رویداد DOMContentLoaded برای اطمینان از بارگذاری کامل المان‌ها
+    // اطمینان از بارگذاری کامل المان‌ها قبل از اجرای توابع
     document.addEventListener("DOMContentLoaded", () => {
       // دریافت و اعمال تم ذخیره‌شده از کوکی
       const saved = getCookie("theme");
