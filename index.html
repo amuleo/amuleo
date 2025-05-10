@@ -128,20 +128,15 @@
       }    
     }
     
-    /* سبک بخش آخرین کتاب‌های خوانده شده */
-    #latestBooks {
-      margin-top: 30px;
-      margin-bottom: 40px; /* افزایش فاصله با بخش بعدی */
-    }
-    /* هدر عنوان هر دو بخش کتاب و پست، وسط چین شده */
-    #latestBooks h2, #posts-container h2 {
+    /* سبک بخش آخرین نوشته‌ها و کتاب‌ها */
+    /* تنظیم عنوان h2 مشابه برای هر دو بخش و وسط چین کردن آن */
+    #posts-container h2, #latestBooks h2 {
       font-size: 1.5rem;
       margin-bottom: 15px;
       color: var(--text);
       text-align: center;
     }
-    
-    /* استایل کارت (آیتم‌ها) */
+    /* سبک کارت‌های آیتم (مشترک برای کتاب و پست) */
     .card {
       background-color: var(--card);
       border: none;
@@ -153,24 +148,27 @@
       box-sizing: border-box;
       position: relative;
       overflow: hidden;
-      cursor: pointer; /* تمامی آیتم‌ها قابلیت کلیک نشان می‌دهند */
-      text-align: center; /* محتوای کارت به‌طور کلی وسط چین می‌شود */
-    }
-    /* اطمینان از اینکه پاراگراف‌ها برای خوانایی، متن‌چین (justify) هستند */
-    .card-content p {
-      text-align: justify;
+      cursor: pointer;
+      text-align: center; /* محتوا به‌طور کلی وسط چین */
     }
     .card-content {
       font-size: 1rem;
+    }
+    .card-content p {
+      text-align: justify; /* پاراگراف‌ها حالت justify */
     }
     .label {
       font-weight: bold;
       color: var(--span);
     }
     
-    /* سبک بخش آخرین نوشته هام */
+    /* تنظیم فاصله بخش‌ها */
     #posts-container {
-      margin-top: 50px; /* افزایش فاصله نسبت به آخرین کتاب‌ها */
+      margin-top: 50px;
+    }
+    #latestBooks {
+      margin-top: 30px;
+      margin-bottom: 40px;
     }
   </style>
 </head>
@@ -198,21 +196,23 @@
       <a href="https://books.amuleo.ir" target="_blank">کتابخونۀ من</a>
     </div>
 
+    <!-- جابجایی جای باکس‌ها؛ ابتدا بخش آخرین نوشته‌ها و سپس آخرین کتاب‌ها -->
+    <!-- بخش نمایش آخرین نوشته‌ها -->
+    <div id="posts-container">
+      <h2>آخرین نوشته هام</h2>
+      <!-- ایجاد دایو داخلی جهت درج داینامیک پست‌ها؛ تضمین باقی ماندن عنوان -->
+      <div id="latestPostsContent"></div>
+    </div>
+
     <!-- بخش نمایش آخرین کتاب‌های خوانده شده -->
     <div id="latestBooks">
       <h2>آخرین کتابایی که خوندم</h2>
       <div id="latestBooksContainer"></div>
     </div>
-
-    <!-- بخش نمایش آخرین نوشته هام با عنوان داخل باکس -->
-    <div id="posts-container">
-      <h2>آخرین نوشته هام</h2>
-      <!-- پست‌ها به صورت داینامیک در اینجا اضافه خواهند شد -->
-    </div>
   </div>
 
   <script>
-    // دریافت المان‌های دکمه تغییر تم و آیکن مرتبط
+    // دریافت المان‌های دکمه تغییر تم و آیکن مربوطه
     const btn = document.getElementById("themeBtn");
     const icon = document.getElementById("themeIcon");
 
@@ -258,7 +258,7 @@
       themeMetaTag.setAttribute('content', color);
     }
 
-    // رویداد کلیک برای تغییر تم (شب و روز)
+    // رویداد کلیک جهت تغییر تم (شب و روز)
     btn.addEventListener("click", () => {
       document.body.classList.toggle("dark");
       const isDark = document.body.classList.contains("dark");
@@ -311,7 +311,7 @@
         latest.forEach(book => {
           const card = document.createElement("div");
           card.className = "card";
-          // رویداد کلیک جهت هدایت به صفحه کتابخونۀ من
+          // با کلیک به صفحه کتابخونۀ من هدایت می‌شود
           card.addEventListener("click", () => {
             window.open("https://books.amuleo.ir", "_blank");
           });
@@ -335,8 +335,9 @@
 
     /**
      * تابع loadLatestPosts:
-     * دریافت آخرین نوشته‌های وبلاگ از Cloudflare Worker و نمایش آن‌ها.
-     * پست‌ها به ترتیب طبیعی (از بالا به پایین) نمایش داده می‌شوند.
+     * دریافت آخرین نوشته‌های وبلاگ از Cloudflare Worker
+     * و نمایش آن‌ها در بخش posts-container.
+     * به جای افزودن آیتم‌ها مستقیماً در posts-container، از دایو داخلی "latestPostsContent" استفاده می‌شود تا عنوان (h2) حفظ شود.
      */
     async function loadLatestPosts() {
       const apiUrl = "https://blog-postviewer.immohammaddavoodi.workers.dev/";
@@ -344,44 +345,35 @@
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error("خطا در دریافت داده‌های وبلاگ");
         
-        // گرفتن داده‌های JSON از سرور
         const postsData = await response.json();
-        // انتخاب ۳ پست آخر به ترتیب طبیعی (بدون معکوس کردن)
         const posts = Array.isArray(postsData) ? postsData.slice(-3) : [];
         
-        // انتخاب المان کانتینر پست‌ها
-        const postsContainer = document.getElementById("posts-container");
-        // حفظ عنوان اصلی (تگ h2) و حذف پست‌های قبلی در صورت بارگذاری مجدد
-        while (postsContainer.childNodes.length > 1) {
-          postsContainer.removeChild(postsContainer.lastChild);
-        }
+        // استفاده از دایو داخلی "latestPostsContent" برای درج داینامیک پست‌ها
+        const postsContent = document.getElementById("latestPostsContent");
+        postsContent.innerHTML = "";
         
-        // ساخت کارت برای هر پست به سبک مینیمال
         posts.forEach(post => {
           const postCard = document.createElement("div");
           postCard.className = "card";
-          // رویداد کلیک جهت هدایت به لینک پست در تب جدید
+          // با کلیک به لینک پست هدایت می‌شود
           postCard.addEventListener("click", () => {
             window.open(post.link, "_blank");
           });
-          
-          // ایجاد div برای محتوای کارت پست
           const content = document.createElement("div");
           content.className = "card-content";
           content.innerHTML = `
             <h3>${post.title}</h3>
             <p>${post.summary}</p>
           `;
-          
           postCard.appendChild(content);
-          postsContainer.appendChild(postCard);
+          postsContent.appendChild(postCard);
         });
       } catch (error) {
         console.error("خطا در دریافت داده‌های وبلاگ:", error.message);
       }
     }
 
-    // اطمینان از بارگذاری کامل المان‌ها قبل از اجرای توابع
+    // اطمینان از اینکه تمامی المان‌ها قبل از اجرای توابع بارگذاری شده‌اند
     document.addEventListener("DOMContentLoaded", () => {
       // دریافت و اعمال تم ذخیره‌شده از کوکی
       const saved = getCookie("theme");
@@ -390,7 +382,6 @@
       icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
       updateThemeColor(isDark ? "#333" : "#f9fafd");
 
-      // فراخوانی توابع بارگذاری آخرین کتاب‌ها و پست‌ها
       loadLatestBooks();
       loadLatestPosts();
     });
