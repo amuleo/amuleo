@@ -129,14 +129,12 @@
     }
     
     /* سبک بخش آخرین نوشته‌ها و کتاب‌ها */
-    /* تنظیم عنوان h2 مشابه برای هر دو بخش و وسط چین کردن آن */
     #posts-container h2, #latestBooks h2 {
       font-size: 1.5rem;
       margin-bottom: 15px;
       color: var(--text);
       text-align: center;
     }
-    /* سبک کارت‌های آیتم (مشترک برای کتاب و پست) */
     .card {
       background-color: var(--card);
       border: none;
@@ -149,35 +147,50 @@
       position: relative;
       overflow: hidden;
       cursor: pointer;
-      text-align: center; /* محتوا به‌طور کلی وسط چین */
+      text-align: center;
     }
-
     .card p {
-      display: inline-block; /* shrink-wrap شدن به محتوا، بدون اعمال عرض ثابت */
-      text-align: justify;   /* تراز متن به صورت justify */
-      margin: 0;             /* حذف فاصله‌های ناخواسته */
-      /* در صورت نیاز می‌تونی پدینگ دو طرف اضافه کنی */
+      display: inline-block;
+      text-align: justify;
+      margin: 0;
     }
-
-    
     .card-content {
       font-size: 1rem;
     }
     .card-content p {
-      text-align: justify; /* پاراگراف‌ها حالت justify */
+      text-align: justify;
     }
     .label {
       font-weight: bold;
       color: var(--span);
     }
-    
-    /* تنظیم فاصله بخش‌ها */
     #posts-container {
       margin-top: 50px;
     }
     #latestBooks {
       margin-top: 30px;
       margin-bottom: 40px;
+    }
+    
+    /* استایل دکمه‌ی نمایش لینک‌های اضافی – مشابه استایل لینک‌ها */
+    .more-btn {
+      padding: 10px;
+      font-size: 1rem;
+      text-decoration: none;
+      border: 0;
+      border-radius: 10px;
+      background-color: var(--card);
+      color: #4b3e38;
+      transition: 0.3s;
+      cursor: pointer;
+      outline: none;
+    }
+    .more-btn:hover {
+      background-color: var(--hover);
+      color: var(--text);
+    }
+    body.dark .more-btn {
+      color: var(--text);
     }
   </style>
 </head>
@@ -205,11 +218,9 @@
       <a href="https://books.amuleo.ir" target="_blank">کتابخونۀ من</a>
     </div>
 
-    <!-- جابجایی جای باکس‌ها؛ ابتدا بخش آخرین نوشته‌ها و سپس آخرین کتاب‌ها -->
     <!-- بخش نمایش آخرین نوشته‌ها -->
     <div id="posts-container">
       <h2>آخرین نوشته هام</h2>
-      <!-- ایجاد دایو داخلی جهت درج داینامیک پست‌ها؛ تضمین باقی ماندن عنوان -->
       <div id="latestPostsContent"></div>
     </div>
 
@@ -221,16 +232,9 @@
   </div>
 
   <script>
-    // دریافت المان‌های دکمه تغییر تم و آیکن مربوطه
-    const btn = document.getElementById("themeBtn");
-    const icon = document.getElementById("themeIcon");
-
-    /** 
-     * تابع setCookie: تنظیم کوکی جهت ذخیره وضعیت تم
-     * @param {string} name - نام کوکی
-     * @param {string} value - مقدار کوکی
-     * @param {number} days - تعداد روزهای انقضا
-     */
+    /*--------------------------
+       توابع کمکی (کوکی، به‌روزرسانی تم)
+    ---------------------------*/
     function setCookie(name, value, days) {
       const d = new Date();
       d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -238,11 +242,6 @@
       document.cookie = name + "=" + value + ";" + expires + ";path=/";
     }
 
-    /**
-     * تابع getCookie: دریافت مقدار یک کوکی
-     * @param {string} name - نام کوکی
-     * @returns {string} - مقدار کوکی در صورت وجود
-     */
     function getCookie(name) {
       let nameEq = name + "=";
       let ca = document.cookie.split(';');
@@ -253,21 +252,22 @@
       return "";
     }
 
-    /**
-     * تابع updateThemeColor: به‌روزرسانی meta tag مربوط به theme-color
-     * @param {string} color - رنگ مورد نظر
-     */
     function updateThemeColor(color) {
       let themeMetaTag = document.querySelector('meta[name="theme-color"]');
       if (!themeMetaTag) {
-          themeMetaTag = document.createElement('meta');
-          themeMetaTag.setAttribute('name', 'theme-color');
-          document.head.appendChild(themeMetaTag);
+        themeMetaTag = document.createElement('meta');
+        themeMetaTag.setAttribute('name', 'theme-color');
+        document.head.appendChild(themeMetaTag);
       }
       themeMetaTag.setAttribute('content', color);
     }
 
-    // رویداد کلیک جهت تغییر تم (شب و روز)
+    /*--------------------------
+       کد مربوط به تغییر تم (شب و روز)
+    ---------------------------*/
+    const btn = document.getElementById("themeBtn");
+    const icon = document.getElementById("themeIcon");
+
     btn.addEventListener("click", () => {
       document.body.classList.toggle("dark");
       const isDark = document.body.classList.contains("dark");
@@ -276,22 +276,9 @@
       updateThemeColor(isDark ? "#333" : "#f9fafd");
     });
 
-    // بارگذاری وضعیت تم از کوکی در زمان لود صفحه
-    window.addEventListener("load", () => {
-      const saved = getCookie("theme");
-      if (saved === "dark") {
-        document.body.classList.add("dark");
-        icon.className = "fas fa-moon";
-      } else {
-        icon.className = "fas fa-sun";
-        updateThemeColor(document.body.classList.contains("dark") ? "#333" : "#f9fafd");
-      }
-    });
-
-    /**
-     * تابع loadLatestBooks:
-     * دریافت آخرین کتاب‌های خوانده شده از Cloudflare Worker و نمایش آن‌ها.
-     */
+    /*--------------------------
+       توابع بارگذاری پست‌ها و کتاب‌ها از Cloudflare Worker
+    ---------------------------*/
     async function loadLatestBooks() {
       try {
         const response = await fetch("https://book-manager-worker.immohammaddavoodi.workers.dev/list-books");
@@ -313,14 +300,13 @@
           throw new Error("خطا در دریافت اطلاعات.");
         }
         
-        // انتخاب ۳ کتاب آخر به ترتیب طبیعی (از بالا به پایین)
+        // انتخاب ۳ کتاب آخر (ترتیب طبیعی)
         const latest = books.slice(-3);
         const latestBooksContainer = document.getElementById("latestBooksContainer");
         latestBooksContainer.innerHTML = "";
         latest.forEach(book => {
           const card = document.createElement("div");
           card.className = "card";
-          // با کلیک به صفحه کتابخونۀ من هدایت می‌شود
           card.addEventListener("click", () => {
             window.open("https://books.amuleo.ir", "_blank");
           });
@@ -342,12 +328,6 @@
       }
     }
 
-    /**
-     * تابع loadLatestPosts:
-     * دریافت آخرین نوشته‌های وبلاگ از Cloudflare Worker
-     * و نمایش آن‌ها در بخش posts-container.
-     * به جای افزودن آیتم‌ها مستقیماً در posts-container، از دایو داخلی "latestPostsContent" استفاده می‌شود تا عنوان (h2) حفظ شود.
-     */
     async function loadLatestPosts() {
       const apiUrl = "https://blog-postviewer.immohammaddavoodi.workers.dev/";
       try {
@@ -357,14 +337,12 @@
         const postsData = await response.json();
         const posts = Array.isArray(postsData) ? postsData.slice(-3) : [];
         
-        // استفاده از دایو داخلی "latestPostsContent" برای درج داینامیک پست‌ها
         const postsContent = document.getElementById("latestPostsContent");
         postsContent.innerHTML = "";
         
         posts.forEach(post => {
           const postCard = document.createElement("div");
           postCard.className = "card";
-          // با کلیک به لینک پست هدایت می‌شود
           postCard.addEventListener("click", () => {
             window.open(post.link, "_blank");
           });
@@ -382,15 +360,44 @@
       }
     }
 
-    // اطمینان از اینکه تمامی المان‌ها قبل از اجرای توابع بارگذاری شده‌اند
+    /*--------------------------
+       یکپارچه‌سازی همه رویدادها پس از بارگذاری کامل DOM
+    ---------------------------*/
     document.addEventListener("DOMContentLoaded", () => {
-      // دریافت و اعمال تم ذخیره‌شده از کوکی
+      // مدیریت دکمه‌ی نمایش لینک‌های اضافی در بخش social-media
+      const socialLinks = document.querySelectorAll('.social-media a');
+      if (socialLinks.length > 3) {
+        const hiddenLinks = Array.from(socialLinks).slice(3);
+        hiddenLinks.forEach(link => {
+          link.style.display = 'none';
+          link.style.opacity = 0;
+        });
+        const moreBtn = document.createElement('button');
+        moreBtn.className = 'more-btn';
+        moreBtn.textContent = 'دیگر لینک های من';
+        socialLinks[2].insertAdjacentElement('afterend', moreBtn);
+        moreBtn.addEventListener('click', function() {
+          hiddenLinks.forEach((link, index) => {
+            setTimeout(() => {
+              link.style.display = 'block';
+              link.style.transition = 'opacity 0.5s';
+              link.style.opacity = '1';
+            }, index * 150);
+          });
+          moreBtn.style.transition = 'opacity 0.5s';
+          moreBtn.style.opacity = '0';
+          setTimeout(() => { moreBtn.remove(); }, 500);
+        });
+      }
+
+      // اعمال تم ذخیره‌شده با استفاده از کوکی
       const saved = getCookie("theme");
       const isDark = saved === "dark";
       document.body.classList.toggle("dark", isDark);
       icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
       updateThemeColor(isDark ? "#333" : "#f9fafd");
 
+      // بارگذاری آخرین کتاب‌ها و نوشته‌ها
       loadLatestBooks();
       loadLatestPosts();
     });
