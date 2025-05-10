@@ -24,6 +24,7 @@
       --border: #e5e5e5;
       --text: #333;
       --hover: #dbdce0;
+      --span: #9e8e7; /* رنگ مورد نظر برای عناوین داخل هر آیتم */
     }
 
     body {
@@ -71,7 +72,7 @@
 
     .header h1 {
       margin-right: 30px;
-      color: var(--text); /* رنگ متن هدر */
+      color: var(--text);
       font-size: 1.5rem;
     }
 
@@ -166,6 +167,10 @@
       text-align: justify;
       font-size: 1rem;
     }
+    .label {
+      font-weight: bold;
+      color: var(--span);
+    }
   </style>
 </head>
 <body>
@@ -197,7 +202,6 @@
       <h2>آخرین کتاب‌های خوانده شده</h2>
       <div id="latestBooksContainer"></div>
     </div>
-
   </div>
 
   <script>
@@ -218,7 +222,7 @@
       for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) == ' ') c = c.substring(1);
-        if (c.indexOf(nameEq) == 0) return c.substring(nameEq.length, c.length);
+        if (c.indexOf(nameEq) === 0) return c.substring(nameEq.length, c.length);
       }
       return "";
     }
@@ -268,13 +272,11 @@
     // تابعی جهت دریافت آخرین کتاب‌های خوانده شده از Cloudflare Worker
     async function loadLatestBooks() {
       try {
-        // فراخوانی API برای دریافت لیست کتاب‌ها
         const response = await fetch("https://book-manager-worker.immohammaddavoodi.workers.dev/list-books");
         if (!response.ok) throw new Error("خطا در دریافت اطلاعات از سرور");
         
         const data = await response.json();
         let books = [];
-        // استخراج داده‌ها با توجه به ساختار برگشتی
         if (Array.isArray(data)) {
           books = data;
         } else if (data.success) {
@@ -289,8 +291,8 @@
           throw new Error("خطا در دریافت اطلاعات.");
         }
         
-        // انتخاب ۳ کتاب آخر (فرض بر این است که آرایه به ترتیب زمانی مرتب شده است)
-        const latest = books.slice(-3);
+        // انتخاب ۳ کتاب آخر به طوری که جدیدترین در بالا نمایش داده شود
+        const latest = books.slice(-3).reverse();
         const latestBooksContainer = document.getElementById("latestBooksContainer");
         latestBooksContainer.innerHTML = "";
         latest.forEach(book => {
@@ -299,13 +301,12 @@
           const content = document.createElement("div");
           content.className = "card-content";
           content.innerHTML = `
-            <p>نام کتاب: ${book.name || book.title}</p>
-            <hr>
-            <p>نویسنده: ${book.author}</p>
-            <hr>
-            <p>تعداد صفحات: ${book.pages || book.page}</p>
-            <hr>
-            <p>سال مطالعه: ${book.year}</p>
+            <p>
+              <span class="label">نام کتاب:</span> ${book.name || book.title} &nbsp; – &nbsp;
+              <span class="label">نویسنده:</span> ${book.author} &nbsp; – &nbsp;
+              <span class="label">تعداد صفحات:</span> ${book.pages || book.page} &nbsp; – &nbsp;
+              <span class="label">سال مطالعه:</span> ${book.year}
+            </p>
           `;
           card.appendChild(content);
           latestBooksContainer.appendChild(card);
