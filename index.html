@@ -333,6 +333,7 @@
         // برای هر پست یک div ایجاد می‌کنیم
         data.forEach(post => {
           const postDiv = document.createElement("div");
+          postDiv.className = "card";
           // تنظیم نشانگر جهت نمایش قابل کلیک بودن
           postDiv.style.cursor = "pointer";
 
@@ -342,7 +343,7 @@
           });
 
           // ایجاد و افزودن عنوان مطلب
-          const titleElem = document.createElement("h2");
+          const titleElem = document.createElement("h3");
           titleElem.textContent = post.title;
 
           // ایجاد و افزودن توضیحات مطلب
