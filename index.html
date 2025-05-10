@@ -46,6 +46,23 @@
       background-color: var(--bg);
       color: var(--text);
     }
+    
+     #progress {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 5px solid #ddd;
+        border-top: 5px solid #3498db; /* رنگ متحرک */
+        animation: spin 1.5s linear infinite;
+        position: fixed;
+        transition: opacity 0.5s ease-out;
+      }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
     .container {
       max-width: 800px;
       margin: auto;
@@ -70,6 +87,7 @@
       color: var(--text);
       font-size: 1.5rem;
     }
+    
     .theme-toggle {
       width: 40px;
       height: 40px;
@@ -196,6 +214,8 @@
   </style>
 </head>
 <body>
+ <div id="progress"></div>
+  
   <div class="container">
     <div class="header">
       <h1>عمو لئو هستم،</h1>
@@ -233,6 +253,7 @@
   </div>
 
   <script>
+    
     /*--------------------------
        توابع کمکی (کوکی، به‌روزرسانی تم)
     ---------------------------*/
@@ -276,6 +297,15 @@
       setCookie("theme", isDark ? "dark" : "light", 365);
       updateThemeColor(isDark ? "#333" : "#f9fafd");
     });
+
+    // پروگرس بار
+     setTimeout(() => {
+      const progress = document.getElementById("progress");
+      progress.style.opacity = "0";
+      setTimeout(() => {
+        progress.style.display = "none"; // حذف از صفحه
+      }, 500);
+    }, 1500);
 
     /*--------------------------
        توابع بارگذاری پست‌ها و کتاب‌ها از Cloudflare Worker
