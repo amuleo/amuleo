@@ -151,6 +151,15 @@
       cursor: pointer;
       text-align: center; /* محتوا به‌طور کلی وسط چین */
     }
+
+    .card p {
+      display: inline-block; /* shrink-wrap شدن به محتوا، بدون اعمال عرض ثابت */
+      text-align: justify;   /* تراز متن به صورت justify */
+      margin: 0;             /* حذف فاصله‌های ناخواسته */
+      /* در صورت نیاز می‌تونی پدینگ دو طرف اضافه کنی */
+    }
+
+    
     .card-content {
       font-size: 1rem;
     }
@@ -362,7 +371,7 @@
           const content = document.createElement("div");
           content.className = "card-content";
           content.innerHTML = `
-            <h3>${post.title}</h3>
+            <p style="font-weight: bold; font-size: 20px; color: var(--span)">${post.title}</p><br>
             <p>${post.summary}</p>
           `;
           postCard.appendChild(content);
