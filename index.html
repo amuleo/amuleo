@@ -133,11 +133,15 @@
       margin-top: 30px;
       margin-bottom: 40px; /* افزایش فاصله با بخش بعدی */
     }
-    #latestBooks h2 {
+    /* هدر عنوان هر دو بخش کتاب و پست، وسط چین شده */
+    #latestBooks h2, #posts-container h2 {
       font-size: 1.5rem;
       margin-bottom: 15px;
       color: var(--text);
+      text-align: center;
     }
+    
+    /* استایل کارت (آیتم‌ها) */
     .card {
       background-color: var(--card);
       border: none;
@@ -149,9 +153,14 @@
       box-sizing: border-box;
       position: relative;
       overflow: hidden;
+      cursor: pointer; /* تمامی آیتم‌ها قابلیت کلیک نشان می‌دهند */
+      text-align: center; /* محتوای کارت به‌طور کلی وسط چین می‌شود */
+    }
+    /* اطمینان از اینکه پاراگراف‌ها برای خوانایی، متن‌چین (justify) هستند */
+    .card-content p {
+      text-align: justify;
     }
     .card-content {
-      text-align: justify;
       font-size: 1rem;
     }
     .label {
@@ -162,11 +171,6 @@
     /* سبک بخش آخرین نوشته هام */
     #posts-container {
       margin-top: 50px; /* افزایش فاصله نسبت به آخرین کتاب‌ها */
-    }
-    #posts-container h2 {
-      font-size: 1.5rem;
-      margin-bottom: 15px;
-      color: var(--text);
     }
   </style>
 </head>
@@ -200,7 +204,7 @@
       <div id="latestBooksContainer"></div>
     </div>
 
-    <!-- بخش نمایش آخرین نوشته هام با عنوان سمت بالا -->
+    <!-- بخش نمایش آخرین نوشته هام با عنوان داخل باکس -->
     <div id="posts-container">
       <h2>آخرین نوشته هام</h2>
       <!-- پست‌ها به صورت داینامیک در اینجا اضافه خواهند شد -->
@@ -213,7 +217,7 @@
     const icon = document.getElementById("themeIcon");
 
     /** 
-     * تابع setCookie: تنظیم کوکی برای ذخیره وضعیت تم
+     * تابع setCookie: تنظیم کوکی جهت ذخیره وضعیت تم
      * @param {string} name - نام کوکی
      * @param {string} value - مقدار کوکی
      * @param {number} days - تعداد روزهای انقضا
@@ -226,7 +230,7 @@
     }
 
     /**
-     * تابع getCookie: دریافت مقدار ذخیره شده برای یک کوکی
+     * تابع getCookie: دریافت مقدار یک کوکی
      * @param {string} name - نام کوکی
      * @returns {string} - مقدار کوکی در صورت وجود
      */
@@ -254,7 +258,7 @@
       themeMetaTag.setAttribute('content', color);
     }
 
-    // رویداد کلیک دکمه تغییر تم (شب و روز)
+    // رویداد کلیک برای تغییر تم (شب و روز)
     btn.addEventListener("click", () => {
       document.body.classList.toggle("dark");
       const isDark = document.body.classList.contains("dark");
@@ -307,9 +311,7 @@
         latest.forEach(book => {
           const card = document.createElement("div");
           card.className = "card";
-          // افزودن استایل کلیک‌پذیری به کارت کتاب
-          card.style.cursor = "pointer";
-          // اضافه کردن رویداد کلیک جهت هدایت به صفحه کتابخونۀ من
+          // رویداد کلیک جهت هدایت به صفحه کتابخونۀ من
           card.addEventListener("click", () => {
             window.open("https://books.amuleo.ir", "_blank");
           });
@@ -333,8 +335,8 @@
 
     /**
      * تابع loadLatestPosts:
-     * دریافت آخرین نوشته‌های وبلاگ از Cloudflare Worker
-     * و نمایش ۳ پست اخیر به ترتیب از بالا به پایین (ترتیب طبیعی داده‌ها).
+     * دریافت آخرین نوشته‌های وبلاگ از Cloudflare Worker و نمایش آن‌ها.
+     * پست‌ها به ترتیب طبیعی (از بالا به پایین) نمایش داده می‌شوند.
      */
     async function loadLatestPosts() {
       const apiUrl = "https://blog-postviewer.immohammaddavoodi.workers.dev/";
@@ -344,7 +346,7 @@
         
         // گرفتن داده‌های JSON از سرور
         const postsData = await response.json();
-        // انتخاب ۳ پست آخر بدون تغییر ترتیب (ترتیب طبیعی)
+        // انتخاب ۳ پست آخر به ترتیب طبیعی (بدون معکوس کردن)
         const posts = Array.isArray(postsData) ? postsData.slice(-3) : [];
         
         // انتخاب المان کانتینر پست‌ها
@@ -354,18 +356,16 @@
           postsContainer.removeChild(postsContainer.lastChild);
         }
         
-        // ساخت کارت برای هر پست به صورت مینیمال مشابه ساختار کتاب‌ها
+        // ساخت کارت برای هر پست به سبک مینیمال
         posts.forEach(post => {
           const postCard = document.createElement("div");
           postCard.className = "card";
-          postCard.style.cursor = "pointer"; // افزودن قابلیت کلیک
-          
-          // افزودن رویداد کلیک برای هدایت به لینک پست در تب جدید
+          // رویداد کلیک جهت هدایت به لینک پست در تب جدید
           postCard.addEventListener("click", () => {
             window.open(post.link, "_blank");
           });
           
-          // ایجاد div برای محتوای کارت پست به سبک مینیمال
+          // ایجاد div برای محتوای کارت پست
           const content = document.createElement("div");
           content.className = "card-content";
           content.innerHTML = `
