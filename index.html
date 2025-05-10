@@ -204,6 +204,10 @@
     </div>
   </div>
 
+  <div id="posts-container">
+      <h2>آخرین نوشته هام</h2>
+  </div>
+
   <script>
     const btn = document.getElementById("themeBtn");
     const icon = document.getElementById("themeIcon");
@@ -315,6 +319,49 @@
         console.error(error.message);
       }
     }
+
+    // اسکریپت مربوط به آخرین نوشته های وبلاگم
+   // آدرس Worker شما که خروجی JSON ایجاد می‌کند.
+    const apiUrl = "https://blog-postviewer.immohammaddavoodi.workers.dev/";
+
+    // دریافت داده‌ها از Worker
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById("posts-container");
+
+        // برای هر پست یک div ایجاد می‌کنیم
+        data.forEach(post => {
+          const postDiv = document.createElement("div");
+          // تنظیم نشانگر جهت نمایش قابل کلیک بودن
+          postDiv.style.cursor = "pointer";
+
+          // افزودن رویداد کلیک برای باز کردن لینک در تب جدید
+          postDiv.addEventListener("click", () => {
+            window.open(post.link, "_blank");
+          });
+
+          // ایجاد و افزودن عنوان مطلب
+          const titleElem = document.createElement("h2");
+          titleElem.textContent = post.title;
+
+          // ایجاد و افزودن توضیحات مطلب
+          const summaryPara = document.createElement("p");
+          summaryPara.textContent = post.summary;
+
+          // اضافه کردن عنوان و توضیحات به دایو مربوطه
+          postDiv.appendChild(titleElem);
+          postDiv.appendChild(summaryPara);
+
+          // افزودن دایو پست به کانتینر اصلی
+          container.appendChild(postDiv);
+        });
+      })
+      .catch(err => {
+        console.error("خطا در دریافت داده‌ها:", err);
+      });
+    
+  
   </script>
 </body>
 </html>
