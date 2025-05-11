@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>عمو لئو</title>
+  <meta name="description" content="سایت شخصی عمو لئو | بیوگرافی، دل نوشته، روز نوشت و تجربیات زندگی کنکوری.">
+  <meta name="keywords" content="عمو لئو, بیوگرافی, دل نوشته, روز نوشت, دل نوشت, تجربیات زندگی, کنکوری, عمو لئو, افکار, سایت شخصی">
+  <meta name="author" content="عمو لئو">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="">
+  <meta name="msapplication-navbutton-color" content="">
+  <meta name="apple-mobile-web-app-status-bar-style" content="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="icon" href="data:image/x-icon;base64,AA==" type="image/x-icon">
+  <style>
+    @import url('https://v1.fontapi.ir/css/Mikhak');
+    @font-face {
+      font-family: 'YekanBakh';
+      src: url('fonts/YekanBakh-Regular.ttf') format('truetype');
+    }
+    :root {
+      --bg: #eef1f6;
+      --card: #ffffff;
+      --border: #e5e5e5;
+      --text: #333;
+      --hover: #dbdce0;
+      --span: #9e8e71;
+    }
+
+    /* برای مرورگرهای مبتنی بر WebKit (مثل کروم، سافاری، جدیدترین نسخه‌های اپرا) */
+::-webkit-scrollbar {
+  width: 5px;    /* اگر عرض اولیه مثلاً 10px است، 5px همان نصف آن است */
+  height: 5px;   /* برای اسکرول بار افقی (در صورت نیاز) */
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);  /* رنگ پس‌زمینه ریل اسکرول بار */
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text); /* رنگ نوار اسکرول (thumb) */
+  border-radius: 5px;       /* انحنای لبه‌ها به دلخواه */
+}
+
+/* برای فایرفاکس */
+html {
+  scrollbar-width: thin;  /* thin نمایانگر اسکرول باری نازک است */
+  scrollbar-color: var(--text) var(--bg); /* رنگ نوار و ریل */
+}
+
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      font-family: Mikhak, sans-serif;
+      color: var(--text);
+      direction: rtl;
+      font-size: 1.1rem;
+      text-align: center;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body.dark {
+      --bg: #212121;
+      --card: #303030;
+      --border: #666;
+      --text: #f0f0f0;
+      --hover: #1a1a1c;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 120px 10px;
+    }
+    .header {
+      display: flex;
+      position: fixed;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background-color: var(--card);
+      padding: 15px;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      height: 60px;
+    }
+    .header h1 {
+      margin-right: 30px;
+      color: var(--text);
+      font-size: 1.5rem;
+    }
+    .theme-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: none;
+      background-color: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .theme-toggle i {
+      color: var(--text);
+      font-size: 18px;
+    }
+    .profile {
+      max-width: 200px;
+      border-radius: 25%;
+      margin: 10px 10px;
+    }
+    .social-media {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .social-media a {
+      padding: 10px;
+      font-size: 1rem;
+      text-decoration: none;
+      border: 0px solid var(--border);
+      border-radius: 10px;
+      background-color: var(--card);
+      color: #4b3e38;
+      transition: 0.3s;
+    }
+    body.dark .social-media a {
+      color: var(--text);
+    }
+    .social-media a:hover {
+      background-color: var(--hover);
+      color: var(--text);
+    }
+    p {
+      text-align: justify;
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        font-size: 1rem;
+      }
+      .container {
+        padding: 100px 20px;
+      }
+      .header {
+        height: 40px;
+      }    
+    }
+    
+    /* سبک بخش آخرین نوشته‌ها و کتاب‌ها */
+    #posts-container h2, #latestBooks h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--text);
+      text-align: center;
+    }
+    .card {
+      background-color: var(--card);
+      border: none;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 15px auto;
+      max-width: 800px;
+      width: 100%;
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      text-align: center;
+    }
+    .card p {
+      display: inline-block;
+      text-align: justify;
+      margin: 0;
+    }
+    .card-content {
+      font-size: 1rem;
+    }
+    .card-content p {
+      text-align: justify;
+    }
+    .label {
+      font-weight: bold;
+      color: var(--span);
+    }
+    #posts-container {
+      margin-top: 10px;
+    }
+    #latestBooks {
+      margin-top: 30px;
+      margin-bottom: 40px;
+    }
+    
+    /* استایل دکمه‌ی نمایش لینک‌های اضافی – مشابه استایل لینک‌ها */
+    .more-btn {
+      padding: 10px;
+      color: var(--text);
+      font-size: 1rem;
+      text-decoration: none;
+      border: 0;
+      border-radius: 10px;
+      background-color: var(--card);
+      transition: 0.3s;
+      cursor: pointer;
+      outline: none;
+      font-family: Mikhak, sans-serif;
+    }
+    .more-btn:hover {
+      background-color: var(--hover);
+      color: var(--text);
+    }
+    body.dark .more-btn {
+      color: var(--text);
+    }
+    
+    /* استایل صفحه پروگرس (بار بارگذاری) */
+    #loadingScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s;
+    }
+    #loadingScreen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .spinner {
+      width: 25px;
+      height: 25px;
+      border: 3px solid var(--border);
+      border-top: 3px solid var(--text);
+      border-radius: 50%;
+      animation: spin 1.2s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- صفحه پروگرس (بارگذاری) -->
+  <div id="loadingScreen">
+    <div class="spinner"></div>
+  </div>
+  
+  <div class="container">
+    <div class="header">
+      <h1>عمو لئو هستم،</h1>
+      <button class="theme-toggle" id="themeBtn" title="تغییر حالت">
+        <i class="fas fa-sun" id="themeIcon"></i>
+      </button>
+    </div>
+
+    <img src="pics/profile.jpg" alt="عمو لئو" class="profile" />
+
+    <div class="text">
+      <p>هدفم فعلا درس خوندنه، کارای گرافیکی هم انجام میدم، به تولید محـــتــوای ویدیویی هم علاقۀ زیــــــــــــــــــــادی دارم. دروس مورد علاقم هم زیست و ریاضین.</p>
+    </div>
+
+    <div class="social-media">
+      <a href="https://notes.amuleo.ir" target="_blank">بلـــــــــــــــــاگ من</a>
+      <a href="https://link.yeolpumta.com/P3R5cGU9Z3JvdXBJbnZpdGUmaWQ9NDc4NzI4MA==" target="_blank">گروه درسی نبض جنگجو</a>
+      <a href="https://robustaclub.ir" target="_blank">باشگاه مطالعاتی روبوستا</a>
+      <a href="https://rtool.amuleo.ir" target="_blank">ابزار آنلاین گرافیکی من</a>
+      <a href="https://lastproject.blogfa.com" target="_blank">آخرین پروژم</a>
+      <a href="https://books.amuleo.ir" target="_blank">کتابخونۀ من</a>
+    </div>
+
+    <!-- بخش نمایش آخرین نوشته‌ها -->
+    <div id="posts-container">
+      <h2><i class="fa-solid fa-pen-nib"></i>&nbsp;آخرین نوشته هام</h2>
+      <div id="latestPostsContent"></div>
+    </div>
+
+    <!-- بخش نمایش آخرین کتاب‌های خوانده شده -->
+    <div id="latestBooks">
+      <h2><i class="fa-solid fa-book"></i>&nbsp;آخرین کتابایی که خوندم</h2>
+      <div id="latestBooksContainer"></div>
+    </div>
+  </div>
+  
+  <script>
+    /*--------------------------
+       توابع کمکی (کوکی، به‌روزرسانی تم)
+    ---------------------------*/
+    function setCookie(name, value, days) {
+      const d = new Date();
+      d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+      let expires = "expires=" + d.toUTCString();
+      document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    function getCookie(name) {
+      let nameEq = name + "=";
+      let ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i].trim();
+        if (c.indexOf(nameEq) === 0) return c.substring(nameEq.length, c.length);
+      }
+      return "";
+    }
+
+    function updateThemeColor(color) {
+      let themeMetaTag = document.querySelector('meta[name="theme-color"]');
+      if (!themeMetaTag) {
+        themeMetaTag = document.createElement('meta');
+        themeMetaTag.setAttribute('name', 'theme-color');
+        document.head.appendChild(themeMetaTag);
+      }
+      themeMetaTag.setAttribute('content', color);
+    }
+
+    /*--------------------------
+       کد مربوط به تغییر تم (شب و روز)
+    ---------------------------*/
+    const btn = document.getElementById("themeBtn");
+    const icon = document.getElementById("themeIcon");
+
+    btn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      const isDark = document.body.classList.contains("dark");
+      icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
+      setCookie("theme", isDark ? "dark" : "light", 365);
+      updateThemeColor(isDark ? "#333" : "#f9fafd");
+    });
+
+    /*--------------------------
+       توابع بارگذاری پست‌ها و کتاب‌ها از Cloudflare Worker
+    ---------------------------*/
+    async function loadLatestBooks() {
+      try {
+        const response = await fetch("https://book-manager-worker.immohammaddavoodi.workers.dev/list-books");
+        if (!response.ok) throw new Error("خطا در دریافت اطلاعات از سرور");
+        
+        const data = await response.json();
+        let books = [];
+        if (Array.isArray(data)) {
+          books = data;
+        } else if (data.success) {
+          if (data.results && Array.isArray(data.results.results)) {
+            books = data.results.results;
+          } else if (data.results && Array.isArray(data.results)) {
+            books = data.results;
+          } else {
+            throw new Error("داده‌های دریافتی معتبر نیستند.");
+          }
+        } else {
+          throw new Error("خطا در دریافت اطلاعات.");
+        }
+        
+        // انتخاب ۳ کتاب آخر (ترتیب طبیعی)
+        const latest = books.slice(-3);
+        const latestBooksContainer = document.getElementById("latestBooksContainer");
+        latestBooksContainer.innerHTML = "";
+        latest.forEach(book => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.addEventListener("click", () => {
+            window.open("https://books.amuleo.ir", "_blank");
+          });
+          const content = document.createElement("div");
+          content.className = "card-content";
+          content.innerHTML = `
+            <p>
+              <span class="label">نام کتاب:</span> ${book.name || book.title}، &nbsp;
+              <span class="label">نویسنده:</span> ${book.author}، &nbsp;
+              <span class="label">تعداد صفحات:</span> ${book.pages || book.page}، &nbsp;
+              <span class="label">تاریخ مطالعه:</span> ${book.year}.
+            </p>
+          `;
+          card.appendChild(content);
+          latestBooksContainer.appendChild(card);
+        });
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    async function loadLatestPosts() {
+      const apiUrl = "https://blog-postviewer.immohammaddavoodi.workers.dev/";
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("خطا در دریافت داده‌های وبلاگ");
+        
+        const postsData = await response.json();
+        const posts = Array.isArray(postsData) ? postsData.slice(-3) : [];
+        
+        const postsContent = document.getElementById("latestPostsContent");
+        postsContent.innerHTML = "";
+        
+        posts.forEach(post => {
+          const postCard = document.createElement("div");
+          postCard.className = "card";
+          postCard.addEventListener("click", () => {
+            window.open(post.link, "_blank");
+          });
+          const content = document.createElement("div");
+          content.className = "card-content";
+          content.innerHTML = `
+            <p style="font-weight: bold; font-size: 20px; color: var(--span)">${post.title}</p><br>
+            <p>${post.summary}</p>
+          `;
+          postCard.appendChild(content);
+          postsContent.appendChild(postCard);
+        });
+      } catch (error) {
+        console.error("خطا در دریافت داده‌های وبلاگ:", error.message);
+      }
+    }
+
+    /*--------------------------
+       یکپارچه‌سازی همه رویدادها پس از بارگذاری کامل DOM
+    ---------------------------*/
+    document.addEventListener("DOMContentLoaded", () => {
+      // مدیریت دکمه‌ی نمایش لینک‌های اضافی در بخش social-media
+      const socialLinks = document.querySelectorAll('.social-media a');
+      if (socialLinks.length > 2) {
+        const hiddenLinks = Array.from(socialLinks).slice(2);
+        hiddenLinks.forEach(link => {
+          link.style.display = 'none';
+          link.style.opacity = 0;
+        });
+        const moreBtn = document.createElement('button');
+        moreBtn.className = 'more-btn';
+        moreBtn.textContent = '+ دیگر لینک های من +';
+        socialLinks[2].insertAdjacentElement('afterend', moreBtn);
+        moreBtn.addEventListener('click', function() {
+          hiddenLinks.forEach((link, index) => {
+            setTimeout(() => {
+              link.style.display = 'block';
+              link.style.transition = 'opacity 0.5s';
+              link.style.opacity = '1';
+            }, index * 150);
+          });
+          moreBtn.style.transition = 'opacity 0.5s';
+          moreBtn.style.opacity = '0';
+          setTimeout(() => { moreBtn.remove(); }, 500);
+        });
+      }
+
+      // اعمال تم ذخیره‌شده با استفاده از کوکی
+      const saved = getCookie("theme");
+      const isDark = saved === "dark";
+      document.body.classList.toggle("dark", isDark);
+      icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
+      updateThemeColor(isDark ? "#333" : "#f9fafd");
+
+      // بارگذاری آخرین کتاب‌ها و نوشته‌ها
+      loadLatestBooks();
+      loadLatestPosts();
+
+      // حذف صفحه پروگرس پس از 1 ثانیه و اعمال انیمیشن محو شدن به مدت 0.5 ثانیه
+      setTimeout(() => {
+        const loadingScreen = document.getElementById("loadingScreen");
+        if (loadingScreen) {
+          loadingScreen.classList.add("fade-out");
+          setTimeout(() => {
+            loadingScreen.remove();
+          }, 500);
+        }
+      }, 800);
+    });
+  </script>
+</body>
+</html>
