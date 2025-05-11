@@ -427,8 +427,8 @@ html {
     document.addEventListener("DOMContentLoaded", () => {
       // مدیریت دکمه‌ی نمایش لینک‌های اضافی در بخش social-media
       const socialLinks = document.querySelectorAll('.social-media a');
-      if (socialLinks.length > 3) {
-        const hiddenLinks = Array.from(socialLinks).slice(3);
+      if (socialLinks.length > 2) {
+        const hiddenLinks = Array.from(socialLinks).slice(2);
         hiddenLinks.forEach(link => {
           link.style.display = 'none';
           link.style.opacity = 0;
