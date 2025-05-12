@@ -362,42 +362,33 @@ html {
         }
         
         // انتخاب ۳ کتاب آخر (ترتیب طبیعی)
-        try {
-  // فیلتر کردن کتاب‌هایی که وضعیت‌ آن‌ها "خوانده شده" (re) است
-  const readBooks = books.filter(book => book.stat === "re");
-
-  // انتخاب ۳ کتاب آخر (ترتیب طبیعی) از میان کتاب‌های خوانده شده
-  const latest = readBooks.slice(-3);
-
-  // پیدا کردن المان ظرف نمایش کتاب‌های اخیر در صفحه اصلی
-  const latestBooksContainer = document.getElementById("latestBooksContainer");
-  latestBooksContainer.innerHTML = "";
-
-  // ایجاد و درج کارت‌ها برای هر کتاب انتخاب شده
-  latest.forEach(book => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.addEventListener("click", () => {
-      window.open("https://books.amuleo.ir", "_blank");
-    });
-
-    const content = document.createElement("div");
-    content.className = "card-content";
-    content.innerHTML = `
-      <p>
-        <span class="label">نام کتاب:</span> ${book.name || book.title}، &nbsp;
-        <span class="label">نویسنده:</span> ${book.author}، &nbsp;
-        <span class="label">تعداد صفحات:</span> ${book.pages || book.page}، &nbsp;
-        <span class="label">تاریخ مطالعه:</span> ${book.year}.
-      </p>
-    `;
-    card.appendChild(content);
-    latestBooksContainer.appendChild(card);
-  });
-} catch (error) {
-  console.error(error.message);
-}
-
+        const readBooks = books.filter(book => book.stat === "re");
+        const latest = readBooks.slice(-3);
+        const latestBooksContainer = document.getElementById("latestBooksContainer");
+        latestBooksContainer.innerHTML = "";
+        latest.forEach(book => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.addEventListener("click", () => {
+            window.open("https://books.amuleo.ir", "_blank");
+          });
+          const content = document.createElement("div");
+          content.className = "card-content";
+          content.innerHTML = `
+            <p>
+              <span class="label">نام کتاب:</span> ${book.name || book.title}، &nbsp;
+              <span class="label">نویسنده:</span> ${book.author}، &nbsp;
+              <span class="label">تعداد صفحات:</span> ${book.pages || book.page}، &nbsp;
+              <span class="label">تاریخ مطالعه:</span> ${book.year}.
+            </p>
+          `;
+          card.appendChild(content);
+          latestBooksContainer.appendChild(card);
+        });
+        } catch (error) {
+          console.error(error.message);
+        }
+        }
     async function loadLatestPosts() {
       const apiUrl = "https://blog-postviewer.immohammaddavoodi.workers.dev/";
       try {
