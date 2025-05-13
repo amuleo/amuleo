@@ -89,11 +89,23 @@ html {
       height: 60px;
     }
     .header h1 {
-      margin-right: 30px;
+      margin-right: 40px;
       color: var(--text);
       font-size: 1.5rem;
-      width: 170px;
     }
+
+    .typing::after {
+    content: "...";
+    display: inline-block;
+    animation: typingDots 1.5s infinite steps(3);
+   }
+  
+    @keyframes typingDots {
+        0% { content: "."; }
+        33% { content: ".."; }
+        66% { content: "..."; }
+    }
+
     .theme-toggle {
       width: 40px;
       height: 40px;
@@ -259,7 +271,7 @@ html {
   
   <div class="container">
     <div class="header">
-      <h1><a href="https://amuleo.ir" style="color: var(--span); text-decoration: none;">عمو لئو</a> هستم،</h1>
+      <h1 class="typing"><a href="https://amuleo.ir" style="color: var(--span); text-decoration: none;">عمو لئو</a> هستم،</h1>
       <button class="theme-toggle" id="themeBtn" title="تغییر حالت">
         <i class="fas fa-sun" id="themeIcon"></i>
       </button>
