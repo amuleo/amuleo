@@ -363,7 +363,7 @@ html {
         
         // انتخاب ۳ کتاب آخر (ترتیب طبیعی)
         const readBooks = books.filter(book => book.stat === "re");
-        const latest = readBooks.slice(-3);
+        const latest = readBooks.slice(-3).reverse();
         const latestBooksContainer = document.getElementById("latestBooksContainer");
         latestBooksContainer.innerHTML = "";
         latest.forEach(book => {
