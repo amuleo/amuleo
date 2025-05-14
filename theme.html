@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تم قابل تغییر</title>
+    <title>انتخاب تم</title>
     <style>
-        /* تنظیمات پیش‌فرض بر اساس تم سیستم */
         @media (prefers-color-scheme: dark) {
             body {
                 background-color: #121212;
@@ -20,7 +19,6 @@
             }
         }
 
-        /* استایل‌های سفارشی برای تغییر دستی */
         body[data-theme="dark"] {
             background-color: #121212 !important;
             color: #ffffff !important;
@@ -37,36 +35,39 @@
             padding: 50px;
         }
 
-        button {
-            padding: 10px 20px;
-            margin-top: 20px;
-            border: none;
-            cursor: pointer;
+        select {
+            padding: 10px;
             font-size: 16px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>تم صفحه با تنظیمات سیستم هماهنگ می‌شود 🚀</h1>
-    <p>اما شما هم می‌توانید آن را تغییر دهید!</p>
-    <button onclick="toggleTheme()">تغییر تم</button>
+    <h1>انتخاب تم صفحه 🌙☀️</h1>
+    <label for="theme-select">حالت تم را انتخاب کنید:</label>
+    <select id="theme-select" onchange="changeTheme(this.value)">
+        <option value="auto">خودکار (بر اساس تنظیمات سیستم)</option>
+        <option value="dark">حالت شب</option>
+        <option value="light">حالت روز</option>
+    </select>
 
     <script>
         function getSystemTheme() {
             return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         }
 
-        function toggleTheme() {
-            const currentTheme = document.body.getAttribute("data-theme");
-            const newTheme = currentTheme === "dark" ? "light" : "dark";
-            document.body.setAttribute("data-theme", newTheme);
-            localStorage.setItem("theme", newTheme); // ذخیره در localStorage
+        function changeTheme(theme) {
+            if (theme === "auto") {
+                theme = getSystemTheme();
+            }
+            document.body.setAttribute("data-theme", theme);
+            localStorage.setItem("theme", theme);
         }
 
-        // بارگذاری تم بر اساس تنظیمات سیستم یا انتخاب کاربر
         document.addEventListener("DOMContentLoaded", () => {
-            const savedTheme = localStorage.getItem("theme") || getSystemTheme();
-            document.body.setAttribute("data-theme", savedTheme);
+            const savedTheme = localStorage.getItem("theme") || "auto";
+            document.getElementById("theme-select").value = savedTheme;
+            changeTheme(savedTheme);
         });
     </script>
 </body>
