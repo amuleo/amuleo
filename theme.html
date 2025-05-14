@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>انتخاب تم پویا با Popover</title>
+    <title>انتخاب تم پویا با Popup</title>
     <style>
         @media (prefers-color-scheme: dark) {
             body {
@@ -45,9 +45,9 @@
             border-radius: 5px;
         }
 
-        .popover {
+        .popup {
             position: absolute;
-            top: 50px;
+            top: 60px;
             left: 50%;
             transform: translateX(-50%);
             background: #fff;
@@ -58,7 +58,7 @@
             border-radius: 5px;
         }
 
-        .popover button {
+        .popup button {
             display: block;
             margin: 5px 0;
             width: 100%;
@@ -69,10 +69,10 @@
     </style>
 </head>
 <body>
-    <h1>انتخاب تم پویا با Popover 🎨</h1>
-    <button onclick="togglePopover()">🎛️ تغییر تم</button>
+    <h1>انتخاب تم پویا با Popup 🎨</h1>
+    <button id="themeButton" onclick="togglePopup()">🎛️ تغییر تم</button>
 
-    <div class="popover" id="themePopover">
+    <div class="popup" id="themePopup">
         <button onclick="changeTheme('auto')">🔄 خودکار</button>
         <button onclick="changeTheme('dark')">🌙 حالت شب</button>
         <button onclick="changeTheme('light')">☀️ حالت روز</button>
@@ -93,12 +93,18 @@
         function changeTheme(selectedTheme) {
             localStorage.setItem("theme", selectedTheme);
             applyTheme(selectedTheme);
-            document.getElementById("themePopover").style.display = "none";
+            document.getElementById("themePopup").style.display = "none";
         }
 
-        function togglePopover() {
-            const popover = document.getElementById("themePopover");
-            popover.style.display = popover.style.display === "block" ? "none" : "block";
+        function togglePopup() {
+            const popup = document.getElementById("themePopup");
+            const button = document.getElementById("themeButton");
+            popup.style.display = popup.style.display === "block" ? "none" : "block";
+
+            // موقعیت Popup دقیقاً زیر دکمه تنظیم شود
+            const rect = button.getBoundingClientRect();
+            popup.style.top = `${rect.bottom + window.scrollY}px`;
+            popup.style.left = `${rect.left + window.scrollX}px`;
         }
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -107,6 +113,14 @@
 
             if (savedTheme === "auto") {
                 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => applyTheme("auto"));
+            }
+        });
+
+        document.addEventListener("click", (event) => {
+            const popup = document.getElementById("themePopup");
+            const button = document.getElementById("themeButton");
+            if (!popup.contains(event.target) && event.target !== button) {
+                popup.style.display = "none";
             }
         });
     </script>
