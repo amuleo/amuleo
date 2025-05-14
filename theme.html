@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تم خودکار بر اساس سیستم</title>
+    <title>تم قابل تغییر</title>
     <style>
+        /* تنظیمات پیش‌فرض بر اساس تم سیستم */
         @media (prefers-color-scheme: dark) {
             body {
                 background-color: #121212;
@@ -19,19 +20,54 @@
             }
         }
 
+        /* استایل‌های سفارشی برای تغییر دستی */
+        body[data-theme="dark"] {
+            background-color: #121212 !important;
+            color: #ffffff !important;
+        }
+
+        body[data-theme="light"] {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 50px;
         }
 
-        h1 {
-            font-size: 24px;
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-    <h1>سلام! این صفحه با تم سیستم شما هماهنگ می‌شود. 🌙☀️</h1>
-    <p>تم این صفحه به طور خودکار تغییر می‌کند.</p>
+    <h1>تم صفحه با تنظیمات سیستم هماهنگ می‌شود 🚀</h1>
+    <p>اما شما هم می‌توانید آن را تغییر دهید!</p>
+    <button onclick="toggleTheme()">تغییر تم</button>
+
+    <script>
+        function getSystemTheme() {
+            return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            document.body.setAttribute("data-theme", newTheme);
+            localStorage.setItem("theme", newTheme); // ذخیره در localStorage
+        }
+
+        // بارگذاری تم بر اساس تنظیمات سیستم یا انتخاب کاربر
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem("theme") || getSystemTheme();
+            document.body.setAttribute("data-theme", savedTheme);
+        });
+    </script>
 </body>
 </html>
