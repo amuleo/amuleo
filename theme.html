@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>انتخاب تم</title>
+    <title>انتخاب تم پویا با Popover</title>
     <style>
         @media (prefers-color-scheme: dark) {
             body {
@@ -35,39 +35,79 @@
             padding: 50px;
         }
 
-        select {
-            padding: 10px;
+        button {
+            padding: 10px 15px;
             font-size: 16px;
-            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .popover {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+            display: none;
+            border-radius: 5px;
+        }
+
+        .popover button {
+            display: block;
+            margin: 5px 0;
+            width: 100%;
+            background: none;
+            color: #333;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
-    <h1>انتخاب تم صفحه 🌙☀️</h1>
-    <label for="theme-select">حالت تم را انتخاب کنید:</label>
-    <select id="theme-select" onchange="changeTheme(this.value)">
-        <option value="auto">خودکار (بر اساس تنظیمات سیستم)</option>
-        <option value="dark">حالت شب</option>
-        <option value="light">حالت روز</option>
-    </select>
+    <h1>انتخاب تم پویا با Popover 🎨</h1>
+    <button onclick="togglePopover()">🎛️ تغییر تم</button>
+
+    <div class="popover" id="themePopover">
+        <button onclick="changeTheme('auto')">🔄 خودکار</button>
+        <button onclick="changeTheme('dark')">🌙 حالت شب</button>
+        <button onclick="changeTheme('light')">☀️ حالت روز</button>
+    </div>
 
     <script>
         function getSystemTheme() {
             return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         }
 
-        function changeTheme(theme) {
+        function applyTheme(theme) {
             if (theme === "auto") {
                 theme = getSystemTheme();
             }
             document.body.setAttribute("data-theme", theme);
-            localStorage.setItem("theme", theme);
+        }
+
+        function changeTheme(selectedTheme) {
+            localStorage.setItem("theme", selectedTheme);
+            applyTheme(selectedTheme);
+            document.getElementById("themePopover").style.display = "none";
+        }
+
+        function togglePopover() {
+            const popover = document.getElementById("themePopover");
+            popover.style.display = popover.style.display === "block" ? "none" : "block";
         }
 
         document.addEventListener("DOMContentLoaded", () => {
             const savedTheme = localStorage.getItem("theme") || "auto";
-            document.getElementById("theme-select").value = savedTheme;
-            changeTheme(savedTheme);
+            applyTheme(savedTheme);
+
+            if (savedTheme === "auto") {
+                window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => applyTheme("auto"));
+            }
         });
     </script>
 </body>
