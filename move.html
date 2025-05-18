@@ -11,14 +11,14 @@
       src: url('fonts/Mikhak.ttf') format('truetype');
     }
 
-    /* تنظیم متغیرهای رنگی برای تم روشن */
+    /* تنظیم رنگ‌های تم روشن به صورت پیش‌فرض */
     :root {
       --bg-color: #f4f4f4;
       --text-color: #333;
       --content-bg: #fff;
     }
 
-    /* تنظیمات برای تم تاریک */
+    /* تنظیم تم تاریک براساس تنظیمات دستگاه */
     @media (prefers-color-scheme: dark) {
       :root {
         --bg-color: #171717;
@@ -27,7 +27,7 @@
       }
     }
 
-    /* استایل کل صفحه */
+    /* استایل کلی صفحه */
     body {
       margin: 0;
       padding: 0;
@@ -35,41 +35,46 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       direction: rtl;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
     }
 
-    /* استایل جعبه متن */
+    /* استایل کارت محتوا */
     .content {
+      width: calc(100% - 30px); /* 15px فضای خالی از چپ و راست */
       max-width: 600px;
-      width: 90%;
       background-color: var(--content-bg);
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin: 30px auto 0; /* فاصله از بالا و مرکز سازی افقی */
     }
 
-    /* برجسته سازی بخش‌های مهم */
-    .highlight {
+    /* استایل پاراگراف‌ها */
+    p {
+      margin: 1em 0;
+      line-height: 1.6;
+      font-size: 1.1em;
+    }
+
+    /* برجسته‌سازی علمی با استفاده از تگ strong */
+    strong {
       font-weight: bold;
       color: #9e8e71;
-    }
-
-    p {
-      line-height: 1.6;
-      margin: 1em 0;
-      font-size: 1.1em;
     }
   </style>
 </head>
 <body>
   <div class="content">
-    <p><span class="highlight">فردا؟ فقط همین یه بار؟</span> بعدش قول می‌دی دیگه تکرار نشه؟ فقط ۵ دقیقه؟ از فردا؟</p>
-    <p>گول نفس و مغزت که می‌خواد قانعت کنه رو نخور، <span class="highlight">وسوسه و شیطان</span> رو پس بزن...</p>
-    <p><span class="highlight">۱۲ ساله داری همین بازی رو می‌کنی!</span></p>
-    <p><span class="highlight">دیگه بسه!</span> توکل کن، محکم نه بگو، همین حالا خودت رو از این چرخه نجات بده!</p>
+    <p>
+      <strong>فردا؟ فقط همین یه بار؟</strong> بعدش قول می‌دی دیگه تکرار نشه؟ فقط ۵ دقیقه؟ از فردا؟
+    </p>
+    <p>
+      گول نفس و مغزت که می‌خواد قانعت کنه رو نخور، <strong>وسوسه و شیطان</strong> رو پس بزن...
+    </p>
+    <p>
+      <strong>۱۲ ساله داری همین بازی رو می‌کنی!</strong>
+    </p>
+    <p>
+      <strong>دیگه بسه!</strong> توکل کن، محکم نه بگو، همین حالا خودت رو از این چرخه نجات بده!
+    </p>
   </div>
 </body>
 </html>
