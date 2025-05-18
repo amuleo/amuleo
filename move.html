@@ -5,20 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تلنگر!!</title>
   <style>
+    /* غیر فعال کردن اسکرول افقی */
+    html, body {
+      overflow-x: hidden;
+    }
+
     /* بارگذاری فونت میخک از پوشه fonts */
     @font-face {
       font-family: 'Mikhak';
       src: url('fonts/Mikhak.ttf') format('truetype');
     }
 
-    /* تنظیم رنگ‌های تم روشن به صورت پیش‌فرض */
+    /* تنظیم رنگ‌ها برای تم روشن */
     :root {
       --bg-color: #f4f4f4;
       --text-color: #333;
       --content-bg: #fff;
     }
 
-    /* تنظیم تم تاریک براساس تنظیمات دستگاه */
+    /* تنظیم تم تاریک براساس تنظیمات سیستم کاربر */
     @media (prefers-color-scheme: dark) {
       :root {
         --bg-color: #171717;
@@ -39,7 +44,7 @@
 
     /* استایل کارت محتوا */
     .content {
-      width: calc(100% - 30px); /* 15px فضای خالی از چپ و راست */
+      width: calc(100% - 30px); /* ۱۵px از چپ و راست */
       max-width: 600px;
       background-color: var(--content-bg);
       padding: 20px;
@@ -54,7 +59,7 @@
       font-size: 1.1em;
     }
 
-    /* برجسته‌سازی علمی با استفاده از تگ strong */
+    /* برجسته‌سازی علمی با استفاده از <strong> */
     strong {
       font-weight: bold;
       color: #9e8e71;
@@ -64,16 +69,10 @@
 <body>
   <div class="content">
     <p>
-      <strong>فردا؟ فقط همین یه بار؟</strong> بعدش قول می‌دی دیگه تکرار نشه؟ فقط ۵ دقیقه؟ از فردا؟
+      <strong>فردا</strong>? فقط <strong>همین یه بار</strong>? بعدش <strong>قول میدی دیگه تکرار نشه</strong>? فقط <strong>۵ دقیقه</strong>? <strong>از فردا</strong>? گول نفس و <strong>مغزت که میخواذ قانعا کنه</strong> رو نخور، <strong>وسوسه شیطان</strong> رو پس بزن... <strong>۱۲ ساله</strong> داری همین رو میگی!
     </p>
     <p>
-      گول نفس و مغزت که می‌خواد قانعت کنه رو نخور، <strong>وسوسه و شیطان</strong> رو پس بزن...
-    </p>
-    <p>
-      <strong>۱۲ ساله داری همین بازی رو می‌کنی!</strong>
-    </p>
-    <p>
-      <strong>دیگه بسه!</strong> توکل کن، محکم نه بگو، همین حالا خودت رو از این چرخه نجات بده!
+      <strong>دیگه بسه</strong>! به خدا <strong>توکل کن</strong>، محکم نه بگو، <strong>همین حالا</strong> خودت رو از <strong>این چرخه</strong> نجات بده!
     </p>
   </div>
 </body>
