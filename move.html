@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تلنگر!!</title>
+  <style>
+    /* بارگذاری فونت میخک از پوشه fonts */
+    @font-face {
+      font-family: 'Mikhak';
+      src: url('fonts/Mikhak.ttf') format('truetype');
+    }
+
+    /* تنظیم متغیرهای رنگی برای تم روشن */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --content-bg: #fff;
+    }
+
+    /* تنظیمات برای تم تاریک */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #171717;
+        --text-color: #f1f1f1;
+        --content-bg: #2a2a2a;
+      }
+    }
+
+    /* استایل کل صفحه */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Mikhak', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      direction: rtl;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* استایل جعبه متن */
+    .content {
+      max-width: 600px;
+      width: 90%;
+      background-color: var(--content-bg);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* برجسته سازی بخش‌های مهم */
+    .highlight {
+      font-weight: bold;
+      color: #9e8e71;
+    }
+
+    p {
+      line-height: 1.6;
+      margin: 1em 0;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <p><span class="highlight">فردا؟ فقط همین یه بار؟</span> بعدش قول می‌دی دیگه تکرار نشه؟ فقط ۵ دقیقه؟ از فردا؟</p>
+    <p>گول نفس و مغزت که می‌خواد قانعت کنه رو نخور، <span class="highlight">وسوسه و شیطان</span> رو پس بزن...</p>
+    <p><span class="highlight">۱۲ ساله داری همین بازی رو می‌کنی!</span></p>
+    <p><span class="highlight">دیگه بسه!</span> توکل کن، محکم نه بگو، همین حالا خودت رو از این چرخه نجات بده!</p>
+  </div>
+</body>
+</html>
