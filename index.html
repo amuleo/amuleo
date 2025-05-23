@@ -348,6 +348,117 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
+
+    /* استایل‌های Modal انتخاب تم */
+    .theme-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* پوشش نیمه‌شفاف */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000; /* بالاتر از هدر */
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    }
+
+    .theme-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .theme-modal-content {
+      background-color: var(--card);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      position: relative;
+      max-width: 350px; /* تنظیم عرض */
+      width: 90%;
+      transform: translateY(-20px); /* افست اولیه برای انیمیشن */
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .theme-modal.show .theme-modal-content {
+      transform: translateY(0); /* افکت اسلاید به داخل */
+    }
+
+    .close-modal-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--text);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .close-modal-btn:hover {
+      color: var(--span);
+    }
+
+    .theme-options-wrapper {
+      display: flex;
+      flex-direction: column; /* گزینه‌ها به صورت عمودی در صفحه کوچک */
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .theme-option {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 20px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background-color: var(--bg); /* پس‌زمینه کمی متفاوت برای گزینه‌ها */
+      color: var(--text);
+      font-family: 'Mikhak', sans-serif;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    }
+
+    .theme-option:hover {
+      background-color: var(--hover);
+      border-color: var(--span);
+    }
+
+    .theme-option.selected {
+      background-color: var(--span); /* برجسته کردن گزینه انتخاب شده */
+      color: #ffffff; /* متن سفید برای گزینه انتخاب شده */
+      border-color: var(--span);
+      box-shadow: 0 0 0 2px rgba(158, 142, 113, 0.5); /* درخشش ملایم */
+    }
+
+    .theme-option.selected i {
+        color: #ffffff; /* اطمینان از مطابقت رنگ آیکون با متن برای گزینه انتخاب شده */
+    }
+
+    .theme-option i {
+      font-size: 1.2rem;
+      color: var(--text); /* رنگ پیش‌فرض آیکون */
+      transition: color 0.3s;
+    }
+
+    /* تنظیمات واکنش‌گرا برای گزینه‌های تم */
+    @media (min-width: 481px) {
+      .theme-options-wrapper {
+        flex-direction: row; /* چیدمان افقی در صفحه بزرگتر */
+        justify-content: space-around;
+      }
+      .theme-option {
+        flex: 1; /* توزیع فضای مساوی */
+      }
+    }
   </style>
 </head>
 <body>
@@ -360,6 +471,26 @@
       <button class="theme-toggle" id="themeBtn" title="تغییر حالت">
         <i class="fas fa-sun" id="themeIcon"></i>
       </button>
+    </div>
+
+    <div id="themeModal" class="theme-modal">
+      <div class="theme-modal-content">
+        <button class="close-modal-btn" id="closeThemeModal">&times;</button>
+        <div class="theme-options-wrapper">
+          <button class="theme-option" id="autoTheme" data-theme="auto">
+            <i class="fas fa-sync-alt"></i>
+            <span>خودکار</span>
+          </button>
+          <button class="theme-option" id="lightTheme" data-theme="light">
+            <i class="fas fa-sun"></i>
+            <span>روشن</span>
+          </button>
+          <button class="theme-option" id="darkTheme" data-theme="dark">
+            <i class="fas fa-moon"></i>
+            <span>تاریک</span>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="profile-wrapper">
@@ -421,17 +552,82 @@
     }
 
     /*--------------------------
-        کد مربوط به تغییر تم (شب و روز)
+        کد مربوط به تغییر تم (شب و روز) با پاپ‌آپ جدید
     ---------------------------*/
     const themeBtn = document.getElementById("themeBtn");
     const themeIcon = document.getElementById("themeIcon");
+    const themeModal = document.getElementById("themeModal");
+    const closeThemeModalBtn = document.getElementById("closeThemeModal");
+    const autoThemeBtn = document.getElementById("autoTheme");
+    const lightThemeBtn = document.getElementById("lightTheme");
+    const darkThemeBtn = document.getElementById("darkTheme");
 
+    // تابع مرکزی برای اعمال تم بر اساس ترجیح (auto, light, dark)
+    function applyTheme(preference) {
+        const body = document.body;
+        let actualThemeIsDark;
+
+        if (preference === "auto") {
+            actualThemeIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        } else {
+            actualThemeIsDark = (preference === "dark");
+        }
+
+        body.classList.toggle("dark", actualThemeIsDark);
+        themeIcon.className = actualThemeIsDark ? "fas fa-moon" : "fas fa-sun";
+        updateThemeColor(actualThemeIsDark ? "#333" : "#f9fafd");
+        // ذخیره حالت واقعی تم (dark/light) در کوکی 'theme'
+        setCookie("theme", actualThemeIsDark ? "dark" : "light", 365);
+
+        // هایلایت کردن گزینه انتخاب شده در پاپ‌آپ
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.classList.remove('selected');
+            if (option.dataset.theme === preference) {
+                option.classList.add('selected');
+            }
+        });
+    }
+
+    // باز کردن پاپ‌آپ انتخاب تم با کلیک روی دکمه
     themeBtn.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      const isDark = document.body.classList.contains("dark");
-      themeIcon.className = isDark ? "fas fa-moon" : "fas fa-sun";
-      setCookie("theme", isDark ? "dark" : "light", 365);
-      updateThemeColor(isDark ? "#333" : "#f9fafd");
+        themeModal.classList.add("show");
+    });
+
+    // بستن پاپ‌آپ با کلیک روی دکمه بستن یا بیرون از محتوا
+    closeThemeModalBtn.addEventListener("click", () => {
+        themeModal.classList.remove("show");
+    });
+
+    themeModal.addEventListener("click", (e) => {
+        if (e.target === themeModal) { // اگر روی پس‌زمینه کلیک شد
+            themeModal.classList.remove("show");
+        }
+    });
+
+    // رویدادهای کلیک برای گزینه‌های تم در پاپ‌آپ
+    autoThemeBtn.addEventListener("click", () => {
+        setCookie("theme_preference", "auto", 365);
+        applyTheme("auto");
+        themeModal.classList.remove("show");
+    });
+
+    lightThemeBtn.addEventListener("click", () => {
+        setCookie("theme_preference", "light", 365);
+        applyTheme("light");
+        themeModal.classList.remove("show");
+    });
+
+    darkThemeBtn.addEventListener("click", () => {
+        setCookie("theme_preference", "dark", 365);
+        applyTheme("dark");
+        themeModal.classList.remove("show");
+    });
+
+    // گوش دادن به تغییرات تم سیستم برای حالت "خودکار"
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (getCookie("theme_preference") === "auto") {
+            applyTheme("auto");
+        }
     });
 
     /*--------------------------
@@ -580,12 +776,15 @@
         });
       }
 
-      // اعمال تم ذخیره‌شده با استفاده از کوکی
-      const savedTheme = getCookie("theme");
-      const isDark = savedTheme === "dark";
-      document.body.classList.toggle("dark", isDark);
-      themeIcon.className = isDark ? "fas fa-moon" : "fas fa-sun";
-      updateThemeColor(isDark ? "#333" : "#f9fafd");
+      // اعمال تم ذخیره‌شده با استفاده از کوکی یا تشخیص تم دستگاه
+      const savedPreference = getCookie("theme_preference");
+      if (savedPreference) {
+          applyTheme(savedPreference);
+      } else {
+          // به صورت پیش‌فرض روی 'auto' تنظیم شود اگر هیچ ترجیحی ذخیره نشده باشد
+          setCookie("theme_preference", "auto", 365);
+          applyTheme("auto");
+      }
 
       // مدیریت بارگذاری تصویر پروفایل
       const profileImage = document.getElementById("profileImage");
