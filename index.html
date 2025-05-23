@@ -160,6 +160,8 @@
       animation: shimmer 1.5s infinite linear;
       background: linear-gradient(to right, var(--border) 8%, var(--hover) 18%, var(--border) 33%);
       background-size: 800px 100%;
+      opacity: 1; /* در ابتدا قابل مشاهده */
+      transition: opacity 0.5s ease-in-out;
     }
 
     .profile {
@@ -379,7 +381,8 @@
       text-align: center;
       position: relative;
       max-width: 350px; /* تنظیم عرض */
-      width: 90%;
+      width: 90%; /* پیش‌فرض برای موبایل */
+      margin: 0 15px; /* فاصله ۱۵ پیکسلی از چپ و راست در موبایل */
       transform: translateY(-20px); /* افست اولیه برای انیمیشن */
       transition: transform 0.3s ease-in-out;
     }
@@ -457,6 +460,9 @@
       }
       .theme-option {
         flex: 1; /* توزیع فضای مساوی */
+      }
+      .theme-modal-content {
+        margin: auto; /* حذف margin افقی برای صفحات بزرگتر */
       }
     }
   </style>
@@ -701,15 +707,15 @@
         });
       } catch (error) {
         console.error(error.message);
-        // در صورت خطا، کارت‌های اسکلتون را پنهان کنید یا پیام خطا نمایش دهید
-        latestBooksContainer.innerHTML = "<p style='text-align: center; color: var(--text);'>خطا در بارگذاری کتاب‌ها.</p>";
+        // در صورت خطا، کارت‌های اسکلتون را پنهان کنید و پیام خطا نمایش دهید
+        latestBooksContainer.innerHTML = "<p style='text-align: center; color: var(--span);'><i class='fas fa-exclamation-circle'></i>&nbsp;خطا در بارگذاری کتاب‌ها.</p>";
       }
     }
 
     async function loadLatestPosts() {
       const apiUrl = "https://blog-postviewer.immohammaddavoodi.workers.dev/";
       const postsContent = document.getElementById("latestPostsContent");
-      // نمایش 3 کارت اسکلتون قبل از بارگذاری داده‌ها
+      // نمایش 3 کارت اسکلتون قبل از بارگذاری داده‌هاhttps://notepad.js.org/
       for (let i = 0; i < 3; i++) {
         postsContent.appendChild(createSkeletonCard());
       }
@@ -741,8 +747,8 @@
         });
       } catch (error) {
         console.error("خطا در دریافت داده‌های وبلاگ:", error.message);
-        // در صورت خطا، کارت‌های اسکلتون را پنهان کنید یا پیام خطا نمایش دهید
-        postsContent.innerHTML = "<p style='text-align: center; color: var(--text);'>خطا در بارگذاری نوشته‌ها.</p>";
+        // در صورت خطا، کارت‌های اسکلتون را پنهان کنید و پیام خطا نمایش دهید
+        postsContent.innerHTML = "<p style='text-align: center; color: var(--span);'><i class='fas fa-exclamation-circle'></i>&nbsp;خطا در بارگذاری نوشته‌ها.</p>";
       }
     }
 
@@ -790,23 +796,35 @@
       const profileImage = document.getElementById("profileImage");
       const profileSkeleton = document.getElementById("profileSkeleton");
 
-      if (profileImage.complete) { // اگر تصویر از قبل بارگذاری شده بود (کش شده بود)
-        profileSkeleton.style.display = 'none';
-        profileImage.style.opacity = '1';
-      } else { // در غیر این صورت، منتظر بارگذاری تصویر بمانید
-        profileImage.onload = () => {
-          profileSkeleton.style.opacity = '0'; // محو کردن اسکلتون
-          profileImage.style.opacity = '1'; // نمایش تصویر
-          setTimeout(() => {
-            profileSkeleton.style.display = 'none'; // حذف اسکلتون از DOM پس از انیمیشن
-          }, 500); // مدت زمان انیمیشن opacity
-        };
-        profileImage.onerror = () => {
-          console.error("خطا در بارگذاری تصویر پروفایل.");
-          profileSkeleton.style.display = 'none'; // در صورت خطا، اسکلتون را پنهان کنید
-          profileImage.style.opacity = '1'; // تصویر را نمایش دهید (حتی اگر شکسته باشد)
-        };
+      // در ابتدا، اسکلتون را نمایش داده و تصویر را پنهان کنید
+      profileImage.style.opacity = '0';
+      profileSkeleton.style.opacity = '1';
+      profileSkeleton.style.display = 'block';
+
+      // رویداد onload برای زمانی که تصویر بارگذاری می‌شود
+      profileImage.onload = () => {
+        profileSkeleton.style.opacity = '0'; // محو کردن اسکلتون
+        profileImage.style.opacity = '1'; // نمایش تصویر
+        setTimeout(() => {
+          profileSkeleton.style.display = 'none'; // حذف اسکلتون از DOM پس از انیمیشن
+        }, 500); // مدت زمان انیمیشن opacity
+      };
+
+      // رویداد onerror برای زمانی که بارگذاری تصویر با خطا مواجه می‌شود
+      profileImage.onerror = () => {
+        console.error("خطا در بارگذاری تصویر پروفایل. لطفاً مسیر تصویر را بررسی کنید: " + profileImage.src);
+        // در صورت خطا، اسکلتون را پنهان نکنید تا به عنوان پس‌زمینه باقی بماند
+        // و تصویر شکسته (broken image icon) روی آن نمایش داده شود.
+        profileSkeleton.style.opacity = '1'; // اطمینان از اینکه اسکلتون قابل مشاهده است
+        profileImage.style.opacity = '1'; // نمایش تصویر (که اکنون شکسته است)
+        // profileSkeleton.style.display = 'none'; // این خط را حذف یا کامنت می‌کنیم
+      };
+
+      // اگر تصویر از قبل کامل بارگذاری شده بود (مثلاً از کش مرورگر)
+      if (profileImage.complete) {
+        profileImage.onload(); // تابع onload را به صورت دستی فراخوانی کنید
       }
+      // نکته: اگر تصویر از قبل بارگذاری نشده باشد، مرورگر به صورت خودکار onload را پس از تکمیل بارگذاری فراخوانی می‌کند.
 
       // بارگذاری آخرین کتاب‌ها و نوشته‌ها
       loadLatestBooks();
