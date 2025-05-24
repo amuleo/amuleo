@@ -725,7 +725,7 @@
         function renderGamificationStats() {
             $('#current-points').textContent = points;
             const currentLevelConfig = levelsConfig.find(l => l.level === level);
-            $('#current-level').textContent = `${level} (${currentLevelConfig ? currentLevelConfig.name : 'نامشخص'})`; // Display level name
+            $('#current-level').textContent = `${level} - ${currentLevelConfig ? currentLevelConfig.name : 'نامشخص'}`; // Display level name
             $('#current-streak').textContent = streak;
 
             const nextLevelConfig = levelsConfig.find(l => l.level === level + 1);
