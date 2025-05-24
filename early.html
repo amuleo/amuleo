@@ -252,7 +252,7 @@
                 </div>
                 <div class="bg-white p-4 rounded-lg shadow-sm dark:bg-gray-700 dark:text-gray-200">
                     <p class="text-lg font-semibold">
-                        استریک (روزهای متوالی): <span id="current-streak" class="text-xl font-bold text-red-600 dark:text-red-400">0</span>
+                        زنجیره: <span id="current-streak" class="text-xl font-bold text-red-600 dark:text-red-400">0</span>
                     </p>
                 </div>
             </div>
@@ -342,10 +342,10 @@
                     </ul>
                 </div>
                 <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
-                    <p class="text-base text-right text-justify"><strong>استریک (روزهای متوالی):</strong> برای حفظ استریک، باید حداقل <strong>۵ هدف</strong> را در هر روز تکمیل کنید.</p>
+                    <p class="text-base text-right text-justify"><strong>زنجیره (روزهای متوالی):</strong> برای حفظ زنجیره، باید حداقل <strong>۵ هدف</strong> را در هر روز تکمیل کنید.</p>
                 </div>
                 <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
-                    <p class="text-base text-right text-justify">اگر یک روز را از دست بدهید و کمتر از ۵ هدف را تکمیل کنید، استریک شما صفر می‌شود.</p>
+                    <p class="text-base text-right text-justify">اگر یک روز را از دست بدهید و کمتر از ۵ هدف را تکمیل کنید، زنجیره شما صفر می‌شود.</p>
                 </div>
                 <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
                     <p class="text-base text-right text-justify">تمامی اطلاعات در مروگر شما ذخیره می‌شود و هیچگونه دسترسی ای به آن نداریم.</p>
@@ -750,7 +750,7 @@
             const today = new Date().toISOString().split('T')[0]; // تاریخ امروز به فرمتYYYY-MM-DD
             // شمارش تعداد اهداف تکمیل شده برای امروز
             const completedGoalsTodayCount = morningGoals.filter(goal => goal.completed && goal.lastCompletionDate === today).length;
-            const acceptableCompletedGoals = 5; // تعداد اهداف لازم برای محاسبه استریک
+            const acceptableCompletedGoals = 5; // تعداد اهداف لازم برای محاسبه زنجیره
 
             if (completedGoalsTodayCount >= acceptableCompletedGoals) {
                 if (lastAllGoalsCompletionDate === null) {
@@ -763,23 +763,23 @@
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
                     if (diffDays === 1) {
-                        // اگر دیروز هم تعداد کافی از اهداف تکمیل شده بودند، استریک را افزایش بده
+                        // اگر دیروز هم تعداد کافی از اهداف تکمیل شده بودند، زنجیره را افزایش بده
                         streak++;
                     } else if (diffDays > 1) {
-                        // اگر بیش از یک روز گذشته، استریک را ریست کن
+                        // اگر بیش از یک روز گذشته، زنجیره را ریست کن
                         streak = 1;
                     }
                 }
                 lastAllGoalsCompletionDate = today;
             } else {
-                // اگر تعداد کافی از اهداف امروز تکمیل نشده‌اند، بررسی کن که آیا باید استریک را ریست کرد
+                // اگر تعداد کافی از اهداف امروز تکمیل نشده‌اند، بررسی کن که آیا باید زنجیره را ریست کرد
                 if (lastAllGoalsCompletionDate !== null) {
                     const lastDate = new Date(lastAllGoalsCompletionDate);
                     const todayDate = new Date(today);
                     const diffTime = Math.abs(todayDate - lastDate);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                    // اگر آخرین تکمیل تعداد کافی از اهداف مربوط به دیروز نیست و امروز هم کامل نشده، استریک را صفر کن
+                    // اگر آخرین تکمیل تعداد کافی از اهداف مربوط به دیروز نیست و امروز هم کامل نشده، زنجیره را صفر کن
                     if (diffDays > 1) {
                         streak = 0;
                         lastAllGoalsCompletionDate = null;
@@ -922,10 +922,10 @@
             loadData(); // بارگذاری داده‌ها
             applyTheme(currentTheme); // اعمال تم اولیه
 
-            // بررسی استریک در ابتدای هر روز
+            // بررسی زنجیره در ابتدای هر روز
             const today = new Date().toISOString().split('T')[0];
             if (lastAllGoalsCompletionDate !== today) {
-                // اگر آخرین تاریخ تکمیل اهداف مربوط به امروز نیست، استریک را بررسی کن
+                // اگر آخرین تاریخ تکمیل اهداف مربوط به امروز نیست، زنجیره را بررسی کن
                 checkAllGoalsCompletedForToday();
             }
 
