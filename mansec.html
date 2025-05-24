@@ -191,6 +191,7 @@
         p {
             line-height: 1.75;
             margin-bottom: 1rem;
+            text-align: justify; /* پاراگراف‌ها جاستیفای می‌شوند */
         }
 
         /* استایل متن‌های بولد */
@@ -597,7 +598,7 @@
                     content.classList.remove('active');
                 } else { // اگر بسته است
                     content.classList.add('active'); // ابتدا کلاس active را اضافه کن تا پدینگ‌ها اعمال شوند
-                    content.style.maxHeight = 'none'; // موقتاً maxHeight را بردار تا scrollHeight دقیق محاسبه شود
+                    content.style.maxHeight = 'none'; // موقتااً maxHeight را بردار تا scrollHeight دقیق محاسبه شود
                     const scrollHeight = content.scrollHeight; // ارتفاع واقعی محتوا را بگیر
                     content.style.maxHeight = '0px'; // به 0 برگردان برای شروع انیمیشن
                     void content.offsetWidth; // یک reflow اجباری برای اطمینان از اعمال 0px قبل از تنظیم ارتفاع جدید
