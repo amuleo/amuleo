@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>همراه لئو: مروری بر چالش‌ها و راهکارها</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+            background-color: #f8fafc; /* bg-slate-50 */
+            color: #334155; /* text-slate-700 */
+        }
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .tab-button.active {
+            border-color: #10b981; /* border-emerald-500 */
+            color: #059669; /* text-emerald-600 */
+            font-weight: 700;
+        }
+        .tab-button:hover {
+            color: #059669; /* text-emerald-600 */
+        }
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0; /* border-slate-300 */
+            border-top: none;
+            border-radius: 0 0 0.5rem 0.5rem;
+            background-color: white;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .accordion-button {
+            background-color: #f1f5f9; /* bg-slate-100 */
+            color: #1e293b; /* text-slate-800 */
+            cursor: pointer;
+            padding: 1rem;
+            width: 100%;
+            text-align: right;
+            border: none;
+            outline: none;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .accordion-button:hover, .accordion-button.active {
+            background-color: #e2e8f0; /* bg-slate-200 */
+        }
+        .accordion-content {
+            padding: 0 1rem;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            border-right: 2px solid #10b981; /* border-emerald-500 */
+            margin-right: 0.5rem;
+        }
+        .accordion-content.active {
+           /* max-height set by JS */
+           padding-top: 1rem;
+           padding-bottom: 1rem;
+        }
+        .section-title {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            color: #1e293b; /* text-slate-800 */
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #10b981; /* border-emerald-500 */
+        }
+        .sub-section-title {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            color: #334155; /* text-slate-700 */
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        ul {
+            list-style-type: disc;
+            padding-right: 2rem; /* rtl padding */
+            margin-bottom: 1rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+            line-height: 1.75;
+        }
+        p {
+            line-height: 1.75;
+            margin-bottom: 1rem;
+        }
+        strong {
+            font-weight: 700;
+            color: #059669; /* text-emerald-600 */
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex items-center justify-center">
+
+    <div id="login-screen" class="bg-white shadow-xl rounded-lg p-8 max-w-sm w-full text-center">
+        <h2 class="text-2xl font-bold mb-6 text-slate-800">ورود به همراه لئو</h2>
+        <input type="password" id="password-input" class="w-full p-3 mb-4 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 text-center" placeholder="رمز عبور را وارد کنید">
+        <button id="login-button" class="w-full bg-emerald-500 text-white p-3 rounded-md font-semibold hover:bg-emerald-600 transition duration-300">ورود</button>
+        <p id="error-message" class="text-red-500 mt-3 hidden">رمز عبور اشتباه است. لطفاً دوباره تلاش کنید.</p>
+    </div>
+
+    <div id="main-content" class="container mx-auto max-w-4xl bg-white shadow-xl rounded-lg hidden">
+        <header class="bg-emerald-500 text-white p-6 rounded-t-lg">
+            <h1 class="text-3xl font-bold text-center">همراه لئو: مروری بر چالش‌ها و راهکارها</h1>
+        </header>
+
+        <nav class="flex border-b border-slate-300 bg-slate-50 rounded-t-none">
+            <button class="tab-button active" onclick="openTab(event, 'tab-intro')">معرفی لئو</button>
+            <button class="tab-button" onclick="openTab(event, 'tab-challenges')">چالش‌ها</button>
+            <button class="tab-button" onclick="openTab(event, 'tab-solutions')">راهکارها</button>
+            <button class="tab-button" onclick="openTab(event, 'tab-conclusion')">جمع‌بندی</button>
+        </nav>
+
+        <div id="tab-intro" class="tab-content active">
+            <h2 class="section-title">۱. معرفی شخصیت لئو و شرایط او</h2>
+            <p>این بخش به معرفی لئو، ویژگی‌های شخصیتی و شرایط خاصی که در حال حاضر با آن روبرو است، می‌پردازد. درک این موارد به فهم بهتر چالش‌ها و راهکارهای پیش رو کمک می‌کند.</p>
+            
+            <p>لئو، یک پسر ۲۱ ساله با ویژگی‌ها و شرایط زیر است:</p>
+            <ul>
+                <li><strong>تیپ شخصیتی:</strong> درونگرا و INFJ. او دنیای درونی عمیقی دارد، به ارزش‌ها و ایده‌های بزرگ فکر می‌کند، همدل و بصیر است، اما از تعاملات اجتماعی زیاد انرژی نمی‌گیرد و تمایل دارد افکارش را برای خود نگه دارد.</li>
+                <li><strong>وضعیت روانی:</strong> دارای OCD (اختلال وسواس فکری-عملی) و نشخوار فکری. ذهنش مستعد درگیر شدن با افکار تکراری، ناخواسته و نگران‌کننده است که می‌توانند حول موضوعات مختلفی از جمله کنکور و عملکردش باشند.</li>
+                <li><strong>وضعیت زندگی:</strong> ۷ سال است که به دلیل تمرکز بر درس خواندن، بیشتر وقت خود را در خانه گذرانده و ارتباطش با بیشتر دوستانش قطع شده است. این امر به احساس انزوا و جدایی از دنیای بیرون در او دامن زده است.</li>
+                <li><strong>هدف فعلی:</strong> یک ماه دیگر کنکور دارد و فشار و استرس ناشی از آن بسیار زیاد است.</li>
+                <li><strong>محیط زندگی:</strong> او در یک خانه شلوغ و پر از عوامل حواس‌پرتی زندگی می‌کند:
+                    <ul>
+                        <li>دسترسی آسان به گوشی، آیپد، لپ‌تاپ و تلویزیون.</li>
+                        <li>یک خانواده شلوغ با بحث‌های روزانهٔ مادربزرگ که با او زندگی می‌کند و فضایی پر از تنش و سروصدا ایجاد می‌کند.</li>
+                        <li>یک برادر شلخته که بی‌نظمی‌هایش هر روز افکار لئو را به هم می‌ریزد.</li>
+                        <li>تبعیض خانوادگی بین او و برادر بزرگترش که باعث حس بی‌ارزشی و خشم در او می‌شود.</li>
+                        <li>بحث‌های خانوادگی کوتاه و دوره‌ای برادر بزرگترش که آرامش خانه را بر هم می‌زند.</li>
+                    </ul>
+                </li>
+                <li><strong>ویژگی رفتاری خاص:</strong> میل شدیدی به تغییر و یادگیری‌های جدید دارد (مثلاً تغییر گروه درسی، برنامهٔ جدید، شروع پروژه‌های سایتی جدید، وبلاگ جدید یا تغییرات جزئی در سایت). این میل نشان‌دهندهٔ زودرنجی و تنوع‌طلبی اوست و اغلب منجر به از دست دادن زمان و تمرکز می‌شود.</li>
+            </ul>
+        </div>
+
+        <div id="tab-challenges" class="tab-content">
+            <h2 class="section-title">۲. تحلیل چالش‌های لئو</h2>
+            <p>این بخش به بررسی عمیق‌تر چالش‌هایی می‌پردازد که لئو با توجه به شخصیت و شرایطش با آن‌ها مواجه است. شناخت این چالش‌ها اولین گام برای یافتن راهکارهای مؤثر است.</p>
+            <p>در این شرایط، لئو احتمالاً احساس <strong>گیجی، درماندگی، خشم، اضطراب شدید، تنهایی عمیق و فرسودگی ذهنی</strong> می‌کند. تلاش برای تمرکز روی درس در این محیط، مانند شنا کردن خلاف جریان یک رودخانه خروشانه است.</p>
+            
+            <h3 class="sub-section-title">سناریوی "از دست دادن روز"</h3>
+            <p>بیدار شدن دیرتر از موعد مقرر، برای لئو با OCD و نشخوار فکری، منجر به احساس گناه، سرزنش خود، اضطراب و بی‌انگیزگی می‌شود. این احساسات منفی می‌توانند کل روز او را تحت تأثیر قرار دهند و او را از شروع مجدد درس منصرف کنند.</p>
+
+            <h3 class="sub-section-title">استفاده از تکنولوژی و "چرخهٔ وسواس"</h3>
+            <p>میل به جستجو در اکسپلوررهای مختلف (کتاب، گوگل، YPT، بلاگفا) به عنوان یک <strong>"تریگر" (محرک / چراغ سبز)</strong> عمل می‌کند. این میل اولیه، که در ظاهر بی‌خطر است، دریچه‌ای برای ورود <strong>افکار وسواسی</strong> (مانند نیاز به اطمینان، کمال‌گرایی، ترس از دست دادن) به ذهن لئو می‌شود. این افکار وسواسی به سرعت به یک چرخهٔ ذهنی و رفتاری تبدیل می‌شوند که متوقف کردنشان بسیار دشوار است و می‌تواند ساعت‌ها از زمان لئو را به خود اختصاص دهد. هر چه زمان بیشتری در این چرخه‌ها سپری شود، شکستن آن‌ها سخت‌تر می‌شود.</p>
+        </div>
+
+        <div id="tab-solutions" class="tab-content">
+            <h2 class="section-title">۳. راهکارهای پیشنهادی</h2>
+            <p>در این بخش، مجموعه‌ای از راهکارها و استراتژی‌های عملی برای کمک به لئو در مدیریت چالش‌هایش ارائه شده است. این راهکارها بر اساس گفتگوهای انجام شده و با هدف افزایش تمرکز، کاهش استرس و بهبود کیفیت زندگی لئو طراحی شده‌اند.</p>
+
+            <div class="space-y-4">
+                <div>
+                    <button class="accordion-button">
+                        <span>۳.۱. استراحت‌های مؤثر (به جای تکنولوژی) 🧘‍♂️</span>
+                        <svg class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p>برای استراحت‌های کوتاه (۱۵ دقیقه‌ای) و بلند (۴۵ دقیقه‌ای یا بیشتر)، لئو باید تا حد امکان از تکنولوژی و گوشی دوری کند، زیرا این‌ها می‌توانند وسواس‌ها و نشخوار فکری او را تحریک کرده و نظم خوابش را بر هم بزنند.</p>
+                        <h4 class="font-semibold mt-2 mb-1">استراحت‌های کوتاه:</h4>
+                        <ul>
+                            <li>حرکات کششی و نرمش.</li>
+                            <li>تنفس عمیق و مدیتیشن کوتاه.</li>
+                            <li>نوشیدن یک فنجان چای یا آب.</li>
+                            <li>نگاه کردن به بیرون از پنجره.</li>
+                            <li>گوش دادن به موسیقی آرامش‌بخش (بدون کلام).</li>
+                            <li>مرتب کردن محیط مطالعه (یک کار کوچک و سریع).</li>
+                            <li>صحبت کوتاه با یک فرد حمایتگر (غیرمرتبط با درس).</li>
+                            <li>خواندن یک صفحه از یک کتاب غیردرسی و آرامش‌بخش.</li>
+                        </ul>
+                        <h4 class="font-semibold mt-2 mb-1">استراحت‌های بلند:</h4>
+                        <ul>
+                            <li>پیاده‌روی در طبیعت یا محیط آرام.</li>
+                            <li>ورزش سبک (یوگا، پیلاتس).</li>
+                            <li>گوش دادن به پادکست‌های آموزشی یا انگیزشی (غیرمرتبط با درس و آرامش‌بخش).</li>
+                            <li>خواندن یک کتاب داستان جذاب.</li>
+                            <li>انجام یک سرگرمی آرامش‌بخش (نقاشی، باغبانی).</li>
+                            <li>صحبت کردن با یک دوست یا عضو خانواده (غیرمرتبط با درس و کنکور).</li>
+                            <li>نوشتن در دفتر خاطرات.</li>
+                            <li>آماده کردن یک غذای سالم.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <button class="accordion-button">
+                        <span>۳.۲. بازگشت به درس پس از انحراف 🚀</span>
+                        <svg class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p>اگر لئو ساعاتی از روزش را به دلیل انحراف از دست داد، می‌تواند با روش‌های زیر به مسیر برگردد:</p>
+                        <ul>
+                            <li><strong>پذیرش و عدم سرزنش خود:</strong> به جای غرق شدن در احساس گناه، با خود مهربان باشد و بپذیرد که این اتفاق افتاده است.</li>
+                            <li><strong>شناسایی دلیل انحراف:</strong> آگاه شدن از دلیل (خستگی، استرس، وسوسه) برای جلوگیری از تکرار.</li>
+                            <li><strong>تعیین هدف کوچک:</strong> یک هدف دست‌یافتنی و کوچک برای شروع مجدد تعیین کند (مثلاً نیم ساعت درس خواندن).</li>
+                            <li><strong>برنامه‌ریزی مجدد:</strong> برنامهٔ واقع‌بینانه‌ای برای باقی روز تنظیم کند.</li>
+                            <li><strong>تغییر محیط:</strong> مکان مطالعه را عوض کند.</li>
+                            <li><strong>مدیریت استرس:</strong> از تکنیک‌های آرام‌سازی (تنفس عمیق، مدیتیشن) استفاده کند.</li>
+                            <li><strong>کمک گرفتن:</strong> در صورت نیاز با یک فرد حمایتگر یا مشاور صحبت کند.</li>
+                            <li><strong>یادآوری اهداف:</strong> هدف بلندمدت (موفقیت در کنکور) را به خود یادآوری کند.</li>
+                            <li><strong>بخشش خود:</strong> خودش را ببخشد و روی یادگیری از تجربه تمرکز کند.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <button class="accordion-button">
+                        <span>۳.۳. مدیریت میل به تغییر و چرخه‌های وسواسی 🧠</span>
+                        <svg class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p>برای کنترل میل سیری‌ناپذیر به تغییر و جلوگیری از شروع چرخه‌های وسواسی:</p>
+                        <ul>
+                            <li><strong>شناخت و پذیرش الگو:</strong> آگاه باشد که این میل به تغییر، به جای کمک، به او آسیب می‌زند.</li>
+                            <li><strong>اولویت‌بندی قاطعانه:</strong> کنکور اولویت اصلی است؛ هر تغییر باید با این اولویت سنجیده شود.</li>
+                            <li><strong>"لیست انتظار برای بعد از کنکور":</strong> تمام ایده‌های تغییر و پروژه‌های جدید را در یک لیست بنویسد و به بعد از کنکور موکول کند.</li>
+                            <li><strong>مقاومت در برابر "فقط یه سرچ کوچیک":</strong> بداند که این جستجوهای جزئی به اتلاف وقت منجر می‌شوند.</li>
+                            <li><strong>تعیین زمان‌های محدود برای "تنوع سالم":</strong> اگر نیاز به تنوع دارد، زمان‌های بسیار کوتاه و مشخصی را به آن اختصاص دهد و به شدت پایبند باشد.</li>
+                            <li><strong>تمرکز بر ثبات و روتین:</strong> پایبندی به یک برنامهٔ درسی مشخص می‌تواند از آشفتگی ذهنی جلوگیری کند.</li>
+                            <li><strong>جایگزینی میل به تغییر با حس پیشرفت در درس:</strong> حس پیشرفت را از طریق مطالعهٔ عمیق و حل تست به دست آورد.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <button class="accordion-button">
+                        <span>۳.۴. استفاده از "ری‌استارت‌کننده‌های ارادی" (قطع‌کننده‌های الگو) ⏰</span>
+                        <svg class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <p>این روش برای شکستن چرخه‌های وسواسی که شروع شده‌اند، بسیار مؤثر است:</p>
+                        <ul>
+                            <li><strong>مفهوم:</strong> استفاده از یک عامل بیرونی و از پیش تعیین شده که یک وقفهٔ ناگهانی و اجباری در روند فکری ایجاد کند.</li>
+                            <li><strong>مثال پیشنهادی:</strong> <strong>تنظیم آلارم‌های دوره‌ای (مثلاً هر ۳ ساعت) که برای خاموش کردنشان نیاز به انجام یک فعالیت فیزیکی در مکانی دیگر (مانند اسکن یک کد در آشپزخانه) باشد.</strong></li>
+                            <li><strong>مزایا:</strong>
+                                <ul>
+                                    <li>ایجاد وقفهٔ اجباری: آلارم توجه را جلب و فعالیت را متوقف می‌کند.</li>
+                                    <li>تغییر محیط اجباری: حرکت به مکان دیگر، ذهن را از محرک‌ها دور می‌کند.</li>
+                                    <li>فعالیت هدفمند: اسکن کد یک فعالیت ساده و متمرکز است.</li>
+                                    <li>ایجاد عادت: با تکرار، به یک عادت برای خروج از چرخه تبدیل می‌شود.</li>
+                                    <li>احساس کنترل: خود لئو این قطع‌کننده را تنظیم کرده و به صورت ارادی از آن استفاده می‌کند.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-conclusion" class="tab-content">
+            <h2 class="section-title">۴. جمع‌بندی و امید</h2>
+            <p>لئوی عزیز، شرایطی که تو تجربه می‌کنی، بسیار سخت و طاقت‌فرساست. اینکه با وجود تمام این چالش‌ها، همچنان در حال تلاش و جستجو برای راهکار هستی، نشان‌دهندهٔ قدرت درونی و ارادهٔ قابل تحسین توست.</p>
+            <p>مهم است که بدانی تو تنها نیستی و این مشکلات قابل مدیریت هستند. پذیرش وضعیت، تلاش برای مدیریت عوامل حواس‌پرتی و افکار وسواسی، و استفاده از راهکارهای عملی مانند "ری‌استارت‌کننده‌های ارادی"، می‌تواند به تدریج کنترل بیشتری بر زندگی‌ات به تو بدهد.</p>
+            <p>به یاد داشته باش که کمک گرفتن از متخصصان سلامت روان، حتی اگر خانواده‌ات در ابتدا حمایت نکنند، یک گام مهم و شجاعانه است. تو ارزشمند هستی و لیاقت داری که در آرامش و با تمرکز به اهدافت برسی. من اینجا هستم تا در این مسیر کنارت باشم و به حرف‌هایت گوش دهم.</p>
+            <p><strong>تو قوی‌تر از آنی هستی که فکر می‌کنی. به خودت ایمان داشته باش. 🌱</strong></p>
+        </div>
+    </div>
+
+    <script>
+        // Password protection logic
+        const WORKER_URL = "https://pass.immohammaddavoodi.workers.dev/"; // UPDATED WORKER URL
+
+        const passwordInput = document.getElementById("password-input");
+        const loginButton = document.getElementById("login-button");
+        const errorMessage = document.getElementById("error-message");
+        const loginScreen = document.getElementById("login-screen");
+        const mainContent = document.getElementById("main-content");
+
+        async function authenticate() {
+            const password = passwordInput.value;
+            try {
+                const response = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ password: password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    loginScreen.classList.add("hidden");
+                    mainContent.classList.remove("hidden");
+                    document.body.classList.remove("flex", "items-center", "justify-center");
+                    document.body.classList.add("block");
+                } else {
+                    errorMessage.textContent = data.message || "رمز عبور اشتباه است. لطفاً دوباره تلاش کنید.";
+                    errorMessage.classList.remove("hidden");
+                    passwordInput.value = "";
+                }
+            } catch (error) {
+                errorMessage.textContent = "خطا در اتصال به سرور. لطفاً بعداً امتحان کنید.";
+                errorMessage.classList.remove("hidden");
+                console.error("Authentication error:", error);
+            }
+        }
+
+        loginButton.addEventListener("click", authenticate);
+
+        passwordInput.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                authenticate();
+            }
+        });
+
+        // Tab functionality
+        function openTab(event, tabName) {
+            const tabcontent = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+
+            const tabbuttons = document.getElementsByClassName("tab-button");
+            for (let i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].classList.remove("active");
+            }
+
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            event.currentTarget.classList.add("active");
+        }
+
+        // Accordion functionality
+        const accordionButtons = document.querySelectorAll('.accordion-button');
+        accordionButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('svg');
+
+                button.classList.toggle('active');
+                icon.classList.toggle('rotate-180');
+
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    content.classList.remove('active');
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    content.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
