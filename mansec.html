@@ -482,6 +482,31 @@
     </div>
 
     <script>
+             /* ------------------ جلوگیری از inspect ------------------ */
+            document.addEventListener('contextmenu', function(e) {
+              e.preventDefault();
+            });
+            
+            document.addEventListener('keydown', function(e) {
+              // جلوگیری از کلید F12
+              if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+              }
+              // جلوگیری از ترکیب‌های Ctrl+Shift+I و Ctrl+Shift+J
+              if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) {
+                e.preventDefault();
+                return false;
+              }
+              // جلوگیری از Ctrl+U
+              if (e.ctrlKey && e.keyCode === 85) {
+                e.preventDefault();
+                return false;
+              }
+            });
+            /* ------------------ پایان جلوگیری از inspect ------------------ */
+        
+        
         // آدرس Worker برای احراز هویت
         const WORKER_URL = "https://pass.immohammaddavoodi.workers.dev/";
 
