@@ -10,119 +10,224 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* استایل‌های پایه برای بدنه صفحه */
         body {
             font-family: 'Vazirmatn', 'Tahoma', sans-serif;
             background-color: #f8fafc; /* bg-slate-50 */
             color: #334155; /* text-slate-700 */
+            /* انیمیشن نرم برای تغییر رنگ‌ها هنگام تغییر تم */
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+
+        /* استایل‌های بدنه در حالت تم تاریک */
+        body.dark {
+            background-color: #1e293b; /* معادل slate-800 */
+            color: #f8fafc; /* معادل slate-50 */
+        }
+
+        /* استایل دکمه‌های تب */
         .tab-button {
             padding: 0.75rem 1.5rem;
             cursor: pointer;
             border-bottom: 2px solid transparent;
             transition: all 0.3s ease;
             font-weight: 500;
+            /* ریسپانسیو: در صفحات کوچک، دکمه‌ها فضای کمتری می‌گیرند */
+            flex-grow: 1; /* اجازه می‌دهد دکمه‌ها فضای موجود را تقسیم کنند */
+            text-align: center; /* متن دکمه را وسط‌چین می‌کند */
+            white-space: nowrap; /* از شکستن خط متن دکمه جلوگیری می‌کند */
         }
+
+        /* استایل دکمه تب فعال */
         .tab-button.active {
-            border-color: #10b981; /* border-emerald-500 */
-            color: #059669; /* text-emerald-600 */
+            border-color: #10b981; /* emerald-500 */
+            color: #059669; /* emerald-600 */
             font-weight: 700;
         }
-        .tab-button:hover {
-            color: #059669; /* text-emerald-600 */
+
+        /* استایل دکمه تب فعال در حالت تاریک */
+        body.dark .tab-button.active {
+            border-color: #10b981; /* emerald-500 */
+            color: #059669; /* emerald-600 */
         }
+
+        /* استایل دکمه تب هنگام هاور شدن */
+        .tab-button:hover {
+            color: #059669; /* emerald-600 */
+        }
+
+        /* استایل دکمه تب هنگام هاور شدن در حالت تاریک */
+        body.dark .tab-button:hover {
+            color: #059669; /* emerald-600 */
+        }
+
+        /* استایل محتوای تب‌ها */
         .tab-content {
-            display: none;
+            display: none; /* به صورت پیش‌فرض مخفی است */
             padding: 1.5rem;
-            border: 1px solid #e2e8f0; /* border-slate-300 */
-            border-top: none;
+            border: 1px solid #e2e8f0; /* slate-300 */
+            border-top: none; /* حاشیه بالا ندارد */
             border-radius: 0 0 0.5rem 0.5rem;
             background-color: white;
         }
-        .tab-content.active {
-            display: block;
+
+        /* استایل محتوای تب‌ها در حالت تاریک */
+        body.dark .tab-content {
+            background-color: #334155; /* معادل slate-700 */
+            color: #e2e8f0; /* معادل slate-300 */
+            border-color: #475569; /* معادل slate-600 */
         }
+
+        /* استایل محتوای تب فعال */
+        .tab-content.active {
+            display: block; /* نمایش محتوای تب فعال */
+        }
+
+        /* استایل دکمه‌های آکاردئون */
         .accordion-button {
-            background-color: #f1f5f9; /* bg-slate-100 */
-            color: #1e293b; /* text-slate-800 */
+            background-color: #f1f5f9; /* slate-100 */
+            color: #1e293b; /* slate-800 */
             cursor: pointer;
             padding: 1rem;
-            width: 100%;
+            width: 100%; /* تمام عرض را می‌گیرد */
             text-align: right;
             border: none;
             outline: none;
             transition: background-color 0.3s ease;
             font-weight: 500;
             border-radius: 0.375rem;
-            display: flex;
-            justify-content: space-between;
+            display: flex; /* برای قرار دادن آیکون در سمت چپ */
+            justify-content: space-between; /* آیکون را به سمت چپ می‌برد */
             align-items: center;
         }
-        .accordion-button:hover, .accordion-button.active {
-            background-color: #e2e8f0; /* bg-slate-200 */
+
+        /* استایل دکمه‌های آکاردئون در حالت تاریک */
+        body.dark .accordion-button {
+            background-color: #334155; /* معادل slate-700 */
+            color: #f8fafc; /* معادل slate-50 */
         }
+
+        /* استایل دکمه‌های آکاردئون هنگام هاور شدن یا فعال بودن */
+        .accordion-button:hover, .accordion-button.active {
+            background-color: #e2e8f0; /* slate-200 */
+        }
+
+        /* استایل دکمه‌های آکاردئون هنگام هاور شدن یا فعال بودن در حالت تاریک */
+        body.dark .accordion-button:hover, body.dark .accordion-button.active {
+            background-color: #334155; /* معادل slate-700 */
+        }
+
+        /* استایل محتوای آکاردئون */
         .accordion-content {
             padding: 0 1rem;
             background-color: white;
-            max-height: 0;
+            max-height: 0; /* به صورت پیش‌فرض مخفی است */
             overflow: hidden;
+            /* انیمیشن برای باز و بسته شدن */
             transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-            border-right: 2px solid #10b981; /* border-emerald-500 */
+            border-right: 2px solid #10b981; /* emerald-500 */
             margin-right: 0.5rem;
         }
-        .accordion-content.active {
-           /* max-height set by JS */
-           padding-top: 1rem;
-           padding-bottom: 1rem;
+
+        /* استایل محتوای آکاردئون در حالت تاریک */
+        body.dark .accordion-content {
+            background-color: #334155; /* معادل slate-700 */
+            color: #e2e8f0; /* معادل slate-300 */
+            border-right-color: #10b981; /* emerald-500 */
         }
+
+        /* استایل محتوای آکاردئون فعال */
+        .accordion-content.active {
+            /* max-height توسط JS تنظیم می‌شود */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        /* استایل عنوان‌های بخش‌ها */
         .section-title {
             font-size: 1.5rem; /* text-2xl */
             font-weight: 700; /* font-bold */
-            color: #1e293b; /* text-slate-800 */
+            color: #1e293b; /* slate-800 */
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid #10b981; /* border-emerald-500 */
+            border-bottom: 2px solid #10b981; /* emerald-500 */
         }
+
+        /* استایل عنوان‌های بخش‌ها در حالت تاریک */
+        body.dark .section-title {
+            color: #f8fafc; /* معادل slate-50 */
+            border-bottom-color: #10b981; /* emerald-500 */
+        }
+
+        /* استایل عنوان‌های زیربخش‌ها */
         .sub-section-title {
             font-size: 1.25rem; /* text-xl */
             font-weight: 600; /* font-semibold */
-            color: #334155; /* text-slate-700 */
+            color: #334155; /* slate-700 */
             margin-top: 1.5rem;
             margin-bottom: 0.75rem;
         }
+
+        /* استایل عنوان‌های زیربخش‌ها در حالت تاریک */
+        body.dark .sub-section-title {
+            color: #e2e8f0; /* معادل slate-300 */
+        }
+
+        /* استایل لیست‌ها */
         ul {
             list-style-type: disc;
-            padding-right: 2rem; /* rtl padding */
+            padding-right: 2rem; /* padding برای راست به چپ */
             margin-bottom: 1rem;
         }
+
+        /* استایل آیتم‌های لیست */
         li {
             margin-bottom: 0.5rem;
             line-height: 1.75;
         }
+
+        /* استایل پاراگراف‌ها */
         p {
             line-height: 1.75;
             margin-bottom: 1rem;
         }
+
+        /* استایل متن‌های بولد */
         strong {
             font-weight: 700;
-            color: #059669; /* text-emerald-600 */
+            color: #059669; /* emerald-600 */
+        }
+
+        /* استایل متن‌های بولد در حالت تاریک */
+        body.dark strong {
+            color: #059669; /* emerald-600 */
         }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 flex items-center justify-center">
 
-    <div id="login-screen" class="bg-white shadow-xl rounded-lg p-8 max-w-sm w-full text-center">
-        <h2 class="text-2xl font-bold mb-6 text-slate-800">ورود به همراه لئو</h2>
-        <input type="password" id="password-input" class="w-full p-3 mb-4 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 text-center" placeholder="رمز عبور را وارد کنید">
-        <button id="login-button" class="w-full bg-emerald-500 text-white p-3 rounded-md font-semibold hover:bg-emerald-600 transition duration-300">ورود</button>
-        <p id="error-message" class="text-red-500 mt-3 hidden">رمز عبور اشتباه است. لطفاً دوباره تلاش کنید.</p>
+    <div id="login-screen" class="bg-white shadow-xl rounded-lg p-8 max-w-sm w-full text-center
+                                 dark:bg-slate-700 dark:shadow-none">
+        <h2 class="text-2xl font-bold mb-6 text-slate-800 dark:text-slate-50">ورود به همراه لئو</h2>
+        <input type="password" id="password-input" class="w-full p-3 mb-4 border border-slate-300 rounded-md
+                                                        focus:outline-none focus:ring-2 focus:ring-emerald-500 text-center
+                                                        dark:bg-slate-800 dark:border-slate-600 dark:text-slate-50
+                                                        dark:focus:ring-emerald-500"
+               placeholder="رمز عبور را وارد کنید">
+        <button id="login-button" class="w-full bg-emerald-500 text-white p-3 rounded-md font-semibold
+                                        hover:bg-emerald-600 transition duration-300
+                                        dark:bg-emerald-500 dark:hover:bg-emerald-600">ورود</button>
+        <p id="error-message" class="text-red-500 mt-3 hidden dark:text-red-500">رمز عبور اشتباه است. لطفاً دوباره تلاش کنید.</p>
     </div>
 
-    <div id="main-content" class="container mx-auto max-w-4xl bg-white shadow-xl rounded-lg hidden">
-        <header class="bg-emerald-500 text-white p-6 rounded-t-lg">
+    <div id="main-content" class="container mx-auto max-w-4xl bg-white shadow-xl rounded-lg hidden
+                                 dark:bg-slate-700 dark:shadow-none">
+        <header class="bg-emerald-500 text-white p-6 rounded-t-lg dark:bg-emerald-500">
             <h1 class="text-3xl font-bold text-center">همراه لئو: مروری بر چالش‌ها و راهکارها</h1>
         </header>
 
-        <nav class="flex border-b border-slate-300 bg-slate-50 rounded-t-none">
+        <nav class="flex flex-wrap sm:flex-nowrap border-b border-slate-300 bg-slate-50 rounded-t-none
+                    dark:border-slate-600 dark:bg-slate-800">
             <button class="tab-button active" onclick="openTab(event, 'tab-intro')">معرفی لئو</button>
             <button class="tab-button" onclick="openTab(event, 'tab-challenges')">چالش‌ها</button>
             <button class="tab-button" onclick="openTab(event, 'tab-solutions')">راهکارها</button>
@@ -132,7 +237,7 @@
         <div id="tab-intro" class="tab-content active">
             <h2 class="section-title">۱. معرفی شخصیت لئو و شرایط او</h2>
             <p>این بخش به معرفی لئو، ویژگی‌های شخصیتی و شرایط خاصی که در حال حاضر با آن روبرو است، می‌پردازد. درک این موارد به فهم بهتر چالش‌ها و راهکارهای پیش رو کمک می‌کند.</p>
-            
+
             <p>لئو، یک پسر ۲۱ ساله با ویژگی‌ها و شرایط زیر است:</p>
             <ul>
                 <li><strong>تیپ شخصیتی:</strong> درونگرا و INFJ. او دنیای درونی عمیقی دارد، به ارزش‌ها و ایده‌های بزرگ فکر می‌کند، همدل و بصیر است، اما از تعاملات اجتماعی زیاد انرژی نمی‌گیرد و تمایل دارد افکارش را برای خود نگه دارد.</li>
@@ -156,7 +261,7 @@
             <h2 class="section-title">۲. تحلیل چالش‌های لئو</h2>
             <p>این بخش به بررسی عمیق‌تر چالش‌هایی می‌پردازد که لئو با توجه به شخصیت و شرایطش با آن‌ها مواجه است. شناخت این چالش‌ها اولین گام برای یافتن راهکارهای مؤثر است.</p>
             <p>در این شرایط، لئو احتمالاً احساس <strong>گیجی، درماندگی، خشم، اضطراب شدید، تنهایی عمیق و فرسودگی ذهنی</strong> می‌کند. تلاش برای تمرکز روی درس در این محیط، مانند شنا کردن خلاف جریان یک رودخانه خروشانه است.</p>
-            
+
             <h3 class="sub-section-title">سناریوی "از دست دادن روز"</h3>
             <p>بیدار شدن دیرتر از موعد مقرر، برای لئو با OCD و نشخوار فکری، منجر به احساس گناه، سرزنش خود، اضطراب و بی‌انگیزگی می‌شود. این احساسات منفی می‌توانند کل روز او را تحت تأثیر قرار دهند و او را از شروع مجدد درس منصرف کنند.</p>
 
@@ -215,7 +320,7 @@
                             <li><strong>برنامه‌ریزی مجدد:</strong> برنامهٔ واقع‌بینانه‌ای برای باقی روز تنظیم کند.</li>
                             <li><strong>تغییر محیط:</strong> مکان مطالعه را عوض کند.</li>
                             <li><strong>مدیریت استرس:</strong> از تکنیک‌های آرام‌سازی (تنفس عمیق، مدیتیشن) استفاده کند.</li>
-                            <li><strong>کمک گرفتن:</strong> در صورت نیاز با یک فرد حمایتگر یا مشاور صحبت کند.</li>
+                            <li><strong>کمک گرفتن: </strong>در صورت نیاز با یک فرد حمایتگر یا مشاور صحبت کند.</li>
                             <li><strong>یادآوری اهداف:</strong> هدف بلندمدت (موفقیت در کنکور) را به خود یادآوری کند.</li>
                             <li><strong>بخشش خود:</strong> خودش را ببخشد و روی یادگیری از تجربه تمرکز کند.</li>
                         </ul>
@@ -237,10 +342,10 @@
                             <li><strong>تعیین زمان‌های محدود برای "تنوع سالم":</strong> اگر نیاز به تنوع دارد، زمان‌های بسیار کوتاه و مشخصی را به آن اختصاص دهد و به شدت پایبند باشد.</li>
                             <li><strong>تمرکز بر ثبات و روتین:</strong> پایبندی به یک برنامهٔ درسی مشخص می‌تواند از آشفتگی ذهنی جلوگیری کند.</li>
                             <li><strong>جایگزینی میل به تغییر با حس پیشرفت در درس:</strong> حس پیشرفت را از طریق مطالعهٔ عمیق و حل تست به دست آورد.</li>
-                            </ul>
+                        </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <button class="accordion-button">
                         <span>۳.۴. استفاده از "ری‌استارت‌کننده‌های ارادی" (قطع‌کننده‌های الگو) ⏰</span>
@@ -276,14 +381,20 @@
     </div>
 
     <script>
+        // آدرس Worker برای احراز هویت
         const WORKER_URL = "https://pass.immohammaddavoodi.workers.dev/";
 
+        // گرفتن ارجاع به عناصر DOM
         const passwordInput = document.getElementById("password-input");
         const loginButton = document.getElementById("login-button");
         const errorMessage = document.getElementById("error-message");
         const loginScreen = document.getElementById("login-screen");
         const mainContent = document.getElementById("main-content");
 
+        /**
+         * تابع برای مدیریت احراز هویت کاربر.
+         * رمز عبور را به Worker ارسال کرده و نتیجه را بررسی می‌کند.
+         */
         async function authenticate() {
             const password = passwordInput.value;
             try {
@@ -298,70 +409,113 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    // مخفی کردن صفحه ورود و نمایش محتوای اصلی
                     loginScreen.classList.add("hidden");
                     mainContent.classList.remove("hidden");
+                    // تغییر کلاس‌های body برای تنظیم مجدد طرح‌بندی پس از ورود
                     document.body.classList.remove("flex", "items-center", "justify-center");
                     document.body.classList.add("block");
-                    // Set initial tab to intro
+                    // باز کردن تب معرفی لئو به عنوان تب اولیه
                     openTab(null, 'tab-intro');
                 } else {
+                    // نمایش پیام خطا در صورت عدم موفقیت در ورود
                     errorMessage.textContent = data.message || "رمز عبور اشتباه است. لطفاً دوباره تلاش کنید.";
                     errorMessage.classList.remove("hidden");
-                    passwordInput.value = "";
+                    passwordInput.value = ""; // پاک کردن فیلد رمز عبور
                 }
             } catch (error) {
+                // مدیریت خطاهای شبکه یا سرور
                 errorMessage.textContent = "خطا در اتصال به سرور. لطفاً بعداً امتحان کنید.";
                 errorMessage.classList.remove("hidden");
                 console.error("Authentication error:", error);
             }
         }
 
+        // افزودن شنونده رویداد برای دکمه ورود
         loginButton.addEventListener("click", authenticate);
 
+        // افزودن شنونده رویداد برای کلید Enter در فیلد رمز عبور
         passwordInput.addEventListener("keypress", (event) => {
             if (event.key === "Enter") {
                 authenticate();
             }
         });
 
+        /**
+         * تابع برای باز کردن تب‌های مختلف.
+         * تمام تب‌ها را مخفی کرده و تب مورد نظر را نمایش می‌دهد.
+         * @param {Event} event - رویداد کلیک (می‌تواند null باشد برای باز شدن اولیه)
+         * @param {string} tabName - شناسه (ID) تب مورد نظر برای نمایش
+         */
         function openTab(event, tabName) {
+            // مخفی کردن تمام محتوای تب‌ها
             const tabcontent = document.getElementsByClassName("tab-content");
             for (let i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
                 tabcontent[i].classList.remove("active");
             }
 
+            // غیرفعال کردن تمام دکمه‌های تب
             const tabbuttons = document.getElementsByClassName("tab-button");
             for (let i = 0; i < tabbuttons.length; i++) {
                 tabbuttons[i].classList.remove("active");
             }
 
+            // نمایش تب مورد نظر
             document.getElementById(tabName).style.display = "block";
             document.getElementById(tabName).classList.add("active");
-            if (event) { // Check if event is not null (for initial tab opening)
+
+            // فعال کردن دکمه تب مربوطه
+            if (event) { // اگر رویداد کلیک وجود دارد (یعنی کاربر روی دکمه کلیک کرده)
                 event.currentTarget.classList.add("active");
-            } else { // If event is null, it's the initial load, activate the first button
-                document.querySelector('.tab-button').classList.add('active');
+            } else { // اگر رویداد null است (یعنی بارگذاری اولیه صفحه)
+                // دکمه مربوط به تب فعال را پیدا کرده و فعال می‌کند
+                const activeButton = document.querySelector(`.tab-button[onclick*="${tabName}"]`);
+                if (activeButton) {
+                    activeButton.classList.add('active');
+                }
             }
         }
 
+        // گرفتن تمام دکمه‌های آکاردئون
         const accordionButtons = document.querySelectorAll('.accordion-button');
+        // افزودن شنونده رویداد برای هر دکمه آکاردئون
         accordionButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const content = button.nextElementSibling;
-                const icon = button.querySelector('svg');
+                const content = button.nextElementSibling; // محتوای آکاردئون
+                const icon = button.querySelector('svg'); // آیکون SVG
 
+                // تغییر وضعیت فعال/غیرفعال دکمه و آیکون
                 button.classList.toggle('active');
-                icon.classList.toggle('rotate-180');
+                icon.classList.toggle('rotate-180'); // چرخش آیکون
 
+                // باز و بسته کردن محتوای آکاردئون
                 if (content.style.maxHeight) {
-                    content.style.maxHeight = null;
+                    content.style.maxHeight = null; // بستن
                     content.classList.remove('active');
                 } else {
+                    // باز کردن با تنظیم maxHeight به ارتفاع واقعی محتوا
                     content.style.maxHeight = content.scrollHeight + "px";
                     content.classList.add('active');
                 }
             });
+        });
+
+        // منطق برای تشخیص و اعمال تم تاریک/روشن سیستم عامل
+        // بررسی اولیه تم دستگاه هنگام بارگذاری صفحه
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.classList.add('dark'); // اگر تم دستگاه تاریک است، کلاس 'dark' را اضافه کن
+        } else {
+            document.body.classList.remove('dark'); // در غیر این صورت، مطمئن شو که کلاس 'dark' وجود ندارد
+        }
+
+        // گوش دادن به تغییرات تم دستگاه در زمان واقعی
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.body.classList.add('dark'); // اگر تم به تاریک تغییر کرد
+            } else {
+                document.body.classList.remove('dark'); // اگر تم به روشن تغییر کرد
+            }
         });
     </script>
 </body>
