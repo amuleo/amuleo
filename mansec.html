@@ -12,141 +12,117 @@
     <style>
         body {
             font-family: 'Vazirmatn', 'Tahoma', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        :root {
-            --bg-color: #f8fafc;
-            --text-color: #334155;
-            --tab-button-active-border: #10b981;
-            --tab-button-active-text: #059669;
-            --tab-button-hover-text: #059669;
-            --tab-content-border: #e2e8f0;
-            --accordion-button-bg: #f1f5f9;
-            --accordion-button-text: #1e293b;
-            --accordion-button-hover-bg: #e2e8f0;
-            --accordion-content-border: #10b981;
-            --section-title-border: #10b981;
-            --section-title-text: #1e293b;
-            --sub-section-title-text: #334155;
-            --strong-text: #059669;
-            --login-bg: white;
-            --login-text: #334155;
-            --login-input-border: #e2e8f0;
-            --login-button-bg: #10b981;
-            --login-button-text: white;
-            --login-button-hover-bg: #059669;
-            --error-text: #dc2626;
-            --header-bg: #10b981;
-            --header-text: white;
-            --nav-bg: #f8fafc;
-            --nav-border: #e2e8f0;
-            --tab-content-bg: white;
-        }
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #1e293b;
-                --text-color: #e5e7eb;
-                --tab-button-active-border: #22c55e;
-                --tab-button-active-text: #16a34a;
-                --tab-button-hover-text: #16a34a;
-                --tab-content-border: #4b5563;
-                --accordion-button-bg: #374151;
-                --accordion-button-text: #f3f4f6;
-                --accordion-button-hover-bg: #4b5563;
-                --accordion-content-border: #22c55e;
-                --section-title-border: #22c55e;
-                --section-title-text: #f3f4f6;
-                --sub-section-title-text: #d1d5db;
-                --strong-text: #16a34a;
-                --login-bg: #374151;
-                --login-text: #f3f4f6;
-                --login-input-border: #4b5563;
-                --login-button-bg: #22c55e;
-                --login-button-text: #1e293b;
-                --login-button-hover-bg: #16a34a;
-                --error-text: #f44336;
-                --header-bg: #22c55e;
-                --header-text: #1e293b;
-                --nav-bg: #374151;
-                --nav-border: #4b5563;
-                --tab-content-bg: #1e293b;
-            }
+            background-color: #f8fafc; /* bg-slate-50 */
+            color: #334155; /* text-slate-700 */
         }
         .tab-button {
-            color: var(--text-color);
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .tab-button.active {
+            border-color: #10b981; /* border-emerald-500 */
+            color: #059669; /* text-emerald-600 */
+            font-weight: 700;
+        }
+        .tab-button:hover {
+            color: #059669; /* text-emerald-600 */
         }
         .tab-content {
-            background-color: var(--tab-content-bg);
-            color: var(--text-color);
+            display: none;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0; /* border-slate-300 */
+            border-top: none;
+            border-radius: 0 0 0.5rem 0.5rem;
+            background-color: white;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .accordion-button {
+            background-color: #f1f5f9; /* bg-slate-100 */
+            color: #1e293b; /* text-slate-800 */
+            cursor: pointer;
+            padding: 1rem;
+            width: 100%;
+            text-align: right;
+            border: none;
+            outline: none;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .accordion-button:hover, .accordion-button.active {
+            background-color: #e2e8f0; /* bg-slate-200 */
         }
         .accordion-content {
-            background-color: var(--tab-content-bg);
-            color: var(--text-color);
+            padding: 0 1rem;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            border-right: 2px solid #10b981; /* border-emerald-500 */
+            margin-right: 0.5rem;
+        }
+        .accordion-content.active {
+           /* max-height set by JS */
+           padding-top: 1rem;
+           padding-bottom: 1rem;
         }
         .section-title {
-            color: var(--section-title-text);
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            color: #1e293b; /* text-slate-800 */
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #10b981; /* border-emerald-500 */
         }
         .sub-section-title {
-            color: var(--sub-section-title-text);
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            color: #334155; /* text-slate-700 */
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        ul {
+            list-style-type: disc;
+            padding-right: 2rem; /* rtl padding */
+            margin-bottom: 1rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+            line-height: 1.75;
         }
         p {
-            color: var(--text-color);
+            line-height: 1.75;
+            margin-bottom: 1rem;
         }
         strong {
-            color: var(--strong-text);
-        }
-        #login-screen {
-            background-color: var(--login-bg);
-            color: var(--login-text);
-        }
-        #login-screen h2 {
-            color: var(--login-text);
-        }
-        #password-input {
-            border-color: var(--login-input-border);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
-        #password-input:focus {
-            ring-color: var(--tab-button-active-border);
-        }
-        #login-button {
-            background-color: var(--login-button-bg);
-            color: var(--login-button-text);
-        }
-        #login-button:hover {
-            background-color: var(--login-button-hover-bg);
-        }
-        #error-message {
-            color: var(--error-text);
-        }
-        #main-content header {
-            background-color: var(--header-bg);
-            color: var(--header-text);
-        }
-        nav {
-            background-color: var(--nav-bg);
-            border-bottom-color: var(--nav-border);
+            font-weight: 700;
+            color: #059669; /* text-emerald-600 */
         }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 flex items-center justify-center">
 
     <div id="login-screen" class="bg-white shadow-xl rounded-lg p-8 max-w-sm w-full text-center">
-        <h2 class="text-2xl font-bold mb-6">ورود به همراه لئو</h2>
-        <input type="password" id="password-input" class="w-full p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 text-center" placeholder="رمز عبور را وارد کنید">
-        <button id="login-button" class="w-full p-3 rounded-md font-semibold transition duration-300">ورود</button>
-        <p id="error-message" class="mt-3 hidden">رمز عبور اشتباه است. لطفاً دوباره تلاش کنید.</p>
+        <h2 class="text-2xl font-bold mb-6 text-slate-800">ورود به همراه لئو</h2>
+        <input type="password" id="password-input" class="w-full p-3 mb-4 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 text-center" placeholder="رمز عبور را وارد کنید">
+        <button id="login-button" class="w-full bg-emerald-500 text-white p-3 rounded-md font-semibold hover:bg-emerald-600 transition duration-300">ورود</button>
+        <p id="error-message" class="text-red-500 mt-3 hidden">رمز عبور اشتباه است. لطفاً دوباره تلاش کنید.</p>
     </div>
 
-    <div id="main-content" class="container mx-auto max-w-4xl shadow-xl rounded-lg hidden">
-        <header class="p-6 rounded-t-lg">
+    <div id="main-content" class="container mx-auto max-w-4xl bg-white shadow-xl rounded-lg hidden">
+        <header class="bg-emerald-500 text-white p-6 rounded-t-lg">
             <h1 class="text-3xl font-bold text-center">همراه لئو: مروری بر چالش‌ها و راهکارها</h1>
         </header>
 
-        <nav class="flex border-b rounded-t-none">
+        <nav class="flex border-b border-slate-300 bg-slate-50 rounded-t-none">
             <button class="tab-button active" onclick="openTab(event, 'tab-intro')">معرفی لئو</button>
             <button class="tab-button" onclick="openTab(event, 'tab-challenges')">چالش‌ها</button>
             <button class="tab-button" onclick="openTab(event, 'tab-solutions')">راهکارها</button>
@@ -252,7 +228,7 @@
                         <svg class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div class="accordion-content">
-                        <p>برای کنترل میل سیری‌ناپذیر به تغییر و جلوگیری از شروع چرخه‌های وسواسی:</p>
+                        <p>برای کنترل میل سیری‌ناپیر به تغییر و جلوگیری از شروع چرخه‌های وسواسی:</p>
                         <ul>
                             <li><strong>شناخت و پذیرش الگو:</strong> آگاه باشد که این میل به تغییر، به جای کمک، به او آسیب می‌زند.</li>
                             <li><strong>اولویت‌بندی قاطعانه:</strong> کنکور اولویت اصلی است؛ هر تغییر باید با این اولویت سنجیده شود.</li>
@@ -261,7 +237,7 @@
                             <li><strong>تعیین زمان‌های محدود برای "تنوع سالم":</strong> اگر نیاز به تنوع دارد، زمان‌های بسیار کوتاه و مشخصی را به آن اختصاص دهد و به شدت پایبند باشد.</li>
                             <li><strong>تمرکز بر ثبات و روتین:</strong> پایبندی به یک برنامهٔ درسی مشخص می‌تواند از آشفتگی ذهنی جلوگیری کند.</li>
                             <li><strong>جایگزینی میل به تغییر با حس پیشرفت در درس:</strong> حس پیشرفت را از طریق مطالعهٔ عمیق و حل تست به دست آورد.</li>
-                        </ul>
+                            </ul>
                     </div>
                 </div>
                 
