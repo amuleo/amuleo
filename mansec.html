@@ -32,10 +32,9 @@
             border-bottom: 2px solid transparent;
             transition: all 0.3s ease;
             font-weight: 500;
-            /* ریسپانسیو: در صفحات کوچک، دکمه‌ها فضای کمتری می‌گیرند */
-            flex-grow: 1; /* اجازه می‌دهد دکمه‌ها فضای موجود را تقسیم کنند */
-            text-align: center; /* متن دکمه را وسط‌چین می‌کند */
+            /* text-align: center; /* متن دکمه را وسط‌چین می‌کند - این را از flex-grow جدا کردیم */
             white-space: nowrap; /* از شکستن خط متن دکمه جلوگیری می‌کند */
+            /* flex-grow: 1; /* این را حذف کردیم تا اسکرول افقی بهتر کار کند */
         }
 
         /* استایل دکمه تب فعال */
@@ -141,8 +140,7 @@
         .accordion-content.active {
             /* max-height توسط JS تنظیم می‌شود */
             padding-top: 1rem;
-            /* padding-bottom را به حالت اولیه بازگردانده‌ایم (1rem) */
-            padding-bottom: 1rem; /* 1rem (16px) */
+            padding-bottom: 1rem; /* بازگشت به padding اصلی */
             margin-bottom: 5px; /* این فاصله بین پنل آکاردئون باز شده و عنصر بعدی است */
         }
 
@@ -206,10 +204,10 @@
             color: #059669; /* emerald-600 */
         }
 
-        /* استایل‌های سفارشی برای اسکرول بار نازک */
+        /* استایل‌های سفارشی برای اسکرول بار نازک (1px) */
         /* برای مرورگرهای Webkit (کروم، سافاری) */
         .tab-nav-scroll::-webkit-scrollbar {
-            height: 6px; /* ارتفاع اسکرول بار افقی */
+            height: 1px; /* ارتفاع اسکرول بار افقی */
         }
 
         .tab-nav-scroll::-webkit-scrollbar-track {
@@ -217,25 +215,24 @@
         }
 
         .tab-nav-scroll::-webkit-scrollbar-thumb {
-            background-color: #a0aec0; /* رنگ اسکرول بار (slate-400) */
-            border-radius: 3px; /* گردی اسکرول بار */
-            border: 1px solid transparent; /* حاشیه برای پدینگ */
+            background-color: #a0aec0; /* رنگ اسکرول بار در حالت روشن (slate-400) */
+            border-radius: 0.5px; /* گردی اسکرول بار (نصف ارتفاع) */
         }
 
         /* رنگ اسکرول بار در حالت تاریک */
         body.dark .tab-nav-scroll::-webkit-scrollbar-thumb {
-            background-color: #64748b; /* slate-600 برای حالت تاریک */
+            background-color: #64748b; /* رنگ اسکرول بار در حالت تاریک (slate-600) */
         }
 
         /* برای مرورگرهای Firefox */
         .tab-nav-scroll {
-            scrollbar-width: thin; /* عرض اسکرول بار */
+            scrollbar-width: thin; /* عرض اسکرول بار (Firefox) */
             scrollbar-color: #a0aec0 transparent; /* رنگ thumb و track برای فایرفاکس */
         }
 
         /* رنگ اسکرول بار در فایرفاکس در حالت تاریک */
         body.dark .tab-nav-scroll {
-            scrollbar-color: #64748b transparent; /* slate-600 برای حالت تاریک */
+            scrollbar-color: #64748b transparent; /* رنگ thumb و track برای فایرفاکس در حالت تاریک */
         }
     </style>
 </head>
@@ -261,7 +258,7 @@
             <h1 class="text-3xl font-bold text-center">همراه لئو: مروری بر چالش‌ها و راهکارها</h1>
         </header>
 
-        <nav class="flex flex-wrap sm:flex-nowrap border-b border-slate-300 bg-slate-50 rounded-t-none
+        <nav class="flex flex-nowrap border-b border-slate-300 bg-slate-50 rounded-t-none
                     dark:border-slate-600 dark:bg-slate-800 overflow-x-auto tab-nav-scroll">
             <button class="tab-button active" onclick="openTab(event, 'tab-intro')">معرفی لئو</button>
             <button class="tab-button" onclick="openTab(event, 'tab-challenges')">چالش‌ها</button>
