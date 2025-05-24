@@ -241,16 +241,19 @@
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mb-6">
                 <div class="bg-white p-4 rounded-lg shadow-sm dark:bg-gray-700 dark:text-gray-200">
-                    <p class="text-lg font-semibold text-justify">امتیازات:</p>
-                    <p id="current-points" class="text-3xl font-bold text-blue-600 dark:text-blue-400 text-justify">0</p>
+                    <p class="text-lg font-semibold">
+                        امتیازات: <span id="current-points" class="text-xl font-bold text-blue-600 dark:text-blue-400">0</span>
+                    </p>
                 </div>
                 <div class="bg-white p-4 rounded-lg shadow-sm dark:bg-gray-700 dark:text-gray-200">
-                    <p class="text-lg font-semibold text-justify">سطح:</p>
-                    <p id="current-level" class="text-3xl font-bold text-green-600 dark:text-green-400 text-justify">1</p>
+                    <p class="text-lg font-semibold">
+                        سطح: <span id="current-level" class="text-xl font-bold text-green-600 dark:text-green-400">1</span>
+                    </p>
                 </div>
                 <div class="bg-white p-4 rounded-lg shadow-sm dark:bg-gray-700 dark:text-gray-200">
-                    <p class="text-lg font-semibold text-justify">استریک (روزهای متوالی):</p>
-                    <p id="current-streak" class="text-3xl font-bold text-red-600 dark:text-red-400 text-justify">0</p>
+                    <p class="text-lg font-semibold">
+                        استریک (روزهای متوالی): <span id="current-streak" class="text-xl font-bold text-red-600 dark:text-red-400">0</span>
+                    </p>
                 </div>
             </div>
 
@@ -300,8 +303,10 @@
         </section>
 
         <footer class="text-center text-gray-500 text-sm mt-8 dark:text-gray-400">
-            <p class="text-justify">با آرزوی روزی پر از موفقیت و آرامش برای شما.</p>
-            <p class="text-justify">تمامی حقوق برای<strong> عمو لئو</strong> محفوظ است.</p>
+            <div class="flex flex-col items-center">
+                <p>با آرزوی روزی پر از موفقیت و آرامش برای شما.</p>
+                <p>تمامی حقوق برای<strong> عمو لئو</strong> محفوظ است.</p>
+            </div>
         </footer>
     </div>
 
@@ -315,25 +320,36 @@
     </div>
 
     <div id="gamification-rules-modal" class="modal">
-        <div class="modal-content flex flex-col h-[500px]"> <h3 class="text-xl font-bold mb-4 text-center text-justify">قوانین گیمیفیکیشن</h3>
-            <div class="text-base text-right text-justify space-y-3 flex-grow overflow-y-auto custom-scrollbar"> <p class="text-justify"><strong>امتیازات:</strong> با تکمیل هر هدف، ۱۰ امتیاز کسب می‌کنید.</p>
-                <p class="text-justify"><strong>سطح‌بندی:</strong> برای ارتقاء سطح، باید امتیازات مشخصی کسب کنید:</p>
-                <ul class="list-decimal list-inside mr-4">
-                    <li class="text-justify">سطح ۱ (تازه کار): ۰ امتیاز</li>
-                    <li class="text-justify">سطح ۲ (آماتور): ۱۰۰ امتیاز</li>
-                    <li class="text-justify">سطح ۳ (پویا): ۲۵۰ امتیاز</li>
-                    <li class="text-justify">سطح ۴ (متعهد): ۴۰۰ امتیاز</li>
-                    <li class="text-justify">سطح ۵ (پیشرو): ۶۰۰ امتیاز</li>
-                    <li class="text-justify">سطح ۶ (استاد): ۸۵۰ امتیاز</li>
-                    <li class="text-justify">سطح ۷ (قهرمان): ۱۱۰۰ امتیاز</li>
-                    <li class="text-justify">سطح ۸ (افسانه): ۱۳۰۰ امتیاز</li>
-                    <li class="text-justify">سطح ۹ (اسطوره): ۱۴۵۰ امتیاز</li>
-                    <li class="text-justify">سطح ۱۰ (سحرخیز اعظم): ۱۵۰۰ امتیاز</li>
-                </ul>
-                <p class="text-justify"><strong>استریک (روزهای متوالی):</strong> برای حفظ استریک، باید حداقل <strong>۵ هدف</strong> را در هر روز تکمیل کنید.</p>
-                <p class="text-justify">اگر یک روز را از دست بدهید و کمتر از ۵ هدف را تکمیل کنید، استریک شما صفر می‌شود.</p>
+        <div class="modal-content flex flex-col max-h-[90vh] md:h-[500px]">
+            <h3 class="text-xl font-bold mb-4 text-center text-justify">قوانین گیمیفیکیشن</h3>
+            <div class="flex-grow overflow-y-auto custom-scrollbar space-y-3 p-2">
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+                    <p class="text-base text-right text-justify"><strong>امتیازات:</strong> با تکمیل هر هدف، ۱۰ امتیاز کسب می‌کنید.</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+                    <p class="text-base text-right text-justify"><strong>سطح‌بندی:</strong> برای ارتقاء سطح، باید امتیازات مشخصی کسب کنید:</p>
+                    <ul class="list-decimal list-inside mr-4 text-base text-justify">
+                        <li>سطح ۱ (تازه کار): ۰ امتیاز</li>
+                        <li>سطح ۲ (آماتور): ۱۰۰ امتیاز</li>
+                        <li>سطح ۳ (پویا): ۲۵۰ امتیاز</li>
+                        <li>سطح ۴ (متعهد): ۴۰۰ امتیاز</li>
+                        <li>سطح ۵ (پیشرو): ۶۰۰ امتیاز</li>
+                        <li>سطح ۶ (استاد): ۸۵۰ امتیاز</li>
+                        <li>سطح ۷ (قهرمان): ۱۱۰۰ امتیاز</li>
+                        <li>سطح ۸ (افسانه): ۱۳۰۰ امتیاز</li>
+                        <li>سطح ۹ (اسطوره): ۱۴۵۰ امتیاز</li>
+                        <li>سطح ۱۰ (سحرخیز اعظم): ۱۵۰۰ امتیاز</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+                    <p class="text-base text-right text-justify"><strong>استریک (روزهای متوالی):</strong> برای حفظ استریک، باید حداقل <strong>۵ هدف</strong> را در هر روز تکمیل کنید.</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+                    <p class="text-base text-right text-justify">اگر یک روز را از دست بدهید و کمتر از ۵ هدف را تکمیل کنید، استریک شما صفر می‌شود.</p>
+                </div>
             </div>
-            <button class="modal-button mt-4" id="close-gamification-rules">بستن</button> </div>
+            <button class="modal-button mt-4" id="close-gamification-rules">بستن</button>
+        </div>
     </div>
 
     <div id="reset-confirmation-modal" class="modal">
@@ -525,7 +541,7 @@
                 content: `
                     <h3 class="text-lg md:text-xl font-bold text-gray-700 mb-2 text-right text-justify">پرهیز از محرک‌ها</h3>
                     <p class="mb-2 text-base text-right text-justify">همانطور که به دنبال آرامش هستید، باید از هر چیزی که ذهن یا بدن را بیش از حد نزدیک به زمان خواب تحریک می‌کند، اجتناب کنید. این شامل خارج کردن دستگاه‌های الکترونیکی مانند تلویزیون، کامپیوتر و تلفن‌های هوشمند از اتاق خواب است. نور آبی صفحه نمایش می‌تواند خواب را مختل کند و درگیر شدن با محتوا ذهن را فعال نگه می‌دارد. هدف این است که حداقل یک ساعت قبل از خواب همه صفحه‌های نمایش را کنار بگذارید. همچنین، به آنچه مصرف می‌کنید توجه داشته باشید. از وعده‌های غذایی سنگیل، کافئین (قهوه، چای، نوشیدنی‌های انرژی‌زا) و الکل قبل از خواب اجتناب کنید. در حالی که الکل ممکن است در ابتدا احساس خواب‌آلودگی ایجاد کند، اغلب منجر به خواب مختل شده در اواخر شب می‌شود. غذاهای سنگیل یا تند می‌توانند باعث سوءهاضمه شوند که قطعاً به آرامش کمک نمی‌کند. سعی کنید شام خود را ۲-۳ ساعت قبل از خواب میل کنید.</p>
-                    <p class="text-base text-right text-justify">پرهیز از محرک‌ها به محافظت از "پناهگاه خواب" در برابر تحریک شناختی کمک می‌کند. توصیه‌هایی برای حذف دستگاه‌های الکترونیکی از اتاق خواب و اجتناب از زمان استفاده از صفحه نمایش حداقل یک ساعت قبل از خواب، ثابت هستند. فراتر از سرکوب ملاتونین توسط نور آبی، مسئله اصلی برای فرد دارای OCD/نشخوار فکری، *تحریک شناختی* ناشی از درگیر شدن با محتوای دیجیتال (اخبار، رسانه‌های اجتماعی، بازی‌ها، ایمیل‌ها) است. این درگیری مغز را فعال، هوشیار و در حال پردازش اطلاعات نگه می‌دارد. برای ذهنی که از قبل بیش‌فعال و مستعد افکار مزاحم و نشخوار فکری است، این تحریک ذهنی می‌تواند به راحتی چرخه‌های فکری جدید را تحریک کند یا مواد جدیدی برای نشخوار فکری فراهم آورد و آرام کردن ذهن و انتقال به خواب را تقریباً غیرممکن سازد. توصیه به اجتناب از صفحه‌های نمایش فقط در مورد نوردهی نیست؛ بلکه یک راهبرد حیاتی برای ایجاد یک "مسیر خروجی" ذهنی از بار شناختی روز است. این کار از ورود محرک‌های جدید جلوگیری می‌کند و به ذهن مضطرب اجازه می‌دهد تا به تدریج از فعالیت جدا شود و در نتیجه اتاق خواب را به عنوان یک "پناهگاه خواب" اختصاصی محافظت کرده و انتقال به حالت آرامش را تسهیل می‌کند. </p>
+                    <p class="text-base text-right text-justify">پرهیز از محرک‌ها به محافظت از "پناهگاه خواب" در برابر تحریک شناختی کمک می‌کند. توصیه‌هایی برای حذف دستگاه‌های الکترونیکی از اتاق خواب و اجتناب از زمان استفاده از صفحه نمایش حداقل یک ساعت قبل از خواب، ثابت هستند. فراتر از سرکوب ملاتونین توسط نور آبی، مسئله اصلی برای فرد دارای OCD/نشخوار فکری، *تحریک شناختی* ناشی از درگیر شدن با محتوای دیجیتال (اخبار، رسانه‌های اجتماعی، بازی‌ها، ایمیل‌ها) است. این درگیری مغز را فعال، هوشیار و در حال پردازش اطلاعات نگه می‌دارد. برای ذهنی که از قبل بیش‌فعال و مستعد افکار مزاحم و نشخوار فکری است، این تحریک ذهنی می‌تواند به راحتی چرخه‌های فکری جدید را تحریک کند یا مواد جدیدی برای نشخوار فکری فراهم آورد و آرام کردن ذهن و انتقال به خواب را تقریباً غیرممکن سازد. توصیه به اجتناب از صفحه‌های نمایش فقط در مورد نوردهی نیست؛ بلکه یک راهبرد حیاتی برای ایجاد یک "مسیر خروجی" ذهنی از بار شناختی روز است. این کار از ورود محرک‌های جدید جلوگیری می‌کند و به ذهن مضطرب اجازه می‌دهد تا به تدریج از فعالیت جدا شود و در نتیجه اتاق خواب را به عنوان یک "پناهگاه خواب" اختصاصی محافظت کرده و انتقال به حالت آرامش را تسهیل می‌کند.</p>
                     <p class="text-base text-right text-justify">همچنین، این اقدامات تداخل فیزیولوژیکی با خواب را به حداقل می‌رساند. توصیه‌ها شامل اجتناب از وعده‌های غذایی سنگیل، کافئین و الکل قبل از خواب است. کافئین یک محرک مستقیم است. وعده‌های غذایی سنگین انرژی را به سمت هضم هدیت می‌کنند و به طور بالقوه باعث ناراحتی می‌شوند. الکل، در حالی که در ابتدا آرام‌بخش است، ساختار خواب را در اواخر شب مختل می‌کند و منجر به بیداری می‌شود. این مواد مستقیماً در فرآیندهای طبیعی خواب بدن تداخل ایجاد می‌کنند و باعث تحریک فیزیولوژیکی، ناراحتی گوارشی یا خواب تکه‌تکه می‌شوند. این ناراحتی فیزیکی یا هوشیاری بالا می‌تواند به راحتی توسط یک ذهن مضطرب اشتباه تفسیر یا تشدید شود و به چرخه نگرانی و بی‌خوابی دامن بزند. برای فردی با OCD/نشخوار فکری، که ممکن است از قبل نسبت به احساسات درونی خود بسیار آگاه باشد، مدیریت رژیم غذایی و مصرف مواد قبل از خواب حیاتی است. هرگونه اختلال فیزیولوژیکی می‌تواند به یک تمرکز جدید برای افکار وسواسی تبدیل شود یا اضطراب‌های موجود را تشدید کند و به خواب رفتن و حفظ آن را دشوارتر سازد. این به معنای حذف "نویز" داخلی است که یک ذهن مضطرب ممکن است به آن چسبیده باشد.</p>
                 `
             },
@@ -590,6 +606,9 @@
                         <li class="text-justify">**جستجوی حمایت حرفه‌ای:** در صورت شدت یافتن علائم، مراجعه به روانشناس یا روانپزشک برای دریافت درمان‌های تخصصی مانند CBT و مواجهه‌درمانی، و همچنین پیوستن به گروه‌های حمایتی، می‌تواند بسیار کمک‌کننده باشد.</li>
                     </ol>
                     <p class="mt-2 text-base text-right text-justify">با پیاده‌سازی تدریجی و مداوم این گام‌ها، فرد می‌تواند کنترل بیشتری بر افکار خود پیدا کرده، ریتم خواب خود را تنظیم کند و در نهایت کیفیت زندگی خود را به طور قابل توجهی بهبود بخشد. این مسیر نیازمند صبر، پیوستگی و تعهد است، اما نتایج آن در بهبود سلامت روان و جسمی بسیار ارزشمند خواهد بود.</p>
+                    <p class="mt-4 text-base text-right text-justify font-semibold text-blue-700 dark:text-blue-400">
+                        توجه: تمامی اطلاعات شما به صورت محلی در مرورگر شما ذخیره می‌شود و ما هیچ دسترسی به آن‌ها نداریم. اطلاعات شما کاملاً امن و خصوصی است.
+                    </p>
                 `
             },
         ];
