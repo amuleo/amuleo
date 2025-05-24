@@ -235,6 +235,81 @@
         body.dark .tab-nav-scroll {
             scrollbar-color: #64748b transparent; /* رنگ thumb و track برای فایرفاکس در حالت تاریک */
         }
+
+        /* استایل‌های سفارشی برای دکمه ورود و پروگرس بار و اسپینر */
+        #login-button {
+            position: relative;
+            overflow: hidden; /* برای قرارگیری صحیح پروگرس بار و اسپینر */
+            display: flex; /* برای مرکزیت محتوا */
+            align-items: center;
+            justify-content: center;
+        }
+
+        #login-button-text {
+            opacity: 1; /* ابتدا قابل مشاهده است */
+            transition: opacity 0.3s ease; /* انیمیشن محو شدن متن */
+            position: relative; /* برای اطمینان از قرارگیری صحیح روی اسپینر */
+            z-index: 2; /* بالاتر از پروگرس بار و اسپینر */
+        }
+
+        #login-progress-bar {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2px;
+            width: 100%;
+            background-color: #10b981; /* رنگ پروگرس بار */
+            transform: scaleX(0); /* ابتدا مخفی است */
+            transform-origin: left; /* از چپ رشد می‌کند */
+            transition: transform 0.3s ease, background-color 0.3s ease; /* انیمیشن رشد و تغییر رنگ */
+            z-index: 1; /* زیر متن و اسپینر */
+        }
+
+        #login-spinner {
+            position: absolute;
+            inset: 0; /* کل فضای دکمه را پوشش می‌دهد */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0; /* ابتدا مخفی است */
+            transition: opacity 0.3s ease; /* انیمیشن ظاهر شدن/محو شدن اسپینر */
+            z-index: 2; /* هم سطح با متن، برای جایگزینی بصری */
+            pointer-events: none; /* اجازه می‌دهد کلیک‌ها از طریق آن عبور کنند وقتی مخفی است */
+        }
+
+        /* انیمیشن چرخش اسپینر */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #login-spinner::after {
+            content: '';
+            width: 20px; /* اندازه اسپینر */
+            height: 20px; /* اندازه اسپینر */
+            border: 2px solid #fff; /* رنگ اسپینر (سفید) */
+            border-top-color: transparent; /* قسمت بالای شفاف برای ایجاد جلوه چرخش */
+            border-radius: 50%; /* دایره‌ای کردن */
+            animation: spin 0.8s linear infinite; /* انیمیشن چرخش */
+        }
+
+        /* وضعیت دکمه هنگام لودینگ */
+        #login-button.loading #login-button-text {
+            opacity: 0; /* محو شدن متن */
+        }
+
+        #login-button.loading #login-progress-bar {
+            transform: scaleX(1); /* نمایش پروگرس بار */
+        }
+
+        #login-button.loading #login-spinner {
+            opacity: 1; /* نمایش اسپینر */
+        }
+
+        /* وضعیت دکمه هنگام خطا */
+        #login-button.error #login-progress-bar {
+            background-color: #ef4444; /* تغییر رنگ پروگرس بار به قرمز */
+        }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 flex items-center justify-center">
@@ -249,7 +324,11 @@
                placeholder="رمز عبور را وارد کنید">
         <button id="login-button" class="w-full bg-emerald-500 text-white p-3 rounded-md font-semibold
                                         hover:bg-emerald-600 transition duration-300
-                                        dark:bg-emerald-500 dark:hover:bg-emerald-600">ورود</button>
+                                        dark:bg-emerald-500 dark:hover:bg-emerald-600">
+            <span id="login-button-text">ورود</span>
+            <div id="login-progress-bar"></div>
+            <div id="login-spinner"></div>
+        </button>
         <p id="error-message" class="text-red-500 mt-3 hidden dark:text-red-500">رمز عبور اشتباه است. لطفاً دوباره تلاش کنید.</p>
     </div>
 
@@ -332,6 +411,11 @@
         const loginScreen = document.getElementById("login-screen");
         const mainContent = document.getElementById("main-content");
 
+        // ارجاع به عناصر جدید برای انیمیشن پروگرس بار و اسپینر
+        const loginButtonText = document.getElementById("login-button-text");
+        const loginProgressBar = document.getElementById("login-progress-bar");
+        const loginSpinner = document.getElementById("login-spinner"); // عنصر اسپینر
+
         let cachedTabData = null; // برای ذخیره داده‌های تب پس از بارگذاری اولیه
 
         /**
@@ -341,6 +425,11 @@
         async function authenticate() {
             const password = passwordInput.value;
             errorMessage.classList.add("hidden"); // مخفی کردن پیام خطا قبلی
+
+            // نمایش پروگرس بار و اسپینر و مخفی کردن متن دکمه
+            loginButton.classList.add('loading');
+            loginButton.classList.remove('error'); // اطمینان از حذف کلاس خطا
+            loginButton.disabled = true; // غیرفعال کردن دکمه در حین پردازش
 
             try {
                 // مرحله 1: احراز هویت با Worker اول
@@ -376,12 +465,23 @@
                         document.body.classList.add("block");
                         // باز کردن تب معرفی لئو به عنوان تب اولیه
                         openTab(null, 'tab-intro');
+
+                        // پس از موفقیت، پروگرس بار و اسپینر را مخفی کن و دکمه را فعال کن
+                        loginButton.classList.remove('loading');
+                        loginButton.disabled = false;
                     } else {
                         // اگر Worker دوم خطا داد (مثلاً کد ثانویه نامعتبر بود)
                         const errorText = await dataResponse.text();
                         errorMessage.textContent = `خطا در دریافت اطلاعات: ${errorText}`;
                         errorMessage.classList.remove("hidden");
                         console.error("Data Worker error:", dataResponse.status, errorText);
+
+                        // نمایش حالت خطا و سپس بازگرداندن دکمه
+                        loginButton.classList.add('error');
+                        setTimeout(() => {
+                            loginButton.classList.remove('loading', 'error');
+                            loginButton.disabled = false;
+                        }, 1500); // 1.5 ثانیه برای نمایش خطا
                     }
 
                 } else {
@@ -389,12 +489,26 @@
                     errorMessage.textContent = authData.message || "رمز عبور اشتباه است. لطفاً دوباره تلاش کنید.";
                     errorMessage.classList.remove("hidden");
                     passwordInput.value = ""; // پاک کردن فیلد رمز عبور
+
+                    // نمایش حالت خطا و سپس بازگرداندن دکمه
+                    loginButton.classList.add('error');
+                    setTimeout(() => {
+                        loginButton.classList.remove('loading', 'error');
+                        loginButton.disabled = false;
+                    }, 1500); // 1.5 ثانیه برای نمایش خطا
                 }
             } catch (error) {
                 // مدیریت خطاهای شبکه یا سرور
                 errorMessage.textContent = "خطا در اتصال به سرور. لطفاً بعداً امتحان کنید.";
                 errorMessage.classList.remove("hidden");
                 console.error("Authentication or Data Fetch error:", error);
+
+                // نمایش حالت خطا و سپس بازگرداندن دکمه
+                loginButton.classList.add('error');
+                setTimeout(() => {
+                    loginButton.classList.remove('loading', 'error');
+                    loginButton.disabled = false;
+                }, 1500); // 1.5 ثانیه برای نمایش خطا
             }
         }
 
