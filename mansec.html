@@ -124,9 +124,10 @@
             max-height: 0; /* به صورت پیش‌فرض مخفی است */
             overflow: hidden;
             /* انیمیشن برای باز و بسته شدن */
-            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out, margin-bottom 0.3s ease-out; /* اضافه کردن margin-bottom به transition */
             border-right: 2px solid #10b981; /* emerald-500 */
             margin-right: 0.5rem;
+            margin-bottom: 0; /* به صورت پیش‌فرض 0 */
         }
 
         /* استایل محتوای آکاردئون در حالت تاریک */
@@ -140,7 +141,9 @@
         .accordion-content.active {
             /* max-height توسط JS تنظیم می‌شود */
             padding-top: 1rem;
-            padding-bottom: 1rem;
+            /* padding-bottom را به حالت اولیه بازگردانده‌ایم (1rem) */
+            padding-bottom: 1rem; /* 1rem (16px) */
+            margin-bottom: 5px; /* این فاصله بین پنل آکاردئون باز شده و عنصر بعدی است */
         }
 
         /* استایل عنوان‌های بخش‌ها */
@@ -202,6 +205,38 @@
         body.dark strong {
             color: #059669; /* emerald-600 */
         }
+
+        /* استایل‌های سفارشی برای اسکرول بار نازک */
+        /* برای مرورگرهای Webkit (کروم، سافاری) */
+        .tab-nav-scroll::-webkit-scrollbar {
+            height: 6px; /* ارتفاع اسکرول بار افقی */
+        }
+
+        .tab-nav-scroll::-webkit-scrollbar-track {
+            background: transparent; /* پس‌زمینه اسکرول بار */
+        }
+
+        .tab-nav-scroll::-webkit-scrollbar-thumb {
+            background-color: #a0aec0; /* رنگ اسکرول بار (slate-400) */
+            border-radius: 3px; /* گردی اسکرول بار */
+            border: 1px solid transparent; /* حاشیه برای پدینگ */
+        }
+
+        /* رنگ اسکرول بار در حالت تاریک */
+        body.dark .tab-nav-scroll::-webkit-scrollbar-thumb {
+            background-color: #64748b; /* slate-600 برای حالت تاریک */
+        }
+
+        /* برای مرورگرهای Firefox */
+        .tab-nav-scroll {
+            scrollbar-width: thin; /* عرض اسکرول بار */
+            scrollbar-color: #a0aec0 transparent; /* رنگ thumb و track برای فایرفاکس */
+        }
+
+        /* رنگ اسکرول بار در فایرفاکس در حالت تاریک */
+        body.dark .tab-nav-scroll {
+            scrollbar-color: #64748b transparent; /* slate-600 برای حالت تاریک */
+        }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 flex items-center justify-center">
@@ -227,7 +262,7 @@
         </header>
 
         <nav class="flex flex-wrap sm:flex-nowrap border-b border-slate-300 bg-slate-50 rounded-t-none
-                    dark:border-slate-600 dark:bg-slate-800">
+                    dark:border-slate-600 dark:bg-slate-800 overflow-x-auto tab-nav-scroll">
             <button class="tab-button active" onclick="openTab(event, 'tab-intro')">معرفی لئو</button>
             <button class="tab-button" onclick="openTab(event, 'tab-challenges')">چالش‌ها</button>
             <button class="tab-button" onclick="openTab(event, 'tab-solutions')">راهکارها</button>
@@ -287,7 +322,7 @@
                             <li>تنفس عمیق و مدیتیشن کوتاه.</li>
                             <li>نوشیدن یک فنجان چای یا آب.</li>
                             <li>نگاه کردن به بیرون از پنجره.</li>
-                            <li>گوش دادن به موسیقی آرامش‌بخش (بدون کلام).</li>
+                            <li>گوش دادن به پادکست‌های آموزشی یا انگیزشی (غیرمرتبط با درس و آرامش‌بخش).</li>
                             <li>مرتب کردن محیط مطالعه (یک کار کوچک و سریع).</li>
                             <li>صحبت کوتاه با یک فرد حمایتگر (غیرمرتبط با درس).</li>
                             <li>خواندن یک صفحه از یک کتاب غیردرسی و آرامش‌بخش.</li>
@@ -490,13 +525,27 @@
                 icon.classList.toggle('rotate-180'); // چرخش آیکون
 
                 // باز و بسته کردن محتوای آکاردئون
-                if (content.style.maxHeight) {
-                    content.style.maxHeight = null; // بستن
+                if (content.style.maxHeight && content.style.maxHeight !== '0px') { // اگر باز است
+                    // قبل از بستن، ارتفاع فعلی را برای انیمیشن صحیح تنظیم کن
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    void content.offsetWidth; // Force reflow
+                    content.style.maxHeight = '0px'; // بستن
                     content.classList.remove('active');
-                } else {
-                    // باز کردن با تنظیم maxHeight به ارتفاع واقعی محتوا
-                    content.style.maxHeight = content.scrollHeight + "px";
-                    content.classList.add('active');
+                } else { // اگر بسته است
+                    content.classList.add('active'); // ابتدا کلاس active را اضافه کن تا پدینگ‌ها اعمال شوند
+                    content.style.maxHeight = 'none'; // موقتاً maxHeight را بردار تا scrollHeight دقیق محاسبه شود
+                    const scrollHeight = content.scrollHeight; // ارتفاع واقعی محتوا را بگیر
+                    content.style.maxHeight = '0px'; // به 0 برگردان برای شروع انیمیشن
+                    void content.offsetWidth; // یک reflow اجباری برای اطمینان از اعمال 0px قبل از تنظیم ارتفاع جدید
+                    content.style.maxHeight = scrollHeight + 'px'; // انیمیشن به ارتفاع واقعی
+
+                    // پس از اتمام انیمیشن، maxHeight را به 'none' تغییر بده تا محتوا بتواند به صورت پویا گسترش یابد
+                    content.addEventListener('transitionend', function handler() {
+                        if (content.classList.contains('active')) { // فقط اگر هنوز فعال است (در طول انیمیشن بسته نشده)
+                            content.style.maxHeight = 'none';
+                        }
+                        content.removeEventListener('transitionend', handler);
+                    });
                 }
             });
         });
