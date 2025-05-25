@@ -220,6 +220,13 @@
         let initialTouchOffsetX = 0; // Stores the X offset of the touch within the dragged element
         let initialTouchOffsetY = 0; // Stores the Y offset of the touch within the dragged element
 
+        // Touch drag related variables
+        let dragTimer = null; // Holds the setTimeout ID for long press
+        let isDragging = false; // Flag to indicate if a drag operation has officially started
+        let initialTouchX = 0; // Initial touch X coordinate for movement detection
+        let initialTouchY = 0; // Initial touch Y coordinate for movement detection
+        const DRAG_THRESHOLD = 10; // Pixels a touch can move before cancelling a potential drag (e.g., for scrolling)
+
 
         // Function to display a custom message box instead of alert()
         function showMessageBox(message, type = 'info') {
@@ -316,12 +323,12 @@
                     <span class="task-name mr-3 text-lg font-medium ${task.completed ? 'text-gray-500 dark:text-gray-400' : 'text-gray-800 dark:text-gray-100'}">
                         ${task.name}
                     </span>
-                    <input type="text" class="edit-task-input hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 flex-grow bg-white dark:bg-gray-700 h-12 w-full md:w-auto">
+                    <input type="text" class="edit-task-input hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 flex-grow bg-white dark:bg-gray-700 h-12">
                     <span class="task-importance-display mr-3 text-sm px-2 py-1 rounded-full
                         ${task.importance === 'important' ? 'bg-red-200 dark:bg-red-700 text-red-800 dark:text-red-200' : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200'}">
                         ${task.importance === 'important' ? 'مهم' : 'غیر مهم'}
                     </span>
-                    <select class="edit-importance-select hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12 w-full md:w-auto">
+                    <select class="edit-importance-select hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12">
                         <option value="important" ${task.importance === 'important' ? 'selected' : ''}>مهم</option>
                         <option value="normal" ${task.importance === 'normal' ? 'selected' : ''}>غیر مهم</option>
                     </select>
@@ -450,6 +457,12 @@
         });
 
         // Handle Task Actions (Toggle Complete, Delete, Edit, Save, Cancel)
+        // Now handles both mouse clicks and touch taps (routed from touchend)
+        // Removed `activeTaskList.addEventListener('click', handleTaskActions);`
+        // Removed `completedTasksContainer.addEventListener('click', handleTaskActions);`
+        // Actions are now solely handled by `touchend` for touch and `click` for mouse (via native event)
+        // or directly by `handleTaskActions` if `touchend` routes it.
+        // Re-adding click listeners to ensure desktop mouse functionality.
         activeTaskList.addEventListener('click', handleTaskActions);
         completedTasksContainer.addEventListener('click', handleTaskActions);
 
@@ -541,6 +554,7 @@
         }
 
         // --- Drag and Drop Logic (Mouse Events) ---
+        // Mouse events remain for desktop/non-touch devices
         activeTaskList.addEventListener('dragstart', (e) => {
             const taskItem = e.target.closest('.task-item');
             if (taskItem && !taskItem.classList.contains('bg-green-100')) { // Only active tasks
@@ -652,47 +666,91 @@
 
         // --- Drag and Drop Logic (Touch Events) ---
         activeTaskList.addEventListener('touchstart', (e) => {
-            // Only allow dragging if it's a single touch and not on a checkbox/button within the task item
-            if (e.touches.length === 1 && !e.target.closest('button') && e.target.type !== 'checkbox') {
+            // Determine if the touch started on an interactive element (checkbox, button, input, select)
+            const targetTagName = e.target.tagName;
+            const isInteractiveElement = (targetTagName === 'INPUT' && e.target.type === 'checkbox') ||
+                                         targetTagName === 'BUTTON' ||
+                                         e.target.classList.contains('edit-task-input') || // specifically target the edit input
+                                         e.target.classList.contains('edit-importance-select'); // specifically target the edit select
+
+            // If it's an interactive element, do NOT prevent default, and do NOT start drag timer.
+            // Let the browser handle the tap/click for that element.
+            if (isInteractiveElement) {
+                clearTimeout(dragTimer); // Ensure no lingering drag timer if user taps interactive element
+                dragTimer = null;
+                isDragging = false; // Ensure dragging is false
+                return; // Exit early, allow default behavior
+            }
+
+            // If it's not an interactive element and it's a single touch, proceed with potential drag logic
+            if (e.touches.length === 1) {
                 const taskItem = e.target.closest('.task-item');
-                if (taskItem && !taskItem.classList.contains('bg-green-100')) {
-                    draggedTaskId = taskItem.dataset.id;
-                    draggedElement = taskItem;
+                if (taskItem && !taskItem.classList.contains('bg-green-100')) { // Only active tasks are draggable
+                    // Clear any previous timer to prevent multiple drags starting
+                    clearTimeout(dragTimer);
+                    isDragging = false; // Reset dragging flag
 
                     const touch = e.touches[0];
                     const boundingBox = taskItem.getBoundingClientRect();
 
-                    // Calculate the offset of the touch point relative to the top-left of the task item
+                    // Store initial touch coordinates and offsets
+                    initialTouchX = touch.clientX;
+                    initialTouchY = touch.clientY;
                     initialTouchOffsetX = touch.clientX - boundingBox.left;
                     initialTouchOffsetY = touch.clientY - boundingBox.top;
 
-                    // Create a ghost element for visual feedback during touch drag
-                    ghostElement = taskItem.cloneNode(true);
-                    ghostElement.style.position = 'fixed'; // Use fixed to ensure it's viewport relative
-                    ghostElement.style.width = boundingBox.width + 'px'; // Use boundingBox.width for accurate width
-                    ghostElement.style.height = boundingBox.height + 'px'; // Use boundingBox.height for accurate height
-                    ghostElement.style.pointerEvents = 'none'; // Ensure it doesn't interfere with touch events
-                    ghostElement.style.opacity = '0.7';
-                    ghostElement.style.zIndex = '1000';
-                    ghostElement.classList.add('dragging'); // Apply dragging style to ghost
-                    document.body.appendChild(ghostElement);
+                    // Start a timer for long press
+                    dragTimer = setTimeout(() => {
+                        isDragging = true; // Officially set dragging flag
+                        draggedTaskId = taskItem.dataset.id;
+                        draggedElement = taskItem;
 
-                    // Position the ghost element based on the initial touch offset
-                    ghostElement.style.left = (touch.clientX - initialTouchOffsetX) + 'px';
-                    ghostElement.style.top = (touch.clientY - initialTouchOffsetY) + 'px';
-                    ghostElement.style.transform = 'none'; // Ensure no conflicting transforms
+                        // Create a ghost element for visual feedback during touch drag
+                        ghostElement = taskItem.cloneNode(true);
+                        ghostElement.style.position = 'fixed'; // Use fixed to ensure it's viewport relative
+                        ghostElement.style.width = boundingBox.width + 'px'; // Use boundingBox.width for accurate width
+                        ghostElement.style.height = boundingBox.height + 'px'; // Use boundingBox.height for accurate height
+                        ghostElement.style.pointerEvents = 'none'; // Ensure it doesn't interfere with touch events
+                        ghostElement.style.opacity = '0.7';
+                        ghostElement.style.zIndex = '1000';
+                        ghostElement.classList.add('dragging'); // Apply dragging style to ghost
+                        document.body.appendChild(ghostElement);
 
-                    taskItem.classList.add('opacity-0'); // Hide the original element
-                    e.preventDefault(); // Prevent scrolling
+                        // Position the ghost element based on the initial touch offset
+                        ghostElement.style.left = (touch.clientX - initialTouchOffsetX) + 'px';
+                        ghostElement.style.top = (touch.clientY - initialTouchOffsetY) + 'px';
+                        ghostElement.style.transform = 'none'; // Ensure no conflicting transforms
+
+                        taskItem.classList.add('opacity-0'); // Hide the original element
+                    }, 700); // 700ms long press to start drag (can adjust this value)
+
+                    // Prevent default immediately if it's a potential drag target (not an interactive element).
+                    // This prevents scrolling while the long-press timer is active.
+                    e.preventDefault();
                 }
             }
         });
 
         activeTaskList.addEventListener('touchmove', (e) => {
-            if (draggedTaskId && ghostElement) {
-                e.preventDefault(); // Prevent scrolling
-                const touch = e.touches[0];
+            const touch = e.touches[0];
 
+            if (dragTimer && !isDragging) {
+                // If a drag is pending (timer active) but not yet started, check for significant movement
+                const deltaX = Math.abs(touch.clientX - initialTouchX);
+                const deltaY = Math.abs(touch.clientY - initialTouchY);
+
+                if (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
+                    // If moved beyond threshold, it's likely a scroll, so cancel the pending drag
+                    clearTimeout(dragTimer);
+                    dragTimer = null;
+                    // Do NOT prevent default here, allow scrolling
+                    return;
+                }
+            }
+
+            if (isDragging && ghostElement) {
+                e.preventDefault(); // Prevent scrolling during active drag
+                
                 // Update ghost element position using the stored initial offset
                 ghostElement.style.left = (touch.clientX - initialTouchOffsetX) + 'px';
                 ghostElement.style.top = (touch.clientY - initialTouchOffsetY) + 'px';
@@ -715,9 +773,6 @@
                         closestTaskItem.classList.add('drop-target');
                     } else {
                         // Drop after this item
-                        // Find the actual next active task item to apply the drop-target border.
-                        // If no next active sibling, it means we are at the end of the list.
-                        // The touchend logic will handle inserting at the end correctly.
                         let targetForBorder = closestTaskItem.nextElementSibling;
                         let foundNextActive = false;
                         while (targetForBorder) {
@@ -728,8 +783,6 @@
                             }
                             targetForBorder = targetForBorder.nextElementSibling;
                         }
-                        // Fallback: if no next active item, highlight the current item itself.
-                        // The touchend logic will then place it correctly at the end.
                         if (!foundNextActive) {
                             closestTaskItem.classList.add('drop-target');
                         }
@@ -739,16 +792,19 @@
         });
 
         activeTaskList.addEventListener('touchend', (e) => {
-            if (draggedTaskId && ghostElement) {
-                // Cleanup visuals immediately
-                if (draggedElement) {
-                    draggedElement.classList.remove('opacity-0');
-                }
-                if (ghostElement) {
-                    ghostElement.remove();
-                }
-                document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+            clearTimeout(dragTimer); // Always clear the timer on touchend
 
+            // Cleanup visuals regardless of whether a drag occurred or not
+            if (draggedElement) {
+                draggedElement.classList.remove('opacity-0');
+            }
+            if (ghostElement) {
+                ghostElement.remove();
+            }
+            document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+
+            if (isDragging) {
+                // This was an active drag, proceed with drop logic
                 const touch = e.changedTouches[0];
                 const elementAtEnd = document.elementFromPoint(touch.clientX, touch.clientY);
                 const dropTargetItem = elementAtEnd ? elementAtEnd.closest('.task-item') : null;
@@ -756,55 +812,42 @@
                 const originalDraggedTaskIndex = tasks.findIndex(t => t.id === draggedTaskId);
                 const draggedTask = tasks[originalDraggedTaskIndex];
 
-                // If dropped outside a valid target or if the dragged task was completed (should not be draggable then)
                 if (!dropTargetItem || draggedTask.completed) {
-                    // Revert to original position if dropped outside
-                    renderTasks(); // This will effectively revert the visual state
-                    draggedTaskId = null;
-                    draggedElement = null;
-                    ghostElement = null;
-                    return;
-                }
-
-                // If dropped on itself (should be caught by touchmove logic, but as a safeguard)
-                if (dropTargetItem.dataset.id === draggedTaskId) {
+                    // Revert to original position if dropped outside or on a completed task
                     renderTasks();
-                    draggedTaskId = null;
-                    draggedElement = null;
-                    ghostElement = null;
-                    return;
+                    showMessageBox('عملیات جابجایی لغو شد.', 'info');
+                } else if (dropTargetItem.dataset.id === draggedTaskId) {
+                    // Dropped on itself, no change
+                    renderTasks();
+                } else {
+                    const originalDroppedOnTaskIndex = tasks.findIndex(t => t.id === dropTargetItem.dataset.id);
+                    let finalInsertIndex = originalDroppedOnTaskIndex;
+                    const boundingBox = dropTargetItem.getBoundingClientRect();
+                    const offset = touch.clientY - boundingBox.top;
+
+                    if (offset > boundingBox.height / 2) {
+                        finalInsertIndex++;
+                    }
+
+                    tasks.splice(originalDraggedTaskIndex, 1);
+                    if (originalDraggedTaskIndex < finalInsertIndex) {
+                        finalInsertIndex--;
+                    }
+                    tasks.splice(finalInsertIndex, 0, draggedTask);
+
+                    saveToLocalStorage();
+                    renderTasks();
+                    showMessageBox('وظیفه با موفقیت جابجا شد!', 'success');
                 }
-
-                const originalDroppedOnTaskIndex = tasks.findIndex(t => t.id === dropTargetItem.dataset.id);
-
-                // Determine the insertion point based on the visual feedback logic
-                let finalInsertIndex = originalDroppedOnTaskIndex;
-                const boundingBox = dropTargetItem.getBoundingClientRect();
-                const offset = touch.clientY - boundingBox.top;
-
-                if (offset > boundingBox.height / 2) {
-                    // If dropped in the bottom half of the target, insert *after* it
-                    finalInsertIndex++;
-                }
-
-                // Now, remove the dragged task from its original position
-                tasks.splice(originalDraggedTaskIndex, 1);
-
-                // Adjust the finalInsertIndex if the removed item was *before* the insertion point
-                // in the original array. This is because the array indices shift after splice.
-                if (originalDraggedTaskIndex < finalInsertIndex) {
-                    finalInsertIndex--;
-                }
-
-                // Insert the dragged task at the calculated new position
-                tasks.splice(finalInsertIndex, 0, draggedTask);
-
-                saveToLocalStorage();
-                renderTasks();
-
+                
+                isDragging = false; // Reset flag
                 draggedTaskId = null;
                 draggedElement = null;
                 ghostElement = null;
+            } else {
+                // This was a tap/short press. Explicitly call handleTaskActions.
+                // This ensures that taps on touch devices trigger the action reliably.
+                handleTaskActions(e);
             }
         });
 
