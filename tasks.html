@@ -217,6 +217,9 @@
         let draggedTaskId = null;
         let draggedElement = null; // Reference to the actual element being dragged
         let ghostElement = null; // A ghost element for touch drag feedback
+        let initialTouchOffsetX = 0; // Stores the X offset of the touch within the dragged element
+        let initialTouchOffsetY = 0; // Stores the Y offset of the touch within the dragged element
+
 
         // Function to display a custom message box instead of alert()
         function showMessageBox(message, type = 'info') {
@@ -564,7 +567,13 @@
                 if (offset < boundingBox.height / 2) {
                     targetItem.classList.add('drop-target'); // Indicate drop above
                 } else {
-                    targetItem.classList.add('drop-target'); // Indicate drop below (for simplicity, just highlight the target)
+                    // If dropping after the targetItem, apply border-top to the next sibling if it exists
+                    // Otherwise, apply it to the targetItem itself (conceptually inserting at the end of the list)
+                    if (targetItem.nextElementSibling && targetItem.nextElementSibling.classList.contains('task-item')) {
+                        targetItem.nextElementSibling.classList.add('drop-target');
+                    } else {
+                        targetItem.classList.add('drop-target'); // Still highlight, touchend handles index
+                    }
                 }
             }
         });
@@ -650,21 +659,28 @@
                     draggedTaskId = taskItem.dataset.id;
                     draggedElement = taskItem;
 
+                    const touch = e.touches[0];
+                    const boundingBox = taskItem.getBoundingClientRect();
+
+                    // Calculate the offset of the touch point relative to the top-left of the task item
+                    initialTouchOffsetX = touch.clientX - boundingBox.left;
+                    initialTouchOffsetY = touch.clientY - boundingBox.top;
+
                     // Create a ghost element for visual feedback during touch drag
                     ghostElement = taskItem.cloneNode(true);
-                    ghostElement.style.position = 'absolute';
-                    ghostElement.style.width = taskItem.offsetWidth + 'px';
-                    ghostElement.style.height = taskItem.offsetHeight + 'px';
+                    ghostElement.style.position = 'fixed'; // Use fixed to ensure it's viewport relative
+                    ghostElement.style.width = boundingBox.width + 'px'; // Use boundingBox.width for accurate width
+                    ghostElement.style.height = boundingBox.height + 'px'; // Use boundingBox.height for accurate height
                     ghostElement.style.pointerEvents = 'none'; // Ensure it doesn't interfere with touch events
                     ghostElement.style.opacity = '0.7';
                     ghostElement.style.zIndex = '1000';
                     ghostElement.classList.add('dragging'); // Apply dragging style to ghost
                     document.body.appendChild(ghostElement);
 
-                    // Position the ghost element initially
-                    const touch = e.touches[0];
-                    ghostElement.style.left = (touch.clientX - taskItem.offsetWidth / 2) + 'px';
-                    ghostElement.style.top = (touch.clientY - taskItem.offsetHeight / 2) + 'px';
+                    // Position the ghost element based on the initial touch offset
+                    ghostElement.style.left = (touch.clientX - initialTouchOffsetX) + 'px';
+                    ghostElement.style.top = (touch.clientY - initialTouchOffsetY) + 'px';
+                    ghostElement.style.transform = 'none'; // Ensure no conflicting transforms
 
                     taskItem.classList.add('opacity-0'); // Hide the original element
                     e.preventDefault(); // Prevent scrolling
@@ -677,96 +693,114 @@
                 e.preventDefault(); // Prevent scrolling
                 const touch = e.touches[0];
 
-                // Update ghost element position
-                ghostElement.style.left = (touch.clientX - ghostElement.offsetWidth / 2) + 'px';
-                ghostElement.style.top = (touch.clientY - ghostElement.offsetHeight / 2) + 'px';
+                // Update ghost element position using the stored initial offset
+                ghostElement.style.left = (touch.clientX - initialTouchOffsetX) + 'px';
+                ghostElement.style.top = (touch.clientY - initialTouchOffsetY) + 'px';
 
                 // Find the element currently under the touch
                 ghostElement.style.display = 'none'; // Temporarily hide ghost to find element beneath
                 const elementUnderTouch = document.elementFromPoint(touch.clientX, touch.clientY);
                 ghostElement.style.display = 'block'; // Show ghost again
 
-                let targetItem = elementUnderTouch ? elementUnderTouch.closest('.task-item') : null;
-
-                // Remove drop-target from all elements
                 document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
 
-                if (targetItem && targetItem.dataset.id !== draggedTaskId && !targetItem.classList.contains('bg-green-100')) {
-                    const boundingBox = targetItem.getBoundingClientRect();
+                let closestTaskItem = elementUnderTouch ? elementUnderTouch.closest('.task-item') : null;
+
+                if (closestTaskItem && closestTaskItem.dataset.id !== draggedTaskId && !closestTaskItem.classList.contains('bg-green-100')) {
+                    const boundingBox = closestTaskItem.getBoundingClientRect();
                     const offset = touch.clientY - boundingBox.top;
 
-                    // If touch is in the lower half of the targetItem, consider the next sibling as the target
-                    // This makes the 'border-top' indicator more intuitive for insertion
-                    if (offset > boundingBox.height / 2 && targetItem.nextElementSibling && targetItem.nextElementSibling.classList.contains('task-item')) {
-                        targetItem = targetItem.nextElementSibling;
+                    if (offset < boundingBox.height / 2) {
+                        // Drop before this item
+                        closestTaskItem.classList.add('drop-target');
+                    } else {
+                        // Drop after this item
+                        // Find the actual next active task item to apply the drop-target border.
+                        // If no next active sibling, it means we are at the end of the list.
+                        // The touchend logic will handle inserting at the end correctly.
+                        let targetForBorder = closestTaskItem.nextElementSibling;
+                        let foundNextActive = false;
+                        while (targetForBorder) {
+                            if (targetForBorder.classList.contains('task-item') && !targetForBorder.classList.contains('bg-green-100')) {
+                                targetForBorder.classList.add('drop-target');
+                                foundNextActive = true;
+                                break;
+                            }
+                            targetForBorder = targetForBorder.nextElementSibling;
+                        }
+                        // Fallback: if no next active item, highlight the current item itself.
+                        // The touchend logic will then place it correctly at the end.
+                        if (!foundNextActive) {
+                            closestTaskItem.classList.add('drop-target');
+                        }
                     }
-                    targetItem.classList.add('drop-target');
                 }
             }
         });
 
         activeTaskList.addEventListener('touchend', (e) => {
             if (draggedTaskId && ghostElement) {
-                // Find the element where the touch ended
-                ghostElement.style.display = 'none'; // Temporarily hide ghost to find element beneath
-                const touch = e.changedTouches[0];
-                const elementAtEnd = document.elementFromPoint(touch.clientX, touch.clientY);
-                ghostElement.style.display = 'block'; // Show ghost again
-
-                const dropTargetItem = elementAtEnd ? elementAtEnd.closest('.task-item') : null;
-
-                // Remove all dragging/drop-target feedback
-                document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+                // Cleanup visuals immediately
                 if (draggedElement) {
-                    draggedElement.classList.remove('opacity-0'); // Show original element again
+                    draggedElement.classList.remove('opacity-0');
                 }
                 if (ghostElement) {
-                    ghostElement.remove(); // Remove ghost element
+                    ghostElement.remove();
                 }
+                document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
 
-                if (!dropTargetItem || dropTargetItem.dataset.id === draggedTaskId) {
-                    // Dropped outside a valid target or on itself
+                const touch = e.changedTouches[0];
+                const elementAtEnd = document.elementFromPoint(touch.clientX, touch.clientY);
+                const dropTargetItem = elementAtEnd ? elementAtEnd.closest('.task-item') : null;
+
+                const originalDraggedTaskIndex = tasks.findIndex(t => t.id === draggedTaskId);
+                const draggedTask = tasks[originalDraggedTaskIndex];
+
+                // If dropped outside a valid target or if the dragged task was completed (should not be draggable then)
+                if (!dropTargetItem || draggedTask.completed) {
+                    // Revert to original position if dropped outside
+                    renderTasks(); // This will effectively revert the visual state
                     draggedTaskId = null;
                     draggedElement = null;
                     ghostElement = null;
                     return;
                 }
 
-                const droppedOnTaskId = dropTargetItem.dataset.id;
-                const draggedTaskIndex = tasks.findIndex(t => t.id === draggedTaskId);
-                const droppedOnTaskIndex = tasks.findIndex(t => t.id === droppedOnTaskId);
-
-                if (draggedTaskIndex === -1 || droppedOnTaskIndex === -1) {
+                // If dropped on itself (should be caught by touchmove logic, but as a safeguard)
+                if (dropTargetItem.dataset.id === draggedTaskId) {
+                    renderTasks();
                     draggedTaskId = null;
                     draggedElement = null;
                     ghostElement = null;
                     return;
                 }
 
-                // Ensure we are only reordering active tasks
-                if (tasks[draggedTaskIndex].completed || tasks[droppedOnTaskIndex].completed) {
-                    showMessageBox('فقط وظایف فعال قابل جابجایی هستند.', 'info');
-                    draggedTaskId = null;
-                    draggedElement = null;
-                    ghostElement = null;
-                    return;
-                }
+                const originalDroppedOnTaskIndex = tasks.findIndex(t => t.id === dropTargetItem.dataset.id);
 
-                // Reorder the tasks array
-                const [draggedTask] = tasks.splice(draggedTaskIndex, 1);
-                let newIndex = tasks.findIndex(t => t.id === droppedOnTaskId);
-
-                // Adjust index based on where it was dropped (above or below)
+                // Determine the insertion point based on the visual feedback logic
+                let finalInsertIndex = originalDroppedOnTaskIndex;
                 const boundingBox = dropTargetItem.getBoundingClientRect();
                 const offset = touch.clientY - boundingBox.top;
+
                 if (offset > boundingBox.height / 2) {
-                    newIndex++; // Drop below the target
+                    // If dropped in the bottom half of the target, insert *after* it
+                    finalInsertIndex++;
                 }
 
-                tasks.splice(newIndex, 0, draggedTask);
+                // Now, remove the dragged task from its original position
+                tasks.splice(originalDraggedTaskIndex, 1);
+
+                // Adjust the finalInsertIndex if the removed item was *before* the insertion point
+                // in the original array. This is because the array indices shift after splice.
+                if (originalDraggedTaskIndex < finalInsertIndex) {
+                    finalInsertIndex--;
+                }
+
+                // Insert the dragged task at the calculated new position
+                tasks.splice(finalInsertIndex, 0, draggedTask);
 
                 saveToLocalStorage();
-                renderTasks(); // Re-render to reflect new order
+                renderTasks();
 
                 draggedTaskId = null;
                 draggedElement = null;
@@ -874,4 +908,4 @@
         };
     </script>
 </body>
-</html
+</html>
