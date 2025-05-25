@@ -123,7 +123,7 @@
     </style>
 </head>
 <body class="p-4 flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-    <div class="container bg-white dark:bg-gray-800 shadow-xl rounded-xl p-6 md:p-8 w-full max-w-4xl relative pt-16 md:pt-20">
+    <div class="container bg-white dark:bg-gray-800 shadow-xl rounded-xl p-4 sm:p-6 md:p-8 w-full max-w-4xl relative pt-16 md:pt-20">
         <div class="absolute top-4 right-4 md:top-6 md:right-6 z-10">
             <button id="menuBtn" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -147,19 +147,25 @@
         </button>
 
         <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700 md:px-16">
-            <h1 class="text-4xl md:text-6xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 text-center md:text-right w-full md:w-auto">زی تــــســـک</h1>
+            <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 text-center md:text-right w-full md:w-auto">زی تــــســـک</h1>
             <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 sm:space-x-reverse w-full md:w-auto justify-center md:justify-end">
                 <div class="flex items-center bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full shadow-sm">
                     <span class="text-xl mr-2">💰</span>
-                    <span class="text-lg font-semibold">زی پوینت: <span id="points" class="text-yellow-800 dark:text-yellow-200">0</span></span>
+                    <span class="text-base sm:text-lg font-semibold">زی پوینت: <span id="points" class="text-yellow-800 dark:text-yellow-200">0</span></span>
                 </div>
-                <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">سطح: <span id="level" class="text-blue-600 dark:text-blue-400">1</span></div>
-                <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">رشته روزانه: <span id="dailyStreak" class="text-purple-600 dark:text-purple-400">0</span></div>
+                <div class="flex items-center bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full shadow-sm">
+                    <span class="text-xl mr-2">🏆</span>
+                    <span class="text-base sm:text-lg font-semibold">سطح: <span id="level" class="text-blue-800 dark:text-blue-200">1</span></span>
+                </div>
+                <div class="flex items-center bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full shadow-sm">
+                    <span class="text-xl mr-2">🔥</span>
+                    <span class="text-base sm:text-lg font-semibold">رشته روزانه: <span id="dailyStreak" class="text-purple-800 dark:text-purple-200">0</span></span>
+                </div>
             </div>
         </div>
 
         <div class="mb-6 px-2 md:px-0">
-            <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">پیشرفت شما به سطح بعدی:</h2>
+            <h2 class="text-lg sm:text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">پیشرفت شما به سطح بعدی:</h2>
             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4">
                 <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-4 rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
             </div>
@@ -167,25 +173,25 @@
         </div>
 
         <div class="mb-6 px-2 md:px-0">
-            <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">دستاوردها:</h2>
+            <h2 class="text-lg sm:text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">دستاوردها:</h2>
             <div id="achievementsList" class="flex flex-wrap gap-3">
                 <p id="noAchievementsMessage" class="text-gray-500 dark:text-gray-400">هنوز دستاوردی کسب نشده است.</p>
             </div>
         </div>
 
         <div class="mb-8 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg shadow-sm">
-            <h2 class="text-2xl font-semibold text-blue-800 dark:text-blue-200 mb-4">افزودن وظیفه جدید</h2>
+            <h2 class="text-xl sm:text-2xl font-semibold text-blue-800 dark:text-blue-200 mb-4">افزودن وظیفه جدید</h2>
             <div class="flex flex-col md:flex-row gap-4 items-stretch md:items-center">
                 <input type="text" id="taskInput" placeholder="نام وظیفه را وارد کنید..."
-                       class="flex-grow p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12">
+                       class="flex-grow p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12">
                 <select id="importanceSelect"
-                        class="p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12 md:w-40">
+                        class="p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-base sm:text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12 w-full md:w-40">
                     <option value="important">مهم</option>
                     <option value="normal" selected>غیر مهم</option>
                     <option value="custom">سفارشی</option>
                 </select>
                 <input type="number" id="customPointsInput" placeholder="زی پوینت سفارشی (حداکثر 50)"
-                       class="p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12 w-full md:w-32 hidden">
+                       class="p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12 w-full md:w-32 hidden">
                 <button id="addTaskBtn"
                         class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 text-lg w-full md:w-auto">
                     افزودن وظیفه
@@ -194,7 +200,7 @@
         </div>
 
         <div class="mb-6 px-2 md:px-0">
-            <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">وظایف فعال</h2>
+            <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">وظایف فعال</h2>
             <div id="activeTaskList" class="task-list-container overflow-y-auto max-h-96 pr-2">
                 </div>
         </div>
@@ -211,10 +217,10 @@
 
     <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100">
-            <h3 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700 text-center">به زی تسک خوش آمدید!</h3>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700 text-center">به زی تسک خوش آمدید!</h3>
             <p class="mb-4 text-center text-gray-700 dark:text-gray-300">لطفاً نام خود را وارد کنید تا شروع کنیم:</p>
             <input type="text" id="userNameInput" placeholder="نام شما..."
-                   class="w-full p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 mb-4">
+                   class="w-full p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 mb-4">
             <button id="startBtn"
                     class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 text-lg">
                 بزن بریم!
@@ -224,7 +230,7 @@
 
     <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box">
-            <h3 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">پروفایل کاربری</h3>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">پروفایل کاربری</h3>
             <div id="profileModalContent" class="modal-scrollable-content text-justify text-sm leading-relaxed">
                 </div>
             <button id="closeProfileModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -235,7 +241,7 @@
 
     <div id="helpModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box">
-            <h3 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">راهنما</h3>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">راهنما</h3>
             <div id="helpModalContent" class="modal-scrollable-content text-justify text-sm leading-relaxed">
                 </div>
             <button id="closeHelpModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -246,7 +252,7 @@
 
     <div id="aboutModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box">
-            <h3 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">درباره</h3>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">درباره</h3>
             <div id="aboutModalContent" class="modal-scrollable-content text-justify text-sm leading-relaxed">
                 <p class="mb-3">این برنامه برای کمک به مدیریت وظایف و افزایش انگیزه از طریق گیمیفیکیشن طراحی شده است.</p>
                 <p class="mb-3">تمامی حقوق متعلق به عمو لئو است.</p>
@@ -260,7 +266,7 @@
 
     <div id="backupModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box">
-            <h3 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">پشتیبان‌گیری و بازیابی داده‌ها</h3>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">پشتیبان‌گیری و بازیابی داده‌ها</h3>
             <div class="modal-scrollable-content flex flex-col gap-4">
                 <p class="text-sm text-gray-700 dark:text-gray-300">برای پشتیبان‌گیری، دکمه "ذخیره داده‌ها" را بزنید تا فایل پشتیبان دانلود شود. برای بازیابی، فایل پشتیبان را انتخاب کرده و "بارگذاری از فایل" را بزنید.</p>
                 
@@ -288,7 +294,7 @@
 
     <div id="resetConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100">
-            <h3 class="text-xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">تأیید بازنشانی داده‌ها</h3>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">تأیید بازنشانی داده‌ها</h3>
             <p class="mb-6 text-sm">آیا مطمئن هستید که می‌خواهید تمامی داده‌های برنامه را حذف کنید؟ این عمل غیرقابل بازگشت است.</p>
             <div class="flex justify-end space-x-4 space-x-reverse">
                 <button id="confirmResetBtn" class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400">
@@ -674,7 +680,7 @@
         function createTaskElement(task) {
             const taskItem = document.createElement('div');
             // Apply dark mode classes based on task status and importance
-            taskItem.className = `task-item flex items-center justify-between p-4 mb-3 rounded-lg shadow-sm transition-all duration-300 ease-in-out
+            taskItem.className = `task-item flex items-center justify-between p-3 mb-2 sm:p-4 sm:mb-3 rounded-lg shadow-sm transition-all duration-300 ease-in-out
                                 ${task.completed ? 'bg-green-100 dark:bg-green-800 border-l-4 border-green-500 dark:border-green-600 line-through text-gray-500 dark:text-gray-400' :
                                 task.importance === 'important' ? 'bg-red-50 dark:bg-red-900 border-l-4 border-red-500 dark:border-red-600' :
                                 task.importance === 'custom' ? 'bg-purple-50 dark:bg-purple-900 border-l-4 border-purple-500 dark:border-purple-600' : // New: Custom importance style
@@ -701,19 +707,19 @@
                 <div class="flex flex-wrap items-center flex-grow gap-2 md:gap-0">
                     <input type="checkbox" data-id="${task.id}" ${task.completed ? 'checked' : ''}
                         class="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-400 rounded focus:ring-blue-500 dark:focus:ring-blue-300 cursor-pointer">
-                    <span class="task-name mr-3 text-lg font-medium ${task.completed ? 'text-gray-500 dark:text-gray-400' : 'text-gray-800 dark:text-gray-100'}">
+                    <span class="task-name mr-3 text-base sm:text-lg font-medium ${task.completed ? 'text-gray-500 dark:text-gray-400' : 'text-gray-800 dark:text-gray-100'}">
                         ${task.name}
                     </span>
-                    <input type="text" class="edit-task-input hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 flex-grow bg-white dark:bg-gray-700 h-12">
+                    <input type="text" class="edit-task-input hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-base sm:text-lg text-gray-700 dark:text-gray-100 flex-grow bg-white dark:bg-gray-700 h-12 w-full md:w-auto">
                     <span class="task-importance-display mr-3 text-sm px-2 py-1 rounded-full ${importanceClasses}">
                         ${importanceText}
                     </span>
-                    <select class="edit-importance-select hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12">
+                    <select class="edit-importance-select hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-base sm:text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12 w-full md:w-40">
                         <option value="important" ${task.importance === 'important' ? 'selected' : ''}>مهم</option>
                         <option value="normal" ${task.importance === 'normal' ? 'selected' : ''}>غیر مهم</option>
                         <option value="custom" ${task.importance === 'custom' ? 'selected' : ''}>سفارشی</option>
                     </select>
-                    <input type="number" class="edit-custom-points-input hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 flex-grow bg-white dark:bg-gray-700 h-12 w-32">
+                    <input type="number" class="edit-custom-points-input hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-base sm:text-lg text-gray-700 dark:text-gray-100 flex-grow bg-white dark:bg-gray-700 h-12 w-full md:w-32">
                 </div>
                 <div class="flex items-center space-x-2 space-x-reverse">
                     <button data-id="${task.id}" data-action="edit"
@@ -1433,10 +1439,10 @@
             e.preventDefault();
             // Dynamically update help modal content with current point values
             helpModalContent.innerHTML = `
-                <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-blue-400">به زی تسک خوش آمدید!</h3>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">به زی تسک خوش آمدید!</h3>
                 <p class="mb-3 text-gray-700 dark:text-gray-300">این برنامه به شما کمک می‌کند تا با انجام وظایف، زی پوینت کسب کرده و به سطوح بالاتر دست یابید و دستاوردهای مختلفی کسب کنید.</p>
 
-                <h3 class="text-xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">نحوه کار با برنامه</h3>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">نحوه کار با برنامه</h3>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">افزودن وظیفه:</strong> نام وظیفه را وارد کرده و اهمیت آن (مهم/غیر مهم/سفارشی) را انتخاب کنید. وظایف مهم و سفارشی زی پوینت بیشتری دارند.</p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تغییر اولویت:</strong> وظایف فعال را می‌توانید با کشیدن و رها کردن (Drag & Drop) جابجا کنید.</p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تکمیل وظیفه:</strong> با زدن تیک کنار هر وظیفه، آن را تکمیل کنید. با این کار زی پوینت کسب می‌کنید و وظیفه به بخش "وظایف انجام شده" منتقل می‌شود.</p>
@@ -1444,7 +1450,7 @@
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">حذف وظیفه:</strong> با کلیک روی دکمه سطل زباله، وظیفه را حذف کنید.</p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">وظایف انجام شده:</strong> برای مشاهده یا پنهان کردن وظایف تکمیل شده، روی دکمه مربوطه کلیک کنید.</p>
 
-                <h3 class="text-xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">سیستم گیمیفیکیشن</h3>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">سیستم گیمیفیکیشن</h3>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">زی پوینت:</strong>
                     زی پوینت‌ها صرفاً ارزش نمادین دارند و برای سنجش میزان پیشرفت و فعالیت شما در برنامه استفاده می‌شوند.
                     <ul>
@@ -1455,7 +1461,7 @@
                 </p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">رشته روزانه:</strong> با تکمیل حداقل یک وظیفه در هر روز متوالی، رشته روزانه شما افزایش می‌یابد و می‌توانید دستاوردهای خاصی کسب کنید.</p>
                 
-                <h3 class="text-xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">سطوح</h3>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">سطوح</h3>
                 <p class="mb-2 text-gray-700 dark:text-gray-300">با کسب زی پوینت، به سطوح بالاتر ارتقا پیدا می‌کنید. جزئیات هر سطح به شرح زیر است:</p>
                 <div class="flex flex-wrap gap-2 mb-3">
                     ${levelPointsThresholds.map((levelInfo, index) => `
@@ -1465,18 +1471,18 @@
                     `).join('')}
                 </div>
 
-                <h3 class="text-xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">مدال‌ها (دستاوردها)</h3>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">مدال‌ها (دستاوردها)</h3>
                 <p class="mb-2 text-gray-700 dark:text-gray-300">با پیشرفت در بازی، مدال‌های مختلفی کسب می‌کنید. برخی از آن‌ها عبارتند از:</p>
                 <div class="flex flex-wrap gap-2 mb-3">
                     ${achievementsData.map(ach => `<span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm flex items-center">${ach.icon} <span class="mr-1">${ach.name}</span></span>`).join('')}
                 </div>
 
-                <h3 class="text-xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">پشتیبان‌گیری و بازیابی داده‌ها</h3>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">پشتیبان‌گیری و بازیابی داده‌ها</h3>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">امنیت داده‌ها:</strong> تمام داده‌های شما به صورت ایمن در حافظه مرورگر شما (Local Storage) ذخیره می‌شوند و هیچ اطلاعاتی به سرور ارسال نمی‌گردد.</p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">پشتیبان‌گیری (Export):</strong> می‌توانید با کلیک بر روی دکمه "ذخیره داده‌ها"، یک فایل پشتیبان با فرمت JSON از تمام اطلاعات برنامه خود دانلود کنید. این فایل را در جایی امن نگهداری کنید.</p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">بازیابی (Import):</strong> برای بازیابی اطلاعات، کافی است فایل پشتیبان JSON را که قبلاً دانلود کرده‌اید، از طریق بخش "انتخاب فایل" انتخاب کرده و سپس دکمه "بارگذاری از فایل" را بزنید. این کار اطلاعات برنامه شما را با داده‌های موجود در فایل جایگزین می‌کند.</p>
 
-                <h3 class="text-xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">دونیت</h3>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">دونیت</h3>
                 <p class="mb-2 text-gray-700 dark:text-gray-300">این بخش برای حمایت مالی از توسعه‌دهنده برنامه در نظر گرفته شده است. حمایت شما به بهبود و توسعه قابلیت‌های جدید کمک می‌کند.</p>
 
                 <p class="mt-4 text-center text-gray-700 dark:text-gray-300">هدف این برنامه ایجاد انگیزه و کمک به شما در سازماندهی بهتر کارهایتان است. موفق باشید!</p>
