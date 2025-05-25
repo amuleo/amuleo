@@ -61,37 +61,94 @@
             padding-left: 1rem; /* Adjust padding for scrollbar */
             padding-right: 1rem;
         }
+
+        /* Point gain animation */
+        .points-gain-feedback {
+            position: absolute;
+            font-weight: bold;
+            color: #22C55E; /* Green color */
+            animation: fadeOutUp 1.5s forwards;
+            pointer-events: none; /* Ensure it doesn't block clicks */
+            z-index: 20;
+        }
+
+        @keyframes fadeOutUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+        }
+
+        /* Confetti effect */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 9999;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f0f; /* Default color */
+            animation: confetti-fall 3s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(0deg);
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
     </style>
 </head>
-<body class="p-4 flex items-center justify-center min-h-screen bg-f0f2f5 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-    <div class="container bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 md:p-8 w-full relative pt-16">
+<body class="p-4 flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+    <div class="container bg-white dark:bg-gray-800 shadow-xl rounded-xl p-6 md:p-8 w-full max-w-4xl relative pt-16 md:pt-20">
         <div class="absolute top-4 right-4 md:top-6 md:right-6 z-10">
-            <button id="menuBtn" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out">
+            <button id="menuBtn" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 100-2 1 1 0 000 2zm0 7a1 1 0 100-2 1 1 0 000 2zm0 7a1 1 0 100-2 1 1 0 000 2z"></path>
                 </svg>
             </button>
             <div id="menuDropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg py-1 hidden z-20">
-                <a href="#" id="helpMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">راهنما</a>
-                <a href="#" id="aboutMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">درباره</a>
+                <a href="#" id="helpMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">راهنما</a>
+                <a href="#" id="aboutMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">درباره</a>
             </div>
         </div>
 
-        <button id="themeToggleBtn" class="absolute top-4 left-4 md:top-6 md:left-6 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out cursor-default">
+        <button id="themeToggleBtn" class="absolute top-4 left-4 md:top-6 md:left-6 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400">
             <svg id="themeIcon" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.325 6.675l-.707-.707M6.318 6.318l-.707-.707m12.728 0l-.707.707M6.318 17.682l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
             </svg>
         </button>
 
         <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700 md:px-16">
-            <h1 class="text-2xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-0">مدیریت وظایف گیمیفای شده</h1>
-            <div class="flex items-center space-x-4 space-x-reverse">
+            <h1 class="text-2xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 text-center md:text-right w-full md:w-auto">مدیریت وظایف گیمیفای شده</h1>
+            <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 sm:space-x-reverse w-full md:w-auto justify-center md:justify-end">
                 <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">امتیاز: <span id="points" class="text-green-600 dark:text-green-400">0</span></div>
                 <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">سطح: <span id="level" class="text-blue-600 dark:text-blue-400">1</span></div>
+                <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">رشته روزانه: <span id="dailyStreak" class="text-purple-600 dark:text-purple-400">0</span></div>
             </div>
         </div>
 
-        <div class="mb-6">
+        <div class="mb-6 px-2 md:px-0">
             <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">پیشرفت شما به سطح بعدی:</h2>
             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4">
                 <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-4 rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
@@ -99,7 +156,7 @@
             <p id="progressText" class="text-sm text-gray-500 dark:text-gray-400 mt-1 text-left">0%</p>
         </div>
 
-        <div class="mb-6">
+        <div class="mb-6 px-2 md:px-0">
             <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">دستاوردها:</h2>
             <div id="achievementsList" class="flex flex-wrap gap-3">
                 <p id="noAchievementsMessage" class="text-gray-500 dark:text-gray-400">هنوز دستاوردی کسب نشده است.</p>
@@ -108,28 +165,32 @@
 
         <div class="mb-8 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg shadow-sm">
             <h2 class="text-2xl font-semibold text-blue-800 dark:text-blue-200 mb-4">افزودن وظیفه جدید</h2>
-            <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex flex-col md:flex-row gap-4 items-stretch md:items-center">
                 <input type="text" id="taskInput" placeholder="نام وظیفه را وارد کنید..."
                        class="flex-grow p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12">
                 <select id="importanceSelect"
-                        class="p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12">
+                        class="p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12 md:w-40">
                     <option value="important">مهم</option>
-                    <option value="normal" selected>غیر مهم</option> </select>
+                    <option value="normal" selected>غیر مهم</option>
+                    <option value="custom">سفارشی</option>
+                </select>
+                <input type="number" id="customPointsInput" placeholder="امتیاز سفارشی"
+                       class="p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12 w-full md:w-32 hidden">
                 <button id="addTaskBtn"
-                        class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 text-lg">
+                        class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 text-lg w-full md:w-auto">
                     افزودن وظیفه
                 </button>
             </div>
         </div>
 
-        <div class="mb-6">
+        <div class="mb-6 px-2 md:px-0">
             <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">وظایف فعال</h2>
             <div id="activeTaskList" class="task-list-container overflow-y-auto max-h-96 pr-2">
                 </div>
         </div>
 
-        <div class="mt-8">
-            <button id="toggleCompletedTasksBtn" class="w-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center justify-between">
+        <div class="mt-8 px-2 md:px-0">
+            <button id="toggleCompletedTasksBtn" class="w-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <span>وظایف انجام شده</span>
                 <svg id="toggleIcon" class="h-5 w-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
@@ -143,7 +204,7 @@
             <h3 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">راهنما</h3>
             <div id="helpModalContent" class="modal-scrollable-content text-justify text-sm leading-relaxed">
                 </div>
-            <button id="closeHelpModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400">
+            <button id="closeHelpModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
@@ -157,33 +218,44 @@
                 <p class="mb-3">تمامی حقوق متعلق به عمو لئو است.</p>
                 <p class="mb-3">نسخه: 1.0.0</p>
             </div>
-            <button id="closeAboutModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400">
+            <button id="closeAboutModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
     </div>
+
+    <div id="confettiContainer" class="confetti-container"></div>
 
     <script>
         // Task data structure
         let tasks = [];
         let points = 0;
         let level = 1;
+        let dailyStreak = 0; // Daily streak counter
+        let lastCompletionDate = null; // Last date a task was completed
+
         const pointsPerNormalTask = 10;
         const pointsPerImportantTask = 25;
         const pointsPerLevel = 100; // Points required for each level up
 
         // Achievement data
         const achievementsData = [
-            { level: 1, name: 'شروع کننده', icon: '🌟' },
-            { level: 2, name: 'عادی', icon: '✨' },
-            { level: 3, name: 'متوسط', icon: '💪' },
-            { level: 4, name: 'پیشرفته', icon: '🚀' },
-            { level: 5, name: 'استاد وظایف', icon: '🏆' },
-            { level: 6, name: 'قهرمان بهره‌وری', icon: '👑' },
-            { level: 7, name: 'کمال‌گرا', icon: '💎' },
-            { level: 8, name: 'سلطان نظم', icon: '🏰' },
-            { level: 9, name: 'افسانه', icon: '✨' },
-            { level: 10, name: 'ابرقهرمان OCD', icon: '🦸‍♂️' },
+            { level: 1, name: 'شروع کننده', icon: '🌟', type: 'level' },
+            { level: 2, name: 'عادی', icon: '✨', type: 'level' },
+            { level: 3, name: 'متوسط', icon: '💪', type: 'level' },
+            { level: 4, name: 'پیشرفته', icon: '🚀', type: 'level' },
+            { level: 5, name: 'استاد وظایف', icon: '🏆', type: 'level' },
+            { level: 6, name: 'قهرمان بهره‌وری', icon: '👑', type: 'level' },
+            { level: 7, name: 'کمال‌گرا', icon: '💎', type: 'level' },
+            { level: 8, name: 'سلطان نظم', icon: '🏰', type: 'level' },
+            { level: 9, name: 'افسانه', icon: '✨', type: 'level' },
+            { level: 10, name: 'ابرقهرمان OCD', icon: '🦸‍♂️', type: 'level' },
+            { type: 'streak', value: 3, name: 'رشته سه روزه', icon: '🔥' },
+            { type: 'streak', value: 7, name: 'رشته هفت روزه', icon: '✨🔥' },
+            { type: 'totalTasks', value: 10, name: 'ده وظیفه', icon: '✅' },
+            { type: 'totalTasks', value: 50, name: 'پنجاه وظیفه', icon: '💯' },
+            { type: 'importantTasks', value: 5, name: 'پنج وظیفه مهم', icon: '🚨' },
+            { type: 'importantTasks', value: 10, name: 'ده وظیفه مهم', icon: '🛑' },
             // Add more levels and achievements as needed
         ];
 
@@ -195,13 +267,14 @@
         const helpMenuItem = document.getElementById('helpMenuItem');
         const aboutMenuItem = document.getElementById('aboutMenuItem');
         const helpModal = document.getElementById('helpModal');
-        const helpModalContent = document.getElementById('helpModalContent'); // Reference to the content div
+        const helpModalContent = document.getElementById('helpModalContent');
         const aboutModal = document.getElementById('aboutModal');
         const closeHelpModalBtn = document.getElementById('closeHelpModalBtn');
         const closeAboutModalBtn = document.getElementById('closeAboutModalBtn');
 
         const taskInput = document.getElementById('taskInput');
         const importanceSelect = document.getElementById('importanceSelect');
+        const customPointsInput = document.getElementById('customPointsInput');
         const addTaskBtn = document.getElementById('addTaskBtn');
         const activeTaskList = document.getElementById('activeTaskList');
         const completedTasksContainer = document.getElementById('completedTasksContainer');
@@ -209,9 +282,13 @@
         const toggleIcon = document.getElementById('toggleIcon');
         const pointsSpan = document.getElementById('points');
         const levelSpan = document.getElementById('level');
+        const dailyStreakSpan = document.getElementById('dailyStreak');
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
         const noAchievementsMessage = document.getElementById('noAchievementsMessage');
+        const achievementsList = document.getElementById('achievementsList');
+
+        const confettiContainer = document.getElementById('confettiContainer');
 
         // Variable to hold the ID of the task being dragged
         let draggedTaskId = null;
@@ -227,41 +304,107 @@
         let initialTouchY = 0; // Initial touch Y coordinate for movement detection
         const DRAG_THRESHOLD = 10; // Pixels a touch can move before cancelling a potential drag (e.g., for scrolling)
 
+        // Message queue for sequential display
+        const messageQueue = [];
+        let isMessageDisplaying = false;
+
+        // Event listener for importance select to show/hide custom points input
+        importanceSelect.addEventListener('change', () => {
+            if (importanceSelect.value === 'custom') {
+                customPointsInput.classList.remove('hidden');
+            } else {
+                customPointsInput.classList.add('hidden');
+            }
+        });
 
         // Function to display a custom message box instead of alert()
         function showMessageBox(message, type = 'info') {
-            const messageBox = document.createElement('div');
-            // Dynamically set classes based on theme preference
-            let bgColorClass = '';
-            if (type === 'info') {
-                bgColorClass = 'bg-blue-500 dark:bg-blue-700';
-            } else if (type === 'success') {
-                bgColorClass = 'bg-green-500 dark:bg-green-700';
-            } else if (type === 'error') {
-                bgColorClass = 'bg-red-500 dark:bg-red-700';
+            messageQueue.push({ message, type });
+            processMessageQueue();
+        }
+
+        // New function to process the message queue
+        function processMessageQueue() {
+            if (messageQueue.length > 0 && !isMessageDisplaying) {
+                isMessageDisplaying = true;
+                const { message, type } = messageQueue.shift(); // Get the next message from the queue
+
+                const messageBox = document.createElement('div');
+                let bgColorClass = '';
+                if (type === 'info') {
+                    bgColorClass = 'bg-blue-500 dark:bg-blue-700';
+                } else if (type === 'success') {
+                    bgColorClass = 'bg-green-500 dark:bg-green-700';
+                } else if (type === 'error') {
+                    bgColorClass = 'bg-red-500 dark:bg-red-700';
+                }
+                messageBox.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg text-white z-50 transition-all duration-300 transform translate-x-full opacity-0 ${bgColorClass}`;
+                messageBox.textContent = message;
+                document.body.appendChild(messageBox);
+
+                // Animate in
+                setTimeout(() => {
+                    messageBox.classList.remove('translate-x-full', 'opacity-0');
+                    messageBox.classList.add('translate-x-0', 'opacity-100');
+                }, 100);
+
+                // Animate out and remove, then process next message
+                setTimeout(() => {
+                    messageBox.classList.remove('translate-x-0', 'opacity-100');
+                    messageBox.classList.add('translate-x-full', 'opacity-0');
+                    messageBox.addEventListener('transitionend', () => {
+                        messageBox.remove();
+                        isMessageDisplaying = false; // Message finished displaying
+                        processMessageQueue(); // Process the next message in the queue
+                    }, { once: true }); // Ensure this listener runs only once
+                }, 3000);
             }
-            messageBox.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg text-white z-50 transition-all duration-300 transform translate-x-full opacity-0 ${bgColorClass}`;
-            messageBox.textContent = message;
-            document.body.appendChild(messageBox);
+        }
 
-            // Animate in
-            setTimeout(() => {
-                messageBox.classList.remove('translate-x-full', 'opacity-0');
-                messageBox.classList.add('translate-x-0', 'opacity-100');
-            }, 100);
+        // Function to show points gain feedback
+        function showPointsGainFeedback(pointsGained, taskElement) {
+            if (!taskElement) return;
 
-            // Animate out and remove
+            const feedback = document.createElement('div');
+            feedback.textContent = `+${pointsGained}`;
+            feedback.classList.add('points-gain-feedback');
+
+            // Position the feedback element relative to the task item
+            const rect = taskElement.getBoundingClientRect();
+            feedback.style.top = `${rect.top + window.scrollY + rect.height / 2 - 10}px`;
+            feedback.style.left = `${rect.left + window.scrollX + rect.width / 2 - 20}px`;
+            feedback.style.fontSize = '1.2rem'; // Make it slightly larger
+
+            document.body.appendChild(feedback);
+
+            feedback.addEventListener('animationend', () => {
+                feedback.remove();
+            });
+        }
+
+        // Function to trigger confetti effect
+        function triggerConfetti() {
+            const colors = ['#f0f', '#0ff', '#ff0', '#f00', '#0f0', '#00f'];
+            for (let i = 0; i < 50; i++) { // Generate 50 confetti pieces
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = `${Math.random() * 0.5}s`; // Stagger animation
+                confettiContainer.appendChild(confetti);
+            }
+            // Clean up confetti after animation
             setTimeout(() => {
-                messageBox.classList.remove('translate-x-0', 'opacity-100');
-                messageBox.classList.add('translate-x-full', 'opacity-0');
-                messageBox.addEventListener('transitionend', () => messageBox.remove());
+                confettiContainer.innerHTML = '';
             }, 3000);
         }
+
 
         // Function to update gamification display
         function updateGamificationDisplay() {
             pointsSpan.textContent = points;
             levelSpan.textContent = level;
+            dailyStreakSpan.textContent = dailyStreak; // Update daily streak display
 
             const currentLevelPoints = (level - 1) * pointsPerLevel;
             const pointsIntoCurrentLevel = points - currentLevelPoints;
@@ -271,27 +414,35 @@
             progressText.textContent = `${Math.round(progressPercentage)}% پیشرفت به سطح ${level + 1}`;
 
             // Check for level up
-            while (points >= level * pointsPerLevel) {
-                level++;
-                showMessageBox(`تبریک! شما به سطح ${level} رسیدید!`, 'success');
-                updateGamificationDisplay(); // Recalculate progress for new level
+            if (points >= level * pointsPerLevel) {
+                const oldLevel = level;
+                level = Math.floor(points / pointsPerLevel) + 1; // Calculate new level based on total points
+                if (level > oldLevel) { // Only show message if level actually increased
+                    showMessageBox(`تبریک! شما به سطح ${level} رسیدید!`, 'success');
+                    triggerConfetti(); // Trigger confetti on level up
+                }
             }
             renderAchievements(); // Call renderAchievements here
         }
 
-        // Function to save tasks, points, and level to Local Storage
+        // Function to save tasks, points, level, streak, and last completion date to Local Storage
         function saveToLocalStorage() {
             localStorage.setItem('tasks', JSON.stringify(tasks));
             localStorage.setItem('points', points);
             localStorage.setItem('level', level);
-            console.log("Tasks, points, and level saved to Local Storage.");
+            localStorage.setItem('dailyStreak', dailyStreak); // Save daily streak
+            localStorage.setItem('lastCompletionDate', lastCompletionDate); // Save last completion date
+            console.log("Tasks, points, level, streak, and last completion date saved to Local Storage.");
+            console.log("Saved dailyStreak:", dailyStreak, "lastCompletionDate:", lastCompletionDate); // Debug log
         }
 
-        // Function to load tasks, points, and level from Local Storage
+        // Function to load tasks, points, level, streak, and last completion date from Local Storage
         function loadFromLocalStorage() {
             const storedTasks = localStorage.getItem('tasks');
             const storedPoints = localStorage.getItem('points');
             const storedLevel = localStorage.getItem('level');
+            const storedDailyStreak = localStorage.getItem('dailyStreak');
+            const storedLastCompletionDate = localStorage.getItem('lastCompletionDate');
 
             if (storedTasks) {
                 tasks = JSON.parse(storedTasks);
@@ -302,6 +453,41 @@
             if (storedLevel) {
                 level = parseInt(storedLevel, 10);
             }
+            if (storedDailyStreak) {
+                dailyStreak = parseInt(storedDailyStreak, 10);
+            }
+            // Handle 'null' string from localStorage
+            if (storedLastCompletionDate && storedLastCompletionDate !== 'null') {
+                lastCompletionDate = storedLastCompletionDate;
+            } else {
+                lastCompletionDate = null; // Explicitly set to null if not found or 'null' string
+            }
+            console.log("Loaded dailyStreak:", dailyStreak, "lastCompletionDate:", lastCompletionDate); // Debug log
+
+
+            // Check and update daily streak on load
+            const today = new Date().toDateString();
+            console.log("Today:", today); // Debug log
+
+            if (lastCompletionDate && lastCompletionDate !== today) {
+                const lastDate = new Date(lastCompletionDate);
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                console.log("Last completion date (parsed):", lastDate.toDateString()); // Debug log
+                console.log("Yesterday:", yesterday.toDateString()); // Debug log
+
+                if (lastDate.toDateString() !== yesterday.toDateString()) {
+                    // If last completion was not yesterday, reset streak
+                    dailyStreak = 0;
+                    showMessageBox('رشته روزانه شما بازنشانی شد.', 'info');
+                    console.log("Streak reset on load because not consecutive."); // Debug log
+                }
+            } else if (!lastCompletionDate) {
+                // If no last completion date, streak is 0
+                dailyStreak = 0;
+                console.log("Streak reset on load because no previous completion."); // Debug log
+            }
+            saveToLocalStorage(); // Save updated streak if it was reset
             renderTasks(); // Render tasks immediately after loading
         }
 
@@ -312,9 +498,25 @@
             taskItem.className = `task-item flex items-center justify-between p-4 mb-3 rounded-lg shadow-sm transition-all duration-300 ease-in-out
                                 ${task.completed ? 'bg-green-100 dark:bg-green-800 border-l-4 border-green-500 dark:border-green-600 line-through text-gray-500 dark:text-gray-400' :
                                 task.importance === 'important' ? 'bg-red-50 dark:bg-red-900 border-l-4 border-red-500 dark:border-red-600' :
+                                task.importance === 'custom' ? 'bg-purple-50 dark:bg-purple-900 border-l-4 border-purple-500 dark:border-purple-600' : // New: Custom importance style
                                 'bg-gray-50 dark:bg-gray-700 border-l-4 border-gray-300 dark:border-gray-600'}`;
             taskItem.dataset.id = task.id;
             taskItem.draggable = !task.completed; // Only active tasks are draggable
+
+            // Determine importance display text
+            let importanceText = '';
+            let importanceClasses = '';
+            if (task.importance === 'important') {
+                importanceText = 'مهم';
+                importanceClasses = 'bg-red-200 dark:bg-red-700 text-red-800 dark:text-red-200';
+            } else if (task.importance === 'normal') {
+                importanceText = 'غیر مهم';
+                importanceClasses = 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
+            } else if (task.importance === 'custom') {
+                importanceText = `امتیاز سفارشی: ${task.customPoints}`; // Display custom points
+                importanceClasses = 'bg-purple-200 dark:bg-purple-700 text-purple-800 dark:text-purple-200';
+            }
+
 
             taskItem.innerHTML = `
                 <div class="flex flex-wrap items-center flex-grow gap-2 md:gap-0">
@@ -324,36 +526,37 @@
                         ${task.name}
                     </span>
                     <input type="text" class="edit-task-input hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 flex-grow bg-white dark:bg-gray-700 h-12">
-                    <span class="task-importance-display mr-3 text-sm px-2 py-1 rounded-full
-                        ${task.importance === 'important' ? 'bg-red-200 dark:bg-red-700 text-red-800 dark:text-red-200' : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200'}">
-                        ${task.importance === 'important' ? 'مهم' : 'غیر مهم'}
+                    <span class="task-importance-display mr-3 text-sm px-2 py-1 rounded-full ${importanceClasses}">
+                        ${importanceText}
                     </span>
                     <select class="edit-importance-select hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12">
                         <option value="important" ${task.importance === 'important' ? 'selected' : ''}>مهم</option>
                         <option value="normal" ${task.importance === 'normal' ? 'selected' : ''}>غیر مهم</option>
+                        <option value="custom" ${task.importance === 'custom' ? 'selected' : ''}>سفارشی</option>
                     </select>
+                    <input type="number" class="edit-custom-points-input hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 flex-grow bg-white dark:bg-gray-700 h-12 w-32">
                 </div>
                 <div class="flex items-center space-x-2 space-x-reverse">
                     <button data-id="${task.id}" data-action="edit"
-                        class="edit-btn bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 ${task.completed ? 'hidden' : ''}">
+                        class="edit-btn bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 ${task.completed ? 'hidden' : ''} focus:outline-none focus:ring-2 focus:ring-yellow-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.38-2.828-2.829z" />
                         </svg>
                     </button>
                     <button data-id="${task.id}" data-action="save"
-                        class="save-btn bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 hidden">
+                        class="save-btn bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 hidden focus:outline-none focus:ring-2 focus:ring-green-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                         </svg>
                     </button>
                     <button data-id="${task.id}" data-action="cancel"
-                        class="cancel-btn bg-gray-500 hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 hidden">
+                        class="cancel-btn bg-gray-500 hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 hidden focus:outline-none focus:ring-2 focus:ring-gray-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
                     </button>
                     <button data-id="${task.id}" data-action="delete"
-                        class="delete-btn bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                        class="delete-btn bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm1 3a1 1 0 100 2h4a1 1 0 100-2H8z" clip-rule="evenodd" />
                         </svg>
@@ -412,7 +615,18 @@
         // Function to render achievements
         function renderAchievements() {
             achievementsList.innerHTML = ''; // Clear existing achievements
-            const unlockedAchievements = achievementsData.filter(achievement => achievement.level <= level);
+            const unlockedAchievements = achievementsData.filter(achievement => {
+                if (achievement.type === 'level') {
+                    return achievement.level <= level;
+                } else if (achievement.type === 'streak') {
+                    return dailyStreak >= achievement.value;
+                } else if (achievement.type === 'totalTasks') {
+                    return tasks.filter(t => t.completed).length >= achievement.value;
+                } else if (achievement.type === 'importantTasks') {
+                    return tasks.filter(t => t.completed && t.importance === 'important').length >= achievement.value;
+                }
+                return false;
+            });
 
             if (unlockedAchievements.length === 0) {
                 noAchievementsMessage.style.display = 'block';
@@ -422,7 +636,7 @@
                     const achievementItem = document.createElement('div');
                     // Apply dark mode classes for achievement items
                     achievementItem.className = `flex items-center bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-full px-4 py-2 shadow-sm text-gray-700 dark:text-gray-200 text-sm`;
-                    achievementItem.innerHTML = `<span class="text-xl mr-2">${achievement.icon}</span><span>${achievement.name} (سطح ${achievement.level})</span>`;
+                    achievementItem.innerHTML = `<span class="text-xl mr-2">${achievement.icon}</span><span>${achievement.name}</span>`;
                     achievementsList.appendChild(achievementItem);
                 });
             }
@@ -432,16 +646,29 @@
         addTaskBtn.addEventListener('click', () => {
             const taskName = taskInput.value.trim();
             const importance = importanceSelect.value;
+            let customPoints = 0;
+
+            if (importance === 'custom') {
+                customPoints = parseInt(customPointsInput.value, 10);
+                if (isNaN(customPoints) || customPoints <= 0) {
+                    showMessageBox('لطفاً یک امتیاز سفارشی معتبر وارد کنید.', 'info');
+                    return;
+                }
+            }
 
             if (taskName) {
                 const newTask = {
                     id: Date.now().toString(), // Unique ID for the task
                     name: taskName,
                     completed: false,
-                    importance: importance
+                    importance: importance,
+                    customPoints: importance === 'custom' ? customPoints : undefined // Store custom points if importance is custom
                 };
                 tasks.push(newTask);
                 taskInput.value = ''; // Clear input
+                customPointsInput.value = ''; // Clear custom points input
+                importanceSelect.value = 'normal'; // Reset importance select
+                customPointsInput.classList.add('hidden'); // Hide custom points input
                 saveToLocalStorage(); // Save after adding
                 renderTasks(); // Re-render tasks after adding
                 showMessageBox('وظیفه جدید اضافه شد!', 'success');
@@ -457,12 +684,6 @@
         });
 
         // Handle Task Actions (Toggle Complete, Delete, Edit, Save, Cancel)
-        // Now handles both mouse clicks and touch taps (routed from touchend)
-        // Removed `activeTaskList.addEventListener('click', handleTaskActions);`
-        // Removed `completedTasksContainer.addEventListener('click', handleTaskActions);`
-        // Actions are now solely handled by `touchend` for touch and `click` for mouse (via native event)
-        // or directly by `handleTaskActions` if `touchend` routes it.
-        // Re-adding click listeners to ensure desktop mouse functionality.
         activeTaskList.addEventListener('click', handleTaskActions);
         completedTasksContainer.addEventListener('click', handleTaskActions);
 
@@ -478,6 +699,7 @@
             const editInput = taskItemElement.querySelector('.edit-task-input');
             const importanceDisplaySpan = taskItemElement.querySelector('.task-importance-display');
             const editImportanceSelect = taskItemElement.querySelector('.edit-importance-select');
+            const editCustomPointsInput = taskItemElement.querySelector('.edit-custom-points-input');
             const editBtn = taskItemElement.querySelector('.edit-btn');
             const saveBtn = taskItemElement.querySelector('.save-btn');
             const cancelBtn = taskItemElement.querySelector('.cancel-btn');
@@ -487,29 +709,69 @@
             if (target.type === 'checkbox') {
                 const taskIndex = tasks.findIndex(t => t.id === taskId);
                 if (taskIndex > -1) {
-                    tasks[taskIndex].completed = target.checked;
-                    if (target.checked) {
-                        // Add points for completing a task
-                        if (tasks[taskIndex].importance === 'important') {
-                            points += pointsPerImportantTask;
-                            showMessageBox(`وظیفه مهم تکمیل شد! +${pointsPerImportantTask} امتیاز`, 'success');
-                        } else {
-                            points += pointsPerNormalTask;
-                            showMessageBox(`وظیفه تکمیل شد! +${pointsPerNormalTask} امتیاز`, 'success');
+                    const task = tasks[taskIndex];
+                    console.log("Checkbox clicked! Task before change:", JSON.parse(JSON.stringify(task)));
+                    let pointsGained = 0;
+
+                    if (!task.completed) { // User wants to complete the task
+                        console.log("Intending to COMPLETE task.");
+                        task.completed = true;
+                        if (task.importance === 'important') {
+                            pointsGained = pointsPerImportantTask;
+                        } else if (task.importance === 'normal') {
+                            pointsGained = pointsPerNormalTask;
+                        } else if (task.importance === 'custom' && task.customPoints) {
+                            pointsGained = task.customPoints;
                         }
-                    } else {
-                        // Deduct points if unchecked (optional, but good for gamification)
-                        if (tasks[taskIndex].importance === 'important') {
-                            points = Math.max(0, points - pointsPerImportantTask);
-                            showMessageBox(`وظیفه مهم بازنشانی شد! -${pointsPerImportantTask} امتیاز`, 'info');
+                        points += pointsGained;
+                        showMessageBox(`وظیفه تکمیل شد! +${pointsGained} امتیاز`, 'success');
+                        showPointsGainFeedback(pointsGained, taskItemElement);
+
+                        // Daily Streak Logic (only on completion)
+                        const today = new Date().toDateString();
+                        console.log("Task completed. Current lastCompletionDate:", lastCompletionDate, "Today:", today);
+
+                        if (!lastCompletionDate) {
+                            dailyStreak = 1;
+                            showMessageBox('رشته روزانه شما شروع شد!', 'info');
+                            console.log("Streak started: dailyStreak =", dailyStreak);
                         } else {
-                            points = Math.max(0, points - pointsPerNormalTask);
-                            points = Math.max(0, points); // Ensure points don't go negative
-                            showMessageBox(`وظیفه بازنشانی شد! -${pointsPerNormalTask} امتیاز`, 'info');
+                            const lastDate = new Date(lastCompletionDate);
+                            const yesterday = new Date();
+                            yesterday.setDate(yesterday.getDate() - 1);
+
+                            console.log("Comparing lastDate:", lastDate.toDateString(), "with yesterday:", yesterday.toDateString(), "and today:", today);
+
+                            if (lastDate.toDateString() === yesterday.toDateString()) {
+                                dailyStreak++;
+                                showMessageBox(`رشته روزانه: ${dailyStreak} روز متوالی!`, 'info');
+                                console.log("Streak incremented: dailyStreak =", dailyStreak);
+                            } else if (lastDate.toDateString() !== today) {
+                                dailyStreak = 1; // Reset if not consecutive and not already completed today
+                                showMessageBox('رشته روزانه شما بازنشانی شد و دوباره شروع شد.', 'info');
+                                console.log("Streak reset and started anew: dailyStreak =", dailyStreak);
+                            }
                         }
+                        lastCompletionDate = today;
+                        console.log("New lastCompletionDate:", lastCompletionDate);
+
+                    } else { // User wants to reset (un-complete) the task
+                        console.log("Intending to RESET task.");
+                        task.completed = false;
+                        if (task.importance === 'important') {
+                            pointsGained = pointsPerImportantTask; // Points to deduct
+                        } else if (task.importance === 'normal') {
+                            pointsGained = pointsPerNormalTask;
+                        } else if (task.importance === 'custom' && task.customPoints) {
+                            pointsGained = task.customPoints;
+                        }
+                        points = Math.max(0, points - pointsGained);
+                        showMessageBox(`وظیفه بازنشانی شد! -${pointsGained} امتیاز`, 'info');
+                        // Streak logic is only for completion, not for un-completion.
                     }
-                    saveToLocalStorage(); // Save after toggling
-                    renderTasks(); // Re-render tasks after toggling
+                    console.log("Task.completed (after change):", task.completed);
+                    saveToLocalStorage();
+                    renderTasks();
                 }
             } else if (action === 'delete') {
                 tasks = tasks.filter(t => t.id !== taskId);
@@ -517,13 +779,32 @@
                 renderTasks(); // Re-render tasks after deleting
                 showMessageBox('وظیفه حذف شد.', 'info');
             } else if (action === 'edit') {
+                const task = tasks.find(t => t.id === taskId);
+                if (!task) return;
+
                 taskNameSpan.classList.add('hidden');
                 importanceDisplaySpan.classList.add('hidden'); // Hide importance display span
                 editInput.classList.remove('hidden');
                 editImportanceSelect.classList.remove('hidden'); // Show importance select
                 editInput.focus();
                 editInput.value = taskNameSpan.textContent.trim(); // Set input value to current task name
-                editImportanceSelect.value = tasks.find(t => t.id === taskId).importance; // Set select value
+                editImportanceSelect.value = task.importance; // Set select value
+
+                if (task.importance === 'custom') {
+                    editCustomPointsInput.classList.remove('hidden');
+                    editCustomPointsInput.value = task.customPoints || '';
+                } else {
+                    editCustomPointsInput.classList.add('hidden');
+                }
+
+                // Listener for edit importance select to show/hide custom points input
+                editImportanceSelect.onchange = () => {
+                    if (editImportanceSelect.value === 'custom') {
+                        editCustomPointsInput.classList.remove('hidden');
+                    } else {
+                        editCustomPointsInput.classList.add('hidden');
+                    }
+                };
 
                 editBtn.classList.add('hidden');
                 deleteBtn.classList.add('hidden');
@@ -532,13 +813,23 @@
                 cancelBtn.classList.remove('hidden');
             } else if (action === 'save') {
                 const newTaskName = editInput.value.trim();
-                const newImportance = editImportanceSelect.value; // Get new importance
+                const newImportance = editImportanceSelect.value;
+                let newCustomPoints = undefined;
+
+                if (newImportance === 'custom') {
+                    newCustomPoints = parseInt(editCustomPointsInput.value, 10);
+                    if (isNaN(newCustomPoints) || newCustomPoints <= 0) {
+                        showMessageBox('لطفاً یک امتیاز سفارشی معتبر وارد کنید.', 'info');
+                        return;
+                    }
+                }
 
                 if (newTaskName) {
                     const taskIndex = tasks.findIndex(t => t.id === taskId);
                     if (taskIndex > -1) {
                         tasks[taskIndex].name = newTaskName;
-                        tasks[taskIndex].importance = newImportance; // Update importance
+                        tasks[taskIndex].importance = newImportance;
+                        tasks[taskIndex].customPoints = newCustomPoints; // Update custom points
                         saveToLocalStorage();
                         renderTasks(); // Re-render to show updated name and importance
                         showMessageBox('وظیفه با موفقیت ویرایش شد!', 'success');
@@ -554,7 +845,6 @@
         }
 
         // --- Drag and Drop Logic (Mouse Events) ---
-        // Mouse events remain for desktop/non-touch devices
         activeTaskList.addEventListener('dragstart', (e) => {
             const taskItem = e.target.closest('.task-item');
             if (taskItem && !taskItem.classList.contains('bg-green-100')) { // Only active tasks
@@ -668,10 +958,12 @@
         activeTaskList.addEventListener('touchstart', (e) => {
             // Determine if the touch started on an interactive element (checkbox, button, input, select)
             const targetTagName = e.target.tagName;
-            const isInteractiveElement = (targetTagName === 'INPUT' && e.target.type === 'checkbox') ||
+            const isInteractiveElement = (targetTagName === 'INPUT' && (e.target.type === 'checkbox' || e.target.type === 'number' || e.target.type === 'text')) ||
                                          targetTagName === 'BUTTON' ||
-                                         e.target.classList.contains('edit-task-input') || // specifically target the edit input
-                                         e.target.classList.contains('edit-importance-select'); // specifically target the edit select
+                                         targetTagName === 'SELECT' ||
+                                         e.target.classList.contains('edit-task-input') ||
+                                         e.target.classList.contains('edit-importance-select') ||
+                                         e.target.classList.contains('edit-custom-points-input');
 
             // If it's an interactive element, do NOT prevent default, and do NOT start drag timer.
             // Let the browser handle the tap/click for that element.
@@ -899,7 +1191,7 @@
                 <p class="mb-3">به سیستم مدیریت وظایف گیمیفای شده خوش آمدید! این برنامه به شما کمک می‌کند تا با انجام وظایف، امتیاز کسب کرده و به سطوح بالاتر دست یابید.</p>
                 <p class="mb-3 font-bold">نحوه کار با برنامه:</p>
                 <ul class="list-disc list-inside mb-3">
-                    <li>**افزودن وظیفه:** در بخش "افزودن وظیفه جدید"، نام وظیفه را وارد کرده و اهمیت آن (مهم/غیر مهم) را انتخاب کنید. وظایف مهم امتیاز بیشتری دارند.</li>
+                    <li>**افزودن وظیفه:** در بخش "افزودن وظیفه جدید"، نام وظیفه را وارد کرده و اهمیت آن (مهم/غیر مهم/سفارشی) را انتخاب کنید. وظایف مهم و سفارشی امتیاز بیشتری دارند.</li>
                     <li>**تغییر اولویت:** وظایف فعال را می‌توانید با کشیدن و رها کردن (Drag & Drop) جابجا کنید تا اولویت آن‌ها تغییر کند.</li>
                     <li>**تکمیل وظیفه:** با زدن تیک کنار هر وظیفه، آن را به عنوان تکمیل شده علامت‌گذاری کنید. با این کار امتیاز کسب می‌کنید و وظیفه به بخش "وظایف انجام شده" منتقل می‌شود.</li>
                     <li>**ویرایش وظیفه:** روی دکمه مداد کنار وظیفه کلیک کنید تا بتوانید نام و اهمیت آن را ویرایش کنید.</li>
@@ -912,10 +1204,12 @@
                         <ul>
                             <li>وظایف عادی: ${pointsPerNormalTask} امتیاز</li>
                             <li>وظایف مهم: ${pointsPerImportantTask} امتیاز</li>
+                            <li>وظایف سفارشی: امتیاز وارد شده توسط شما</li>
                         </ul>
                     </li>
                     <li>**سطوح:** با کسب هر ${pointsPerLevel} امتیاز، به سطح بعدی ارتقا پیدا می‌کنید.</li>
-                    <li>**دستاوردها:** با رسیدن به هر سطح جدید، یک مدال دستاورد کسب می‌کنید که در بخش "دستاوردها" نمایش داده می‌شود.</li>
+                    <li>**رشته روزانه:** با تکمیل حداقل یک وظیفه در هر روز متوالی، رشته روزانه شما افزایش می‌یابد.</li>
+                    <li>**دستاوردها:** با رسیدن به هر سطح جدید، رشته روزانه مشخص یا تعداد وظایف انجام شده، یک مدال دستاورد کسب می‌کنید که در بخش "دستاوردها" نمایش داده می‌شود.</li>
                 </ul>
                 <p>هدف این برنامه ایجاد انگیزه و کمک به شما در سازماندهی بهتر کارهایتان است. موفق باشید!</p>
             `;
