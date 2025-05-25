@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مدیریت وظایف گیمیفای شده</title>
+    <title>زی تسک | پلتفرم آنلاین انجام وظایف</title>
+    <meta name="description" content="زی تسک: پلتفرم مدیریت وظایف گیمیفای شده برای افزایش انگیزه و بهره‌وری. وظایف خود را مدیریت کنید، زی پوینت کسب کنید و به سطوح بالاتر برسید.">
+    <meta name="keywords" content="مدیریت وظایف, گیمیفیکیشن, زی تسک, Z-Point, بهره‌وری, سازماندهی, برنامه ریزی, انگیزه, وظایف روزانه">
+    <meta name="robots" content="noindex, nofollow">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -128,8 +131,12 @@
                 </svg>
             </button>
             <div id="menuDropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg py-1 hidden z-20">
+                <a href="#" id="profileMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">پروفایل</a>
                 <a href="#" id="helpMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">راهنما</a>
                 <a href="#" id="aboutMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">درباره</a>
+                <a href="#" id="backupMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">پشتیبان‌گیری</a>
+                <a href="#" id="donateMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">دونیت</a>
+                <a href="#" id="resetMenuItem" class="block px-4 py-2 text-sm text-red-700 dark:text-red-200 hover:bg-red-100 dark:hover:bg-red-600 transition duration-200 ease-in-out">بازنشانی داده‌ها</a>
             </div>
         </div>
 
@@ -140,9 +147,12 @@
         </button>
 
         <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700 md:px-16">
-            <h1 class="text-2xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 text-center md:text-right w-full md:w-auto">مدیریت وظایف گیمیفای شده</h1>
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 text-center md:text-right w-full md:w-auto">زی تــــســـک</h1>
             <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 sm:space-x-reverse w-full md:w-auto justify-center md:justify-end">
-                <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">امتیاز: <span id="points" class="text-green-600 dark:text-green-400">0</span></div>
+                <div class="flex items-center bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full shadow-sm">
+                    <span class="text-xl mr-2">💰</span>
+                    <span class="text-lg font-semibold">زی پوینت: <span id="points" class="text-yellow-800 dark:text-yellow-200">0</span></span>
+                </div>
                 <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">سطح: <span id="level" class="text-blue-600 dark:text-blue-400">1</span></div>
                 <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">رشته روزانه: <span id="dailyStreak" class="text-purple-600 dark:text-purple-400">0</span></div>
             </div>
@@ -174,7 +184,7 @@
                     <option value="normal" selected>غیر مهم</option>
                     <option value="custom">سفارشی</option>
                 </select>
-                <input type="number" id="customPointsInput" placeholder="امتیاز سفارشی"
+                <input type="number" id="customPointsInput" placeholder="زی پوینت سفارشی (حداکثر 50)"
                        class="p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12 w-full md:w-32 hidden">
                 <button id="addTaskBtn"
                         class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 text-lg w-full md:w-auto">
@@ -196,6 +206,30 @@
             </button>
             <div id="completedTasksContainer" class="hidden mt-4 task-list-container overflow-y-auto max-h-96 pr-2">
                 </div>
+        </div>
+    </div>
+
+    <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100">
+            <h3 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700 text-center">به زی تسک خوش آمدید!</h3>
+            <p class="mb-4 text-center text-gray-700 dark:text-gray-300">لطفاً نام خود را وارد کنید تا شروع کنیم:</p>
+            <input type="text" id="userNameInput" placeholder="نام شما..."
+                   class="w-full p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 mb-4">
+            <button id="startBtn"
+                    class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 text-lg">
+                بزن بریم!
+            </button>
+        </div>
+    </div>
+
+    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box">
+            <h3 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">پروفایل کاربری</h3>
+            <div id="profileModalContent" class="modal-scrollable-content text-justify text-sm leading-relaxed">
+                </div>
+            <button id="closeProfileModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
         </div>
     </div>
 
@@ -224,39 +258,122 @@
         </div>
     </div>
 
+    <div id="backupModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box">
+            <h3 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">پشتیبان‌گیری و بازیابی داده‌ها</h3>
+            <div class="modal-scrollable-content flex flex-col gap-4">
+                <p class="text-sm text-gray-700 dark:text-gray-300">برای پشتیبان‌گیری، دکمه "ذخیره داده‌ها" را بزنید تا فایل پشتیبان دانلود شود. برای بازیابی، فایل پشتیبان را انتخاب کرده و "بارگذاری از فایل" را بزنید.</p>
+                
+                <button id="exportDataBtn" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    ذخیره داده‌ها (دانلود فایل)
+                </button>
+
+                <div class="flex items-center gap-2 mt-2">
+                    <label for="importFileInput" class="bg-violet-500 hover:bg-violet-600 dark:bg-violet-700 dark:hover:bg-violet-800 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out cursor-pointer focus:outline-none focus:ring-2 focus:ring-violet-400">
+                        انتخاب فایل
+                    </label>
+                    <span id="selectedFileName" class="text-sm text-gray-600 dark:text-gray-300 truncate max-w-[calc(100%-120px)]">فایلی انتخاب نشده است.</span>
+                    <input type="file" id="importFileInput" accept=".json" class="hidden">
+                </div>
+                
+                <button id="importDataBtn" class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400">
+                    بارگذاری از فایل
+                </button>
+            </div>
+            <button id="closeBackupModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="resetConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100">
+            <h3 class="text-xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">تأیید بازنشانی داده‌ها</h3>
+            <p class="mb-6 text-sm">آیا مطمئن هستید که می‌خواهید تمامی داده‌های برنامه را حذف کنید؟ این عمل غیرقابل بازگشت است.</p>
+            <div class="flex justify-end space-x-4 space-x-reverse">
+                <button id="confirmResetBtn" class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400">
+                    تأیید بازنشانی
+                </button>
+                <button id="cancelResetBtn" class="bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-100 font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400">
+                    لغو
+                </button>
+            </div>
+            <button id="closeResetModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
     <div id="confettiContainer" class="confetti-container"></div>
 
     <script>
         // Task data structure
         let tasks = [];
-        let points = 0;
+        let points = 0; // Renamed to Z-Point in UI, but kept as 'points' internally for simplicity
         let level = 1;
         let dailyStreak = 0; // Daily streak counter
         let lastCompletionDate = null; // Last date a task was completed
+        let totalCustomTasksCompleted = 0; // New: Counter for custom tasks completed
+        let userName = null; // User's name
 
         const pointsPerNormalTask = 10;
         const pointsPerImportantTask = 25;
-        const pointsPerLevel = 100; // Points required for each level up
+        const MAX_CUSTOM_POINTS = 50; // New: Max points for custom tasks
+
+        // Define total points required to reach each level (Level 1 is 0 points)
+        // Level 15 (Sigma) requires 1500 total points
+        const levelPointsThresholds = [
+            { name: 'نوبا', points: 0 },
+            { name: 'مبتدی', points: 30 },
+            { name: 'جنگجو', points: 70 },
+            { name: 'شوالیه', points: 120 },
+            { name: 'قهرمان', points: 180 },
+            { name: 'استاد', points: 250 },
+            { name: 'فرمانده', points: 330 },
+            { name: 'سلطان', points: 420 },
+            { name: 'اژدها', points: 520 },
+            { name: 'افسانه', points: 630 },
+            { name: 'جاودان', points: 750 },
+            { name: 'خدایگان', points: 900 },
+            { name: 'کیهان‌نورد', points: 1080 },
+            { name: 'ابرقهرمان', points: 1290 },
+            { name: 'سیگما', points: 1500 }
+        ];
 
         // Achievement data
         const achievementsData = [
-            { level: 1, name: 'شروع کننده', icon: '🌟', type: 'level' },
-            { level: 2, name: 'عادی', icon: '✨', type: 'level' },
-            { level: 3, name: 'متوسط', icon: '💪', type: 'level' },
-            { level: 4, name: 'پیشرفته', icon: '🚀', type: 'level' },
-            { level: 5, name: 'استاد وظایف', icon: '🏆', type: 'level' },
-            { level: 6, name: 'قهرمان بهره‌وری', icon: '👑', type: 'level' },
-            { level: 7, name: 'کمال‌گرا', icon: '💎', type: 'level' },
-            { level: 8, name: 'سلطان نظم', icon: '🏰', type: 'level' },
-            { level: 9, name: 'افسانه', icon: '✨', type: 'level' },
-            { level: 10, name: 'ابرقهرمان OCD', icon: '🦸‍♂️', type: 'level' },
-            { type: 'streak', value: 3, name: 'رشته سه روزه', icon: '🔥' },
-            { type: 'streak', value: 7, name: 'رشته هفت روزه', icon: '✨🔥' },
+            { level: 1, name: 'نوبا', icon: '👶', type: 'level' },
+            { level: 2, name: 'مبتدی', icon: '🌱', type: 'level' },
+            { level: 3, name: 'جنگجو', icon: '⚔️', type: 'level' },
+            { level: 4, name: 'شوالیه', icon: '🛡️', type: 'level' },
+            { level: 5, name: 'قهرمان', icon: '🦸‍♂️', type: 'level' },
+            { level: 6, name: 'استاد', icon: '🎓', type: 'level' },
+            { level: 7, name: 'فرمانده', icon: '🎖️', type: 'level' },
+            { level: 8, name: 'سلطان', icon: '👑', type: 'level' },
+            { level: 9, name: 'اژدها', icon: '🐉', type: 'level' },
             { type: 'totalTasks', value: 10, name: 'ده وظیفه', icon: '✅' },
             { type: 'totalTasks', value: 50, name: 'پنجاه وظیفه', icon: '💯' },
             { type: 'importantTasks', value: 5, name: 'پنج وظیفه مهم', icon: '🚨' },
             { type: 'importantTasks', value: 10, name: 'ده وظیفه مهم', icon: '🛑' },
-            // Add more levels and achievements as needed
+            { type: 'streak', value: 3, name: 'رشته سه روزه', icon: '🔥' },
+            { type: 'streak', value: 7, name: 'رشته هفت روزه', icon: '✨🔥' },
+            { type: 'streak', value: 14, name: 'رشته دو هفته‌ای', icon: '🗓️🔥' },
+            { type: 'streak', value: 30, name: 'رشته ماهانه', icon: '🗓️🗓️🔥' },
+            { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: '💯✅' },
+            { type: 'totalTasks', value: 250, name: 'دویست و پنجاه وظیفه', icon: '🌟💯' },
+            { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: '🏆💯' },
+            { type: 'importantTasks', value: 20, name: 'بیست وظیفه مهم', icon: '🛑🛑' },
+            { type: 'customTasks', value: 1, name: 'اولین وظیفه سفارشی', icon: '💡' },
+            { type: 'customTasks', value: 5, name: 'پنج وظیفه سفارشی', icon: '⚙️✅' },
+            { type: 'customTasks', value: 10, name: 'ده وظیفه سفارشی', icon: '⚙️💯' },
+            { type: 'points', value: 500, name: 'پانصد زی پوینت', icon: '💰' },
+            { type: 'points', value: 1000, name: 'هزار زی پوینت', icon: '💎💰' },
+            { level: 10, name: 'افسانه', icon: '✨', type: 'level' },
+            { level: 11, name: 'جاودان', icon: '♾️', type: 'level' },
+            { level: 12, name: 'خدایگان', icon: '⚡', type: 'level' },
+            { level: 13, name: 'کیهان‌نورد', icon: '🌌', type: 'level' },
+            { level: 14, name: 'ابرقهرمان', icon: '🌟', type: 'level' },
+            { level: 15, name: 'سیگما', icon: '🗿', type: 'level' },
         ];
 
         // DOM Elements
@@ -264,13 +381,37 @@
         const themeIcon = document.getElementById('themeIcon');
         const menuBtn = document.getElementById('menuBtn');
         const menuDropdown = document.getElementById('menuDropdown');
+        const profileMenuItem = document.getElementById('profileMenuItem'); // New
         const helpMenuItem = document.getElementById('helpMenuItem');
         const aboutMenuItem = document.getElementById('aboutMenuItem');
+        const backupMenuItem = document.getElementById('backupMenuItem');
+        const donateMenuItem = document.getElementById('donateMenuItem');
+        const resetMenuItem = document.getElementById('resetMenuItem');
+
+        const welcomeModal = document.getElementById('welcomeModal'); // New
+        const userNameInput = document.getElementById('userNameInput'); // New
+        const startBtn = document.getElementById('startBtn'); // New
+
+        const profileModal = document.getElementById('profileModal'); // New
+        const profileModalContent = document.getElementById('profileModalContent'); // New
+        const closeProfileModalBtn = document.getElementById('closeProfileModalBtn'); // New
+
         const helpModal = document.getElementById('helpModal');
         const helpModalContent = document.getElementById('helpModalContent');
         const aboutModal = document.getElementById('aboutModal');
+        const backupModal = document.getElementById('backupModal');
+        const resetConfirmModal = document.getElementById('resetConfirmModal');
         const closeHelpModalBtn = document.getElementById('closeHelpModalBtn');
         const closeAboutModalBtn = document.getElementById('closeAboutModalBtn');
+        const closeBackupModalBtn = document.getElementById('closeBackupModalBtn');
+        const confirmResetBtn = document.getElementById('confirmResetBtn');
+        const cancelResetBtn = document.getElementById('cancelResetBtn');
+        const closeResetModalBtn = document.getElementById('closeResetModalBtn');
+        const importFileInput = document.getElementById('importFileInput');
+        const exportDataBtn = document.getElementById('exportDataBtn');
+        const importDataBtn = document.getElementById('importDataBtn');
+        const selectedFileNameSpan = document.getElementById('selectedFileName');
+
 
         const taskInput = document.getElementById('taskInput');
         const importanceSelect = document.getElementById('importanceSelect');
@@ -403,25 +544,53 @@
         // Function to update gamification display
         function updateGamificationDisplay() {
             pointsSpan.textContent = points;
-            levelSpan.textContent = level;
-            dailyStreakSpan.textContent = dailyStreak; // Update daily streak display
-
-            const currentLevelPoints = (level - 1) * pointsPerLevel;
-            const pointsIntoCurrentLevel = points - currentLevelPoints;
-            const progressPercentage = Math.min(100, (pointsIntoCurrentLevel / pointsPerLevel) * 100);
-
-            progressBar.style.width = `${progressPercentage}%`;
-            progressText.textContent = `${Math.round(progressPercentage)}% پیشرفت به سطح ${level + 1}`;
-
-            // Check for level up
-            if (points >= level * pointsPerLevel) {
-                const oldLevel = level;
-                level = Math.floor(points / pointsPerLevel) + 1; // Calculate new level based on total points
-                if (level > oldLevel) { // Only show message if level actually increased
-                    showMessageBox(`تبریک! شما به سطح ${level} رسیدید!`, 'success');
-                    triggerConfetti(); // Trigger confetti on level up
+            
+            // Calculate current level based on points thresholds
+            let newLevel = 1;
+            for (let i = 0; i < levelPointsThresholds.length; i++) {
+                if (points >= levelPointsThresholds[i].points) {
+                    newLevel = i + 1;
+                } else {
+                    break; // Points are not enough for this level, so previous was the current
                 }
             }
+
+            if (newLevel > level) {
+                showMessageBox(`تبریک! شما به سطح ${newLevel} رسیدید!`, 'success');
+                triggerConfetti();
+            }
+            level = newLevel; // Update the global level variable
+            levelSpan.textContent = level;
+
+            dailyStreakSpan.textContent = dailyStreak; // Update daily streak display
+
+            // Progress bar logic for up to level 15
+            if (level <= levelPointsThresholds.length) {
+                const currentLevelThreshold = levelPointsThresholds[level - 1].points;
+                const nextLevelThreshold = (level < levelPointsThresholds.length) ? levelPointsThresholds[level].points : points; // If max level, progress is 100%
+                
+                let pointsIntoCurrentLevel = points - currentLevelThreshold;
+                let pointsNeededForNextLevel = nextLevelThreshold - currentLevelThreshold;
+
+                let progressPercentage = 0;
+                if (pointsNeededForNextLevel > 0) {
+                    progressPercentage = Math.min(100, (pointsIntoCurrentLevel / pointsNeededForNextLevel) * 100);
+                } else if (level === levelPointsThresholds.length) { // Max level reached
+                    progressPercentage = 100;
+                }
+
+                progressBar.style.width = `${progressPercentage}%`;
+                if (level < levelPointsThresholds.length) {
+                    progressText.textContent = `${Math.round(progressPercentage)}% پیشرفت به سطح ${level + 1}`;
+                } else {
+                    progressText.textContent = `شما به حداکثر سطح (${level}) رسیده‌اید!`;
+                }
+            } else {
+                // After max level, progress bar remains full, and only points accumulate
+                progressBar.style.width = `100%`;
+                progressText.textContent = `شما به حداکثر سطح (${levelPointsThresholds.length}) رسیده‌اید!`;
+            }
+            
             renderAchievements(); // Call renderAchievements here
         }
 
@@ -432,8 +601,10 @@
             localStorage.setItem('level', level);
             localStorage.setItem('dailyStreak', dailyStreak); // Save daily streak
             localStorage.setItem('lastCompletionDate', lastCompletionDate); // Save last completion date
-            console.log("Tasks, points, level, streak, and last completion date saved to Local Storage.");
-            console.log("Saved dailyStreak:", dailyStreak, "lastCompletionDate:", lastCompletionDate); // Debug log
+            localStorage.setItem('totalCustomTasksCompleted', totalCustomTasksCompleted); // Save custom tasks counter
+            localStorage.setItem('userName', userName); // Save user name
+            console.log("Tasks, points, level, streak, last completion date, and user name saved to Local Storage.");
+            console.log("Saved dailyStreak:", dailyStreak, "lastCompletionDate:", lastCompletionDate, "totalCustomTasksCompleted:", totalCustomTasksCompleted, "userName:", userName); // Debug log
         }
 
         // Function to load tasks, points, level, streak, and last completion date from Local Storage
@@ -443,6 +614,8 @@
             const storedLevel = localStorage.getItem('level');
             const storedDailyStreak = localStorage.getItem('dailyStreak');
             const storedLastCompletionDate = localStorage.getItem('lastCompletionDate');
+            const storedTotalCustomTasksCompleted = localStorage.getItem('totalCustomTasksCompleted');
+            const storedUserName = localStorage.getItem('userName');
 
             if (storedTasks) {
                 tasks = JSON.parse(storedTasks);
@@ -456,13 +629,19 @@
             if (storedDailyStreak) {
                 dailyStreak = parseInt(storedDailyStreak, 10);
             }
+            if (storedTotalCustomTasksCompleted) {
+                totalCustomTasksCompleted = parseInt(storedTotalCustomTasksCompleted, 10);
+            }
+            if (storedUserName) {
+                userName = storedUserName;
+            }
             // Handle 'null' string from localStorage
             if (storedLastCompletionDate && storedLastCompletionDate !== 'null') {
                 lastCompletionDate = storedLastCompletionDate;
             } else {
                 lastCompletionDate = null; // Explicitly set to null if not found or 'null' string
             }
-            console.log("Loaded dailyStreak:", dailyStreak, "lastCompletionDate:", lastCompletionDate); // Debug log
+            console.log("Loaded dailyStreak:", dailyStreak, "lastCompletionDate:", lastCompletionDate, "totalCustomTasksCompleted:", totalCustomTasksCompleted, "userName:", userName); // Debug log
 
 
             // Check and update daily streak on load
@@ -476,7 +655,7 @@
                 console.log("Last completion date (parsed):", lastDate.toDateString()); // Debug log
                 console.log("Yesterday:", yesterday.toDateString()); // Debug log
 
-                if (lastDate.toDateString() !== yesterday.toDateString()) {
+                if (lastDate.toDateString() === yesterday.toDateString()) {
                     // If last completion was not yesterday, reset streak
                     dailyStreak = 0;
                     showMessageBox('رشته روزانه شما بازنشانی شد.', 'info');
@@ -513,7 +692,7 @@
                 importanceText = 'غیر مهم';
                 importanceClasses = 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
             } else if (task.importance === 'custom') {
-                importanceText = `امتیاز سفارشی: ${task.customPoints}`; // Display custom points
+                importanceText = `زی پوینت سفارشی: ${task.customPoints}`; // Display custom points
                 importanceClasses = 'bg-purple-200 dark:bg-purple-700 text-purple-800 dark:text-purple-200';
             }
 
@@ -617,13 +796,19 @@
             achievementsList.innerHTML = ''; // Clear existing achievements
             const unlockedAchievements = achievementsData.filter(achievement => {
                 if (achievement.type === 'level') {
-                    return achievement.level <= level;
+                    // Find the corresponding level threshold to get the points required for that level
+                    const levelInfo = levelPointsThresholds.find(l => l.name === achievement.name);
+                    return levelInfo && points >= levelInfo.points;
                 } else if (achievement.type === 'streak') {
                     return dailyStreak >= achievement.value;
                 } else if (achievement.type === 'totalTasks') {
                     return tasks.filter(t => t.completed).length >= achievement.value;
                 } else if (achievement.type === 'importantTasks') {
                     return tasks.filter(t => t.completed && t.importance === 'important').length >= achievement.value;
+                } else if (achievement.type === 'customTasks') { // New achievement type check
+                    return totalCustomTasksCompleted >= achievement.value;
+                } else if (achievement.type === 'points') { // New achievement type check
+                    return points >= achievement.value;
                 }
                 return false;
             });
@@ -650,8 +835,8 @@
 
             if (importance === 'custom') {
                 customPoints = parseInt(customPointsInput.value, 10);
-                if (isNaN(customPoints) || customPoints <= 0) {
-                    showMessageBox('لطفاً یک امتیاز سفارشی معتبر وارد کنید.', 'info');
+                if (isNaN(customPoints) || customPoints <= 0 || customPoints > MAX_CUSTOM_POINTS) {
+                    showMessageBox(`لطفاً یک زی پوینت سفارشی معتبر (حداکثر ${MAX_CUSTOM_POINTS}) وارد کنید.`, 'info');
                     return;
                 }
             }
@@ -722,9 +907,10 @@
                             pointsGained = pointsPerNormalTask;
                         } else if (task.importance === 'custom' && task.customPoints) {
                             pointsGained = task.customPoints;
+                            totalCustomTasksCompleted++; // Increment custom tasks counter
                         }
                         points += pointsGained;
-                        showMessageBox(`وظیفه تکمیل شد! +${pointsGained} امتیاز`, 'success');
+                        showMessageBox(`وظیفه تکمیل شد! +${pointsGained} زی پوینت`, 'success');
                         showPointsGainFeedback(pointsGained, taskItemElement);
 
                         // Daily Streak Logic (only on completion)
@@ -764,9 +950,10 @@
                             pointsGained = pointsPerNormalTask;
                         } else if (task.importance === 'custom' && task.customPoints) {
                             pointsGained = task.customPoints;
+                            totalCustomTasksCompleted = Math.max(0, totalCustomTasksCompleted - 1); // Decrement custom tasks counter
                         }
                         points = Math.max(0, points - pointsGained);
-                        showMessageBox(`وظیفه بازنشانی شد! -${pointsGained} امتیاز`, 'info');
+                        showMessageBox(`وظیفه بازنشانی شد! -${pointsGained} زی پوینت`, 'info');
                         // Streak logic is only for completion, not for un-completion.
                     }
                     console.log("Task.completed (after change):", task.completed);
@@ -818,8 +1005,8 @@
 
                 if (newImportance === 'custom') {
                     newCustomPoints = parseInt(editCustomPointsInput.value, 10);
-                    if (isNaN(newCustomPoints) || newCustomPoints <= 0) {
-                        showMessageBox('لطفاً یک امتیاز سفارشی معتبر وارد کنید.', 'info');
+                    if (isNaN(newCustomPoints) || newCustomPoints <= 0 || newCustomPoints > MAX_CUSTOM_POINTS) {
+                        showMessageBox(`لطفاً یک زی پوینت سفارشی معتبر (حداکثر ${MAX_CUSTOM_POINTS}) وارد کنید.`, 'info');
                         return;
                     }
                 }
@@ -1184,34 +1371,115 @@
             menuDropdown.classList.toggle('hidden');
         });
 
+        profileMenuItem.addEventListener('click', (e) => {
+            e.preventDefault();
+            menuDropdown.classList.add('hidden'); // Hide dropdown
+
+            const totalTasks = tasks.length;
+            const completedTasksCount = tasks.filter(t => t.completed).length;
+
+            let achievementsHtml = '';
+            const unlockedAchievements = achievementsData.filter(achievement => {
+                if (achievement.type === 'level') {
+                    const levelInfo = levelPointsThresholds.find(l => l.name === achievement.name);
+                    return levelInfo && points >= levelInfo.points;
+                } else if (achievement.type === 'streak') {
+                    return dailyStreak >= achievement.value;
+                } else if (achievement.type === 'totalTasks') {
+                    return completedTasksCount >= achievement.value;
+                } else if (achievement.type === 'importantTasks') {
+                    return tasks.filter(t => t.completed && t.importance === 'important').length >= achievement.value;
+                } else if (achievement.type === 'customTasks') {
+                    return totalCustomTasksCompleted >= achievement.value;
+                } else if (achievement.type === 'points') {
+                    return points >= achievement.value;
+                }
+                return false;
+            });
+
+            if (unlockedAchievements.length > 0) {
+                achievementsHtml = `
+                    <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2 mt-4">دستاوردها:</h4>
+                    <div class="flex flex-wrap gap-2">
+                        ${unlockedAchievements.map(ach => `
+                            <span class="flex items-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm">
+                                <span class="text-xl mr-2">${ach.icon}</span><span>${ach.name}</span>
+                            </span>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                achievementsHtml = `<p class="text-gray-500 dark:text-gray-400 mt-4">هنوز دستاوردی کسب نشده است.</p>`;
+            }
+
+
+            profileModalContent.innerHTML = `
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">نام کاربر:</strong> ${userName || 'نامعلوم'}</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">کل وظایف:</strong> ${totalTasks}</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">وظایف انجام شده:</strong> ${completedTasksCount}</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">زی پوینت:</strong> ${points}</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">سطح:</strong> ${level}</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">رشته روزانه:</strong> ${dailyStreak} روز</p>
+                ${achievementsHtml}
+            `;
+            profileModal.classList.remove('hidden');
+        });
+
+        closeProfileModalBtn.addEventListener('click', () => {
+            profileModal.classList.add('hidden');
+        });
+
         helpMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
             // Dynamically update help modal content with current point values
             helpModalContent.innerHTML = `
-                <p class="mb-3">به سیستم مدیریت وظایف گیمیفای شده خوش آمدید! این برنامه به شما کمک می‌کند تا با انجام وظایف، امتیاز کسب کرده و به سطوح بالاتر دست یابید.</p>
-                <p class="mb-3 font-bold">نحوه کار با برنامه:</p>
-                <ul class="list-disc list-inside mb-3">
-                    <li>**افزودن وظیفه:** در بخش "افزودن وظیفه جدید"، نام وظیفه را وارد کرده و اهمیت آن (مهم/غیر مهم/سفارشی) را انتخاب کنید. وظایف مهم و سفارشی امتیاز بیشتری دارند.</li>
-                    <li>**تغییر اولویت:** وظایف فعال را می‌توانید با کشیدن و رها کردن (Drag & Drop) جابجا کنید تا اولویت آن‌ها تغییر کند.</li>
-                    <li>**تکمیل وظیفه:** با زدن تیک کنار هر وظیفه، آن را به عنوان تکمیل شده علامت‌گذاری کنید. با این کار امتیاز کسب می‌کنید و وظیفه به بخش "وظایف انجام شده" منتقل می‌شود.</li>
-                    <li>**ویرایش وظیفه:** روی دکمه مداد کنار وظیفه کلیک کنید تا بتوانید نام و اهمیت آن را ویرایش کنید.</li>
-                    <li>**حذف وظیفه:** با کلیک روی دکمه سطل زباله، وظیفه را حذف کنید.</li>
-                    <li>**وظایف انجام شده:** برای مشاهده یا پنهان کردن وظایف تکمیل شده، روی دکمه "وظایف انجام شده" کلیک کنید.</li>
-                </ul>
-                <p class="mb-3 font-bold">قوانین گیمیفیکیشن و سطوح:</p>
-                <ul class="list-disc list-inside mb-3">
-                    <li>**امتیاز:**
-                        <ul>
-                            <li>وظایف عادی: ${pointsPerNormalTask} امتیاز</li>
-                            <li>وظایف مهم: ${pointsPerImportantTask} امتیاز</li>
-                            <li>وظایف سفارشی: امتیاز وارد شده توسط شما</li>
-                        </ul>
-                    </li>
-                    <li>**سطوح:** با کسب هر ${pointsPerLevel} امتیاز، به سطح بعدی ارتقا پیدا می‌کنید.</li>
-                    <li>**رشته روزانه:** با تکمیل حداقل یک وظیفه در هر روز متوالی، رشته روزانه شما افزایش می‌یابد.</li>
-                    <li>**دستاوردها:** با رسیدن به هر سطح جدید، رشته روزانه مشخص یا تعداد وظایف انجام شده، یک مدال دستاورد کسب می‌کنید که در بخش "دستاوردها" نمایش داده می‌شود.</li>
-                </ul>
-                <p>هدف این برنامه ایجاد انگیزه و کمک به شما در سازماندهی بهتر کارهایتان است. موفق باشید!</p>
+                <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-blue-400">به زی تسک خوش آمدید!</h3>
+                <p class="mb-3 text-gray-700 dark:text-gray-300">این برنامه به شما کمک می‌کند تا با انجام وظایف، زی پوینت کسب کرده و به سطوح بالاتر دست یابید و دستاوردهای مختلفی کسب کنید.</p>
+
+                <h3 class="text-xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">نحوه کار با برنامه</h3>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">افزودن وظیفه:</strong> نام وظیفه را وارد کرده و اهمیت آن (مهم/غیر مهم/سفارشی) را انتخاب کنید. وظایف مهم و سفارشی زی پوینت بیشتری دارند.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تغییر اولویت:</strong> وظایف فعال را می‌توانید با کشیدن و رها کردن (Drag & Drop) جابجا کنید.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تکمیل وظیفه:</strong> با زدن تیک کنار هر وظیفه، آن را تکمیل کنید. با این کار زی پوینت کسب می‌کنید و وظیفه به بخش "وظایف انجام شده" منتقل می‌شود.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">ویرایش وظیفه:</strong> روی دکمه مداد کنار وظیفه کلیک کنید تا نام و اهمیت آن را ویرایش کنید.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">حذف وظیفه:</strong> با کلیک روی دکمه سطل زباله، وظیفه را حذف کنید.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">وظایف انجام شده:</strong> برای مشاهده یا پنهان کردن وظایف تکمیل شده، روی دکمه مربوطه کلیک کنید.</p>
+
+                <h3 class="text-xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">سیستم گیمیفیکیشن</h3>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">زی پوینت:</strong>
+                    زی پوینت‌ها صرفاً ارزش نمادین دارند و برای سنجش میزان پیشرفت و فعالیت شما در برنامه استفاده می‌شوند.
+                    <ul>
+                        <li>وظایف عادی: ${pointsPerNormalTask} زی پوینت</li>
+                        <li>وظایف مهم: ${pointsPerImportantTask} زی پوینت</li>
+                        <li>وظایف سفارشی: حداکثر ${MAX_CUSTOM_POINTS} زی پوینت</li>
+                    </ul>
+                </p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">رشته روزانه:</strong> با تکمیل حداقل یک وظیفه در هر روز متوالی، رشته روزانه شما افزایش می‌یابد و می‌توانید دستاوردهای خاصی کسب کنید.</p>
+                
+                <h3 class="text-xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">سطوح</h3>
+                <p class="mb-2 text-gray-700 dark:text-gray-300">با کسب زی پوینت، به سطوح بالاتر ارتقا پیدا می‌کنید. جزئیات هر سطح به شرح زیر است:</p>
+                <div class="flex flex-wrap gap-2 mb-3">
+                    ${levelPointsThresholds.map((levelInfo, index) => `
+                        <span class="bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm flex items-center">
+                            سطح ${index + 1}: ${levelInfo.name} (${levelInfo.points} زی پوینت)
+                        </span>
+                    `).join('')}
+                </div>
+
+                <h3 class="text-xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">مدال‌ها (دستاوردها)</h3>
+                <p class="mb-2 text-gray-700 dark:text-gray-300">با پیشرفت در بازی، مدال‌های مختلفی کسب می‌کنید. برخی از آن‌ها عبارتند از:</p>
+                <div class="flex flex-wrap gap-2 mb-3">
+                    ${achievementsData.map(ach => `<span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm flex items-center">${ach.icon} <span class="mr-1">${ach.name}</span></span>`).join('')}
+                </div>
+
+                <h3 class="text-xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">پشتیبان‌گیری و بازیابی داده‌ها</h3>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">امنیت داده‌ها:</strong> تمام داده‌های شما به صورت ایمن در حافظه مرورگر شما (Local Storage) ذخیره می‌شوند و هیچ اطلاعاتی به سرور ارسال نمی‌گردد.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">پشتیبان‌گیری (Export):</strong> می‌توانید با کلیک بر روی دکمه "ذخیره داده‌ها"، یک فایل پشتیبان با فرمت JSON از تمام اطلاعات برنامه خود دانلود کنید. این فایل را در جایی امن نگهداری کنید.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">بازیابی (Import):</strong> برای بازیابی اطلاعات، کافی است فایل پشتیبان JSON را که قبلاً دانلود کرده‌اید، از طریق بخش "انتخاب فایل" انتخاب کرده و سپس دکمه "بارگذاری از فایل" را بزنید. این کار اطلاعات برنامه شما را با داده‌های موجود در فایل جایگزین می‌کند.</p>
+
+                <h3 class="text-xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">دونیت</h3>
+                <p class="mb-2 text-gray-700 dark:text-gray-300">این بخش برای حمایت مالی از توسعه‌دهنده برنامه در نظر گرفته شده است. حمایت شما به بهبود و توسعه قابلیت‌های جدید کمک می‌کند.</p>
+
+                <p class="mt-4 text-center text-gray-700 dark:text-gray-300">هدف این برنامه ایجاد انگیزه و کمک به شما در سازماندهی بهتر کارهایتان است. موفق باشید!</p>
             `;
             helpModal.classList.remove('hidden');
             menuDropdown.classList.add('hidden'); // Hide dropdown after selecting
@@ -1223,12 +1491,151 @@
             menuDropdown.classList.add('hidden'); // Hide dropdown after selecting
         });
 
+        backupMenuItem.addEventListener('click', (e) => {
+            e.preventDefault();
+            backupModal.classList.remove('hidden');
+            menuDropdown.classList.add('hidden'); // Hide dropdown after selecting
+            importFileInput.value = ''; // Clear file input on open
+            selectedFileNameSpan.textContent = 'فایلی انتخاب نشده است.'; // Reset file name display
+        });
+
+        donateMenuItem.addEventListener('click', (e) => {
+            e.preventDefault();
+            // const donateLink = "YOUR_DONATION_LINK_HERE"; // TODO: Replace with actual donation link
+            // window.open(donateLink, '_blank');
+            showMessageBox('این بخش در حال حاضر غیرفعال است. از علاقه شما متشکریم!', 'info');
+            menuDropdown.classList.add('hidden'); // Hide dropdown after selecting
+        });
+
+        resetMenuItem.addEventListener('click', (e) => {
+            e.preventDefault();
+            resetConfirmModal.classList.remove('hidden');
+            menuDropdown.classList.add('hidden'); // Hide dropdown after selecting
+        });
+
+        confirmResetBtn.addEventListener('click', () => {
+            localStorage.clear(); // Clear all data from local storage
+            location.reload(); // Reload the page to reset the app
+        });
+
+        cancelResetBtn.addEventListener('click', () => {
+            resetConfirmModal.classList.add('hidden');
+        });
+
         closeHelpModalBtn.addEventListener('click', () => {
             helpModal.classList.add('hidden');
         });
 
         closeAboutModalBtn.addEventListener('click', () => {
             aboutModal.classList.add('hidden');
+        });
+
+        closeBackupModalBtn.addEventListener('click', () => {
+            backupModal.classList.add('hidden');
+        });
+
+        closeResetModalBtn.addEventListener('click', () => {
+            resetConfirmModal.classList.add('hidden');
+        });
+
+        // Welcome Modal Logic
+        startBtn.addEventListener('click', () => {
+            const inputName = userNameInput.value.trim();
+            if (inputName) {
+                userName = inputName;
+                saveToLocalStorage();
+                welcomeModal.classList.add('hidden');
+                showMessageBox(`خوش آمدید، ${userName}!`, 'success');
+            } else {
+                showMessageBox('لطفاً نام خود را وارد کنید.', 'info');
+            }
+        });
+
+        // Export Data (Download as file)
+        exportDataBtn.addEventListener('click', () => {
+            const dataToSave = {
+                tasks: tasks,
+                points: points,
+                level: level,
+                dailyStreak: dailyStreak,
+                lastCompletionDate: lastCompletionDate,
+                totalCustomTasksCompleted: totalCustomTasksCompleted,
+                userName: userName
+            };
+            const jsonString = JSON.stringify(dataToSave, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            const date = new Date();
+            const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+            a.download = `tasks_backup_${dateString}_زی_تسک.json`; // Updated file name
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url); // Clean up the URL object
+            showMessageBox('فایل پشتیبان با موفقیت دانلود شد!', 'success');
+        });
+
+        // Update selected file name display
+        importFileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                selectedFileNameSpan.textContent = e.target.files[0].name;
+            } else {
+                selectedFileNameSpan.textContent = 'فایلی انتخاب نشده است.';
+            }
+        });
+
+        // Import Data (Load from file)
+        importDataBtn.addEventListener('click', () => {
+            const file = importFileInput.files[0];
+            if (!file) {
+                showMessageBox('لطفاً یک فایل پشتیبان برای بارگذاری انتخاب کنید.', 'info');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const dataString = e.target.result;
+                    const importedData = JSON.parse(dataString);
+
+                    // Basic validation of imported data structure
+                    if (
+                        typeof importedData.tasks === 'object' && Array.isArray(importedData.tasks) &&
+                        typeof importedData.points === 'number' &&
+                        typeof importedData.level === 'number' &&
+                        typeof importedData.dailyStreak === 'number' &&
+                        (typeof importedData.lastCompletionDate === 'string' || importedData.lastCompletionDate === null) &&
+                        typeof importedData.totalCustomTasksCompleted === 'number' &&
+                        (typeof importedData.userName === 'string' || importedData.userName === null || importedData.userName === undefined)
+                    ) {
+                        tasks = importedData.tasks;
+                        points = importedData.points;
+                        level = importedData.level;
+                        dailyStreak = importedData.dailyStreak;
+                        lastCompletionDate = importedData.lastCompletionDate;
+                        totalCustomTasksCompleted = importedData.totalCustomTasksCompleted;
+                        userName = importedData.userName || null; // Ensure userName is set or null
+
+                        saveToLocalStorage(); // Save imported data to local storage
+                        renderTasks(); // Re-render UI with new data
+                        backupModal.classList.add('hidden'); // Hide modal
+                        showMessageBox('داده‌ها با موفقیت بارگذاری شد!', 'success');
+                    } else {
+                        showMessageBox('فرمت داده‌های وارد شده نامعتبر است. لطفاً یک فایل پشتیبان معتبر وارد کنید.', 'error');
+                    }
+                } catch (error) {
+                    console.error("Error parsing imported data:", error);
+                    showMessageBox('خطا در پردازش فایل وارد شده. مطمئن شوید که فایل JSON صحیح است.', 'error');
+                }
+            };
+            reader.onerror = (e) => {
+                console.error("Error reading file:", e);
+                showMessageBox('خطا در خواندن فایل. لطفاً دوباره امتحان کنید.', 'error');
+            };
+            reader.readAsText(file);
         });
 
         // Close dropdown when clicking outside
@@ -1242,6 +1649,12 @@
         window.onload = () => {
             loadFromLocalStorage();
             initializeTheme();
+
+            // Show welcome modal if user name is not set
+            if (!userName) {
+                welcomeModal.classList.remove('hidden');
+                userNameInput.focus();
+            }
         };
     </script>
 </body>
