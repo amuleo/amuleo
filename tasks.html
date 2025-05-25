@@ -64,7 +64,7 @@
     </style>
 </head>
 <body class="p-4 flex items-center justify-center min-h-screen bg-f0f2f5 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-    <div class="container bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 md:p-8 w-full relative">
+    <div class="container bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 md:p-8 w-full relative pt-16">
         <div class="absolute top-4 right-4 md:top-6 md:right-6 z-10">
             <button id="menuBtn" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -84,7 +84,7 @@
         </button>
 
         <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
-            <h1 class="text-2xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0">مدیریت وظایف گیمیفای شده</h1>
+            <h1 class="text-2xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-0">مدیریت وظایف گیمیفای شده</h1>
             <div class="flex items-center space-x-4 space-x-reverse">
                 <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">امتیاز: <span id="points" class="text-green-600 dark:text-green-400">0</span></div>
                 <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">سطح: <span id="level" class="text-blue-600 dark:text-blue-400">1</span></div>
@@ -310,18 +310,18 @@
             taskItem.draggable = !task.completed; // Only active tasks are draggable
 
             taskItem.innerHTML = `
-                <div class="flex items-center flex-grow">
+                <div class="flex flex-wrap items-center flex-grow gap-2 md:gap-0">
                     <input type="checkbox" data-id="${task.id}" ${task.completed ? 'checked' : ''}
                         class="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-400 rounded focus:ring-blue-500 dark:focus:ring-blue-300 cursor-pointer">
                     <span class="task-name mr-3 text-lg font-medium ${task.completed ? 'text-gray-500 dark:text-gray-400' : 'text-gray-800 dark:text-gray-100'}">
                         ${task.name}
                     </span>
-                    <input type="text" class="edit-task-input hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 flex-grow bg-white dark:bg-gray-700 h-12" value="${task.name}">
+                    <input type="text" class="edit-task-input hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 flex-grow bg-white dark:bg-gray-700 h-12 w-full md:w-auto">
                     <span class="task-importance-display mr-3 text-sm px-2 py-1 rounded-full
                         ${task.importance === 'important' ? 'bg-red-200 dark:bg-red-700 text-red-800 dark:text-red-200' : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200'}">
                         ${task.importance === 'important' ? 'مهم' : 'غیر مهم'}
                     </span>
-                    <select class="edit-importance-select hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12">
+                    <select class="edit-importance-select hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12 w-full md:w-auto">
                         <option value="important" ${task.importance === 'important' ? 'selected' : ''}>مهم</option>
                         <option value="normal" ${task.importance === 'normal' ? 'selected' : ''}>غیر مهم</option>
                     </select>
