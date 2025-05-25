@@ -454,13 +454,9 @@
           quoteDiv.style.paddingRight = '3rem';
           quoteDiv.style.paddingTop = '1rem';
           quoteDiv.style.paddingBottom = '1rem';
-          const span = document.createElement('span');
-          span.className = 'text-xl md:text-2xl font-bold ml-3';
-          span.textContent = '“';
           const p = document.createElement('p');
           p.className = 'text-base md:text-lg text-gray-700 italic flex-grow text-right text-justify dark:text-gray-300';
           p.textContent = quote;
-          quoteDiv.appendChild(span);
           quoteDiv.appendChild(p);
           sliderTrack.appendChild(quoteDiv);
           const dot = document.createElement('button');
