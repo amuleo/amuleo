@@ -84,7 +84,7 @@
         </button>
 
         <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0">مدیریت وظایف گیمیفای شده</h1>
+            <h1 class="text-2xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0">مدیریت وظایف گیمیفای شده</h1>
             <div class="flex items-center space-x-4 space-x-reverse">
                 <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">امتیاز: <span id="points" class="text-green-600 dark:text-green-400">0</span></div>
                 <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">سطح: <span id="level" class="text-blue-600 dark:text-blue-400">1</span></div>
@@ -215,6 +215,8 @@
 
         // Variable to hold the ID of the task being dragged
         let draggedTaskId = null;
+        let draggedElement = null; // Reference to the actual element being dragged
+        let ghostElement = null; // A ghost element for touch drag feedback
 
         // Function to display a custom message box instead of alert()
         function showMessageBox(message, type = 'info') {
@@ -535,11 +537,12 @@
             }
         }
 
-        // --- Drag and Drop Logic ---
+        // --- Drag and Drop Logic (Mouse Events) ---
         activeTaskList.addEventListener('dragstart', (e) => {
             const taskItem = e.target.closest('.task-item');
             if (taskItem && !taskItem.classList.contains('bg-green-100')) { // Only active tasks
                 draggedTaskId = taskItem.dataset.id;
+                draggedElement = taskItem;
                 e.dataTransfer.setData('text/plain', draggedTaskId);
                 setTimeout(() => {
                     taskItem.classList.add('dragging');
@@ -581,6 +584,7 @@
                 document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
                 document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
                 draggedTaskId = null;
+                draggedElement = null;
                 return;
             }
 
@@ -593,6 +597,7 @@
                 document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
                 document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
                 draggedTaskId = null;
+                draggedElement = null;
                 return;
             }
 
@@ -602,6 +607,7 @@
                 document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
                 document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
                 draggedTaskId = null;
+                draggedElement = null;
                 return;
             }
 
@@ -624,6 +630,7 @@
             document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
             document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
             draggedTaskId = null;
+            draggedElement = null;
         });
 
         activeTaskList.addEventListener('dragend', (e) => {
@@ -631,7 +638,142 @@
             document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
             document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
             draggedTaskId = null;
+            draggedElement = null;
         });
+
+        // --- Drag and Drop Logic (Touch Events) ---
+        activeTaskList.addEventListener('touchstart', (e) => {
+            // Only allow dragging if it's a single touch and not on a checkbox/button within the task item
+            if (e.touches.length === 1 && !e.target.closest('button') && e.target.type !== 'checkbox') {
+                const taskItem = e.target.closest('.task-item');
+                if (taskItem && !taskItem.classList.contains('bg-green-100')) {
+                    draggedTaskId = taskItem.dataset.id;
+                    draggedElement = taskItem;
+
+                    // Create a ghost element for visual feedback during touch drag
+                    ghostElement = taskItem.cloneNode(true);
+                    ghostElement.style.position = 'absolute';
+                    ghostElement.style.width = taskItem.offsetWidth + 'px';
+                    ghostElement.style.height = taskItem.offsetHeight + 'px';
+                    ghostElement.style.pointerEvents = 'none'; // Ensure it doesn't interfere with touch events
+                    ghostElement.style.opacity = '0.7';
+                    ghostElement.style.zIndex = '1000';
+                    ghostElement.classList.add('dragging'); // Apply dragging style to ghost
+                    document.body.appendChild(ghostElement);
+
+                    // Position the ghost element initially
+                    const touch = e.touches[0];
+                    ghostElement.style.left = (touch.clientX - taskItem.offsetWidth / 2) + 'px';
+                    ghostElement.style.top = (touch.clientY - taskItem.offsetHeight / 2) + 'px';
+
+                    taskItem.classList.add('opacity-0'); // Hide the original element
+                    e.preventDefault(); // Prevent scrolling
+                }
+            }
+        });
+
+        activeTaskList.addEventListener('touchmove', (e) => {
+            if (draggedTaskId && ghostElement) {
+                e.preventDefault(); // Prevent scrolling
+                const touch = e.touches[0];
+
+                // Update ghost element position
+                ghostElement.style.left = (touch.clientX - ghostElement.offsetWidth / 2) + 'px';
+                ghostElement.style.top = (touch.clientY - ghostElement.offsetHeight / 2) + 'px';
+
+                // Find the element currently under the touch
+                ghostElement.style.display = 'none'; // Temporarily hide ghost to find element beneath
+                const elementUnderTouch = document.elementFromPoint(touch.clientX, touch.clientY);
+                ghostElement.style.display = 'block'; // Show ghost again
+
+                let targetItem = elementUnderTouch ? elementUnderTouch.closest('.task-item') : null;
+
+                // Remove drop-target from all elements
+                document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+
+                if (targetItem && targetItem.dataset.id !== draggedTaskId && !targetItem.classList.contains('bg-green-100')) {
+                    const boundingBox = targetItem.getBoundingClientRect();
+                    const offset = touch.clientY - boundingBox.top;
+
+                    // If touch is in the lower half of the targetItem, consider the next sibling as the target
+                    // This makes the 'border-top' indicator more intuitive for insertion
+                    if (offset > boundingBox.height / 2 && targetItem.nextElementSibling && targetItem.nextElementSibling.classList.contains('task-item')) {
+                        targetItem = targetItem.nextElementSibling;
+                    }
+                    targetItem.classList.add('drop-target');
+                }
+            }
+        });
+
+        activeTaskList.addEventListener('touchend', (e) => {
+            if (draggedTaskId && ghostElement) {
+                // Find the element where the touch ended
+                ghostElement.style.display = 'none'; // Temporarily hide ghost to find element beneath
+                const touch = e.changedTouches[0];
+                const elementAtEnd = document.elementFromPoint(touch.clientX, touch.clientY);
+                ghostElement.style.display = 'block'; // Show ghost again
+
+                const dropTargetItem = elementAtEnd ? elementAtEnd.closest('.task-item') : null;
+
+                // Remove all dragging/drop-target feedback
+                document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+                if (draggedElement) {
+                    draggedElement.classList.remove('opacity-0'); // Show original element again
+                }
+                if (ghostElement) {
+                    ghostElement.remove(); // Remove ghost element
+                }
+
+                if (!dropTargetItem || dropTargetItem.dataset.id === draggedTaskId) {
+                    // Dropped outside a valid target or on itself
+                    draggedTaskId = null;
+                    draggedElement = null;
+                    ghostElement = null;
+                    return;
+                }
+
+                const droppedOnTaskId = dropTargetItem.dataset.id;
+                const draggedTaskIndex = tasks.findIndex(t => t.id === draggedTaskId);
+                const droppedOnTaskIndex = tasks.findIndex(t => t.id === droppedOnTaskId);
+
+                if (draggedTaskIndex === -1 || droppedOnTaskIndex === -1) {
+                    draggedTaskId = null;
+                    draggedElement = null;
+                    ghostElement = null;
+                    return;
+                }
+
+                // Ensure we are only reordering active tasks
+                if (tasks[draggedTaskIndex].completed || tasks[droppedOnTaskIndex].completed) {
+                    showMessageBox('فقط وظایف فعال قابل جابجایی هستند.', 'info');
+                    draggedTaskId = null;
+                    draggedElement = null;
+                    ghostElement = null;
+                    return;
+                }
+
+                // Reorder the tasks array
+                const [draggedTask] = tasks.splice(draggedTaskIndex, 1);
+                let newIndex = tasks.findIndex(t => t.id === droppedOnTaskId);
+
+                // Adjust index based on where it was dropped (above or below)
+                const boundingBox = dropTargetItem.getBoundingClientRect();
+                const offset = touch.clientY - boundingBox.top;
+                if (offset > boundingBox.height / 2) {
+                    newIndex++; // Drop below the target
+                }
+
+                tasks.splice(newIndex, 0, draggedTask);
+
+                saveToLocalStorage();
+                renderTasks(); // Re-render to reflect new order
+
+                draggedTaskId = null;
+                draggedElement = null;
+                ghostElement = null;
+            }
+        });
+
 
         // --- Theme Toggle Logic ---
         function applyTheme(theme) {
@@ -732,4 +874,4 @@
         };
     </script>
 </body>
-</html>
+</html
