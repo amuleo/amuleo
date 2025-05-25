@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت وظایف گیمیفای شده</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom scrollbar for task list */
+        .task-list-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .task-list-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .task-list-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .task-list-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Dark mode scrollbar */
+        .dark .task-list-container::-webkit-scrollbar-track {
+            background: #333;
+        }
+        .dark .task-list-container::-webkit-scrollbar-thumb {
+            background: #666;
+        }
+        .dark .task-list-container::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+
+        /* Styles for drag and drop feedback */
+        .dragging {
+            opacity: 0.5;
+            border: 2px dashed #3B82F6; /* Blue dashed border */
+        }
+        .drop-target {
+            border-top: 2px solid #3B82F6; /* Blue line above the drop target */
+        }
+
+        /* Base font for the entire body */
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            direction: rtl; /* Ensure RTL direction for the entire body */
+        }
+
+        /* Modal container styles */
+        .modal-box {
+            height: 75vh; /* Dynamic height: 3/4 of viewport height */
+            max-height: 400px; /* Maximum height for modal content */
+        }
+
+        /* Inner scrollable content area */
+        .modal-scrollable-content {
+            flex-grow: 1; /* Allows content to take available space */
+            overflow-y: auto; /* Enable vertical scroll */
+            padding-left: 1rem; /* Adjust padding for scrollbar */
+            padding-right: 1rem;
+        }
+    </style>
+</head>
+<body class="p-4 flex items-center justify-center min-h-screen bg-f0f2f5 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+    <div class="container bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 md:p-8 w-full relative">
+        <div class="absolute top-4 right-4 md:top-6 md:right-6 z-10">
+            <button id="menuBtn" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 100-2 1 1 0 000 2zm0 7a1 1 0 100-2 1 1 0 000 2zm0 7a1 1 0 100-2 1 1 0 000 2z"></path>
+                </svg>
+            </button>
+            <div id="menuDropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg py-1 hidden z-20">
+                <a href="#" id="helpMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">راهنما</a>
+                <a href="#" id="aboutMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">درباره</a>
+            </div>
+        </div>
+
+        <button id="themeToggleBtn" class="absolute top-4 left-4 md:top-6 md:left-6 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out cursor-default">
+            <svg id="themeIcon" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.325 6.675l-.707-.707M6.318 6.318l-.707-.707m12.728 0l-.707.707M6.318 17.682l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+        </button>
+
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0">مدیریت وظایف گیمیفای شده</h1>
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">امتیاز: <span id="points" class="text-green-600 dark:text-green-400">0</span></div>
+                <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">سطح: <span id="level" class="text-blue-600 dark:text-blue-400">1</span></div>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">پیشرفت شما به سطح بعدی:</h2>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4">
+                <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-4 rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
+            </div>
+            <p id="progressText" class="text-sm text-gray-500 dark:text-gray-400 mt-1 text-left">0%</p>
+        </div>
+
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">دستاوردها:</h2>
+            <div id="achievementsList" class="flex flex-wrap gap-3">
+                <p id="noAchievementsMessage" class="text-gray-500 dark:text-gray-400">هنوز دستاوردی کسب نشده است.</p>
+            </div>
+        </div>
+
+        <div class="mb-8 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg shadow-sm">
+            <h2 class="text-2xl font-semibold text-blue-800 dark:text-blue-200 mb-4">افزودن وظیفه جدید</h2>
+            <div class="flex flex-col md:flex-row gap-4">
+                <input type="text" id="taskInput" placeholder="نام وظیفه را وارد کنید..."
+                       class="flex-grow p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12">
+                <select id="importanceSelect"
+                        class="p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12">
+                    <option value="important">مهم</option>
+                    <option value="normal" selected>غیر مهم</option> </select>
+                <button id="addTaskBtn"
+                        class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 text-lg">
+                    افزودن وظیفه
+                </button>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">وظایف فعال</h2>
+            <div id="activeTaskList" class="task-list-container overflow-y-auto max-h-96 pr-2">
+                </div>
+        </div>
+
+        <div class="mt-8">
+            <button id="toggleCompletedTasksBtn" class="w-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center justify-between">
+                <span>وظایف انجام شده</span>
+                <svg id="toggleIcon" class="h-5 w-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div id="completedTasksContainer" class="hidden mt-4 task-list-container overflow-y-auto max-h-96 pr-2">
+                </div>
+        </div>
+    </div>
+
+    <div id="helpModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box">
+            <h3 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">راهنما</h3>
+            <div id="helpModalContent" class="modal-scrollable-content text-justify text-sm leading-relaxed">
+                </div>
+            <button id="closeHelpModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="aboutModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box">
+            <h3 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">درباره</h3>
+            <div id="aboutModalContent" class="modal-scrollable-content text-justify text-sm leading-relaxed">
+                <p class="mb-3">این برنامه برای کمک به مدیریت وظایف و افزایش انگیزه از طریق گیمیفیکیشن طراحی شده است.</p>
+                <p class="mb-3">تمامی حقوق متعلق به عمو لئو است.</p>
+                <p class="mb-3">نسخه: 1.0.0</p>
+            </div>
+            <button id="closeAboutModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Task data structure
+        let tasks = [];
+        let points = 0;
+        let level = 1;
+        const pointsPerNormalTask = 10;
+        const pointsPerImportantTask = 25;
+        const pointsPerLevel = 100; // Points required for each level up
+
+        // Achievement data
+        const achievementsData = [
+            { level: 1, name: 'شروع کننده', icon: '🌟' },
+            { level: 2, name: 'عادی', icon: '✨' },
+            { level: 3, name: 'متوسط', icon: '💪' },
+            { level: 4, name: 'پیشرفته', icon: '🚀' },
+            { level: 5, name: 'استاد وظایف', icon: '🏆' },
+            { level: 6, name: 'قهرمان بهره‌وری', icon: '👑' },
+            { level: 7, name: 'کمال‌گرا', icon: '💎' },
+            { level: 8, name: 'سلطان نظم', icon: '🏰' },
+            { level: 9, name: 'افسانه', icon: '✨' },
+            { level: 10, name: 'ابرقهرمان OCD', icon: '🦸‍♂️' },
+            // Add more levels and achievements as needed
+        ];
+
+        // DOM Elements
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const menuBtn = document.getElementById('menuBtn');
+        const menuDropdown = document.getElementById('menuDropdown');
+        const helpMenuItem = document.getElementById('helpMenuItem');
+        const aboutMenuItem = document.getElementById('aboutMenuItem');
+        const helpModal = document.getElementById('helpModal');
+        const helpModalContent = document.getElementById('helpModalContent'); // Reference to the content div
+        const aboutModal = document.getElementById('aboutModal');
+        const closeHelpModalBtn = document.getElementById('closeHelpModalBtn');
+        const closeAboutModalBtn = document.getElementById('closeAboutModalBtn');
+
+        const taskInput = document.getElementById('taskInput');
+        const importanceSelect = document.getElementById('importanceSelect');
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        const activeTaskList = document.getElementById('activeTaskList');
+        const completedTasksContainer = document.getElementById('completedTasksContainer');
+        const toggleCompletedTasksBtn = document.getElementById('toggleCompletedTasksBtn');
+        const toggleIcon = document.getElementById('toggleIcon');
+        const pointsSpan = document.getElementById('points');
+        const levelSpan = document.getElementById('level');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const noAchievementsMessage = document.getElementById('noAchievementsMessage');
+
+        // Variable to hold the ID of the task being dragged
+        let draggedTaskId = null;
+
+        // Function to display a custom message box instead of alert()
+        function showMessageBox(message, type = 'info') {
+            const messageBox = document.createElement('div');
+            // Dynamically set classes based on theme preference
+            let bgColorClass = '';
+            if (type === 'info') {
+                bgColorClass = 'bg-blue-500 dark:bg-blue-700';
+            } else if (type === 'success') {
+                bgColorClass = 'bg-green-500 dark:bg-green-700';
+            } else if (type === 'error') {
+                bgColorClass = 'bg-red-500 dark:bg-red-700';
+            }
+            messageBox.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg text-white z-50 transition-all duration-300 transform translate-x-full opacity-0 ${bgColorClass}`;
+            messageBox.textContent = message;
+            document.body.appendChild(messageBox);
+
+            // Animate in
+            setTimeout(() => {
+                messageBox.classList.remove('translate-x-full', 'opacity-0');
+                messageBox.classList.add('translate-x-0', 'opacity-100');
+            }, 100);
+
+            // Animate out and remove
+            setTimeout(() => {
+                messageBox.classList.remove('translate-x-0', 'opacity-100');
+                messageBox.classList.add('translate-x-full', 'opacity-0');
+                messageBox.addEventListener('transitionend', () => messageBox.remove());
+            }, 3000);
+        }
+
+        // Function to update gamification display
+        function updateGamificationDisplay() {
+            pointsSpan.textContent = points;
+            levelSpan.textContent = level;
+
+            const currentLevelPoints = (level - 1) * pointsPerLevel;
+            const pointsIntoCurrentLevel = points - currentLevelPoints;
+            const progressPercentage = Math.min(100, (pointsIntoCurrentLevel / pointsPerLevel) * 100);
+
+            progressBar.style.width = `${progressPercentage}%`;
+            progressText.textContent = `${Math.round(progressPercentage)}% پیشرفت به سطح ${level + 1}`;
+
+            // Check for level up
+            while (points >= level * pointsPerLevel) {
+                level++;
+                showMessageBox(`تبریک! شما به سطح ${level} رسیدید!`, 'success');
+                updateGamificationDisplay(); // Recalculate progress for new level
+            }
+            renderAchievements(); // Call renderAchievements here
+        }
+
+        // Function to save tasks, points, and level to Local Storage
+        function saveToLocalStorage() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            localStorage.setItem('points', points);
+            localStorage.setItem('level', level);
+            console.log("Tasks, points, and level saved to Local Storage.");
+        }
+
+        // Function to load tasks, points, and level from Local Storage
+        function loadFromLocalStorage() {
+            const storedTasks = localStorage.getItem('tasks');
+            const storedPoints = localStorage.getItem('points');
+            const storedLevel = localStorage.getItem('level');
+
+            if (storedTasks) {
+                tasks = JSON.parse(storedTasks);
+            }
+            if (storedPoints) {
+                points = parseInt(storedPoints, 10);
+            }
+            if (storedLevel) {
+                level = parseInt(storedLevel, 10);
+            }
+            renderTasks(); // Render tasks immediately after loading
+        }
+
+        // Function to create a task item HTML element
+        function createTaskElement(task) {
+            const taskItem = document.createElement('div');
+            // Apply dark mode classes based on task status and importance
+            taskItem.className = `task-item flex items-center justify-between p-4 mb-3 rounded-lg shadow-sm transition-all duration-300 ease-in-out
+                                ${task.completed ? 'bg-green-100 dark:bg-green-800 border-l-4 border-green-500 dark:border-green-600 line-through text-gray-500 dark:text-gray-400' :
+                                task.importance === 'important' ? 'bg-red-50 dark:bg-red-900 border-l-4 border-red-500 dark:border-red-600' :
+                                'bg-gray-50 dark:bg-gray-700 border-l-4 border-gray-300 dark:border-gray-600'}`;
+            taskItem.dataset.id = task.id;
+            taskItem.draggable = !task.completed; // Only active tasks are draggable
+
+            taskItem.innerHTML = `
+                <div class="flex items-center flex-grow">
+                    <input type="checkbox" data-id="${task.id}" ${task.completed ? 'checked' : ''}
+                        class="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-400 rounded focus:ring-blue-500 dark:focus:ring-blue-300 cursor-pointer">
+                    <span class="task-name mr-3 text-lg font-medium ${task.completed ? 'text-gray-500 dark:text-gray-400' : 'text-gray-800 dark:text-gray-100'}">
+                        ${task.name}
+                    </span>
+                    <input type="text" class="edit-task-input hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 flex-grow bg-white dark:bg-gray-700 h-12" value="${task.name}">
+                    <span class="task-importance-display mr-3 text-sm px-2 py-1 rounded-full
+                        ${task.importance === 'important' ? 'bg-red-200 dark:bg-red-700 text-red-800 dark:text-red-200' : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200'}">
+                        ${task.importance === 'important' ? 'مهم' : 'غیر مهم'}
+                    </span>
+                    <select class="edit-importance-select hidden mr-3 p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12">
+                        <option value="important" ${task.importance === 'important' ? 'selected' : ''}>مهم</option>
+                        <option value="normal" ${task.importance === 'normal' ? 'selected' : ''}>غیر مهم</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <button data-id="${task.id}" data-action="edit"
+                        class="edit-btn bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 ${task.completed ? 'hidden' : ''}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.38-2.828-2.829z" />
+                        </svg>
+                    </button>
+                    <button data-id="${task.id}" data-action="save"
+                        class="save-btn bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <button data-id="${task.id}" data-action="cancel"
+                        class="cancel-btn bg-gray-500 hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <button data-id="${task.id}" data-action="delete"
+                        class="delete-btn bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm1 3a1 1 0 100 2h4a1 1 0 100-2H8z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            `;
+            return taskItem;
+        }
+
+        // Function to render tasks
+        function renderTasks() {
+            activeTaskList.innerHTML = ''; // Clear existing active tasks
+            completedTasksContainer.innerHTML = ''; // Clear existing completed tasks
+
+            const activeTasks = tasks.filter(task => !task.completed);
+            const completedTasks = tasks.filter(task => task.completed);
+
+            if (activeTasks.length === 0) {
+                // Create a dynamic "no active tasks" item
+                const noActiveItem = document.createElement('div');
+                noActiveItem.id = 'dynamicNoActiveMessage'; // Add an ID to easily find/remove it
+                noActiveItem.className = 'text-gray-500 dark:text-gray-400 text-center py-4'; // Apply styling
+                noActiveItem.textContent = 'اولین وظیفه فعال خود را ایجاد کنید'; // User-requested text
+                activeTaskList.appendChild(noActiveItem);
+            } else {
+                // If there are active tasks, ensure the dynamic "no tasks" message is removed
+                const existingNoMessage = document.getElementById('dynamicNoActiveMessage');
+                if (existingNoMessage) {
+                    existingNoMessage.remove();
+                }
+                activeTasks.forEach(task => {
+                    activeTaskList.appendChild(createTaskElement(task));
+                });
+            }
+
+            if (completedTasks.length === 0) {
+                // Create a dynamic "no completed tasks" item
+                const noCompletedItem = document.createElement('div');
+                noCompletedItem.id = 'dynamicNoCompletedMessage'; // Add an ID to easily find/remove it
+                noCompletedItem.className = 'text-gray-500 dark:text-gray-400 text-center py-4'; // Apply styling
+                noCompletedItem.textContent = 'هیچ وظیفه‌ای انجام نشده است.';
+                completedTasksContainer.appendChild(noCompletedItem);
+            } else {
+                // If there are completed tasks, ensure the dynamic "no tasks" message is removed
+                const existingNoMessage = document.getElementById('dynamicNoCompletedMessage');
+                if (existingNoMessage) {
+                    existingNoMessage.remove();
+                }
+                completedTasks.forEach(task => {
+                    completedTasksContainer.appendChild(createTaskElement(task));
+                });
+            }
+            updateGamificationDisplay();
+        }
+
+        // Function to render achievements
+        function renderAchievements() {
+            achievementsList.innerHTML = ''; // Clear existing achievements
+            const unlockedAchievements = achievementsData.filter(achievement => achievement.level <= level);
+
+            if (unlockedAchievements.length === 0) {
+                noAchievementsMessage.style.display = 'block';
+            } else {
+                noAchievementsMessage.style.display = 'none';
+                unlockedAchievements.forEach(achievement => {
+                    const achievementItem = document.createElement('div');
+                    // Apply dark mode classes for achievement items
+                    achievementItem.className = `flex items-center bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-full px-4 py-2 shadow-sm text-gray-700 dark:text-gray-200 text-sm`;
+                    achievementItem.innerHTML = `<span class="text-xl mr-2">${achievement.icon}</span><span>${achievement.name} (سطح ${achievement.level})</span>`;
+                    achievementsList.appendChild(achievementItem);
+                });
+            }
+        }
+
+        // Add Task
+        addTaskBtn.addEventListener('click', () => {
+            const taskName = taskInput.value.trim();
+            const importance = importanceSelect.value;
+
+            if (taskName) {
+                const newTask = {
+                    id: Date.now().toString(), // Unique ID for the task
+                    name: taskName,
+                    completed: false,
+                    importance: importance
+                };
+                tasks.push(newTask);
+                taskInput.value = ''; // Clear input
+                saveToLocalStorage(); // Save after adding
+                renderTasks(); // Re-render tasks after adding
+                showMessageBox('وظیفه جدید اضافه شد!', 'success');
+            } else {
+                showMessageBox('لطفاً نام وظیفه را وارد کنید.', 'info');
+            }
+        });
+
+        // Toggle Completed Tasks Section
+        toggleCompletedTasksBtn.addEventListener('click', () => {
+            completedTasksContainer.classList.toggle('hidden');
+            toggleIcon.classList.toggle('rotate-180'); // Rotate arrow icon
+        });
+
+        // Handle Task Actions (Toggle Complete, Delete, Edit, Save, Cancel)
+        activeTaskList.addEventListener('click', handleTaskActions);
+        completedTasksContainer.addEventListener('click', handleTaskActions);
+
+        function handleTaskActions(e) {
+            const target = e.target;
+            const taskId = target.dataset.id || target.closest('button')?.dataset.id || target.closest('input[type="checkbox"]')?.dataset.id;
+            const action = target.dataset.action || target.closest('button')?.dataset.action;
+
+            if (!taskId) return;
+
+            const taskItemElement = document.querySelector(`.task-item[data-id="${taskId}"]`);
+            const taskNameSpan = taskItemElement.querySelector('.task-name');
+            const editInput = taskItemElement.querySelector('.edit-task-input');
+            const importanceDisplaySpan = taskItemElement.querySelector('.task-importance-display');
+            const editImportanceSelect = taskItemElement.querySelector('.edit-importance-select');
+            const editBtn = taskItemElement.querySelector('.edit-btn');
+            const saveBtn = taskItemElement.querySelector('.save-btn');
+            const cancelBtn = taskItemElement.querySelector('.cancel-btn');
+            const deleteBtn = taskItemElement.querySelector('.delete-btn');
+            const checkbox = taskItemElement.querySelector('input[type="checkbox"]');
+
+            if (target.type === 'checkbox') {
+                const taskIndex = tasks.findIndex(t => t.id === taskId);
+                if (taskIndex > -1) {
+                    tasks[taskIndex].completed = target.checked;
+                    if (target.checked) {
+                        // Add points for completing a task
+                        if (tasks[taskIndex].importance === 'important') {
+                            points += pointsPerImportantTask;
+                            showMessageBox(`وظیفه مهم تکمیل شد! +${pointsPerImportantTask} امتیاز`, 'success');
+                        } else {
+                            points += pointsPerNormalTask;
+                            showMessageBox(`وظیفه تکمیل شد! +${pointsPerNormalTask} امتیاز`, 'success');
+                        }
+                    } else {
+                        // Deduct points if unchecked (optional, but good for gamification)
+                        if (tasks[taskIndex].importance === 'important') {
+                            points = Math.max(0, points - pointsPerImportantTask);
+                            showMessageBox(`وظیفه مهم بازنشانی شد! -${pointsPerImportantTask} امتیاز`, 'info');
+                        } else {
+                            points = Math.max(0, points - pointsPerNormalTask);
+                            points = Math.max(0, points); // Ensure points don't go negative
+                            showMessageBox(`وظیفه بازنشانی شد! -${pointsPerNormalTask} امتیاز`, 'info');
+                        }
+                    }
+                    saveToLocalStorage(); // Save after toggling
+                    renderTasks(); // Re-render tasks after toggling
+                }
+            } else if (action === 'delete') {
+                tasks = tasks.filter(t => t.id !== taskId);
+                saveToLocalStorage(); // Save after deleting
+                renderTasks(); // Re-render tasks after deleting
+                showMessageBox('وظیفه حذف شد.', 'info');
+            } else if (action === 'edit') {
+                taskNameSpan.classList.add('hidden');
+                importanceDisplaySpan.classList.add('hidden'); // Hide importance display span
+                editInput.classList.remove('hidden');
+                editImportanceSelect.classList.remove('hidden'); // Show importance select
+                editInput.focus();
+                editInput.value = taskNameSpan.textContent.trim(); // Set input value to current task name
+                editImportanceSelect.value = tasks.find(t => t.id === taskId).importance; // Set select value
+
+                editBtn.classList.add('hidden');
+                deleteBtn.classList.add('hidden');
+                checkbox.disabled = true; // Disable checkbox during edit
+                saveBtn.classList.remove('hidden');
+                cancelBtn.classList.remove('hidden');
+            } else if (action === 'save') {
+                const newTaskName = editInput.value.trim();
+                const newImportance = editImportanceSelect.value; // Get new importance
+
+                if (newTaskName) {
+                    const taskIndex = tasks.findIndex(t => t.id === taskId);
+                    if (taskIndex > -1) {
+                        tasks[taskIndex].name = newTaskName;
+                        tasks[taskIndex].importance = newImportance; // Update importance
+                        saveToLocalStorage();
+                        renderTasks(); // Re-render to show updated name and importance
+                        showMessageBox('وظیفه با موفقیت ویرایش شد!', 'success');
+                    }
+                } else {
+                    showMessageBox('نام وظیفه نمی‌تواند خالی باشد.', 'info');
+                }
+            } else if (action === 'cancel') {
+                // Revert to original state without saving changes
+                renderTasks(); // Re-render to revert any changes
+                showMessageBox('ویرایش وظیفه لغو شد.', 'info');
+            }
+        }
+
+        // --- Drag and Drop Logic ---
+        activeTaskList.addEventListener('dragstart', (e) => {
+            const taskItem = e.target.closest('.task-item');
+            if (taskItem && !taskItem.classList.contains('bg-green-100')) { // Only active tasks
+                draggedTaskId = taskItem.dataset.id;
+                e.dataTransfer.setData('text/plain', draggedTaskId);
+                setTimeout(() => {
+                    taskItem.classList.add('dragging');
+                }, 0); // Add class after data is set
+            }
+        });
+
+        activeTaskList.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Allow drop
+            const targetItem = e.target.closest('.task-item');
+            if (targetItem && targetItem.dataset.id !== draggedTaskId && !targetItem.classList.contains('bg-green-100')) {
+                // Remove drop-target from all elements
+                document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+
+                // Add drop-target class to the element currently being dragged over
+                const boundingBox = targetItem.getBoundingClientRect();
+                const offset = e.clientY - boundingBox.top;
+
+                if (offset < boundingBox.height / 2) {
+                    targetItem.classList.add('drop-target'); // Indicate drop above
+                } else {
+                    targetItem.classList.add('drop-target'); // Indicate drop below (for simplicity, just highlight the target)
+                }
+            }
+        });
+
+        activeTaskList.addEventListener('dragleave', (e) => {
+            const targetItem = e.target.closest('.task-item');
+            if (targetItem) {
+                targetItem.classList.remove('drop-target');
+            }
+        });
+
+        activeTaskList.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const dropTargetItem = e.target.closest('.task-item');
+            if (!dropTargetItem) {
+                // If dropped outside any task item, just remove feedback
+                document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+                document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+                draggedTaskId = null;
+                return;
+            }
+
+            const droppedOnTaskId = dropTargetItem.dataset.id;
+            const draggedTaskIndex = tasks.findIndex(t => t.id === draggedTaskId);
+            const droppedOnTaskIndex = tasks.findIndex(t => t.id === droppedOnTaskId);
+
+            if (draggedTaskIndex === -1 || droppedOnTaskIndex === -1 || draggedTaskId === droppedOnTaskId) {
+                // Invalid drag or dropping on itself
+                document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+                document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+                draggedTaskId = null;
+                return;
+            }
+
+            // Ensure we are only reordering active tasks
+            if (tasks[draggedTaskIndex].completed || tasks[droppedOnTaskIndex].completed) {
+                showMessageBox('فقط وظایف فعال قابل جابجایی هستند.', 'info');
+                document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+                document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+                draggedTaskId = null;
+                return;
+            }
+
+            // Reorder the tasks array
+            const [draggedTask] = tasks.splice(draggedTaskIndex, 1);
+            let newIndex = tasks.findIndex(t => t.id === droppedOnTaskId);
+
+            // Adjust index based on where it was dropped (above or below)
+            const boundingBox = dropTargetItem.getBoundingClientRect();
+            const offset = e.clientY - boundingBox.top;
+            if (offset > boundingBox.height / 2) {
+                newIndex++; // Drop below the target
+            }
+
+            tasks.splice(newIndex, 0, draggedTask);
+
+            saveToLocalStorage();
+            renderTasks(); // Re-render to reflect new order
+
+            document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+            document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+            draggedTaskId = null;
+        });
+
+        activeTaskList.addEventListener('dragend', (e) => {
+            // Clean up dragging classes regardless of drop success
+            document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+            document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+            draggedTaskId = null;
+        });
+
+        // --- Theme Toggle Logic ---
+        function applyTheme(theme) {
+            const htmlElement = document.documentElement;
+            if (theme === 'dark') {
+                htmlElement.classList.add('dark');
+                // Moon icon for dark mode
+                themeIcon.innerHTML = `<path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>`;
+            } else {
+                htmlElement.classList.remove('dark');
+                // Sun icon for light mode
+                themeIcon.innerHTML = `<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.325 6.675l-.707-.707M6.318 6.318l-.707-.707m12.728 0l-.707.707M6.318 17.682l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>`;
+            }
+        }
+
+        // Initialize theme on load and listen for system theme changes
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                applyTheme('dark');
+            } else {
+                applyTheme('light');
+            }
+
+            // Listen for changes in the system's preferred color scheme
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                const newSystemTheme = e.matches ? 'dark' : 'light';
+                // Always apply the system theme if no specific theme is saved by the user
+                // or if the user wants to follow system theme
+                applyTheme(newSystemTheme);
+            });
+        }
+
+        // --- Menu and Modal Logic ---
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent click from bubbling to window and closing dropdown
+            menuDropdown.classList.toggle('hidden');
+        });
+
+        helpMenuItem.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Dynamically update help modal content with current point values
+            helpModalContent.innerHTML = `
+                <p class="mb-3">به سیستم مدیریت وظایف گیمیفای شده خوش آمدید! این برنامه به شما کمک می‌کند تا با انجام وظایف، امتیاز کسب کرده و به سطوح بالاتر دست یابید.</p>
+                <p class="mb-3 font-bold">نحوه کار با برنامه:</p>
+                <ul class="list-disc list-inside mb-3">
+                    <li>**افزودن وظیفه:** در بخش "افزودن وظیفه جدید"، نام وظیفه را وارد کرده و اهمیت آن (مهم/غیر مهم) را انتخاب کنید. وظایف مهم امتیاز بیشتری دارند.</li>
+                    <li>**تغییر اولویت:** وظایف فعال را می‌توانید با کشیدن و رها کردن (Drag & Drop) جابجا کنید تا اولویت آن‌ها تغییر کند.</li>
+                    <li>**تکمیل وظیفه:** با زدن تیک کنار هر وظیفه، آن را به عنوان تکمیل شده علامت‌گذاری کنید. با این کار امتیاز کسب می‌کنید و وظیفه به بخش "وظایف انجام شده" منتقل می‌شود.</li>
+                    <li>**ویرایش وظیفه:** روی دکمه مداد کنار وظیفه کلیک کنید تا بتوانید نام و اهمیت آن را ویرایش کنید.</li>
+                    <li>**حذف وظیفه:** با کلیک روی دکمه سطل زباله، وظیفه را حذف کنید.</li>
+                    <li>**وظایف انجام شده:** برای مشاهده یا پنهان کردن وظایف تکمیل شده، روی دکمه "وظایف انجام شده" کلیک کنید.</li>
+                </ul>
+                <p class="mb-3 font-bold">قوانین گیمیفیکیشن و سطوح:</p>
+                <ul class="list-disc list-inside mb-3">
+                    <li>**امتیاز:**
+                        <ul>
+                            <li>وظایف عادی: ${pointsPerNormalTask} امتیاز</li>
+                            <li>وظایف مهم: ${pointsPerImportantTask} امتیاز</li>
+                        </ul>
+                    </li>
+                    <li>**سطوح:** با کسب هر ${pointsPerLevel} امتیاز، به سطح بعدی ارتقا پیدا می‌کنید.</li>
+                    <li>**دستاوردها:** با رسیدن به هر سطح جدید، یک مدال دستاورد کسب می‌کنید که در بخش "دستاوردها" نمایش داده می‌شود.</li>
+                </ul>
+                <p>هدف این برنامه ایجاد انگیزه و کمک به شما در سازماندهی بهتر کارهایتان است. موفق باشید!</p>
+            `;
+            helpModal.classList.remove('hidden');
+            menuDropdown.classList.add('hidden'); // Hide dropdown after selecting
+        });
+
+        aboutMenuItem.addEventListener('click', (e) => {
+            e.preventDefault();
+            aboutModal.classList.remove('hidden');
+            menuDropdown.classList.add('hidden'); // Hide dropdown after selecting
+        });
+
+        closeHelpModalBtn.addEventListener('click', () => {
+            helpModal.classList.add('hidden');
+        });
+
+        closeAboutModalBtn.addEventListener('click', () => {
+            aboutModal.classList.add('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', (e) => {
+            if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+                menuDropdown.classList.add('hidden');
+            }
+        });
+
+        // Load data from Local Storage and initialize theme when the window loads
+        window.onload = () => {
+            loadFromLocalStorage();
+            initializeTheme();
+        };
+    </script>
+</body>
+</html>
