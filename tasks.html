@@ -82,7 +82,7 @@
         .points-gain-feedback {
             position: absolute;
             font-weight: bold;
-            color: #22C55E; /* رنگ سبز، ثابت می‌ماند */
+            color: #22C55E; /* رنگ سبز, ثابت می‌ماند */
             animation: fadeOutUp 1.5s forwards;
             pointer-events: none; /* اطمینان از عدم مسدود کردن کلیک‌ها */
             z-index: 20;
@@ -150,6 +150,16 @@
         .dark input[type="text"]:focus, .dark input[type="number"]:focus, .dark select:focus {
             box-shadow: 0 0 0 2px var(--theme-input-focus-ring); /* استفاده از رنگ حلقه فوکوس خاص حالت تاریک */
         }
+        .clickable-item {
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .clickable-item:hover {
+            background-color: rgba(0, 0, 0, 0.05); /* Light hover for light mode */
+        }
+        .dark .clickable-item:hover {
+            background-color: rgba(255, 255, 255, 0.05); /* Dark hover for dark mode */
+        }
     </style>
 </head>
 <body class="p-4 flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
@@ -183,7 +193,7 @@
                     <span class="text-xl mr-2">💰</span>
                     <span class="text-base sm:text-lg font-semibold">زی پوینت: <span id="zPoint" class="text-yellow-800 dark:text-yellow-200">0</span></span>
                 </div>
-                <div class="flex items-center bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full shadow-sm">
+                <div class="flex items-center bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full shadow-sm clickable-item" id="currentLevelDisplay">
                     <span class="text-xl mr-2">🏆</span>
                     <span class="text-base sm:text-lg font-semibold">سطح: <span id="level" class="text-blue-800 dark:text-blue-200">1</span></span>
                 </div>
@@ -233,6 +243,9 @@
             <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">وظایف فعال</h2>
             <div id="activeTaskList" class="task-list-container overflow-y-auto max-h-96 pr-2">
                 </div>
+            <button id="showMoreActiveTasksBtn" class="mt-4 w-full bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out hidden">
+                نمایش بیشتر وظایف فعال
+            </button>
         </div>
 
         <div class="mt-8 px-2 md:px-0">
@@ -242,11 +255,14 @@
             </button>
             <div id="completedTasksContainer" class="hidden mt-4 task-list-container overflow-y-auto max-h-96 pr-2">
                 </div>
+            <button id="showMoreCompletedTasksBtn" class="mt-4 w-full bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out hidden">
+                نمایش بیشتر وظایف انجام شده
+            </button>
         </div>
     </div>
 
     <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100 transition-transform duration-300 transform scale-95 opacity-0" id="welcomeModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700 text-center">به زی تسک خوش آمدید!</h3>
             <p class="mb-4 text-center text-gray-700 dark:text-gray-300">لطفاً نام خود را وارد کنید تا شروع کنیم:</p>
             <input type="text" id="userNameInput" placeholder="نام شما..."
@@ -259,9 +275,9 @@
     </div>
 
     <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="profileModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">پروفایل کاربری</h3>
-            <div id="profileModalContent" class="modal-scrollable-content text-justify text-sm leading-relaxed">
+            <div id="profileModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
                 </div>
             <button id="closeProfileModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -270,9 +286,9 @@
     </div>
 
     <div id="helpModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="helpModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">راهنما</h3>
-            <div id="helpModalContent" class="modal-scrollable-content text-justify text-sm leading-relaxed">
+            <div id="helpModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
                 </div>
             <button id="closeHelpModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -281,9 +297,9 @@
     </div>
 
     <div id="aboutModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="aboutModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">درباره</h3>
-            <div id="aboutModalContent" class="modal-scrollable-content text-justify text-sm leading-relaxed">
+            <div id="aboutModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
                 <p class="mb-3">این برنامه برای کمک به مدیریت وظایف و افزایش انگیزه از طریق گیمیفیکیشن طراحی شده است.</p>
                 <p class="mb-3">تمامی حقوق متعلق به عمو لئو است.</p>
                 <p class="mb-3">نسخه: 1.0.0</p>
@@ -295,7 +311,7 @@
     </div>
 
     <div id="backupModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="backupModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">پشتیبان‌گیری و بازیابی داده‌ها</h3>
             <div class="modal-scrollable-content flex flex-col gap-4">
                 <p class="text-sm text-gray-700 dark:text-gray-300">برای پشتیبان‌گیری، دکمه "ذخیره داده‌ها" را بزنید تا فایل پشتیبان دانلود شود. برای بازیابی، فایل پشتیبان را انتخاب کرده و "بارگذاری از فایل" را بزنید.</p>
@@ -323,7 +339,7 @@
     </div>
 
     <div id="resetConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100 transition-transform duration-300 transform scale-95 opacity-0" id="resetConfirmModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">تأیید بازنشانی داده‌ها</h3>
             <p class="mb-6 text-sm">آیا مطمئن هستید که می‌خواهید تمامی داده‌های برنامه را حذف کنید؟ این عمل غیرقابل بازگشت است.</p>
             <div class="flex justify-end space-x-4 space-x-reverse">
@@ -335,6 +351,17 @@
                 </button>
             </div>
             <button id="closeResetModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="detailModalContent">
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700" id="detailModalTitle"></h3>
+            <div id="detailModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
+            </div>
+            <button id="closeDetailModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
@@ -355,6 +382,10 @@
         const pointsPerNormalTask = 10;
         const pointsPerImportantTask = 25;
         const MAX_CUSTOM_POINTS = 50; // جدید: حداکثر امتیاز برای وظایف سفارشی
+        const TASKS_PER_LOAD = 10; // تعداد وظایفی که در هر بار بارگذاری نمایش داده می‌شوند
+
+        let activeTasksDisplayedCount = TASKS_PER_LOAD;
+        let completedTasksDisplayedCount = TASKS_PER_LOAD;
 
         // تعریف کل امتیازات مورد نیاز برای رسیدن به هر سطح (سطح 1 صفر امتیاز است)
         // سطح 15 (سیگما) به 1500 امتیاز کل نیاز دارد
@@ -481,23 +512,23 @@
             { level: 7, name: 'فرمانده', icon: '🎖️', type: 'level' },
             { level: 8, name: 'سلطان', icon: '👑', type: 'level' },
             { level: 9, name: 'اژدها', icon: '🐉', type: 'level' },
-            { type: 'totalTasks', value: 10, name: 'ده وظیفه', icon: '✅' },
-            { type: 'totalTasks', value: 50, name: 'پنجاه وظیفه', icon: '💯' },
-            { type: 'importantTasks', value: 5, name: 'پنج وظیفه مهم', icon: '🚨' },
-            { type: 'importantTasks', value: 10, name: 'ده وظیفه مهم', icon: '🛑' },
-            { type: 'streak', value: 3, name: 'رشته سه روزه', icon: '🔥' },
-            { type: 'streak', value: 7, name: 'رشته هفت روزه', icon: '✨🔥' },
-            { type: 'streak', value: 14, name: 'رشته دو هفته‌ای', icon: '🗓️🔥' },
-            { type: 'streak', value: 30, name: 'رشته ماهانه', icon: '🗓️🗓️🔥' },
-            { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: '💯✅' },
-            { type: 'totalTasks', value: 250, name: 'دویست و پنجاه وظیفه', icon: '🌟💯' },
-            { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: '🏆💯' },
-            { type: 'importantTasks', value: 20, name: 'بیست وظیفه مهم', icon: '🛑🛑' },
-            { type: 'customTasks', value: 1, name: 'اولین وظیفه سفارشی', icon: '💡' },
-            { type: 'customTasks', value: 5, name: 'پنج وظیفه سفارشی', icon: '⚙️✅' },
-            { type: 'customTasks', value: 10, name: 'ده وظیفه سفارشی', icon: '⚙️💯' },
-            { type: 'points', value: 500, name: 'پانصد زی پوینت', icon: '💰' },
-            { type: 'points', value: 1000, name: 'هزار زی پوینت', icon: '💎💰' },
+            { type: 'totalTasks', value: 10, name: 'ده وظیفه', icon: '✅', description: 'با تکمیل ۱۰ وظیفه کسب می‌شود.' },
+            { type: 'totalTasks', value: 50, name: 'پنجاه وظیفه', icon: '💯', description: 'با تکمیل ۵۰ وظیفه کسب می‌شود.' },
+            { type: 'importantTasks', value: 5, name: 'پنج وظیفه مهم', icon: '🚨', description: 'با تکمیل ۵ وظیفه مهم کسب می‌شود.' },
+            { type: 'importantTasks', value: 10, name: 'ده وظیفه مهم', icon: '🛑', description: 'با تکمیل ۱۰ وظیفه مهم کسب می‌شود.' },
+            { type: 'streak', value: 3, name: 'رشته سه روزه', icon: '🔥', description: 'با تکمیل حداقل یک وظیفه در ۳ روز متوالی کسب می‌شود.' },
+            { type: 'streak', value: 7, name: 'رشته هفت روزه', icon: '✨🔥', description: 'با تکمیل حداقل یک وظیفه در ۷ روز متوالی کسب می‌شود.' },
+            { type: 'streak', value: 14, name: 'رشته دو هفته‌ای', icon: '🗓️🔥', description: 'با تکمیل حداقل یک وظیفه در ۱۴ روز متوالی کسب می‌شود.' },
+            { type: 'streak', value: 30, name: 'رشته ماهانه', icon: '🗓️🗓️🔥', description: 'با تکمیل حداقل یک وظیفه در ۳۰ روز متوالی کسب می‌شود.' },
+            { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: '💯✅', description: 'با تکمیل ۱۰۰ وظیفه کسب می‌شود.' },
+            { type: 'totalTasks', value: 250, name: 'دویست و پنجاه وظیفه', icon: '🌟💯', description: 'با تکمیل ۲۵۰ وظیفه کسب می‌شود.' },
+            { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: '🏆💯', description: 'با تکمیل ۵۰۰ وظیفه کسب می‌شود.' },
+            { type: 'importantTasks', value: 20, name: 'بیست وظیفه مهم', icon: '🛑🛑', description: 'با تکمیل ۲۰ وظیفه مهم کسب می‌شود.' },
+            { type: 'customTasks', value: 1, name: 'اولین وظیفه سفارشی', icon: '💡', description: 'با تکمیل اولین وظیفه با امتیاز سفارشی کسب می‌شود.' },
+            { type: 'customTasks', value: 5, name: 'پنج وظیفه سفارشی', icon: '⚙️✅', description: 'با تکمیل ۵ وظیفه با امتیاز سفارشی کسب می‌شود.' },
+            { type: 'customTasks', value: 10, name: 'ده وظیفه سفارشی', icon: '⚙️💯', description: 'با تکمیل ۱۰ وظیفه با امتیاز سفارشی کسب می‌شود.' },
+            { type: 'points', value: 500, name: 'پانصد زی پوینت', icon: '💰', description: 'با کسب ۵۰۰ زی پوینت کسب می‌شود.' },
+            { type: 'points', value: 1000, name: 'هزار زی پوینت', icon: '💎💰', description: 'با کسب ۱۰۰۰ زی پوینت کسب می‌شود.' },
             { level: 10, name: 'افسانه', icon: '✨', type: 'level' },
             { level: 11, name: 'جاودان', icon: '♾️', type: 'level' },
             { level: 12, name: 'خدایگان', icon: '⚡', type: 'level' },
@@ -519,18 +550,24 @@
         const resetMenuItem = document.getElementById('resetMenuItem');
 
         const welcomeModal = document.getElementById('welcomeModal');
+        const welcomeModalContent = document.getElementById('welcomeModalContent'); // Added ID for content div
         const userNameInput = document.getElementById('userNameInput');
         const startBtn = document.getElementById('startBtn');
 
         const profileModal = document.getElementById('profileModal');
-        const profileModalContent = document.getElementById('profileModalContent');
+        const profileModalContent = document.getElementById('profileModalContent'); // Added ID for content div
         const closeProfileModalBtn = document.getElementById('closeProfileModalBtn');
 
         const helpModal = document.getElementById('helpModal');
-        const helpModalContent = document.getElementById('helpModalContent');
+        const helpModalContent = document.getElementById('helpModalContent'); // Added ID for content div
+        const helpModalBody = document.getElementById('helpModalBody'); // Renamed to Body for consistency
         const aboutModal = document.getElementById('aboutModal');
+        const aboutModalContent = document.getElementById('aboutModalContent'); // Added ID for content div
+        const aboutModalBody = document.getElementById('aboutModalBody'); // Renamed to Body for consistency
         const backupModal = document.getElementById('backupModal');
+        const backupModalContent = document.getElementById('backupModalContent'); // Added ID for content div
         const resetConfirmModal = document.getElementById('resetConfirmModal');
+        const resetConfirmModalContent = document.getElementById('resetConfirmModalContent'); // Added ID for content div
         const closeHelpModalBtn = document.getElementById('closeHelpModalBtn');
         const closeAboutModalBtn = document.getElementById('closeAboutModalBtn');
         const closeBackupModalBtn = document.getElementById('closeBackupModalBtn');
@@ -541,6 +578,13 @@
         const exportDataBtn = document.getElementById('exportDataBtn');
         const importDataBtn = document.getElementById('importDataBtn');
         const selectedFileNameSpan = document.getElementById('selectedFileName');
+
+        // New Detail Modal Elements
+        const detailModal = document.getElementById('detailModal');
+        const detailModalContent = document.getElementById('detailModalContent');
+        const detailModalTitle = document.getElementById('detailModalTitle');
+        const detailModalBody = document.getElementById('detailModalBody'); // Renamed to Body for consistency
+        const closeDetailModalBtn = document.getElementById('closeDetailModalBtn');
 
 
         const taskInput = document.getElementById('taskInput');
@@ -553,6 +597,7 @@
         const toggleIcon = document.getElementById('toggleIcon');
         const zPointSpan = document.getElementById('zPoint'); // تغییر نام به zPointSpan
         const levelSpan = document.getElementById('level');
+        const currentLevelDisplay = document.getElementById('currentLevelDisplay'); // برای کلیک پذیری سطح فعلی
         const dailyStreakSpan = document.getElementById('dailyStreak');
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
@@ -560,6 +605,9 @@
         const achievementsList = document.getElementById('achievementsList');
         const addTaskSection = document.getElementById('addTaskSection'); // دریافت div بخش افزودن وظیفه
         const addTaskTitle = document.getElementById('addTaskTitle'); // دریافت عنوان بخش افزودن وظیفه
+
+        const showMoreActiveTasksBtn = document.getElementById('showMoreActiveTasksBtn');
+        const showMoreCompletedTasksBtn = document.getElementById('showMoreCompletedTasksBtn');
 
         const confettiContainer = document.getElementById('confettiContainer');
 
@@ -709,7 +757,7 @@
         // تابع برای به‌روزرسانی نمایش گیمیفیکیشن
         function updateGamificationDisplay() {
             zPointSpan.textContent = zPoint; // استفاده از zPoint
-
+            
             // محاسبه سطح فعلی بر اساس آستانه‌های امتیاز
             let newLevel = 1;
             for (let i = 0; i < levelPointsThresholds.length; i++) {
@@ -760,7 +808,7 @@
             applyLevelTheme(level); // اعمال تم برای سطح فعلی
         }
 
-        // تابع برای ذخیره وظایف، امتیازات، سطح، رشته و آخرین تاریخ تکمیل در Local Storage
+        // تابع برای ذخیره وظایف, امتیازات, سطح, رشته و آخرین تاریخ تکمیل در Local Storage
         function saveToLocalStorage() {
             localStorage.setItem('tasks', JSON.stringify(tasks));
             localStorage.setItem('zPoint', zPoint); // تغییر نام به zPoint
@@ -769,11 +817,9 @@
             localStorage.setItem('lastCompletionDate', lastCompletionDate); // ذخیره آخرین تاریخ تکمیل
             localStorage.setItem('totalCustomTasksCompleted', totalCustomTasksCompleted); // ذخیره شمارنده وظایف سفارشی
             localStorage.setItem('userName', userName); // ذخیره نام کاربر
-            console.log("وظایف، امتیازات، سطح، رشته، آخرین تاریخ تکمیل و نام کاربر در Local Storage ذخیره شدند.");
-            console.log("رشته روزانه ذخیره شده:", dailyStreak, "آخرین تاریخ تکمیل:", lastCompletionDate, "وظایف سفارشی تکمیل شده:", totalCustomTasksCompleted, "نام کاربر:", userName); // لاگ اشکال‌زدایی
         }
 
-        // تابع برای بارگذاری وظایف، امتیازات، سطح، رشته و آخرین تاریخ تکمیل از Local Storage
+        // تابع برای بارگذاری وظایف, امتیازات, سطح, رشته و آخرین تاریخ تکمیل از Local Storage
         function loadFromLocalStorage() {
             const storedTasks = localStorage.getItem('tasks');
             const storedZPoint = localStorage.getItem('zPoint'); // تغییر نام به zPoint
@@ -807,30 +853,24 @@
             } else {
                 lastCompletionDate = null; // به صراحت روی null تنظیم شود اگر پیدا نشد یا رشته 'null' بود
             }
-            console.log("رشته روزانه بارگذاری شده:", dailyStreak, "آخرین تاریخ تکمیل:", lastCompletionDate, "وظایف سفارشی تکمیل شده:", totalCustomTasksCompleted, "نام کاربر:", userName); // لاگ اشکال‌زدایی
 
 
             // بررسی و به‌روزرسانی رشته روزانه در بارگذاری
             const today = new Date().toDateString();
-            console.log("امروز:", today); // لاگ اشکال‌زدایی
 
             if (lastCompletionDate && lastCompletionDate !== today) {
                 const lastDate = new Date(lastCompletionDate);
                 const yesterday = new Date();
                 yesterday.setDate(yesterday.getDate() - 1);
-                console.log("تاریخ آخرین تکمیل (تجزیه شده):", lastDate.toDateString()); // لاگ اشکال‌زدایی
-                console.log("دیروز:", yesterday.toDateString()); // لاگ اشکال‌زدایی
 
                 if (lastDate.toDateString() === yesterday.toDateString()) {
-                    // اگر آخرین تکمیل دیروز نبود، رشته را بازنشانی کنید
+                    // اگر آخرین تکمیل دیروز نبود, رشته را بازنشانی کنید
                     dailyStreak = 0;
                     showMessageBox('رشته روزانه شما بازنشانی شد.', 'info');
-                    console.log("رشته در بارگذاری بازنشانی شد زیرا متوالی نبود."); // لاگ اشکال‌زدایی
                 }
             } else if (!lastCompletionDate) {
-                // اگر تاریخ آخرین تکمیل وجود نداشت، رشته 0 است
+                // اگر تاریخ آخرین تکمیل وجود نداشت, رشته 0 است
                 dailyStreak = 0;
-                console.log("رشته در بارگذاری بازنشانی شد زیرا تکمیل قبلی وجود نداشت."); // لاگ اشکال‌زدایی
             }
             saveToLocalStorage(); // ذخیره رشته به‌روز شده در صورت بازنشانی
             renderTasks(); // رندر وظایف بلافاصله پس از بارگذاری
@@ -903,7 +943,7 @@
                     <button data-id="${task.id}" data-action="delete"
                         class="delete-btn bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 text-white p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm1 3a1 1 0 100 2h4a1 1 0 100-2H8z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 0 0011 2H9zM7 8a1 0 011-1h4a1 0 110 2H8a1 0 01-1-1zm1 3a1 0 100 2h4a1 0 100-2H8z" clip-rule="evenodd" />
                         </svg>
                     </button>
                 </div>
@@ -919,43 +959,69 @@
             const activeTasks = tasks.filter(task => !task.completed);
             const completedTasks = tasks.filter(task => task.completed);
 
-            if (activeTasks.length === 0) {
-                // ایجاد یک آیتم "هیچ وظیفه فعالی وجود ندارد" به صورت پویا
+            // Render active tasks
+            const activeTasksToRender = activeTasks.slice(0, activeTasksDisplayedCount);
+            if (activeTasksToRender.length === 0 && activeTasks.length === 0) {
                 const noActiveItem = document.createElement('div');
-                noActiveItem.id = 'dynamicNoActiveMessage'; // افزودن یک ID برای یافتن/حذف آسان آن
-                noActiveItem.className = 'text-gray-500 dark:text-gray-400 text-center py-4'; // اعمال استایل
-                noActiveItem.textContent = 'اولین وظیفه فعال خود را ایجاد کنید'; // متن درخواستی کاربر
+                noActiveItem.id = 'dynamicNoActiveMessage';
+                noActiveItem.className = 'text-gray-500 dark:text-gray-400 text-center py-4';
+                noActiveItem.textContent = 'اولین وظیفه فعال خود را ایجاد کنید';
                 activeTaskList.appendChild(noActiveItem);
             } else {
-                // اگر وظایف فعالی وجود دارد، اطمینان حاصل شود که پیام "هیچ وظیفه ای وجود ندارد" حذف شده است
-                const existingNoMessage = document.getElementById('dynamicNoActiveMessage');
-                if (existingNoMessage) {
-                    existingNoMessage.remove();
-                }
-                activeTasks.forEach(task => {
+                activeTasksToRender.forEach(task => {
                     activeTaskList.appendChild(createTaskElement(task));
                 });
             }
 
-            if (completedTasks.length === 0) {
-                // ایجاد یک آیتم "هیچ وظیفه تکمیل شده ای وجود ندارد" به صورت پویا
+            // Show/hide "Show More Active Tasks" button
+            if (activeTasks.length > activeTasksDisplayedCount) {
+                showMoreActiveTasksBtn.classList.remove('hidden');
+            } else {
+                showMoreActiveTasksBtn.classList.add('hidden');
+            }
+
+            // Render completed tasks
+            const completedTasksToRender = completedTasks.slice(0, completedTasksDisplayedCount);
+            if (completedTasksToRender.length === 0 && completedTasks.length === 0) {
                 const noCompletedItem = document.createElement('div');
-                noCompletedItem.id = 'dynamicNoCompletedMessage'; // افزودن یک ID برای یافتن/حذف آسان آن
-                noCompletedItem.className = 'text-gray-500 dark:text-gray-400 text-center py-4'; // اعمال استایل
+                noCompletedItem.id = 'dynamicNoCompletedMessage';
+                noCompletedItem.className = 'text-gray-500 dark:text-gray-400 text-center py-4';
                 noCompletedItem.textContent = 'هیچ وظیفه‌ای انجام نشده است.';
                 completedTasksContainer.appendChild(noCompletedItem);
             } else {
-                // اگر وظایف تکمیل شده‌ای وجود دارد، اطمینان حاصل شود که پیام "هیچ وظیفه ای وجود ندارد" حذف شده است
-                const existingNoMessage = document.getElementById('dynamicNoCompletedMessage');
-                if (existingNoMessage) {
-                    existingNoMessage.remove();
-                }
-                completedTasks.forEach(task => {
+                completedTasksToRender.forEach(task => {
                     completedTasksContainer.appendChild(createTaskElement(task));
                 });
             }
+
+            // Show/hide "Show More Completed Tasks" button
+            if (completedTasks.length > completedTasksDisplayedCount) {
+                showMoreCompletedTasksBtn.classList.remove('hidden');
+            } else {
+                showMoreCompletedTasksBtn.classList.add('hidden');
+            }
+
             updateGamificationDisplay();
         }
+
+        // Function to show more active tasks
+        function showMoreActiveTasks() {
+            const activeTasks = tasks.filter(task => !task.completed);
+            activeTasksDisplayedCount = Math.min(activeTasksDisplayedCount + TASKS_PER_LOAD, activeTasks.length);
+            renderTasks();
+        }
+
+        // Function to show more completed tasks
+        function showMoreCompletedTasks() {
+            const completedTasks = tasks.filter(task => task.completed);
+            completedTasksDisplayedCount = Math.min(completedTasksDisplayedCount + TASKS_PER_LOAD, completedTasks.length);
+            renderTasks();
+        }
+
+        // Add event listeners for "Show More" buttons
+        showMoreActiveTasksBtn.addEventListener('click', showMoreActiveTasks);
+        showMoreCompletedTasksBtn.addEventListener('click', showMoreCompletedTasks);
+
 
         // تابع برای رندر دستاوردها
         function renderAchievements() {
@@ -985,8 +1051,17 @@
                 unlockedAchievements.forEach(achievement => {
                     const achievementItem = document.createElement('div');
                     // اعمال کلاس‌های حالت تاریک برای آیتم‌های دستاورد
-                    achievementItem.className = `flex items-center bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-full px-4 py-2 shadow-sm text-gray-700 dark:text-gray-200 text-sm`;
-                    achievementItem.innerHTML = `<span class="text-xl mr-2">${achievement.icon}</span><span>${achievement.name}</span>`;
+                    achievementItem.className = `flex items-center bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-full px-4 py-2 shadow-sm text-gray-700 dark:text-gray-200 text-sm clickable-item`;
+                    
+                    // حذف توضیحات از نمایش در صفحه اصلی
+                    achievementItem.innerHTML = `
+                        <span class="text-xl mr-2">${achievement.icon}</span>
+                        <span>${achievement.name}</span>
+                    `;
+                    
+                    // افزودن شنونده رویداد کلیک برای نمایش جزئیات
+                    achievementItem.addEventListener('click', () => showDetailModal(achievement.type, achievement.type === 'level' ? achievement.level : achievement.name));
+                    
                     achievementsList.appendChild(achievementItem);
                 });
             }
@@ -1020,6 +1095,9 @@
                 importanceSelect.value = 'normal'; // بازنشانی انتخاب اهمیت
                 customPointsInput.classList.add('hidden'); // پنهان کردن ورودی امتیازات سفارشی
                 saveToLocalStorage(); // ذخیره پس از افزودن
+                // Reset displayed counts to show newly added task
+                activeTasksDisplayedCount = TASKS_PER_LOAD;
+                completedTasksDisplayedCount = TASKS_PER_LOAD;
                 renderTasks(); // رندر مجدد وظایف پس از افزودن
                 showMessageBox('وظیفه جدید اضافه شد!', 'success');
             } else {
@@ -1033,7 +1111,7 @@
             toggleIcon.classList.toggle('rotate-180'); // چرخش آیکون فلش
         });
 
-        // مدیریت اقدامات وظیفه (تغییر وضعیت تکمیل، حذف، ویرایش، ذخیره، لغو)
+        // مدیریت اقدامات وظیفه (تغییر وضعیت تکمیل, حذف, ویرایش, ذخیره, لغو)
         activeTaskList.addEventListener('click', handleTaskActions);
         completedTasksContainer.addEventListener('click', handleTaskActions);
 
@@ -1060,11 +1138,9 @@
                 const taskIndex = tasks.findIndex(t => t.id === taskId);
                 if (taskIndex > -1) {
                     const task = tasks[taskIndex];
-                    console.log("چک‌باکس کلیک شد! وظیفه قبل از تغییر:", JSON.parse(JSON.stringify(task)));
                     let pointsGained = 0;
 
                     if (!task.completed) { // کاربر می‌خواهد وظیفه را تکمیل کند
-                        console.log("قصد تکمیل وظیفه.");
                         task.completed = true;
                         if (task.importance === 'important') {
                             pointsGained = pointsPerImportantTask;
@@ -1080,34 +1156,26 @@
 
                         // منطق رشته روزانه (فقط در تکمیل)
                         const today = new Date().toDateString();
-                        console.log("وظیفه تکمیل شد. LastCompletionDate فعلی:", lastCompletionDate, "امروز:", today);
 
                         if (!lastCompletionDate) {
                             dailyStreak = 1;
                             showMessageBox('رشته روزانه شما شروع شد!', 'info');
-                            console.log("رشته شروع شد: dailyStreak =", dailyStreak);
                         } else {
                             const lastDate = new Date(lastCompletionDate);
                             const yesterday = new Date();
                             yesterday.setDate(yesterday.getDate() - 1);
 
-                            console.log("مقایسه lastDate:", lastDate.toDateString(), "با دیروز:", yesterday.toDateString(), "و امروز:", today);
-
                             if (lastDate.toDateString() === yesterday.toDateString()) {
                                 dailyStreak++;
                                 showMessageBox(`رشته روزانه: ${dailyStreak} روز متوالی!`, 'info');
-                                console.log("رشته افزایش یافت: dailyStreak =", dailyStreak);
                             } else if (lastDate.toDateString() !== today) {
                                 dailyStreak = 1; // بازنشانی اگر متوالی نبود و قبلاً امروز تکمیل نشده بود
                                 showMessageBox('رشته روزانه شما بازنشانی شد و دوباره شروع شد.', 'info');
-                                console.log("رشته بازنشانی شد و دوباره شروع شد: dailyStreak =", dailyStreak);
                             }
                         }
                         lastCompletionDate = today;
-                        console.log("LastCompletionDate جدید:", lastCompletionDate);
 
                     } else { // کاربر می‌خواهد وظیفه را بازنشانی (عدم تکمیل) کند
-                        console.log("قصد بازنشانی وظیفه.");
                         task.completed = false;
                         if (task.importance === 'important') {
                             pointsGained = pointsPerImportantTask; // امتیازات برای کسر
@@ -1119,15 +1187,20 @@
                         }
                         zPoint = Math.max(0, zPoint - pointsGained); // استفاده از zPoint
                         showMessageBox(`وظیفه بازنشانی شد! -${pointsGained} زی پوینت`, 'info');
-                        // منطق رشته فقط برای تکمیل است، نه برای عدم تکمیل.
+                        // منطق رشته فقط برای تکمیل است, نه برای عدم تکمیل.
                     }
-                    console.log("task.completed (پس از تغییر):", task.completed);
                     saveToLocalStorage();
+                    // Reset displayed counts to show updated task lists
+                    activeTasksDisplayedCount = TASKS_PER_LOAD;
+                    completedTasksDisplayedCount = TASKS_PER_LOAD;
                     renderTasks();
                 }
             } else if (action === 'delete') {
                 tasks = tasks.filter(t => t.id !== taskId);
                 saveToLocalStorage(); // ذخیره پس از حذف
+                // Reset displayed counts to show updated task lists
+                activeTasksDisplayedCount = TASKS_PER_LOAD;
+                completedTasksDisplayedCount = TASKS_PER_LOAD;
                 renderTasks(); // رندر مجدد وظایف پس از حذف
                 showMessageBox('وظیفه حذف شد.', 'info');
             } else if (action === 'edit') {
@@ -1141,6 +1214,12 @@
                 editInput.focus();
                 editInput.value = taskNameSpan.textContent.trim(); // تنظیم مقدار ورودی به نام وظیفه فعلی
                 editImportanceSelect.value = task.importance; // تنظیم مقدار انتخاب
+
+                // Add responsive classes for edit inputs
+                editInput.classList.add('w-full', 'md:w-auto');
+                editImportanceSelect.classList.add('w-full', 'md:w-40');
+                editCustomPointsInput.classList.add('w-full', 'md:w-32');
+
 
                 if (task.importance === 'custom') {
                     editCustomPointsInput.classList.remove('hidden');
@@ -1183,6 +1262,9 @@
                         tasks[taskIndex].importance = newImportance;
                         tasks[taskIndex].customPoints = newCustomPoints; // به‌روزرسانی امتیازات سفارشی
                         saveToLocalStorage();
+                        // Reset displayed counts to show updated task lists
+                        activeTasksDisplayedCount = TASKS_PER_LOAD;
+                        completedTasksDisplayedCount = TASKS_PER_LOAD;
                         renderTasks(); // رندر مجدد برای نمایش نام و اهمیت به‌روز شده
                         showMessageBox('وظیفه با موفقیت ویرایش شد!', 'success');
                     }
@@ -1223,12 +1305,12 @@
                 if (offset < boundingBox.height / 2) {
                     targetItem.classList.add('drop-target'); // نشان دادن رها کردن در بالا
                 } else {
-                    // اگر در حال رها کردن پس از targetItem است، border-top را به خواهر و برادر بعدی اعمال کنید اگر وجود دارد
-                    // در غیر این صورت، آن را به خود targetItem اعمال کنید (مفهوماً در انتهای لیست درج می‌شود)
+                    // اگر در حال رها کردن پس از targetItem است, border-top را به خواهر و برادر بعدی اعمال کنید اگر وجود دارد
+                    // در غیر این صورت, آن را به خود targetItem اعمال کنید (مفهوماً در انتهای لیست درج می‌شود)
                     if (targetItem.nextElementSibling && targetItem.nextElementSibling.classList.contains('task-item')) {
                         targetItem.nextElementSibling.classList.add('drop-target');
                     } else {
-                        targetItem.classList.add('drop-target'); // همچنان برجسته شود، touchend ایندکس را مدیریت می‌کند
+                        targetItem.classList.add('drop-target'); // همچنان برجسته شود, touchend ایندکس را مدیریت می‌کند
                     }
                 }
             }
@@ -1245,11 +1327,11 @@
             e.preventDefault();
             const dropTargetItem = e.target.closest('.task-item');
             if (!dropTargetItem) {
-                // اگر خارج از هر آیتم وظیفه رها شد، فقط بازخورد را حذف کنید
+                // اگر خارج از هر آیتم وظیفه رها شد, فقط بازخورد را حذف کنید
                 document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
                 document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
                 draggedTaskId = null;
-                draggedElement = null;
+draggedElement = null;
                 return;
             }
 
@@ -1262,7 +1344,7 @@
                 document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
                 document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
                 draggedTaskId = null;
-                draggedElement = null;
+draggedElement = null;
                 return;
             }
 
@@ -1272,7 +1354,7 @@
                 document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
                 document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
                 draggedTaskId = null;
-                draggedElement = null;
+draggedElement = null;
                 return;
             }
 
@@ -1295,7 +1377,7 @@
             document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
             document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
             draggedTaskId = null;
-            draggedElement = null;
+draggedElement = null;
         });
 
         activeTaskList.addEventListener('dragend', (e) => {
@@ -1303,12 +1385,12 @@
             document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
             document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
             draggedTaskId = null;
-            draggedElement = null;
+draggedElement = null;
         });
 
         // --- منطق کشیدن و رها کردن (رویدادهای لمسی) ---
         activeTaskList.addEventListener('touchstart', (e) => {
-            // تعیین اینکه آیا لمس روی یک عنصر تعاملی (چک‌باکس، دکمه، ورودی، انتخاب) شروع شده است
+            // تعیین اینکه آیا لمس روی یک عنصر تعاملی (چک‌باکس, دکمه, ورودی, انتخاب) شروع شده است
             const targetTagName = e.target.tagName;
             const isInteractiveElement = (targetTagName === 'INPUT' && (e.target.type === 'checkbox' || e.target.type === 'number' || e.target.type === 'text')) ||
                                          targetTagName === 'BUTTON' ||
@@ -1317,16 +1399,16 @@
                                          e.target.classList.contains('edit-importance-select') ||
                                          e.target.classList.contains('edit-custom-points-input');
 
-            // اگر یک عنصر تعاملی است، از پیشگیری از پیش‌فرض خودداری کنید و تایمر کشیدن را شروع نکنید.
+            // اگر یک عنصر تعاملی است, از پیشگیری از پیش‌فرض خودداری کنید و تایمر کشیدن را شروع نکنید.
             // اجازه دهید مرورگر لمس/کلیک آن عنصر را مدیریت کند.
             if (isInteractiveElement) {
                 clearTimeout(dragTimer); // اطمینان از عدم وجود تایمر کشیدن در صورت لمس عنصر تعاملی توسط کاربر
                 dragTimer = null;
                 isDragging = false; // اطمینان از اینکه dragging false است
-                return; // خروج زودهنگام، اجازه رفتار پیش‌فرض
+                return; // خروج زودهنگام, اجازه رفتار پیش‌فرض
             }
 
-            // اگر یک عنصر تعاملی نیست و یک لمس تکی است، با منطق کشیدن احتمالی ادامه دهید
+            // اگر یک عنصر تعاملی نیست و یک لمس تکی است, با منطق کشیدن احتمالی ادامه دهید
             if (e.touches.length === 1) {
                 const taskItem = e.target.closest('.task-item');
                 if (taskItem && !taskItem.classList.contains('bg-green-100')) { // فقط وظایف فعال قابل کشیدن هستند
@@ -1379,15 +1461,15 @@
             const touch = e.touches[0];
 
             if (dragTimer && !isDragging) {
-                // اگر یک کشیدن در انتظار است (تایمر فعال است) اما هنوز شروع نشده است، حرکت قابل توجه را بررسی کنید
+                // اگر یک کشیدن در انتظار است (تایمر فعال است) اما هنوز شروع نشده است, حرکت قابل توجه را بررسی کنید
                 const deltaX = Math.abs(touch.clientX - initialTouchX);
                 const deltaY = Math.abs(touch.clientY - initialTouchY);
 
                 if (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
-                    // اگر از آستانه فراتر رفت، احتمالاً یک اسکرول است، بنابراین کشیدن در انتظار را لغو کنید
+                    // اگر از آستانه فراتر رفت, احتمالاً یک اسکرول است, بنابراین کشیدن در انتظار را لغو کنید
                     clearTimeout(dragTimer);
                     dragTimer = null;
-                    // در اینجا از پیش‌فرض جلوگیری نکنید، اجازه اسکرول را بدهید
+                    // در اینجا از پیش‌فرض جلوگیری نکنید, اجازه اسکرول را بدهید
                     return;
                 }
             }
@@ -1448,7 +1530,7 @@
             document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
 
             if (isDragging) {
-                // این یک کشیدن فعال بود، با منطق رها کردن ادامه دهید
+                // این یک کشیدن فعال بود, با منطق رها کردن ادامه دهید
                 const touch = e.changedTouches[0];
                 const elementAtEnd = document.elementFromPoint(touch.clientX, touch.clientY);
                 const dropTargetItem = elementAtEnd ? elementAtEnd.closest('.task-item') : null;
@@ -1461,7 +1543,7 @@
                     renderTasks();
                     showMessageBox('عملیات جابجایی لغو شد.', 'info');
                 } else if (dropTargetItem.dataset.id === draggedTaskId) {
-                    // رها کردن روی خود، بدون تغییر
+                    // رها کردن روی خود, بدون تغییر
                     renderTasks();
                 } else {
                     const originalDroppedOnTaskIndex = tasks.findIndex(t => t.id === dropTargetItem.dataset.id);
@@ -1533,13 +1615,18 @@
 
         // --- منطق منو و مودال ---
         menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // جلوگیری از انتشار کلیک به پنجره و بسته شدن دراپ‌داون
+            e.stopPropagation(); // جلوگیری از انتشار کلیک به پنجیره و بسته شدن دراپ‌داون
             menuDropdown.classList.toggle('hidden');
         });
 
         profileMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
             menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون
+
+            // Show profile modal with animation
+            profileModal.classList.remove('hidden');
+            profileModalContent.classList.remove('opacity-0', 'scale-95');
+            profileModalContent.classList.add('opacity-100', 'scale-100');
 
             const totalTasks = tasks.length;
             const completedTasksCount = tasks.filter(t => t.completed).length;
@@ -1568,7 +1655,7 @@
                     <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2 mt-4">دستاوردها:</h4>
                     <div class="flex flex-wrap gap-2">
                         ${unlockedAchievements.map(ach => `
-                            <span class="flex items-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm">
+                            <span class="flex items-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm clickable-item" data-type="${ach.type}" data-id="${ach.type === 'level' ? ach.level : ach.name}">
                                 <span class="text-xl mr-2">${ach.icon}</span><span>${ach.name}</span>
                             </span>
                         `).join('')}
@@ -1579,7 +1666,7 @@
             }
 
 
-            profileModalContent.innerHTML = `
+            profileModalBody.innerHTML = `
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">نام کاربر:</strong> ${userName || 'نامعلوم'}</p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">کل وظایف:</strong> ${totalTasks}</p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">وظایف انجام شده:</strong> ${completedTasksCount}</p>
@@ -1588,17 +1675,41 @@
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">رشته روزانه:</strong> ${dailyStreak} روز</p>
                 ${achievementsHtml}
             `;
-            profileModal.classList.remove('hidden');
+
+            // Add event listeners to newly created clickable items in profile modal
+            profileModalBody.querySelectorAll('.clickable-item').forEach(item => {
+                item.addEventListener('click', (event) => {
+                    const type = event.currentTarget.dataset.type;
+                    const id = event.currentTarget.dataset.id; // For levels
+                    const name = event.currentTarget.dataset.id; // For achievements (using id as name for consistency)
+                    if (type === 'level') {
+                        showDetailModal('level', id);
+                    } else { // All other achievement types will be handled by their name
+                        showDetailModal(type, name);
+                    }
+                });
+            });
         });
 
         closeProfileModalBtn.addEventListener('click', () => {
-            profileModal.classList.add('hidden');
+            profileModalContent.classList.remove('opacity-100', 'scale-100');
+            profileModalContent.classList.add('opacity-0', 'scale-95');
+            profileModalContent.addEventListener('transitionend', () => {
+                profileModal.classList.add('hidden');
+            }, { once: true });
         });
 
         helpMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
+            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون
+
+            // Show help modal with animation
+            helpModal.classList.remove('hidden');
+            helpModalContent.classList.remove('opacity-0', 'scale-95');
+            helpModalContent.classList.add('opacity-100', 'scale-100');
+
             // به‌روزرسانی پویا محتوای مودال راهنما با مقادیر امتیاز فعلی
-            helpModalContent.innerHTML = `
+            helpModalBody.innerHTML = `
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">به زی تسک خوش آمدید!</h3>
                 <p class="mb-3 text-gray-700 dark:text-gray-300">این برنامه به شما کمک می‌کند تا با انجام وظایف، زی پوینت کسب کرده و به سطوح بالاتر دست یابید و دستاوردهای مختلفی کسب کنید.</p>
 
@@ -1622,22 +1733,27 @@
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">رشته روزانه:</strong> با تکمیل حداقل یک وظیفه در هر روز متوالی، رشته روزانه شما افزایش می‌یابد و می‌توانید دستاوردهای خاصی کسب کنید.</p>
                 
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">سطوح و تم‌های رنگی</h3>
-                <p class="mb-2 text-gray-700 dark:text-gray-300">با کسب زی پوینت، به سطوح بالاتر ارتقا پیدا می‌کنید. هر سطح دارای یک تم رنگی منحصر به فرد است که با پیشرفت شما تغییر می‌کند. جزئیات هر سطح و رنگ تم آن به شرح زیر است:</p>
+                <p class="mb-2 text-gray-700 dark:text-gray-300">با کسب زی پوینت، به سطوح بالاتر ارتقا پیدا می‌کنید. هر سطح دارای یک تم رنگی منحصر به فرد است که با پیشرفت شما تغییر می‌کند. برای مطالعه توضیحات بیشتر، روی سطح مورد نظر کلیک کنید:</p>
                 <div class="flex flex-wrap gap-2 mb-3">
                     ${levelPointsThresholds.map((levelInfo, index) => {
-                        const theme = levelThemes[index];
                         return `
-                            <span class="bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm flex items-center">
-                                سطح ${index + 1}: ${levelInfo.name} (${levelInfo.points} زی پوینت) - تم: ${theme.description}
+                            <span class="bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm flex items-center clickable-item" data-type="level" data-id="${index + 1}">
+                                سطح ${index + 1}: ${levelInfo.name}
                             </span>
                         `;
                     }).join('')}
                 </div>
 
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">مدال‌ها (دستاوردها)</h3>
-                <p class="mb-2 text-gray-700 dark:text-gray-300">با پیشرفت در بازی، مدال‌های مختلفی کسب می‌کنید. برخی از آن‌ها عبارتند از:</p>
+                <p class="mb-2 text-gray-700 dark:text-gray-300">با پیشرفت در بازی، مدال‌های مختلفی کسب می‌کنید. برای مطالعه توضیحات بیشتر، روی دستاورد مورد نظر کلیک کنید:</p>
                 <div class="flex flex-wrap gap-2 mb-3">
-                    ${achievementsData.map(ach => `<span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm flex items-center">${ach.icon} <span class="mr-1">${ach.name}</span></span>`).join('')}
+                    ${achievementsData.map(ach => {
+                        // فقط دستاوردهای نوع غیر سطح را در اینجا لیست می‌کنیم
+                        if (ach.type !== 'level') {
+                            return `<span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm flex items-center clickable-item" data-type="achievement" data-name="${ach.name}">${ach.icon} <span class="mr-1">${ach.name}</span></span>`;
+                        }
+                        return '';
+                    }).join('')}
                 </div>
 
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">پشتیبان‌گیری و بازیابی داده‌ها</h3>
@@ -1650,20 +1766,62 @@
 
                 <p class="mt-4 text-center text-gray-700 dark:text-gray-300">هدف این برنامه ایجاد انگیزه و کمک به شما در سازماندهی بهتر کارهایتان است. موفق باشید!</p>
             `;
-            helpModal.classList.remove('hidden');
-            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون پس از انتخاب
+            // Add event listeners to newly created clickable items in help modal
+            helpModalBody.querySelectorAll('.clickable-item').forEach(item => {
+                item.addEventListener('click', (event) => {
+                    const type = event.currentTarget.dataset.type;
+                    const id = event.currentTarget.dataset.id; // For levels
+                    const name = event.currentTarget.dataset.name; // For achievements
+                    if (type === 'level') {
+                        showDetailModal('level', id);
+                    } else { // All other achievement types will be handled by their name
+                        showDetailModal(type, name);
+                    }
+                });
+            });
+        });
+
+        closeHelpModalBtn.addEventListener('click', () => {
+            helpModalContent.classList.remove('opacity-100', 'scale-100');
+            helpModalContent.classList.add('opacity-0', 'scale-95');
+            helpModalContent.addEventListener('transitionend', () => {
+                helpModal.classList.add('hidden');
+            }, { once: true });
         });
 
         aboutMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
+            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون
+
+            // Show about modal with animation
             aboutModal.classList.remove('hidden');
-            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون پس از انتخاب
+            aboutModalContent.classList.remove('opacity-0', 'scale-95');
+            aboutModalContent.classList.add('opacity-100', 'scale-100');
+
+            aboutModalBody.innerHTML = `
+                <p class="mb-3">این برنامه برای کمک به مدیریت وظایف و افزایش انگیزه از طریق گیمیفیکیشن طراحی شده است.</p>
+                <p class="mb-3">تمامی حقوق متعلق به عمو لئو است.</p>
+                <p class="mb-3">نسخه: 1.0.0</p>
+            `;
+        });
+
+        closeAboutModalBtn.addEventListener('click', () => {
+            aboutModalContent.classList.remove('opacity-100', 'scale-100');
+            aboutModalContent.classList.add('opacity-0', 'scale-95');
+            aboutModalContent.addEventListener('transitionend', () => {
+                aboutModal.classList.add('hidden');
+            }, { once: true });
         });
 
         backupMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
+            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون
+
+            // Show backup modal with animation
             backupModal.classList.remove('hidden');
-            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون پس از انتخاب
+            backupModalContent.classList.remove('opacity-0', 'scale-95');
+            backupModalContent.classList.add('opacity-100', 'scale-100');
+
             importFileInput.value = ''; // پاک کردن ورودی فایل در هنگام باز شدن
             selectedFileNameSpan.textContent = 'فایلی انتخاب نشده است.'; // بازنشانی نمایش نام فایل
         });
@@ -1678,8 +1836,12 @@
 
         resetMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
+            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون
+
+            // Show reset confirm modal with animation
             resetConfirmModal.classList.remove('hidden');
-            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون پس از انتخاب
+            resetConfirmModalContent.classList.remove('opacity-0', 'scale-95');
+            resetConfirmModalContent.classList.add('opacity-100', 'scale-100');
         });
 
         confirmResetBtn.addEventListener('click', () => {
@@ -1688,23 +1850,19 @@
         });
 
         cancelResetBtn.addEventListener('click', () => {
-            resetConfirmModal.classList.add('hidden');
-        });
-
-        closeHelpModalBtn.addEventListener('click', () => {
-            helpModal.classList.add('hidden');
-        });
-
-        closeAboutModalBtn.addEventListener('click', () => {
-            aboutModal.classList.add('hidden');
-        });
-
-        closeBackupModalBtn.addEventListener('click', () => {
-            backupModal.classList.add('hidden');
+            resetConfirmModalContent.classList.remove('opacity-100', 'scale-100');
+            resetConfirmModalContent.classList.add('opacity-0', 'scale-95');
+            resetConfirmModalContent.addEventListener('transitionend', () => {
+                resetConfirmModal.classList.add('hidden');
+            }, { once: true });
         });
 
         closeResetModalBtn.addEventListener('click', () => {
-            resetConfirmModal.classList.add('hidden');
+            resetConfirmModalContent.classList.remove('opacity-100', 'scale-100');
+            resetConfirmModalContent.classList.add('opacity-0', 'scale-95');
+            resetConfirmModalContent.addEventListener('transitionend', () => {
+                resetConfirmModal.classList.add('hidden');
+            }, { once: true });
         });
 
         // منطق مودال خوش‌آمدگویی
@@ -1713,7 +1871,11 @@
             if (inputName) {
                 userName = inputName;
                 saveToLocalStorage();
-                welcomeModal.classList.add('hidden');
+                welcomeModalContent.classList.remove('opacity-100', 'scale-100');
+                welcomeModalContent.classList.add('opacity-0', 'scale-95');
+                welcomeModalContent.addEventListener('transitionend', () => {
+                    welcomeModal.classList.add('hidden');
+                }, { once: true });
                 showMessageBox(`خوش آمدید، ${userName}!`, 'success');
             } else {
                 showMessageBox('لطفاً نام خود را وارد کنید.', 'info');
@@ -1789,8 +1951,17 @@
                         userName = importedData.userName || null; // اطمینان از تنظیم userName یا null بودن آن
 
                         saveToLocalStorage(); // ذخیره داده‌های وارد شده در حافظه محلی
+                        // Reset displayed counts to show newly loaded tasks
+                        activeTasksDisplayedCount = TASKS_PER_LOAD;
+                        completedTasksDisplayedCount = TASKS_PER_LOAD;
                         renderTasks(); // رندر مجدد رابط کاربری با داده‌های جدید
-                        backupModal.classList.add('hidden'); // پنهان کردن مودال
+                        
+                        // Hide backup modal with animation
+                        backupModalContent.classList.remove('opacity-100', 'scale-100');
+                        backupModalContent.classList.add('opacity-0', 'scale-95');
+                        backupModalContent.addEventListener('transitionend', () => {
+                            backupModal.classList.add('hidden');
+                        }, { once: true });
                         showMessageBox('داده‌ها با موفقیت بارگذاری شد!', 'success');
                     } else {
                         showMessageBox('فرمت داده‌های وارد شده نامعتبر است. لطفاً یک فایل پشتیبان معتبر وارد کنید.', 'error');
@@ -1814,7 +1985,57 @@
             }
         });
 
-        // بارگذاری داده‌ها از Local Storage و مقداردهی اولیه تم هنگام بارگذاری پنجره
+        // --- منطق نمایش جزئیات سطح/دستاورد ---
+        function showDetailModal(type, identifier) {
+            detailModal.classList.remove('hidden');
+            // Add animation classes for modal entry
+            detailModalContent.classList.remove('opacity-0', 'scale-95');
+            detailModalContent.classList.add('opacity-100', 'scale-100');
+
+            let contentHtml = '';
+            let titleText = ''; 
+
+            if (type === 'level') {
+                const levelNum = parseInt(identifier, 10);
+                const levelInfo = levelPointsThresholds[levelNum - 1];
+                const themeData = levelThemes[levelNum - 1]; // Get theme data for the level
+
+                titleText = levelInfo.name; // Removed "دستاورد"
+
+                contentHtml = `
+                    <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">توضیحات:</strong> برای کسب این دستاورد ${levelInfo.points} زی پوینت کسب شده، رنگ کلی تم ${themeData.description} است.</p>
+                `;
+            } else { // This else block will now catch all non-level types like 'totalTasks', 'importantTasks', etc.
+                const achievement = achievementsData.find(ach => ach.name === identifier);
+                
+                if (achievement) {
+                    titleText = achievement.name; // Removed "دستاورد"
+                    contentHtml = `
+                        <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">توضیحات:</strong> ${achievement.description || 'توضیحات در دسترس نیست.'}</p>
+                    `;
+                } else {
+                    titleText = `خطا`;
+                    contentHtml = `<p class="text-red-500">دستاورد یافت نشد.</p>`;
+                }
+            }
+
+            detailModalTitle.textContent = titleText;
+            detailModalBody.innerHTML = contentHtml;
+        }
+
+        closeDetailModalBtn.addEventListener('click', () => {
+            detailModalContent.classList.remove('opacity-100', 'scale-100');
+            detailModalContent.classList.add('opacity-0', 'scale-95');
+            detailModalContent.addEventListener('transitionend', () => {
+                detailModal.classList.add('hidden');
+            }, { once: true });
+        });
+
+        // اضافه کردن شنونده کلیک برای نمایش سطح فعلی در صفحه اصلی
+        currentLevelDisplay.addEventListener('click', () => showDetailModal('level', level));
+
+
+        // بارگذاری داده‌ها از Local Storage و مقداردهی اولیه تم هنگام بارگذاری پنجیره
         window.onload = () => {
             loadFromLocalStorage();
             initializeTheme();
@@ -1822,6 +2043,8 @@
             // نمایش مودال خوش‌آمدگویی اگر نام کاربر تنظیم نشده باشد
             if (!userName) {
                 welcomeModal.classList.remove('hidden');
+                welcomeModalContent.classList.remove('opacity-0', 'scale-95'); // Ensure animation starts
+                welcomeModalContent.classList.add('opacity-100', 'scale-100');
                 userNameInput.focus();
             }
         };
