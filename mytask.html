@@ -6,28 +6,40 @@
     <title>زی تسک | پلتفرم آنلاین انجام وظایف</title>
     <meta name="description" content="زی تسک: پلتفرم مدیریت وظایف گیمیفای شده برای افزایش انگیزه و بهره‌وری. وظایف خود را مدیریت کنید، زی پوینت کسب کنید و به سطوح بالاتر برسید.">
     <meta name="keywords" content="مدیریت وظایف, گیمیفیکیشن, زی تسک, Z-Point, بهره‌وری, سازماندهی, برنامه ریزی, انگیزه, وظایف روزانه">
-    <!-- اگر هدف این است که برنامه توسط موتورهای جستجو قابل کشف باشد،
-         این متاتگ باید حذف شود یا به "index, follow" تغییر یابد.
-         در حال حاضر، از ایندکس شدن صفحه توسط موتورهای جستجو جلوگیری می‌کند. -->
     <meta name="robots" content="noindex, nofollow">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@33.003/misc/Farsi-Digits/Vazirmatn-FD-font-face.css" rel="stylesheet">
     <style>
-        /* CSS Variables for Dynamic Theming */
+        /* متغیرهای CSS برای تم‌بندی پویا */
         :root {
-            --theme-primary: #3b82f6; /* رنگ اصلی تم */
-            --theme-secondary: #60a5fa; /* رنگ ثانویه تم برای هاور/اکسنت */
-            --theme-accent-bg: #eff6ff; /* رنگ پس‌زمینه بخش اکسنت (افزودن وظیفه) */
-            --theme-accent-text: #1e40af; /* رنگ متن بخش اکسنت (افزودن وظیفه) */
-            --theme-progress-from: #3b82f6; /* رنگ شروع گرادیان نوار پیشرفت */
-            --theme-progress-to: #8b5cf6; /* رنگ پایان گرادیان نوار پیشرفت */
-            --drag-border-color: #3b82f6; /* رنگ حاشیه برای کشیدن و رها کردن */
-            --drag-border-color-rgb: 59, 130, 246; /* نسخه RGB رنگ حاشیه برای استفاده در rgba() */
-            --theme-input-border: #93c5fd; /* رنگ حاشیه ورودی‌ها */
-            --theme-input-focus-ring: #60a5fa; /* رنگ حلقه فوکوس ورودی‌ها */
+            /* رنگ‌های حالت روشن (مینیمال: خاکستری، مشکی، سفید) */
+            --theme-primary: #4b5563; /* خاکستری-700 */
+            --theme-secondary: #6b7280; /* خاکستری-600 */
+            --theme-accent-bg: #f3f4f6; /* خاکستری-100 */
+            --theme-accent-text: #1f2937; /* خاکستری-900 */
+            --theme-progress-from: #4b5563; /* خاکستری-700 */
+            --theme-progress-to: #6b7280; /* خاکستری-600 */
+            --drag-border-color: #4b5563; /* خاکستری-700 */
+            --drag-border-color-rgb: 75, 85, 99; /* نسخه RGB برای خاکستری-700 */
+            --theme-input-border: #9ca3af; /* خاکستری-400 */
+            --theme-input-focus-ring: #6b7280; /* خاکستری-600 */
         }
 
-        /* Custom Scrollbar for Modals */
+        .dark {
+            /* رنگ‌های حالت تاریک (مینیمال: خاکستری، مشکی، سفید) */
+            --theme-primary: #d1d5db; /* خاکستری-300 */
+            --theme-secondary: #9ca3af; /* خاکستری-400 */
+            --theme-accent-bg: #1f2937; /* خاکستری-900 */
+            --theme-accent-text: #f9fafb; /* خاکستری-50 */
+            --theme-progress-from: #d1d5db; /* خاکستری-300 */
+            --theme-progress-to: #9ca3af; /* خاکستری-400 */
+            --drag-border-color: #d1d5db; /* خاکستری-300 */
+            --drag-border-color-rgb: 209, 213, 219; /* نسخه RGB برای خاکستری-300 */
+            --theme-input-border: #4b5563; /* خاکستری-700 */
+            --theme-input-focus-ring: #9ca3af; /* خاکستری-400 */
+        }
+
+        /* نوار اسکرول سفارشی برای مودال‌ها */
         .modal-scrollable-content::-webkit-scrollbar {
             width: 8px;
         }
@@ -42,7 +54,7 @@
         .modal-scrollable-content::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
-        /* Dark mode scrollbar */
+        /* نوار اسکرول حالت تاریک */
         .dark .modal-scrollable-content::-webkit-scrollbar-track {
             background: #333;
         }
@@ -53,28 +65,28 @@
             background: #999;
         }
 
-        /* Styles for drag and drop feedback */
+        /* استایل‌های بازخورد کشیدن و رها کردن */
         .dragging {
             opacity: 0.5;
             border: 2px dashed var(--drag-border-color);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* More prominent shadow */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* سایه برجسته‌تر */
         }
         .drop-target {
-            border: 2px solid var(--drag-border-color); /* Full border */
-            background-color: rgba(var(--drag-border-color-rgb), 0.1); /* Transparent background */
-            transition: all 0.2s ease-in-out; /* Animation for changes */
+            border: 2px solid var(--drag-border-color); /* حاشیه کامل */
+            background-color: rgba(var(--drag-border-color-rgb), 0.1); /* پس‌زمینه شفاف */
+            transition: all 0.2s ease-in-out; /* انیمیشن برای تغییرات */
         }
 
-        /* Main font for the whole body */
+        /* فونت اصلی برای کل بدنه */
         body {
-            font-family: 'Vazirmatn', sans-serif;
-            direction: rtl; /* Ensure RTL direction for the whole body */
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none;    /* Firefox */
-            -ms-user-select: none;     /* Internet Explorer/Edge */
-            user-select: none;         /* Standard */
+            font-family: 'Vazirmatn FD', sans-serif; /* فونت به Vazirmatn FD تغییر یافت */
+            direction: rtl; /* اطمینان از جهت RTL برای کل بدنه */
+            -webkit-user-select: none; /* سافاری */
+            -moz-user-select: none;    /* فایرفاکس */
+            -ms-user-select: none;     /* اینترنت اکسپلورر/اج */
+            user-select: none;         /* استاندارد */
         }
-        /* Allow selection for inputs and textareas */
+        /* اجازه انتخاب برای ورودی‌ها و تکست‌آریاها */
         input, textarea {
             -webkit-user-select: text;
             -moz-user-select: text;
@@ -82,34 +94,34 @@
             user-select: text;
         }
 
-        /* Force Vazirmatn to use Persian numerals for all numbers */
+        /* اجبار Vazirmatn به استفاده از اعداد فارسی برای تمام اعداد */
         body, input[type="number"], input[type="text"], select {
-            font-feature-settings: "ss02", "locl"; /* Stylistic Set 2 and Localized Forms for Vazirmatn */
-            font-variant-numeric: traditional; /* Use traditional numeral forms */
-            unicode-bidi: plaintext; /* Helps with mixed directionality in inputs */
+            font-feature-settings: "ss02", "locl"; /* مجموعه استایلیستی 2 و فرم‌های محلی برای Vazirmatn */
+            font-variant-numeric: traditional; /* استفاده از فرم‌های عددی سنتی */
+            unicode-bidi: plaintext; /* کمک به جهت‌دهی مختلط در ورودی‌ها */
         }
 
-        /* Modal box styles */
+        /* استایل‌های جعبه مودال */
         .modal-box {
-            height: 75vh; /* Dynamic height: 3/4 of viewport height */
-            max-height: 400px; /* Max height for modal content */
+            height: 75vh; /* ارتفاع پویا: 3/4 ارتفاع viewport */
+            max-height: 400px; /* حداکثر ارتفاع برای محتوای مودال */
         }
 
-        /* Inner scrollable content area */
+        /* ناحیه محتوای قابل اسکرول داخلی */
         .modal-scrollable-content {
-            flex-grow: 1; /* Allows content to take available space */
-            overflow-y: auto; /* Enable vertical scrolling */
-            padding-left: 1rem; /* Adjust padding for scrollbar */
+            flex-grow: 1; /* اجازه می‌دهد محتوا فضای موجود را اشغال کند */
+            overflow-y: auto; /* فعال کردن اسکرول عمودی */
+            padding-left: 1rem; /* تنظیم پدینگ برای نوار اسکرول */
             padding-right: 1rem;
         }
 
-        /* Points gain animation */
+        /* انیمیشن کسب پوینت */
         .points-gain-feedback {
             position: absolute;
             font-weight: bold;
-            color: #22C55E; /* Green color, remains constant */
+            color: #22C55E; /* رنگ سبز، ثابت می‌ماند */
             animation: fadeOutUp 1.5s forwards;
-            pointer-events: none; /* Ensure it doesn't block clicks */
+            pointer-events: none; /* اطمینان از عدم مسدود کردن کلیک‌ها */
             z-index: 20;
         }
 
@@ -124,7 +136,7 @@
             }
         }
 
-        /* Confetti effect */
+        /* افکت کنفتی */
         .confetti-container {
             position: fixed;
             top: 0;
@@ -140,7 +152,7 @@
             position: absolute;
             width: 10px;
             height: 10px;
-            background-color: #f0f; /* Default color */
+            background-color: #f0f; /* رنگ پیش‌فرض */
             animation: confetti-fall 3s ease-out forwards;
             opacity: 0;
         }
@@ -157,14 +169,14 @@
                 opacity: 0;
                 transform: translateY(100vh) rotate(720deg);
             }
-            /* Adjusted to ensure confetti falls off screen */
+            /* تنظیم شده برای اطمینان از افتادن کنفتی از صفحه */
             100% {
                 opacity: 0;
                 transform: translateY(100vh) rotate(720deg);
             }
         }
 
-        /* Dynamic styles for inputs and selectors */
+        /* استایل‌های پویا برای ورودی‌ها و سلکتورها */
         input[type="text"], input[type="number"], select {
             border-color: var(--theme-input-border);
         }
@@ -173,41 +185,37 @@
             box-shadow: 0 0 0 2px var(--theme-input-focus-ring);
         }
 
-        /* Dynamic styles for inputs and selectors in dark mode */
+        /* استایل‌های پویا برای ورودی‌ها و سلکتورها در حالت تاریک */
         .dark input[type="text"], .dark input[type="number"], .dark select {
-            border-color: var(--theme-input-border); /* Use specific dark mode border color */
+            border-color: var(--theme-input-border); /* استفاده از رنگ حاشیه خاص حالت تاریک */
         }
         .dark input[type="text"]:focus, .dark input[type="number"]:focus, .dark select:focus {
-            box-shadow: 0 0 0 2px var(--theme-input-focus-ring); /* Use specific dark mode focus ring color */
+            box-shadow: 0 0 0 2px var(--theme-input-focus-ring); /* استفاده از رنگ حلقه فوکوس خاص حالت تاریک */
         }
         .clickable-item {
             cursor: pointer;
             transition: background-color 0.2s ease-in-out;
         }
         .clickable-item:hover {
-            background-color: rgba(0, 0, 0, 0.05); /* Light hover for light mode */
+            background-color: rgba(0, 0, 0, 0.05); /* هاور روشن برای حالت روشن */
         }
         .dark .clickable-item:hover {
-            background-color: rgba(255, 255, 255, 0.05); /* Dark hover for dark mode */
+            background-color: rgba(255, 255, 255, 0.05); /* هاور تیره برای حالت تاریک */
         }
 
-        /* Style for task title to wrap, not scroll */
+        /* استایل برای عنوان وظیفه برای شکستن خط، نه اسکرول */
         .task-name-wrapper {
-            white-space: normal; /* Allow text to wrap */
-            word-break: break-word; /* Break long words */
-            flex-grow: 1; /* Allow it to take available space */
-            min-width: 0; /* Allow it to shrink below its content size */
+            white-space: normal; /* اجازه شکستن خط متن */
+            word-break: break-word; /* شکستن کلمات طولانی */
+            flex-grow: 1; /* اجازه می‌دهد فضای موجود را اشغال کند */
+            min-width: 0; /* اجازه می‌دهد کوچکتر از اندازه محتوای خود شود */
         }
 
-        /* Strikethrough animation for task text - removed */
-        /* .task-name {
-            transition: text-decoration 0.3s ease-in-out, color 0.3s ease-in-out;
-        } */
         .line-through .task-name {
             text-decoration: line-through;
         }
 
-        /* Styles for the three-dot menu pop-up */
+        /* استایل‌های پاپ‌آپ منوی سه نقطه */
         .task-action-menu {
             position: absolute;
             background-color: white;
@@ -220,7 +228,7 @@
             animation: scaleIn 0.15s ease-out forwards;
         }
         .dark .task-action-menu {
-            background-color: #374151; /* gray-700 */
+            background-color: #374151; /* خاکستری-700 */
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         .task-action-menu button {
@@ -231,17 +239,17 @@
             border-radius: 0.375rem;
             text-align: right;
             font-size: 0.875rem; /* text-sm */
-            color: #374151; /* gray-700 */
+            color: #374151; /* خاکستری-700 */
             transition: background-color 0.2s ease-in-out;
         }
         .dark .task-action-menu button {
-            color: #d1d5db; /* gray-300 */
+            color: #d1d5db; /* خاکستری-300 */
         }
         .task-action-menu button:hover {
-            background-color: #f3f4f6; /* gray-100 */
+            background-color: #f3f4f6; /* خاکستری-100 */
         }
         .dark .task-action-menu button:hover {
-            background-color: #4b5563; /* gray-600 */
+            background-color: #4b5563; /* خاکستری-600 */
         }
         .task-action-menu button svg {
             margin-left: 0.5rem; /* ml-2 */
@@ -252,7 +260,7 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* Styles for dynamic modals (edit/change order) */
+        /* استایل‌های مودال‌های پویا (ویرایش/تغییر چیدمان) */
         .dynamic-modal {
             position: fixed;
             inset: 0;
@@ -261,7 +269,7 @@
             align-items: center;
             justify-content: center;
             padding: 1rem;
-            z-index: 60; /* Higher than other modals */
+            z-index: 60; /* بالاتر از سایر مودال‌ها */
             transition: opacity 0.3s ease-in-out;
             opacity: 0;
             pointer-events: none;
@@ -283,7 +291,7 @@
             position: relative;
         }
         .dark .dynamic-modal-content {
-            background-color: #374151; /* gray-700 */
+            background-color: #374151; /* خاکستری-700 */
         }
         .dynamic-modal.show .dynamic-modal-content {
             transform: translateY(0);
@@ -317,7 +325,7 @@
                 <a href="#" id="helpMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">راهنما</a>
                 <a href="#" id="aboutMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">درباره</a>
                 <a href="#" id="backupMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-300 ease-in-out">پشتیبان‌گیری</a>
-                <a href="#" id="donateMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">دونیت</a>
+                <a href="#" id="donateMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">حمایت مالی</a>
                 <a href="#" id="resetMenuItem" class="block px-4 py-2 text-sm text-red-700 dark:text-red-200 hover:bg-red-100 dark:hover:bg-red-600 transition duration-200 ease-in-out">بازنشانی داده‌ها</a>
             </div>
         </div>
@@ -393,7 +401,7 @@
 
         <div class="mt-8 px-2 md:px-0">
             <button id="toggleCompletedTasksBtn" class="w-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-400">
-                <span>وظایف انجام شده</span>
+                <span>وظایف تکمیل شده</span>
                 <svg id="toggleIcon" class="h-5 w-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
             <div id="completedTasksSection" class="hidden mt-4">
@@ -415,7 +423,7 @@
                    class="w-full p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-500 bg-white dark:bg-gray-700 mb-4">
             <button id="startBtn"
                     class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 text-lg">
-                بزن بریم!
+                شروع کنید!
             </button>
         </div>
     </div>
@@ -444,11 +452,11 @@
 
     <div id="aboutModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="aboutModalContent">
-            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">درباره</h3>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">درباره ما</h3>
             <div id="aboutModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
-                <p class="mb-3">این برنامه برای کمک به مدیریت وظایف و افزایش انگیزه طراحی شده است.</p>
-                <p class="mb-3">این پروژه به صورت اختصاصی توسط <strong class="text-blue-600 dark:text-blue-400"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">سایت عمو لئو</a></strong> طراحی شده است، این آولین و آخرین نسخه از از این پروژه است.</p>
-                <p class="mb-3">تمامی حقوق متعلق به <strong class="text-blue-600 dark:text-blue-400"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
+                <p class="mb-3">این برنامه به منظور مدیریت وظایف و افزایش انگیزه طراحی شده است.</p>
+                <p class="mb-3">این پروژه به صورت اختصاصی توسط <strong class="text-gray-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">سایت عمو لئو</a></strong> طراحی شده است. این نسخه، اولین و آخرین نسخه از این پروژه است.</p>
+                <p class="mb-3">تمامی حقوق متعلق به <strong class="text-gray-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
                 <p class="mb-3">تاریخ: ۴ خرداد ۱۴۰۴</p>
             </div>
             <button id="closeAboutModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -461,7 +469,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="backupModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">پشتیبان‌گیری و بازیابی داده‌ها</h3>
             <div class="modal-scrollable-content flex flex-col gap-4">
-                <p class="text-sm text-gray-700 dark:text-gray-300">برای پشتیبان‌گیری، دکمه "ذخیره داده‌ها" را بزنید تا فایل پشتیبان دانلود شود. برای بازیابی، فایل پشتیبان را انتخاب کرده و "بارگذاری از فایل" را بزنید.</p>
+                <p class="text-sm text-gray-700 dark:text-gray-300">برای پشتیبان‌گیری، دکمه "ذخیره داده‌ها" را فشار دهید تا فایل پشتیبان دانلود شود. برای بازیابی، فایل پشتیبان را انتخاب کرده و "بارگذاری از فایل" را فشار دهید.</p>
                 
                 <button id="exportDataBtn" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400">
                     ذخیره داده‌ها (دانلود فایل)
@@ -554,175 +562,81 @@
     </div>
 
     <script>
-        // Task data structure
+        // ساختار داده وظیفه
         let tasks = [];
-        let zPoint = 0; // Z-Point
-        let level = 1; // Current level
-        let dailyStreak = 0; // Daily streak counter
-        let highestDailyStreak = 0; // New variable for highest streak
-        let lastCompletionDate = null; // Date of last task completion
-        let totalCustomTasksCompleted = 0; // Counter for completed custom tasks
-        let userName = null; // User's name
+        let zPoint = 0; // زی-پوینت
+        let level = 1; // سطح فعلی
+        let dailyStreak = 0; // شمارنده زنجیره روزانه
+        let highestDailyStreak = 0; // بالاترین زنجیره ثبت شده
+        let lastCompletionDate = null; // تاریخ آخرین تکمیل وظیفه
+        let totalCustomTasksCompleted = 0; // شمارنده وظایف سفارشی تکمیل شده
+        let userName = null; // نام کاربر
 
-        const pointsPerNormalTask = 10; // Points for normal tasks
-        const pointsPerImportantTask = 25; // Points for important tasks
-        const MAX_CUSTOM_POINTS = 50; // Max points for custom tasks
-        const TASKS_PER_PAGE = 7; // Number of tasks displayed per page (Changed from 8 to 7)
+        const pointsPerNormalTask = 10; // پوینت برای وظایف عادی
+        const pointsPerImportantTask = 25; // پوینت برای وظایف مهم
+        const MAX_CUSTOM_POINTS = 50; // حداکثر پوینت برای وظایف سفارشی
+        const TASKS_PER_PAGE = 7; // تعداد وظایف نمایش داده شده در هر صفحه
 
-        // Pagination status variables
+        // متغیرهای وضعیت صفحه‌بندی
         let activeCurrentPage = 1;
         let completedCurrentPage = 1;
 
-        // Define points required to reach each level (Level 1 is zero points)
+        // تعریف پوینت‌های مورد نیاز برای رسیدن به هر سطح (سطح 1 صفر پوینت است)
         const levelPointsThresholds = [
-            { name: 'نوبا', points: 0 },
+            { name: 'نوب', points: 0 },
             { name: 'مبتدی', points: 30 },
             { name: 'جنگجو', points: 70 },
             { name: 'شوالیه', points: 120 },
-            { name: 'قهرمان', points: 180 },
+            { name: 'هیرو', points: 180 },
             { name: 'استاد', points: 250 },
             { name: 'فرمانده', points: 330 },
             { name: 'سلطان', points: 420 },
-            { name: 'اژدها', points: 520 },
-            { name: 'افسانه', points: 630 },
+            { name: 'کار درست', points: 520 },
+            { name: 'خفن', points: 630 },
             { name: 'جاودان', points: 750 },
             { name: 'خدایگان', points: 900 },
             { name: 'کیهان‌نورد', points: 1080 },
-            { name: 'ابرقهرمان', points: 1290 },
+            { name: 'بتمن', points: 1290 },
             { name: 'سیگما', points: 1500 }
         ];
 
-        // Define themes for each level
-        const levelThemes = [
-            {
-                name: 'نوبا',
-                light: { primary: '#3b82f6', secondary: '#60a5fa', accentBg: '#eff6ff', accentText: '#1e40af', inputBorder: '#93c5fd', inputFocusRing: '#60a5fa' },
-                dark: { primary: '#1d4ed8', secondary: '#3b82f6', accentBg: '#1e3a8a', accentText: '#bfdbfe', inputBorder: '#1d4ed8', inputFocusRing: '#3b82f6' },
-                description: 'آبی آرام'
-            },
-            {
-                name: 'مبتدی',
-                light: { primary: '#22c55e', secondary: '#4ade80', accentBg: '#f0fdf4', accentText: '#166534', inputBorder: '#bbf7d0', inputFocusRing: '#4ade80' },
-                dark: { primary: '#15803d', secondary: '#22c55e', accentBg: '#14532d', accentText: '#86efac', inputBorder: '#15803d', inputFocusRing: '#22c55e' },
-                description: 'سبز تازه'
-            },
-            {
-                name: 'جنگجو',
-                light: { primary: '#f97316', secondary: '#fb923c', accentBg: '#fff7ed', accentText: '#c2410c', inputBorder: '#fed7aa', inputFocusRing: '#fb923c' },
-                dark: { primary: '#ea580c', secondary: '#f97316', accentBg: '#7c2d12', accentText: '#fed7aa', inputBorder: '#ea580c', inputFocusRing: '#f97316' },
-                description: 'نارنجی پرانرژی'
-            },
-            {
-                name: 'شوالیه',
-                light: { primary: '#6b7280', secondary: '#9ca3af', accentBg: '#f9fafb', accentText: '#374151', inputBorder: '#d1d5db', inputFocusRing: '#9ca3af' },
-                dark: { primary: '#4b5563', secondary: '#6b7280', accentBg: '#ffffff', accentText: '#000000', inputBorder: '#4b5563', inputFocusRing: '#6b7280' },
-                description: 'خاکستری نقره‌ای (حالت تاریک: پس‌زمینه سفید، متن مشکی)'
-            },
-            {
-                name: 'قهرمان',
-                light: { primary: '#ef4444', secondary: '#f87171', accentBg: '#fef2f2', accentText: '#b91c1c', inputBorder: '#fca5a5', inputFocusRing: '#f87171' },
-                dark: { primary: '#dc2626', secondary: '#ef4444', accentBg: '#7f1d1d', accentText: '#fca5a5', inputBorder: '#dc2626', inputFocusRing: '#ef4444' },
-                description: 'قرمز آتشین'
-            },
-            {
-                name: 'استاد',
-                light: { primary: '#9333ea', secondary: '#a855f7', accentBg: '#faf5ff', accentText: '#6b21a8', inputBorder: '#d8b4fe', inputFocusRing: '#a855f7' },
-                dark: { primary: '#7e22ce', secondary: '#9333ea', accentBg: '#4a044e', accentText: '#e9d5ff', inputBorder: '#7e22ce', inputFocusRing: '#9333ea' },
-                description: 'بنفش عمیق'
-            },
-            {
-                name: 'فرمانده',
-                light: { primary: '#14b8a6', secondary: '#2dd4bf', accentBg: '#f0fdfa', accentText: '#0f766e', inputBorder: '#99f6e4', inputFocusRing: '#2dd4bf' },
-                dark: { primary: '#0d9488', secondary: '#14b8a6', accentBg: '#042f2e', accentText: '#99f6e4', inputBorder: '#0d9488', inputFocusRing: '#14b8a6' },
-                description: 'آبی-سبز'
-            },
-            {
-                name: 'سلطان',
-                light: { primary: '#eab308', secondary: '#fcd34d', accentBg: '#fefce8', accentText: '#a16207', inputBorder: '#fde68a', inputFocusRing: '#fcd34d' },
-                dark: { primary: '#d97706', secondary: '#eab308', accentBg: '#78350f', accentText: '#fde68a', inputBorder: '#d97706', inputFocusRing: '#eab308' },
-                description: 'طلایی'
-            },
-            {
-                name: 'اژدها',
-                light: { primary: '#f59e0b', secondary: '#fbbf24', accentBg: '#fffbeb', accentText: '#b45309', inputBorder: '#fcd34d', inputFocusRing: '#fbbf24' },
-                dark: { primary: '#d97706', secondary: '#f59e0b', accentBg: '#78350f', accentText: '#fcd34d', inputBorder: '#d97706', inputFocusRing: '#f59e0b' },
-                description: 'کهربایی'
-            },
-            {
-                name: 'افسانه',
-                light: { primary: '#ec4899', secondary: '#f472b6', accentBg: '#fdf2f8', accentText: '#be185d', inputBorder: '#fbcfe8', inputFocusRing: '#f472b6' },
-                dark: { primary: '#be185d', secondary: '#ec4899', accentBg: '#500724', accentText: '#fbcfe8', inputBorder: '#be185d', inputFocusRing: '#ec4899' },
-                description: 'صورتی درخشان'
-            },
-            {
-                name: 'جاودان',
-                light: { primary: '#6366f1', secondary: '#818cf8', accentBg: '#eef2ff', accentText: '#3730a3', inputBorder: '#c7d2fe', inputFocusRing: '#818cf8' },
-                dark: { primary: '#4338ca', secondary: '#6366f1', accentBg: '#1e1b4b', accentText: '#c7d2fe', inputBorder: '#4338ca', inputFocusRing: '#6366f1' },
-                description: 'نیلی'
-            },
-            {
-                name: 'خدایگان',
-                light: { primary: '#84cc16', secondary: '#a3e635', accentBg: '#f7fee7', accentText: '#4d7c0f', inputBorder: '#d9f99d', inputFocusRing: '#a3e635' },
-                dark: { primary: '#65a30d', secondary: '#84cc16', accentBg: '#365314', accentText: '#d9f99d', inputBorder: '#65a30d', inputFocusRing: '#84cc16' },
-                description: 'سبز لیمویی'
-            },
-            {
-                name: 'کیهان‌نورد',
-                light: { primary: '#06b6d4', secondary: '#22d3ee', accentBg: '#ecfeff', accentText: '#0e7490', inputBorder: '#a5f3fc', inputFocusRing: '#22d3ee' },
-                dark: { primary: '#0891b2', secondary: '#06b6d4', accentBg: '#042f2e', accentText: '#a5f3fc', inputBorder: '#0891b2', inputFocusRing: '#06b6d4' },
-                description: 'فیروزه‌ای'
-            },
-            {
-                name: 'ابرقهرمان',
-                light: { primary: '#e11d48', secondary: '#f43f5e', accentBg: '#fff1f2', accentText: '#9f1239', inputBorder: '#fda4af', inputFocusRing: '#f43f5e' },
-                dark: { primary: '#be123c', secondary: '#e11d48', accentBg: '#4c0519', accentText: '#fda4af', inputBorder: '#be123c', inputFocusRing: '#e11d48' },
-                description: 'صورتی رز'
-            },
-            {
-                name: 'سیگما', // Special state
-                light: { primary: '#3b82f6', secondary: '#60a5fa', accentBg: '#ffffff', accentText: '#000000', inputBorder: '#93c5fd', inputFocusRing: '#60a5fa' },
-                dark: { primary: '#3b82f6', secondary: '#60a5fa', accentBg: '#000000', accentText: '#ffffff', inputBorder: '#1d4ed8', inputFocusRing: '#3b82f6' },
-                description: 'سفید و آبی (تم روز: پس‌زمینه سفید، متن مشکی؛ تم شب: پس‌زمینه مشکی، متن سفید)'
-            }
-        ];
-
-        // Achievements data
+        // داده‌های دستاوردها
         const achievementsData = [
-            { level: 1, name: 'نوبا', icon: '👶', type: 'level' },
+            { level: 1, name: 'نوب', icon: '👶', type: 'level' },
             { level: 2, name: 'مبتدی', icon: '🌱', type: 'level' },
             { level: 3, name: 'جنگجو', icon: '⚔️', type: 'level' },
             { level: 4, name: 'شوالیه', icon: '🛡️', type: 'level' },
-            { level: 5, name: 'قهرمان', icon: '🦸‍♂️', type: 'level' },
+            { level: 5, name: 'هیرو', icon: '🦸‍♂️', type: 'level' },
             { level: 6, name: 'استاد', icon: '🎓', type: 'level' },
             { level: 7, name: 'فرمانده', icon: '🎖️', type: 'level' },
             { level: 8, name: 'سلطان', icon: '👑', type: 'level' },
-            { level: 9, name: 'اژدها', icon: '🐉', type: 'level' },
-            { type: 'totalTasks', value: 10, name: 'ده وظیفه', icon: '✅', description: 'Earned by completing 10 tasks.' },
-            { type: 'totalTasks', value: 50, name: 'پنجاه وظیفه', icon: '💯', description: 'Earned by completing 50 tasks.' },
-            { type: 'importantTasks', value: 5, name: 'پنج وظیفه مهم', icon: '🚨', description: 'Earned by completing 5 important tasks.' },
-            { type: 'importantTasks', value: 10, name: 'ده وظیفه مهم', icon: '🛑', description: 'Earned by completing 10 important tasks.' },
-            { type: 'streak', value: 3, name: 'زنجیره سه روزه', icon: '🔥', description: 'Earned by completing at least one task for 3 consecutive days.' },
-            { type: 'streak', value: 7, name: 'زنجیره هفت روزه', icon: '✨🔥', description: 'Earned by completing at least one task for 7 consecutive days.' },
-            { type: 'streak', value: 14, name: 'زنجیره دو هفته‌ای', icon: '🗓️🔥', description: 'Earned by completing at least one task for 14 consecutive days.' },
-            { type: 'streak', value: 30, name: 'زنجیره ماهانه', icon: '🗓️🗓️🔥', description: 'Earned by completing at least one task for 30 consecutive days.' },
-            { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: '💯✅', description: 'Earned by completing 100 tasks.' },
-            { type: 'totalTasks', value: 250, name: 'دویست و پنجاه وظیفه', icon: '🌟💯', description: 'Earned by completing 250 tasks.' },
-            { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: '🏆💯', description: 'Earned by collecting 500 Points.' },
-            { type: 'importantTasks', value: 20, name: 'بیست وظیفه مهم', icon: '🛑🛑', description: 'Earned by completing 20 important tasks.' },
-            { type: 'customTasks', value: 1, name: 'اولین وظیفه سفارشی', icon: '💡', description: 'Earned by completing the first custom-point task.' },
-            { type: 'customTasks', value: 5, name: 'پنج وظیفه سفارشی', icon: '⚙️✅', description: 'Earned by completing 5 custom-point tasks.' },
-            { type: 'customTasks', value: 10, name: 'ده وظیفه سفارشی', icon: '⚙️💯', description: 'Earned by completing 10 custom-point tasks.' },
-            { type: 'points', value: 500, name: 'پانصد پوینت', icon: '💰', description: 'Earned by collecting 500 Points.' },
-            { type: 'points', value: 1000, name: 'هزار پوینت', icon: '💎💰', description: 'Earned by collecting 1000 Points.' },
-            { level: 10, name: 'افسانه', icon: '✨', type: 'level' },
+            { level: 9, name: 'کار درست', icon: '🐉', type: 'level' },
+            { type: 'totalTasks', value: 10, name: 'ده وظیفه', icon: '✅', description: 'با تکمیل ۱۰ وظیفه کسب می‌شود.' },
+            { type: 'totalTasks', value: 50, name: 'پنجاه وظیفه', icon: '💯', description: 'با تکمیل ۵۰ وظیفه کسب می‌شود.' },
+            { type: 'importantTasks', value: 5, name: 'پنج وظیفه مهم', icon: '🚨', description: 'با تکمیل ۵ وظیفه مهم کسب می‌شود.' },
+            { type: 'importantTasks', value: 10, name: 'ده وظیفه مهم', icon: '🛑', description: 'با تکمیل ۱۰ وظیفه مهم کسب می‌شود.' },
+            { type: 'streak', value: 3, name: 'زنجیره سه روزه', icon: '🔥', description: 'با تکمیل حداقل یک وظیفه برای ۳ روز متوالی کسب می‌شود.' },
+            { type: 'streak', value: 7, name: 'زنجیره هفت روزه', icon: '✨🔥', description: 'با تکمیل حداقل یک وظیفه برای ۷ روز متوالی کسب می‌شود.' },
+            { type: 'streak', value: 14, name: 'زنجیره دو هفته‌ای', icon: '🗓️🔥', description: 'با تکمیل حداقل یک وظیفه برای ۱۴ روز متوالی کسب می‌شود.' },
+            { type: 'streak', value: 30, name: 'زنجیره ماهانه', icon: '🗓️🗓️🔥', description: 'با تکمیل حداقل یک وظیفه برای ۳۰ روز متوالی کسب می‌شود.' },
+            { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: '💯✅', description: 'با تکمیل ۱۰۰ وظیفه کسب می‌شود.' },
+            { type: 'totalTasks', value: 250, name: 'دویست و پنجاه وظیفه', icon: '🌟💯', description: 'با تکمیل ۲۵۰ وظیفه کسب می‌شود.' },
+            { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: '🏆💯', description: 'با جمع‌آوری ۵۰۰ پوینت کسب می‌شود.' },
+            { type: 'importantTasks', value: 20, name: 'بیست وظیفه مهم', icon: '🛑🛑', description: 'با تکمیل ۲۰ وظیفه مهم کسب می‌شود.' },
+            { type: 'customTasks', value: 1, name: 'اولین وظیفه سفارشی', icon: '💡', description: 'با تکمیل اولین وظیفه با پوینت سفارشی کسب می‌شود.' },
+            { type: 'customTasks', value: 5, name: 'پنج وظیفه سفارشی', icon: '⚙️✅', description: 'با تکمیل ۵ وظیفه با پوینت سفارشی کسب می‌شود.' },
+            { type: 'customTasks', value: 10, name: 'ده وظیفه سفارشی', icon: '⚙️💯', description: 'با تکمیل ۱۰ وظیفه با پوینت سفارشی کسب می‌شود.' },
+            { type: 'points', value: 500, name: 'پانصد پوینت', icon: '💰', description: 'با جمع‌آوری ۵۰۰ پوینت کسب می‌شود.' },
+            { type: 'points', value: 1000, name: 'هزار پوینت', icon: '💎💰', description: 'با جمع‌آوری ۱۰۰۰ پوینت کسب می‌شود.' },
+            { level: 10, name: 'خفن', icon: '✨', type: 'level' },
             { level: 11, name: 'جاودان', icon: '♾️', type: 'level' },
             { level: 12, name: 'خدایگان', icon: '⚡', type: 'level' },
             { level: 13, name: 'کیهان‌نورد', icon: '🌌', type: 'level' },
-            { level: 14, name: 'ابرقهرمان', icon: '🌟', type: 'level' },
+            { level: 14, name: 'بتمن', icon: '🌟', type: 'level' },
             { level: 15, name: 'سیگما', icon: '🗿', type: 'level' },
         ];
 
-        // DOM elements
+        // عناصر DOM
         const themeToggleBtn = document.getElementById('themeToggleBtn');
         const themeIcon = document.getElementById('themeIcon');
         const menuBtn = document.getElementById('menuBtn');
@@ -789,52 +703,52 @@
         const addTaskSection = document.getElementById('addTaskSection');
         const addTaskTitle = document.getElementById('addTaskTitle');
 
-        // Pagination DOM elements
+        // عناصر DOM صفحه‌بندی
         const activeTasksPagination = document.getElementById('activeTasksPagination');
         const completedTasksPagination = document.getElementById('completedTasksPagination');
-        const completedTasksSection = document.getElementById('completedTasksSection'); // Wrapper for completed tasks content
+        const completedTasksSection = document.getElementById('completedTasksSection'); // کانتینر برای محتوای وظایف تکمیل شده
 
         const confettiContainer = document.getElementById('confettiContainer');
 
-        // Variables for drag and drop
+        // متغیرها برای کشیدن و رها کردن
         let draggedTaskId = null;
-        let draggedElement = null; // Reference to the actual element being dragged
-        let ghostElement = null; // A ghost element for touch drag feedback
-        let initialTouchOffsetX = 0; // Initial touch X offset from element's left edge
-        let initialTouchOffsetY = 0; // Initial touch Y offset from element's top edge
+        let draggedElement = null; // ارجاع به عنصر واقعی در حال کشیدن
+        let ghostElement = null; // عنصر شبح برای بازخورد لمسی کشیدن
+        let initialTouchOffsetX = 0; // آفست اولیه لمس X از لبه چپ عنصر
+        let initialTouchOffsetY = 0; // آفست اولیه لمس Y از لبه بالای عنصر
 
 
-        // Touch-related variables (for Drag & Drop and Tap)
+        // متغیرهای مربوط به لمس (برای کشیدن و رها کردن و ضربه زدن)
         let touchStartX = 0;
         let touchStartY = 0;
         let touchCurrentX = 0;
         let touchCurrentY = 0;
-        let longPressTimer = null; // For activating Drag & Drop
-        let isDragging = false; // Flag to indicate official start of Drag & Drop operation
-        let isGestureStarted = false; // True if a touch sequence has begun on a task item
-        let isLongPressDetected = false; // True if long press threshold has been met for drag
+        let longPressTimer = null; // برای فعال کردن کشیدن و رها کردن
+        let isDragging = false; // پرچم برای نشان دادن شروع رسمی عملیات کشیدن و رها کردن
+        let isGestureStarted = false; // اگر یک دنباله لمسی روی یک آیتم وظیفه شروع شده باشد، درست است
+        let isLongPressDetected = false; // اگر آستانه نگه داشتن طولانی برای کشیدن برآورده شده باشد، درست است
 
-        const DRAG_LONG_PRESS_TIME = 1500; // 1.5 seconds to activate Drag & Drop
-        const TAP_THRESHOLD = 20; // Max pixels moved for a touch to still be considered a tap (increased for better touch recognition)
+        const DRAG_LONG_PRESS_TIME = 1500; // 1.5 ثانیه برای فعال کردن کشیدن و رها کردن
+        const TAP_THRESHOLD = 20; // حداکثر پیکسل جابجا شده برای اینکه یک لمس همچنان ضربه در نظر گرفته شود
 
-        // DOM elements for Undo Message Box
+        // عناصر DOM برای جعبه پیام بازگردانی
         const undoMessageBox = document.getElementById('undoMessageBox');
         const undoMessageText = document.getElementById('undoMessageText');
         const undoCountdown = document.getElementById('undoCountdown');
 
-        // Message queues for sequential display (separate for top-right and bottom-center)
+        // صف‌های پیام برای نمایش متوالی (جداگانه برای بالا-راست و پایین-مرکز)
         const topRightMessageQueue = [];
         const bottomCenterMessageQueue = [];
         let isTopRightDisplaying = false;
         let isBottomCenterDisplaying = false;
         let currentTopRightTimeout = null;
         let currentBottomCenterTimeout = null;
-        let currentCountdownInterval = null; // Holds the interval for the current countdown (if it's an undo message)
+        let currentCountdownInterval = null; // نگهدارنده اینتروال برای شمارش معکوس فعلی (اگر پیام بازگردانی باشد)
 
 
-        // Dynamic Modal elements
+        // عناصر مودال پویا
         const editTaskModal = document.getElementById('editTaskModal');
-        const editTaskModalContent = document.getElementById('editTaskModalContent'); // Correctly selected
+        const editTaskModalContent = document.getElementById('editTaskModalContent'); // به درستی انتخاب شده
         const editTaskNameInput = document.getElementById('editTaskNameInput');
         const editTaskImportanceSelect = document.getElementById('editTaskImportanceSelect');
         const editTaskCustomPointsInput = document.getElementById('editTaskCustomPointsInput');
@@ -842,18 +756,18 @@
         const cancelEditTaskBtn = document.getElementById('cancelEditTaskBtn');
 
         const changeOrderModal = document.getElementById('changeOrderModal');
-        const changeOrderModalContent = document.getElementById('changeOrderModalContent'); // Added ID here
+        const changeOrderModalContent = document.getElementById('changeOrderModalContent'); // ID اضافه شد
         const changeOrderInput = document.getElementById('changeOrderInput');
         const saveChangedOrderBtn = document.getElementById('saveChangedOrderBtn');
         const cancelChangeOrderBtn = document.getElementById('cancelChangeOrderBtn');
 
-        let currentTaskBeingEditedId = null; // To keep track of which task is being edited/reordered
+        let currentTaskBeingEditedId = null; // برای پیگیری وظیفه در حال ویرایش/تغییر چیدمان
 
 
-        // Helper function to convert Persian numerals to English numerals
+        // تابع کمکی برای تبدیل اعداد فارسی به انگلیسی
         function convertPersianNumbersToEnglish(inputString) {
             if (typeof inputString !== 'string') {
-                return inputString; // Return as is if not a string
+                return inputString; // اگر رشته نیست، همانطور که هست برگردانده شود
             }
             const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
             const englishNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
@@ -871,18 +785,8 @@
             return convertedString;
         }
 
-        // Event listener for importance selection to show/hide custom points input
-        importanceSelect.addEventListener('change', () => {
-            if (importanceSelect.value === 'custom') {
-                customPointsInput.classList.remove('hidden');
-                customPointsInput.focus(); // Auto-focus when custom is selected
-            } else {
-                customPointsInput.classList.add('hidden');
-            }
-        });
-
-        // Function to show a custom message box instead of alert()
-        // Options can include: position ('top-right', 'bottom-center'), duration (ms), isUndo (boolean), taskId (for undo)
+        // تابع برای نمایش یک جعبه پیام سفارشی به جای alert()
+        // گزینه‌ها می‌توانند شامل: position ('top-right', 'bottom-center'), duration (ms), isUndo (boolean), taskId (برای بازگردانی)
         function showMessageBox(message, type = 'info', options = {}) {
             const { position = 'top-right', duration = 3000, isUndo = false, taskData = null } = options;
             const messageObject = { message, type, position, duration, isUndo, taskData };
@@ -896,7 +800,7 @@
             }
         }
 
-        // Function to process the top-right message queue
+        // تابع برای پردازش صف پیام بالا-راست
         function processTopRightQueue() {
             if (topRightMessageQueue.length === 0 || isTopRightDisplaying) {
                 return;
@@ -908,7 +812,7 @@
             const messageBox = document.createElement('div');
             let bgColorClass = '';
             if (type === 'info') {
-                bgColorClass = 'bg-blue-500 dark:bg-blue-700';
+                bgColorClass = 'bg-gray-500 dark:bg-gray-700';
             } else if (type === 'success') {
                 bgColorClass = 'bg-green-500 dark:bg-green-700';
             } else if (type === 'error') {
@@ -929,12 +833,12 @@
                 messageBox.addEventListener('transitionend', () => {
                     messageBox.remove();
                     isTopRightDisplaying = false;
-                    processTopRightQueue(); // Process next message
+                    processTopRightQueue(); // پردازش پیام بعدی
                 }, { once: true });
             }, duration);
         }
 
-        // Function to process the bottom-center message queue (for undo messages)
+        // تابع برای پردازش صف پیام پایین-مرکز (برای پیام‌های بازگردانی)
         function processBottomCenterQueue() {
             if (bottomCenterMessageQueue.length === 0 || isBottomCenterDisplaying) {
                 return;
@@ -943,21 +847,21 @@
             isBottomCenterDisplaying = true;
             const { message, duration, isUndo, taskData } = bottomCenterMessageQueue.shift();
 
-            // Only the undoMessageBox uses bottom-center position and undo logic
+            // فقط undoMessageBox از موقعیت پایین-مرکز و منطق بازگردانی استفاده می‌کند
             if (isUndo) {
                 undoMessageText.textContent = message;
-                undoMessageBox.classList.remove('hidden'); // Ensure it's not hidden
-                undoMessageBox._currentUndoTaskData = taskData; // Store the specific task data for this message
+                undoMessageBox.classList.remove('hidden'); // اطمینان از عدم پنهان بودن
+                undoMessageBox._currentUndoTaskData = taskData; // ذخیره داده‌های وظیفه خاص برای این پیام
                 
                 let timeLeft = duration / 1000;
                 undoCountdown.textContent = `(${timeLeft}s)`;
-                clearInterval(currentCountdownInterval); // Clear previous interval
+                clearInterval(currentCountdownInterval); // پاک کردن اینتروال قبلی
                 currentCountdownInterval = setInterval(() => {
                     timeLeft--;
                     undoCountdown.textContent = `(${timeLeft}s)`;
                     if (timeLeft <= 0) {
                         clearInterval(currentCountdownInterval);
-                        hideBottomCenterMessage(); // Hide the undo message
+                        hideBottomCenterMessage(); // پنهان کردن پیام بازگردانی
                     }
                 }, 1000);
 
@@ -965,10 +869,10 @@
                     if (undoMessageBox._currentUndoTaskData) {
                         undoLastDeletion(undoMessageBox._currentUndoTaskData);
                     }
-                    hideBottomCenterMessage(); // Hide the undo message immediately on click
+                    hideBottomCenterMessage(); // پنهان کردن پیام بازگردانی بلافاصله پس از کلیک
                 };
 
-                // Entry animation
+                // انیمیشن ورود
                 setTimeout(() => {
                     undoMessageBox.classList.remove('scale-0', 'opacity-0');
                     undoMessageBox.classList.add('scale-100', 'opacity-100');
@@ -985,29 +889,29 @@
                 undoMessageBox.classList.remove('scale-100', 'opacity-100');
                 undoMessageBox.classList.add('scale-0', 'opacity-0');
                 undoMessageBox.addEventListener('transitionend', () => {
-                    undoMessageBox.classList.add('hidden'); // Hide completely after animation
-                    undoMessageBox.onclick = null; // Remove click handler
-                    undoMessageBox._currentUndoTaskData = null; // Clear the stored task data
+                    undoMessageBox.classList.add('hidden'); // کاملاً پنهان کردن پس از انیمیشن
+                    undoMessageBox.onclick = null; // حذف هندلر کلیک
+                    undoMessageBox._currentUndoTaskData = null; // پاک کردن داده‌های وظیفه ذخیره شده
                     isBottomCenterDisplaying = false;
-                    processBottomCenterQueue(); // Process next message
+                    processBottomCenterQueue(); // پردازش پیام بعدی
                 }, { once: true });
             }
         }
 
 
-        // Function to show points gain feedback
+        // تابع برای نمایش بازخورد کسب پوینت
         function showPointsGainFeedback(pointsGained, taskElement) {
             if (!taskElement) return;
 
             const feedback = document.createElement('div');
-            feedback.textContent = `+${pointsGained}`;
+            feedback.textContent = `${pointsGained} پوینت`;
             feedback.classList.add('points-gain-feedback');
 
-            // Position feedback element relative to task item
+            // موقعیت‌دهی عنصر بازخورد نسبت به آیتم وظیفه
             const rect = taskElement.getBoundingClientRect();
             feedback.style.top = `${rect.top + window.scrollY + rect.height / 2 - 10}px`;
             feedback.style.left = `${rect.left + window.scrollX + rect.width / 2 - 20}px`;
-            feedback.style.fontSize = '1.2rem'; // Slightly increased font size
+            feedback.style.fontSize = '1.2rem'; // اندازه فونت کمی افزایش یافت
 
             document.body.appendChild(feedback);
 
@@ -1016,31 +920,48 @@
             });
         }
 
-        // Function to trigger confetti effect
+        // تابع برای فعال کردن افکت کنفتی
         function triggerConfetti() {
             const colors = ['#f0f', '#0ff', '#ff0', '#f00', '#0f0', '#00f'];
-            for (let i = 0; i < 50; i++) { // Generate 50 confetti pieces
+            for (let i = 0; i < 50; i++) { // تولید 50 قطعه کنفتی
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti');
                 confetti.style.left = `${Math.random() * 100}vw`;
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = `${Math.random() * 0.5}s`; // Staggered animation
+                confetti.style.animationDelay = `${Math.random() * 0.5}s`; // انیمیشن با تأخیر
                 confettiContainer.appendChild(confetti);
             }
-            // Clean up confetti after animation
+            // پاکسازی کنفتی پس از انیمیشن
             setTimeout(() => {
                 confettiContainer.innerHTML = '';
             }, 3000);
         }
 
-        // Function to apply theme based on current level
+        // تابع برای اعمال تم بر اساس سطح فعلی (تغییر یافته برای تم مینیمال)
         function applyLevelTheme(currentLevel) {
             const isDarkMode = document.documentElement.classList.contains('dark');
-            const themeIndex = Math.min(currentLevel - 1, levelThemes.length - 1); // Ensure index is within bounds
-            const theme = levelThemes[themeIndex];
-            const currentThemeData = isDarkMode ? theme.dark : theme.light;
+            
+            // تعریف پالت رنگی مینیمال
+            const lightThemeColors = {
+                primary: '#4b5563', // خاکستری-700
+                secondary: '#6b7280', // خاکستری-600
+                accentBg: '#f3f4f6', // خاکستری-100
+                accentText: '#1f2937', // خاکستری-900
+                inputBorder: '#9ca3af', // خاکستری-400
+                inputFocusRing: '#6b7280' // خاکستری-600
+            };
+            const darkThemeColors = {
+                primary: '#d1d5db', // خاکستری-300
+                secondary: '#9ca3af', // خاکستری-400
+                accentBg: '#1f2937', // خاکستری-900
+                accentText: '#f9fafb', // خاکستری-50
+                inputBorder: '#4b5563', // خاکستری-700
+                inputFocusRing: '#9ca3af' // خاکستری-400
+            };
 
-            // Set CSS variables
+            const currentThemeData = isDarkMode ? darkThemeColors : lightThemeColors;
+
+            // تنظیم متغیرهای CSS
             document.documentElement.style.setProperty('--theme-primary', currentThemeData.primary);
             document.documentElement.style.setProperty('--theme-secondary', currentThemeData.secondary);
             document.documentElement.style.setProperty('--theme-accent-bg', currentThemeData.accentBg);
@@ -1048,25 +969,25 @@
             document.documentElement.style.setProperty('--theme-progress-from', currentThemeData.primary);
             document.documentElement.style.setProperty('--theme-progress-to', currentThemeData.secondary);
             document.documentElement.style.setProperty('--drag-border-color', currentThemeData.primary);
-            document.documentElement.style.setProperty('--drag-border-color-rgb', hexToRgb(currentThemeData.primary)); // Added for rgba() usage
+            document.documentElement.style.setProperty('--drag-border-color-rgb', hexToRgb(currentThemeData.primary)); // اضافه شده برای استفاده در rgba()
             document.documentElement.style.setProperty('--theme-input-border', currentThemeData.inputBorder);
             document.documentElement.style.setProperty('--theme-input-focus-ring', currentThemeData.inputFocusRing);
 
-            // Update elements that use these variables
-            // Add Task Button
+            // به‌روزرسانی عناصری که از این متغیرها استفاده می‌کنند
+            // دکمه افزودن وظیفه
             addTaskBtn.style.backgroundColor = currentThemeData.primary;
             addTaskBtn.onmouseover = () => addTaskBtn.style.backgroundColor = currentThemeData.secondary;
             addTaskBtn.onmouseout = () => addTaskBtn.style.backgroundColor = currentThemeData.primary;
 
-            // Background and text of Add Task section
+            // پس‌زمینه و متن بخش افزودن وظیفه
             addTaskSection.style.backgroundColor = currentThemeData.accentBg;
             addTaskTitle.style.color = currentThemeData.accentText;
 
-            // Update progress bar gradient
+            // به‌روزرسانی گرادیان نوار پیشرفت
             progressBar.style.backgroundImage = `linear-gradient(to right, ${currentThemeData.primary}, ${currentThemeData.secondary})`;
         }
 
-        // Helper function to convert hex color code to RGB format
+        // تابع کمکی برای تبدیل کد رنگ هگز به فرمت RGB
         function hexToRgb(hex) {
             const bigint = parseInt(hex.slice(1), 16);
             const r = (bigint >> 16) & 255;
@@ -1075,33 +996,33 @@
             return `${r}, ${g}, ${b}`;
         }
 
-        // Function to update gamification display
+        // تابع برای به‌روزرسانی نمایش گیمیفیکیشن
         function updateGamificationDisplay() {
             zPointSpan.textContent = zPoint;
             
-            // Calculate current level based on points thresholds
+            // محاسبه سطح فعلی بر اساس آستانه پوینت‌ها
             let newLevel = 1;
             for (let i = 0; i < levelPointsThresholds.length; i++) {
                 if (zPoint >= levelPointsThresholds[i].points) {
                     newLevel = i + 1;
                 } else {
-                    break; // Points are not enough for this level, so previous level is current
+                    break; // پوینت‌ها برای این سطح کافی نیست، بنابراین سطح قبلی فعلی است
                 }
             }
 
             if (newLevel > level) {
-                showMessageBox(`تبریک! به سطح ${newLevel} رسیدید!`, 'success'); // Changed message to Persian
+                showMessageBox(`تبریک! به سطح ${levelPointsThresholds[newLevel - 1].name} رسیدید!`, 'success');
                 triggerConfetti();
             }
-            level = newLevel; // Update global level variable
+            level = newLevel; // به‌روزرسانی متغیر سطح جهانی
             levelSpan.textContent = level;
 
-            dailyStreakSpan.textContent = dailyStreak; // Update daily streak display
+            dailyStreakSpan.textContent = dailyStreak; // به‌روزرسانی نمایش زنجیره روزانه
 
-            // Progress bar logic up to level 15
+            // منطق نوار پیشرفت تا سطح 15
             if (level <= levelPointsThresholds.length) {
                 const currentLevelThreshold = levelPointsThresholds[level - 1].points;
-                // Ensure nextLevelThreshold is correctly calculated, especially for the last level
+                // اطمینان از محاسبه صحیح nextLevelThreshold، به ویژه برای آخرین سطح
                 const nextLevelThreshold = (level < levelPointsThresholds.length) ? levelPointsThresholds[level].points : zPoint;
                 
                 let pointsIntoCurrentLevel = zPoint - currentLevelThreshold;
@@ -1110,45 +1031,45 @@
                 let progressPercentage = 0;
                 if (pointsNeededForNextLevel > 0) {
                     progressPercentage = Math.min(100, (pointsIntoCurrentLevel / pointsNeededForNextLevel) * 100);
-                } else if (level === levelPointsThresholds.length) { // Max level reached
+                } else if (level === levelPointsThresholds.length) { // حداکثر سطح رسید
                     progressPercentage = 100;
                 }
 
                 progressBar.style.width = `${progressPercentage}%`;
                 if (level < levelPointsThresholds.length) {
-                    progressText.textContent = `${Math.round(progressPercentage)}% پیشرفت به سطح ${level + 1}`; // Changed message to Persian
+                    progressText.textContent = `${Math.round(progressPercentage)}% پیشرفت به سطح ${levelPointsThresholds[level].name}`;
                 } else {
-                    progressText.textContent = `شما به حداکثر سطح (${level}) رسیده‌اید!`; // Changed message to Persian
+                    progressText.textContent = `شما به حداکثر سطح (${levelPointsThresholds[levelPointsThresholds.length - 1].name}) رسیده‌اید!`;
                 }
             } else {
-                // After max level, progress bar remains full and only points accumulate
+                // پس از حداکثر سطح، نوار پیشرفت پر باقی می‌ماند و فقط پوینت‌ها جمع می‌شوند
                 progressBar.style.width = `100%`;
-                progressText.textContent = `شما به حداکثر سطح (${levelPointsThresholds.length}) رسیده‌اید!`; // Changed message to Persian
+                progressText.textContent = `شما به حداکثر سطح (${levelPointsThresholds[levelPointsThresholds.length - 1].name}) رسیده‌اید!`;
             }
             
-            renderAchievements(); // Call renderAchievements here
-            applyLevelTheme(level); // Apply theme for current level
+            renderAchievements(); // فراخوانی renderAchievements در اینجا
+            applyLevelTheme(level); // اعمال تم برای سطح فعلی
         }
 
-        // Function to save tasks, points, level, streak, and last completion date to Local Storage
+        // تابع برای ذخیره وظایف، پوینت‌ها، سطح، زنجیره و تاریخ آخرین تکمیل در Local Storage
         function saveToLocalStorage() {
             localStorage.setItem('tasks', JSON.stringify(tasks));
             localStorage.setItem('zPoint', zPoint);
             localStorage.setItem('level', level);
             localStorage.setItem('dailyStreak', dailyStreak);
-            localStorage.setItem('highestDailyStreak', highestDailyStreak); // Save highest streak
+            localStorage.setItem('highestDailyStreak', highestDailyStreak); // ذخیره بالاترین زنجیره
             localStorage.setItem('lastCompletionDate', lastCompletionDate);
             localStorage.setItem('totalCustomTasksCompleted', totalCustomTasksCompleted);
             localStorage.setItem('userName', userName);
         }
 
-        // Function to load tasks, points, level, streak, and last completion date from Local Storage
+        // تابع برای بارگذاری وظایف، پوینت‌ها، سطح، زنجیره و تاریخ آخرین تکمیل از Local Storage
         function loadFromLocalStorage() {
             const storedTasks = localStorage.getItem('tasks');
             const storedZPoint = localStorage.getItem('zPoint');
             const storedLevel = localStorage.getItem('level');
             const storedDailyStreak = localStorage.getItem('dailyStreak');
-            const storedHighestDailyStreak = localStorage.getItem('highestDailyStreak'); // Load highest streak
+            const storedHighestDailyStreak = localStorage.getItem('highestDailyStreak'); // بارگذاری بالاترین زنجیره
             const storedLastCompletionDate = localStorage.getItem('lastCompletionDate');
             const storedTotalCustomTasksCompleted = localStorage.getItem('totalCustomTasksCompleted');
             const storedUserName = localStorage.getItem('userName');
@@ -1157,41 +1078,41 @@
                 try {
                     tasks = JSON.parse(storedTasks);
                 } catch (e) {
-                    console.error("Error parsing stored tasks from Local Storage:", e);
-                    tasks = []; // Reset tasks if parsing fails
+                    console.error("خطا در تجزیه وظایف ذخیره شده از Local Storage:", e);
+                    tasks = []; // بازنشانی وظایف در صورت شکست تجزیه
                 }
             }
             if (storedZPoint) {
                 zPoint = parseInt(storedZPoint, 10);
-                if (isNaN(zPoint)) zPoint = 0; // Ensure it's a number
+                if (isNaN(zPoint)) zPoint = 0; // اطمینان از عدد بودن
             }
             if (storedLevel) {
                 level = parseInt(storedLevel, 10);
-                if (isNaN(level)) level = 1; // Ensure it's a number
+                if (isNaN(level)) level = 1; // اطمینان از عدد بودن
             }
             if (storedDailyStreak) {
                 dailyStreak = parseInt(storedDailyStreak, 10);
-                if (isNaN(dailyStreak)) dailyStreak = 0; // Ensure it's a number
+                if (isNaN(dailyStreak)) dailyStreak = 0; // اطمینان از عدد بودن
             }
-            if (storedHighestDailyStreak) { // Parse highest streak
+            if (storedHighestDailyStreak) { // تجزیه بالاترین زنجیره
                 highestDailyStreak = parseInt(storedHighestDailyStreak, 10);
                 if (isNaN(highestDailyStreak)) highestDailyStreak = 0;
             }
             if (storedTotalCustomTasksCompleted) {
                 totalCustomTasksCompleted = parseInt(storedTotalCustomTasksCompleted, 10);
-                if (isNaN(totalCustomTasksCompleted)) totalCustomTasksCompleted = 0; // Ensure it's a number
+                if (isNaN(totalCustomTasksCompleted)) totalCustomTasksCompleted = 0; // اطمینان از عدد بودن
             }
             if (storedUserName) {
                 userName = storedUserName;
             }
-            // Handle 'null' string from localStorage
+            // رسیدگی به رشته 'null' از localStorage
             if (storedLastCompletionDate && storedLastCompletionDate !== 'null') {
                 lastCompletionDate = storedLastCompletionDate;
             } else {
-                lastCompletionDate = null; // Explicitly set to null if not found or was 'null' string
+                lastCompletionDate = null; // صراحتاً null تنظیم شود اگر یافت نشد یا رشته 'null' بود
             }
 
-            // Check and update daily streak on load
+            // بررسی و به‌روزرسانی زنجیره روزانه در بارگذاری
             const today = new Date().toDateString();
 
             if (lastCompletionDate && lastCompletionDate !== today) {
@@ -1199,34 +1120,34 @@
                 const yesterday = new Date();
                 yesterday.setDate(yesterday.getDate() - 1);
 
-                // Compare only the date parts for streak
-                if (lastDate.toDateString() !== yesterday.toDateString()) { // If not yesterday, reset streak
+                // مقایسه فقط بخش‌های تاریخ برای زنجیره
+                if (lastDate.toDateString() !== yesterday.toDateString()) { // اگر دیروز نبود، زنجیره بازنشانی شود
                     dailyStreak = 0;
-                    showMessageBox('زنجیره روزانه شما بازنشانی شد.', 'info'); // Changed message to Persian
+                    showMessageBox('زنجیره روزانه شما بازنشانی شد.', 'info');
                 }
-                // If it was yesterday, streak has already incremented (on task completion) and no change is needed.
-            } else if (!lastCompletionDate) { // If no completion date exists
+                // اگر دیروز بود، زنجیره قبلاً (در تکمیل وظیفه) افزایش یافته و نیازی به تغییر نیست.
+            } else if (!lastCompletionDate) { // اگر تاریخ تکمیل وجود ندارد
                 dailyStreak = 0;
             }
-            highestDailyStreak = Math.max(highestDailyStreak, dailyStreak); // Ensure highest is updated on load too
-            saveToLocalStorage(); // Save updated streak if reset
-            renderTasks(); // Render tasks immediately after loading
+            highestDailyStreak = Math.max(highestDailyStreak, dailyStreak); // اطمینان از به‌روزرسانی بالاترین در بارگذاری نیز
+            saveToLocalStorage(); // ذخیره زنجیره به‌روز شده در صورت بازنشانی
+            renderTasks(); // رندر وظایف بلافاصله پس از بارگذاری
         }
 
-        // Function to create HTML element for a task
+        // تابع برای ایجاد عنصر HTML برای یک وظیفه
         function createTaskElement(task) {
             const taskItem = document.createElement('div');
-            // Apply dark mode classes based on task status and importance
+            // اعمال کلاس‌های حالت تاریک بر اساس وضعیت و اهمیت وظیفه
             taskItem.className = `task-item flex items-center justify-between p-3 mb-2 sm:p-4 sm:mb-3 rounded-lg shadow-sm transition-all duration-300 ease-in-out
                                 ${task.completed ? 'bg-green-100 dark:bg-green-800 border-l-4 border-green-500 dark:border-green-600 line-through text-gray-500 dark:text-gray-400' :
-                                task.isPinned ? 'bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-500 dark:border-yellow-600' : // Pinned style
+                                task.isPinned ? 'bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-500 dark:border-yellow-600' : // استایل پین شده
                                 task.importance === 'important' ? 'bg-red-50 dark:bg-red-900 border-l-4 border-red-500 dark:border-red-600' :
                                 task.importance === 'custom' ? 'bg-purple-50 dark:bg-purple-900 border-l-4 border-purple-500 dark:border-purple-600' :
                                 'bg-gray-50 dark:bg-gray-700 border-l-4 border-gray-300 dark:border-gray-600'}`;
             taskItem.dataset.id = task.id;
-            taskItem.setAttribute('draggable', !task.completed); // Make draggable only if not completed
+            taskItem.setAttribute('draggable', !task.completed); // فقط اگر تکمیل نشده باشد، قابل کشیدن باشد
 
-            // Determine importance display text
+            // تعیین متن نمایش اهمیت
             let importanceText = '';
             let importanceClasses = '';
             if (task.importance === 'important') {
@@ -1236,7 +1157,7 @@
                 importanceText = 'عادی';
                 importanceClasses = 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
             } else if (task.importance === 'custom') {
-                importanceText = `${task.customPoints} پوینت`; // Display custom points as "35 پوینت"
+                importanceText = `${task.customPoints} پوینت`; // نمایش پوینت‌های سفارشی به صورت "35 پوینت"
                 importanceClasses = 'bg-purple-200 dark:bg-purple-700 text-purple-800 dark:text-purple-200';
             }
 
@@ -1264,25 +1185,25 @@
             return taskItem;
         }
 
-        // Function to render tasks
+        // تابع برای رندر وظایف
         function renderTasks() {
-            activeTaskList.innerHTML = ''; // Clear existing active tasks
-            completedTasksContainer.innerHTML = ''; // Clear existing completed tasks
+            activeTaskList.innerHTML = ''; // پاک کردن وظایف فعال موجود
+            completedTasksContainer.innerHTML = ''; // پاک کردن وظایف تکمیل شده موجود
 
-            // Separate active and completed tasks
+            // جداسازی وظایف فعال و تکمیل شده
             let activeTasks = tasks.filter(task => !task.completed);
             const completedTasks = tasks.filter(task => task.completed);
 
-            // Sort active tasks: pinned first, then maintain their relative order (manual order)
+            // مرتب‌سازی وظایف فعال: پین شده‌ها اول، سپس حفظ ترتیب نسبی (ترتیب دستی)
             activeTasks.sort((a, b) => {
                 if (a.isPinned && !b.isPinned) return -1;
                 if (!a.isPinned && b.isPinned) return 1;
-                return 0; // Maintain existing order for unpinned tasks
+                return 0; // حفظ ترتیب موجود برای وظایف پین نشده
             });
 
-            // Calculate total pages for active tasks
+            // محاسبه کل صفحات برای وظایف فعال
             const activeTotalPages = Math.ceil(activeTasks.length / TASKS_PER_PAGE);
-            // Ensure current page is valid and adjust if tasks are removed
+            // اطمینان از معتبر بودن صفحه فعلی و تنظیم در صورت حذف وظایف
             if (activeCurrentPage > activeTotalPages && activeTotalPages > 0) {
                 activeCurrentPage = activeTotalPages;
             } else if (activeTotalPages === 0) {
@@ -1290,7 +1211,7 @@
             }
             activeCurrentPage = Math.min(Math.max(1, activeCurrentPage), Math.max(1, activeTotalPages));
 
-            // Render active tasks for current page
+            // رندر وظایف فعال برای صفحه فعلی
             const activeStartIndex = (activeCurrentPage - 1) * TASKS_PER_PAGE;
             const activeEndIndex = activeStartIndex + TASKS_PER_PAGE;
             const activeTasksToRender = activeTasks.slice(activeStartIndex, activeEndIndex);
@@ -1307,12 +1228,12 @@
                 });
             }
 
-            // Render pagination controls for active tasks
+            // رندر کنترل‌های صفحه‌بندی برای وظایف فعال
             renderPaginationControls(activeTasksPagination, activeTasks.length, activeCurrentPage, 'active');
 
-            // Calculate total pages for completed tasks
+            // محاسبه کل صفحات برای وظایف تکمیل شده
             const completedTotalPages = Math.ceil(completedTasks.length / TASKS_PER_PAGE);
-            // Ensure current page is valid and adjust if tasks are removed
+            // اطمینان از معتبر بودن صفحه فعلی و تنظیم در صورت حذف وظایف
             if (completedCurrentPage > completedTotalPages && completedTotalPages > 0) {
                 completedCurrentPage = completedTotalPages;
             } else if (completedTotalPages === 0) {
@@ -1320,7 +1241,7 @@
             }
             completedCurrentPage = Math.min(Math.max(1, completedCurrentPage), Math.max(1, completedTotalPages));
 
-            // Render completed tasks for current page
+            // رندر وظایف تکمیل شده برای صفحه فعلی
             const completedStartIndex = (completedCurrentPage - 1) * TASKS_PER_PAGE;
             const completedEndIndex = completedStartIndex + TASKS_PER_PAGE;
             const completedTasksToRender = completedTasks.slice(completedStartIndex, completedEndIndex);
@@ -1337,41 +1258,41 @@
                 });
             }
 
-            // Render pagination controls for completed tasks
+            // رندر کنترل‌های صفحه‌بندی برای وظایف تکمیل شده
             renderPaginationControls(completedTasksPagination, completedTasks.length, completedCurrentPage, 'completed');
 
             updateGamificationDisplay();
         }
 
         /**
-         * Renders pagination controls for a given task list.
-         * @param {HTMLElement} containerElement The DOM element to render controls into.
-         * @param {number} totalItems Total number of items in the list.
-         * @param {number} currentPage Current page number.
-         * @param {'active'|'completed'} listType Type of list ('active' or 'completed').
+         * رندر کنترل‌های صفحه‌بندی برای یک لیست وظیفه مشخص.
+         * @param {HTMLElement} containerElement عنصر DOM برای رندر کنترل‌ها.
+         * @param {number} totalItems تعداد کل آیتم‌ها در لیست.
+         * @param {number} currentPage شماره صفحه فعلی.
+         * @param {'active'|'completed'} listType نوع لیست ('active' یا 'completed').
          */
         function renderPaginationControls(containerElement, totalItems, currentPage, listType) {
             const totalPages = Math.ceil(totalItems / TASKS_PER_PAGE);
 
-            // Hide pagination if only one page or fewer tasks than TASKS_PER_PAGE
+            // پنهان کردن صفحه‌بندی اگر فقط یک صفحه یا تعداد وظایف کمتر از TASKS_PER_PAGE باشد
             if (totalPages <= 1) {
                 containerElement.classList.add('hidden');
-                containerElement.innerHTML = ''; // Clear content when hidden
+                containerElement.innerHTML = ''; // پاک کردن محتوا در صورت پنهان بودن
                 return;
             } else {
-                // Only show pagination if the corresponding section is visible
-                // For active tasks, always show if > 1 page. For completed, show only if section is visible.
+                // فقط در صورتی صفحه‌بندی نمایش داده شود که بخش مربوطه قابل مشاهده باشد
+                // برای وظایف فعال، همیشه نمایش داده شود اگر > 1 صفحه. برای تکمیل شده، فقط در صورتی نمایش داده شود که بخش قابل مشاهده باشد.
                 if (listType === 'completed' && completedTasksSection.classList.contains('hidden')) {
                     containerElement.classList.add('hidden');
-                    containerElement.innerHTML = ''; // Clear content when hidden
+                    containerElement.innerHTML = ''; // پاک کردن محتوا در صورت پنهان بودن
                     return;
                 }
                 containerElement.classList.remove('hidden');
             }
 
-            containerElement.innerHTML = ''; // Clear existing controls
+            containerElement.innerHTML = ''; // پاک کردن کنترل‌های موجود
 
-            // Previous button
+            // دکمه قبلی
             const prevBtn = document.createElement('button');
             prevBtn.className = `p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`;
             prevBtn.innerHTML = `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
@@ -1387,14 +1308,14 @@
             });
             containerElement.appendChild(prevBtn);
 
-            // Page number display (editable)
+            // نمایش شماره صفحه (قابل ویرایش)
             const pageNumberSpan = document.createElement('span');
             pageNumberSpan.className = 'px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 font-semibold cursor-pointer min-w-[3rem] text-center';
             pageNumberSpan.textContent = currentPage;
             pageNumberSpan.title = `صفحه ${currentPage} از ${totalPages}. برای ویرایش دوبار کلیک کنید.`;
-            pageNumberSpan.dataset.listType = listType; // Store list type for event handling
+            pageNumberSpan.dataset.listType = listType; // ذخیره نوع لیست برای مدیریت رویداد
 
-            // Double click to edit page number
+            // دوبار کلیک برای ویرایش شماره صفحه
             pageNumberSpan.addEventListener('dblclick', () => {
                 const input = document.createElement('input');
                 input.type = 'number';
@@ -1402,16 +1323,16 @@
                 input.value = currentPage;
                 input.min = 1;
                 input.max = totalPages;
-                input.dataset.originalValue = currentPage; // Store original value
+                input.dataset.originalValue = currentPage; // ذخیره مقدار اصلی
 
                 pageNumberSpan.replaceWith(input);
                 input.focus();
-                input.select(); // Auto-select the text
+                input.select(); // انتخاب خودکار متن
 
                 const handleInputBlur = () => {
-                    let newPage = parseInt(convertPersianNumbersToEnglish(input.value), 10); // Convert before parsing
+                    let newPage = parseInt(convertPersianNumbersToEnglish(input.value), 10); // تبدیل قبل از تجزیه
                     if (isNaN(newPage) || newPage < 1 || newPage > totalPages) {
-                        newPage = parseInt(input.dataset.originalValue, 10); // Revert to original value if invalid
+                        newPage = parseInt(input.dataset.originalValue, 10); // بازگشت به مقدار اصلی در صورت نامعتبر بودن
                         showMessageBox(`شماره صفحه نامعتبر است. مقدار باید بین ۱ تا ${totalPages} باشد. بازگشت به صفحه ${newPage}.`, 'error');
                     }
                     if (listType === 'active') {
@@ -1426,16 +1347,16 @@
 
                 const handleInputKeydown = (e) => {
                     if (e.key === 'Enter') {
-                        input.blur(); // Trigger blur for input processing
+                        input.blur(); // فعال کردن blur برای پردازش ورودی
                     }
                 };
 
                 input.addEventListener('blur', handleInputBlur);
                 input.addEventListener('keydown', handleInputKeydown);
             });
-            containerElement.appendChild(pageNumberSpan); // Append the span (or input if active)
+            containerElement.appendChild(pageNumberSpan); // اضافه کردن span (یا input اگر فعال باشد)
 
-            // Next button
+            // دکمه بعدی
             const nextBtn = document.createElement('button');
             nextBtn.className = `p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`;
             nextBtn.innerHTML = `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>`;
@@ -1452,9 +1373,9 @@
             containerElement.appendChild(nextBtn);
         }
 
-        // Function to render achievements
+        // تابع برای رندر دستاوردها
         function renderAchievements() {
-            achievementsList.innerHTML = ''; // Clear existing achievements
+            achievementsList.innerHTML = ''; // پاک کردن دستاوردهای موجود
             const unlockedAchievements = achievementsData.filter(achievement => {
                 if (achievement.type === 'level') {
                     const levelInfo = levelPointsThresholds.find(l => l.name === achievement.name);
@@ -1479,16 +1400,16 @@
                 noAchievementsMessage.style.display = 'none';
                 unlockedAchievements.forEach(achievement => {
                     const achievementItem = document.createElement('div');
-                    // Apply dark mode classes for achievement items
+                    // اعمال کلاس‌های حالت تاریک برای آیتم‌های دستاورد
                     achievementItem.className = `flex items-center bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-full px-4 py-2 shadow-sm text-gray-700 dark:text-gray-200 text-sm clickable-item`;
                     
-                    // Remove descriptions from main page display
+                    // حذف توضیحات از نمایش صفحه اصلی
                     achievementItem.innerHTML = `
                         <span class="text-xl mr-2">${achievement.icon}</span>
                         <span>${achievement.name}</span>
                     `;
                     
-                    // Add click listener to show details
+                    // اضافه کردن شنونده کلیک برای نمایش جزئیات
                     achievementItem.addEventListener('click', () => showDetailModal(achievement.type, achievement.type === 'level' ? achievement.level : achievement.name));
                     
                     achievementsList.appendChild(achievementItem);
@@ -1496,7 +1417,7 @@
             }
         }
 
-        // Add task
+        // افزودن وظیفه
         addTaskBtn.addEventListener('click', () => {
             const taskName = taskInput.value.trim();
             const importance = importanceSelect.value;
@@ -1508,7 +1429,7 @@
             }
 
             if (taskName.length > 15) {
-                showMessageBox('مقدار ورودی نباید بیشتر از ۱۵ کارکتر باشد.', 'error'); // Updated error message
+                showMessageBox('مقدار ورودی نباید بیشتر از ۱۵ کاراکتر باشد.', 'error');
                 return;
             }
 
@@ -1522,34 +1443,34 @@
             }
 
             const newTask = {
-                id: Date.now().toString(), // Unique ID for task
+                id: Date.now().toString(), // ID منحصر به فرد برای وظیفه
                 name: taskName,
                 completed: false,
                 importance: importance,
-                customPoints: importance === 'custom' ? customPoints : undefined, // Store custom points if importance is custom
-                isPinned: false // New property for pinning
+                customPoints: importance === 'custom' ? customPoints : undefined, // ذخیره پوینت‌های سفارشی اگر اهمیت سفارشی باشد
+                isPinned: false // ویژگی جدید برای پین کردن
             };
             tasks.push(newTask);
-            taskInput.value = ''; // Clear input
-            customPointsInput.value = ''; // Clear custom points input
-            importanceSelect.value = 'normal'; // Reset importance selection
-            customPointsInput.classList.add('hidden'); // Hide custom points input
-            saveToLocalStorage(); // Save after adding
-            renderTasks(); // Re-render tasks after adding
+            taskInput.value = ''; // پاک کردن ورودی
+            customPointsInput.value = ''; // پاک کردن ورودی پوینت سفارشی
+            importanceSelect.value = 'normal'; // بازنشانی انتخاب اهمیت
+            customPointsInput.classList.add('hidden'); // پنهان کردن ورودی پوینت سفارشی
+            saveToLocalStorage(); // ذخیره پس از افزودن
+            renderTasks(); // رندر مجدد وظایف پس از افزودن
             showMessageBox('وظیفه جدید با موفقیت اضافه شد!', 'success');
         });
 
-        // Toggle completed tasks section visibility
+        // تغییر وضعیت نمایش بخش وظایف تکمیل شده
         toggleCompletedTasksBtn.addEventListener('click', () => {
             completedTasksSection.classList.toggle('hidden');
-            toggleIcon.classList.toggle('rotate-180'); // Rotate arrow icon
-            // Re-render pagination controls to update visibility based on section state
+            toggleIcon.classList.toggle('rotate-180'); // چرخش آیکون فلش
+            // رندر مجدد کنترل‌های صفحه‌بندی برای به‌روزرسانی قابلیت مشاهده بر اساس وضعیت بخش
             renderPaginationControls(completedTasksPagination, tasks.filter(t => t.completed).length, completedCurrentPage, 'completed');
         });
 
-        // Manage task actions (toggle completion status, delete, edit, save, cancel)
-        // Main handler for clicks on task items
-        // This function is called by touchend for taps and directly by menu actions
+        // مدیریت اقدامات وظیفه (تغییر وضعیت تکمیل، حذف، ویرایش، ذخیره، لغو)
+        // هندلر اصلی برای کلیک‌ها روی آیتم‌های وظیفه
+        // این تابع توسط touchend برای ضربه‌ها و مستقیماً توسط اقدامات منو فراخوانی می‌شود
         function handleTaskClick(e) {
             const taskItemElement = e.target.closest('.task-item');
             if (!taskItemElement) return;
@@ -1557,16 +1478,16 @@
             const taskId = taskItemElement.dataset.id;
             const target = e.target;
 
-            // Check if the click was on an interactive child element (checkbox, menu button)
+            // بررسی اینکه آیا کلیک روی یک عنصر فرزند تعاملی (چک‌باکس، دکمه منو) بوده است
             const isCheckbox = (target.tagName === 'INPUT' && target.type === 'checkbox');
             const isMenuButton = target.closest('.three-dot-menu-btn');
-            const action = target.closest('button')?.dataset.action; // Get action from menu button
+            const action = target.closest('button')?.dataset.action; // دریافت اقدام از دکمه منو
 
             if (isCheckbox) {
-                // If checkbox is clicked, toggle completion status
+                // اگر روی چک‌باکس کلیک شد، وضعیت تکمیل را تغییر دهید
                 toggleTaskCompletion(taskId, taskItemElement);
             } else if (isMenuButton) {
-                // If menu button is clicked, show the action menu
+                // اگر روی دکمه منو کلیک شد، منوی اقدام را نمایش دهید
                 const task = tasks.find(t => t.id === taskId);
                 if (task) {
                     showTaskActionsMenu(taskId, isMenuButton, task.completed);
@@ -1575,12 +1496,12 @@
                 pinTask(taskId);
             }
             else {
-                // If the task card itself (and not an interactive child) was clicked, toggle completion status
+                // اگر خود کارت وظیفه (و نه یک فرزند تعاملی) کلیک شد، وضعیت تکمیل را تغییر دهید
                 toggleTaskCompletion(taskId, taskItemElement);
             }
         }
 
-        // Attach event listener to activeTaskList and completedTasksContainer for delegation
+        // اضافه کردن شنونده رویداد به activeTaskList و completedTasksContainer برای تفویض
         activeTaskList.addEventListener('click', handleTaskClick);
         completedTasksContainer.addEventListener('click', handleTaskClick);
 
@@ -1591,22 +1512,22 @@
                 const task = tasks[taskIndex];
                 let pointsGained = 0;
 
-                if (!task.completed) { // User wants to complete the task
+                if (!task.completed) { // کاربر می‌خواهد وظیفه را تکمیل کند
                     task.completed = true;
-                    task.isPinned = false; // Unpin task when completed
+                    task.isPinned = false; // وظیفه را هنگام تکمیل از پین خارج کنید
                     if (task.importance === 'important') {
                         pointsGained = pointsPerImportantTask;
                     } else if (task.importance === 'normal') {
                         pointsGained = pointsPerNormalTask;
                     } else if (task.importance === 'custom' && task.customPoints) {
                         pointsGained = task.customPoints;
-                        totalCustomTasksCompleted++; // Increment custom tasks counter
+                        totalCustomTasksCompleted++; // افزایش شمارنده وظایف سفارشی
                     }
                     zPoint += pointsGained;
-                    showMessageBox(`وظیفه تکمیل شد! +${pointsGained} پوینت`, 'success');
-                    showPointsGainFeedback(pointsGained, taskItemElement); // Show animation for all completed tasks
+                    showMessageBox('وظیفه تکمیل شد!', 'success');
+                    showPointsGainFeedback(pointsGained, taskItemElement); // نمایش انیمیشن برای تمام وظایف تکمیل شده
 
-                    // Daily streak logic (only on completion)
+                    // منطق زنجیره روزانه (فقط در تکمیل)
                     const today = new Date().toDateString();
 
                     if (!lastCompletionDate) {
@@ -1621,36 +1542,48 @@
                             dailyStreak++;
                             showMessageBox(`زنجیره: ${dailyStreak} روز متوالی!`, 'info');
                         } else if (lastDate.toDateString() !== today) {
-                            dailyStreak = 1; // Reset if not consecutive and not completed today already
+                            dailyStreak = 1; // بازنشانی اگر متوالی نباشد و امروز قبلاً تکمیل نشده باشد
                             showMessageBox('زنجیره روزانه شما بازنشانی و دوباره آغاز شد.', 'info');
                         }
                     }
                     lastCompletionDate = today;
-                    highestDailyStreak = Math.max(highestDailyStreak, dailyStreak); // Update highest streak
+                    highestDailyStreak = Math.max(highestDailyStreak, dailyStreak); // به‌روزرسانی بالاترین زنجیره
 
-                    // Re-sort tasks so completed ones are at the end
+                    // مرتب‌سازی مجدد وظایف به طوری که تکمیل شده‌ها در انتها قرار گیرند
                     tasks.sort((a, b) => (a.completed === b.completed) ? 0 : a.completed ? 1 : -1);
 
-                } else { // User clicked on a completed task, implying they want to create a new active instance and remove the original completed one
-                    // Create a new task based on the completed one
+                } else { // کاربر روی یک وظیفه تکمیل شده کلیک کرد، به این معنی که می‌خواهد یک نمونه فعال جدید ایجاد کند و نمونه تکمیل شده اصلی را حذف کند
+                    // کسر پوینت برای وظیفه‌ای که "تکمیل نشده" (از لیست تکمیل شده حذف شده)
+                    let pointsDeducted = 0;
+                    if (task.importance === 'important') {
+                        pointsDeducted = pointsPerImportantTask;
+                    } else if (task.importance === 'normal') {
+                        pointsDeducted = pointsPerNormalTask;
+                    } else if (task.importance === 'custom' && task.customPoints) {
+                        pointsDeducted = task.customPoints;
+                        totalCustomTasksCompleted--; // کاهش شمارنده وظایف سفارشی
+                    }
+                    zPoint -= pointsDeducted; // کسر پوینت‌ها
+                    if (zPoint < 0) zPoint = 0; // اطمینان از عدم منفی شدن پوینت‌ها
+
+                    // ایجاد یک وظیفه جدید بر اساس وظیفه تکمیل شده
                     const newActiveTask = {
-                        id: Date.now().toString(), // New unique ID
+                        id: Date.now().toString(), // ID منحصر به فرد جدید
                         name: task.name,
-                        completed: false, // This new instance is active
+                        completed: false, // این نمونه جدید فعال است
                         importance: task.importance,
                         customPoints: task.customPoints,
-                        isPinned: false // New tasks are not pinned by default
+                        isPinned: false // وظایف جدید به طور پیش‌فرض پین نمی‌شوند
                     };
 
-                    tasks.push(newActiveTask); // Add the new active task to the end of the tasks array
+                    tasks.push(newActiveTask); // اضافه کردن وظیفه فعال جدید به انتهای آرایه وظایف
 
-                    // Now, delete the original completed task from the array
-                    tasks.splice(taskIndex, 1); // Remove the original completed task
+                    // اکنون، وظیفه تکمیل شده اصلی را از آرایه حذف کنید
+                    tasks.splice(taskIndex, 1); // حذف وظیفه تکمیل شده اصلی
 
-                    // No points deduction for the original task, as it remains completed.
-                    // No change to daily streak for this operation.
+                    // هیچ کسر پوینتی برای وظیفه اصلی وجود ندارد، زیرا آن تکمیل شده باقی می‌ماند.
+                    // هیچ تغییری در زنجیره روزانه برای این عملیات وجود ندارد.
 
-                    // Changed message as per user request
                     showMessageBox(`وظیفه بازنشانی شد!`, 'success');
                 }
                 saveToLocalStorage();
@@ -1658,12 +1591,12 @@
             }
         }
 
-        // Function to toggle pin status of a task
+        // تابع برای تغییر وضعیت پین یک وظیفه
         function pinTask(taskId) {
             const taskIndex = tasks.findIndex(t => t.id === taskId);
             if (taskIndex > -1) {
                 const task = tasks[taskIndex];
-                task.isPinned = !task.isPinned; // Toggle pin status
+                task.isPinned = !task.isPinned; // تغییر وضعیت پین
                 saveToLocalStorage();
                 renderTasks();
                 showMessageBox(`وظیفه "${task.name}" ${task.isPinned ? 'پین شد!' : 'از پین خارج شد.'}`, 'info');
@@ -1671,18 +1604,18 @@
         }
 
 
-        // Function to show the three-dot menu pop-up
+        // تابع برای نمایش پاپ‌آپ منوی سه نقطه
         function showTaskActionsMenu(taskId, buttonElement, isCompletedTask) {
-            // Close any existing menu
+            // بستن هر منوی موجود
             document.querySelectorAll('.task-action-menu').forEach(menu => menu.remove());
 
             const menu = document.createElement('div');
             menu.className = 'task-action-menu';
             menu.style.position = 'absolute';
             menu.style.zIndex = '100';
-            menu.style.visibility = 'hidden'; // Hide initially to get dimensions
+            menu.style.visibility = 'hidden'; // ابتدا برای دریافت ابعاد پنهان شود
 
-            document.body.appendChild(menu); // Append to get actual width
+            document.body.appendChild(menu); // اضافه کردن برای دریافت عرض واقعی
 
             const task = tasks.find(t => t.id === taskId);
             let menuHtml = ``;
@@ -1710,8 +1643,8 @@
                     <button data-action="${task.isPinned ? 'unpin-task' : 'pin-task'}">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             ${task.isPinned ?
-                                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14m-5 0l4 4m-4-4l-4 4m-4-4l4-4m-4-4l4 4"></path>' : // Unpin icon (example: broken pin)
-                                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0L6.343 16.657a4 4 0 115.656-5.656l1.414 1.414a1.998 1.998 0 002.828 0l1.414-1.414a4 4 0 115.656 5.656z"></path>' // Pin icon (example: standard pin)
+                                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14m-5 0l4 4m-4-4l-4 4m-4-4l4-4m-4-4l4 4"></path>' : // آیکون برداشتن پین
+                                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0L6.343 16.657a4 4 0 115.656-5.656l1.414 1.414a1.998 1.998 0 002.828 0l1.414-1.414a4 4 0 115.656 5.656z"></path>' // آیکون پین
                             }
                         </svg>
                         ${task.isPinned ? 'برداشتن پین' : 'پین کردن'}
@@ -1724,41 +1657,41 @@
             }
             menu.innerHTML = menuHtml;
 
-            // Dynamic positioning
+            // موقعیت‌دهی پویا
             const rect = buttonElement.getBoundingClientRect();
-            const padding = 5; // Small padding from screen edges
+            const padding = 5; // پدینگ کوچک از لبه‌های صفحه
 
-            // Calculate initial top and left based on button position
+            // محاسبه موقعیت اولیه بالا و چپ بر اساس موقعیت دکمه
             let menuTop = rect.bottom + window.scrollY + 5;
             let menuLeft = rect.left + window.scrollX;
 
-            // Adjust if menu goes off screen to the right (RTL context, so right edge is more important)
+            // تنظیم اگر منو از صفحه به سمت راست خارج شود (در زمینه RTL، لبه راست مهم‌تر است)
             if (menuLeft + menu.offsetWidth > window.innerWidth - padding) {
                 menuLeft = window.innerWidth - menu.offsetWidth - padding;
             }
-            // Adjust if menu goes off screen to the left
+            // تنظیم اگر منو از صفحه به سمت چپ خارج شود
             if (menuLeft < padding) {
                 menuLeft = padding;
             }
 
-            // Adjust if menu goes off screen to the bottom
+            // تنظیم اگر منو از صفحه به سمت پایین خارج شود
             if (menuTop + menu.offsetHeight > window.innerHeight + window.scrollY - padding) {
                 menuTop = rect.top + window.scrollY - menu.offsetHeight - 5;
-                if (menuTop < padding + window.scrollY) { // If still off-screen top, place at top with padding
+                if (menuTop < padding + window.scrollY) { // اگر هنوز از بالای صفحه خارج است، در بالا با پدینگ قرار گیرد
                     menuTop = padding + window.scrollY;
                 }
             }
 
             menu.style.top = `${menuTop}px`;
             menu.style.left = `${menuLeft}px`;
-            menu.style.visibility = 'visible'; // Make visible
+            menu.style.visibility = 'visible'; // قابل مشاهده شود
 
-            // Event listener for menu actions
+            // شنونده رویداد برای اقدامات منو
             menu.addEventListener('click', (e) => {
                 const action = e.target.closest('button')?.dataset.action;
                 if (action) {
-                    menu.remove(); // Close menu after action
-                    document.removeEventListener('click', closeMenu); // Remove global listener
+                    menu.remove(); // بستن منو پس از اقدام
+                    document.removeEventListener('click', closeMenu); // حذف شنونده جهانی
                     if (action === 'edit-task') {
                         showEditTaskModal(taskId);
                     } else if (action === 'change-order') {
@@ -1773,11 +1706,11 @@
                 }
             });
 
-            // Close menu when clicking outside
+            // بستن منو هنگام کلیک در خارج
             const closeMenu = (e) => {
-                // Check if the click was outside the menu and outside the button that opened it
-                // Also check if the click target is an interactive element (input, select, button, checkbox)
-                // If it's an interactive element, allow its default action to proceed, but still close the menu.
+                // بررسی اینکه آیا کلیک در خارج از منو و خارج از دکمه‌ای که آن را باز کرده است، بوده است
+                // همچنین بررسی اینکه آیا هدف کلیک یک عنصر تعاملی (input, select, button, checkbox) است
+                // اگر یک عنصر تعاملی است، اجازه دهید اقدام پیش‌فرض آن ادامه یابد، اما همچنان منو را ببندید.
                 const isInteractiveElement = e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON' || e.target.type === 'checkbox';
 
                 if (!menu.contains(e.target) && !buttonElement.contains(e.target)) {
@@ -1785,14 +1718,14 @@
                     document.removeEventListener('click', closeMenu);
                 }
             };
-            // Add a slight delay to allow the menu to render before attaching the global click listener
-            // This prevents the initial click that opens the menu from immediately closing it.
+            // اضافه کردن تأخیر کمی برای اجازه رندر منو قبل از اتصال شنونده کلیک جهانی
+            // این از بستن بلافاصله منو توسط کلیک اولیه که آن را باز می‌کند، جلوگیری می‌کند.
             setTimeout(() => {
                 document.addEventListener('click', closeMenu);
             }, 50);
         }
 
-        // Function to show the Edit Task Modal
+        // تابع برای نمایش مودال ویرایش وظیفه
         function showEditTaskModal(taskId) {
             currentTaskBeingEditedId = taskId;
             const task = tasks.find(t => t.id === taskId);
@@ -1802,35 +1735,57 @@
             }
 
             editTaskNameInput.value = task.name;
-            editTaskNameInput.setAttribute('maxlength', '15'); // Set maxlength here
+            editTaskNameInput.setAttribute('maxlength', '15'); // تنظیم حداکثر طول در اینجا
             editTaskImportanceSelect.value = task.importance;
             if (task.importance === 'custom') {
                 editTaskCustomPointsInput.classList.remove('hidden');
                 editTaskCustomPointsInput.value = task.customPoints || '';
-                editTaskCustomPointsInput.focus(); // Auto-focus when custom is selected
+                editTaskCustomPointsInput.focus(); // فوکوس خودکار هنگام انتخاب سفارشی
             } else {
                 editTaskCustomPointsInput.classList.add('hidden');
-                editTaskCustomPointsInput.value = ''; // Clear value when hidden
+                editTaskCustomPointsInput.value = ''; // پاک کردن مقدار در صورت پنهان بودن
             }
 
-            editTaskImportanceSelect.onchange = () => {
-                if (editTaskImportanceSelect.value === 'custom') {
-                    editTaskCustomPointsInput.classList.remove('hidden');
-                    editTaskCustomPointsInput.focus(); // Auto-focus when custom is selected
-                } else {
-                    editTaskCustomPointsInput.classList.add('hidden');
-                    editTaskCustomPointsInput.value = ''; // Clear value when hidden
-                }
-            };
+            // حذف هندلر onchange قبلی در صورت وجود
+            editTaskImportanceSelect.onchange = null; 
+            // اضافه کردن شنونده‌های رویداد جدید برای editTaskImportanceSelect
+            editTaskImportanceSelect.addEventListener('change', handleEditTaskImportanceChange);
+            editTaskImportanceSelect.addEventListener('blur', handleEditTaskImportanceBlur);
             
-            editTaskModal.classList.remove('hidden'); // Ensure modal is not hidden before showing
-            void editTaskModal.offsetWidth; // Force reflow
+            editTaskModal.classList.remove('hidden'); // اطمینان از عدم پنهان بودن مودال قبل از نمایش
+            void editTaskModal.offsetWidth; // اجبار به reflow
             editTaskModal.classList.add('show');
             editTaskNameInput.focus();
         }
 
-        // Save Edited Task
-        saveEditedTaskBtn.addEventListener('click', () => {
+        // هندلر برای رویداد تغییر editTaskImportanceSelect
+        function handleEditTaskImportanceChange() {
+            if (editTaskImportanceSelect.value === 'custom') {
+                editTaskCustomPointsInput.classList.remove('hidden');
+                editTaskCustomPointsInput.focus();
+            } else {
+                editTaskCustomPointsInput.classList.add('hidden');
+                editTaskCustomPointsInput.value = '';
+                // ذخیره خودکار وظیفه ویرایش شده اگر نام پر شده و اهمیت سفارشی نباشد
+                if (editTaskNameInput.value.trim().length > 0) {
+                    console.log('اهمیت ویرایش به غیر سفارشی تغییر یافت، تلاش برای ذخیره وظیفه.');
+                    saveEditedTask(); // مستقیماً تابع ذخیره را فراخوانی کنید
+                }
+            }
+        }
+
+        // هندلر برای رویداد blur editTaskImportanceSelect
+        function handleEditTaskImportanceBlur() {
+            // فقط در صورتی فعال شود که سفارشی نباشد و ورودی وظیفه محتوا داشته باشد
+            if (editTaskImportanceSelect.value !== 'custom' && editTaskNameInput.value.trim().length > 0) {
+                console.log('انتخاب اهمیت ویرایش (غیر سفارشی) از فوکوس خارج شد، تلاش برای ذخیره وظیفه.');
+                saveEditedTask(); // مستقیماً تابع ذخیره را فراخوانی کنید
+            }
+        }
+
+
+        // ذخیره وظیفه ویرایش شده
+        function saveEditedTask() {
             const taskId = currentTaskBeingEditedId;
             const newTaskName = editTaskNameInput.value.trim();
             const newImportance = editTaskImportanceSelect.value;
@@ -1842,12 +1797,12 @@
             }
 
             if (newTaskName.length > 15) {
-                showMessageBox('مقدار ورودی نباید بیشتر از ۱۵ کارکتر باشد.', 'error'); // Updated error message
+                showMessageBox('مقدار ورودی نباید بیشتر از ۱۵ کاراکتر باشد.', 'error');
                 return;
             }
 
             if (newImportance === 'custom') {
-                const convertedPoints = convertPersianNumbersToEnglish(editTaskCustomPointsInput.value); // FIXED: Added conversion
+                const convertedPoints = convertPersianNumbersToEnglish(editTaskCustomPointsInput.value);
                 newCustomPoints = parseInt(convertedPoints, 10);
                 if (isNaN(newCustomPoints) || newCustomPoints <= 0 || newCustomPoints > MAX_CUSTOM_POINTS) {
                     showMessageBox(`لطفاً یک مقدار معتبر برای پوینت سفارشی وارد کنید (حداکثر ${MAX_CUSTOM_POINTS}).`, 'info');
@@ -1864,24 +1819,27 @@
                 renderTasks();
                 showMessageBox('وظیفه با موفقیت ویرایش شد!', 'success');
                 editTaskModal.classList.remove('show');
-                setTimeout(() => { // Add timeout to hide after transition
+                setTimeout(() => { // اضافه کردن تأخیر برای پنهان کردن پس از انتقال
                     editTaskModal.classList.add('hidden');
-                }, 50); // Changed to 50ms
+                }, 50);
             } else {
                 showMessageBox('خطا: وظیفه برای ویرایش یافت نشد.', 'error');
             }
-        });
+        }
 
-        // Cancel Edit Task
+        saveEditedTaskBtn.addEventListener('click', saveEditedTask);
+
+
+        // لغو ویرایش وظیفه
         cancelEditTaskBtn.addEventListener('click', () => {
             editTaskModal.classList.remove('show');
-            setTimeout(() => { // Add timeout to hide after transition
+            setTimeout(() => { // اضافه کردن تأخیر برای پنهان کردن پس از انتقال
                 editTaskModal.classList.add('hidden');
-            }, 50); // Changed to 50ms
+            }, 50);
             showMessageBox('ویرایش وظیفه لغو شد.', 'info');
         });
 
-        // Function to show the Change Order Modal
+        // تابع برای نمایش مودال تغییر چیدمان
         function showChangeOrderModal(taskId) {
             currentTaskBeingEditedId = taskId;
             const activeTasks = tasks.filter(t => !t.completed);
@@ -1892,15 +1850,15 @@
                 return;
             }
 
-            changeOrderInput.value = taskIndex + 1; // 1-based index
-            changeOrderModal.classList.remove('hidden'); // Ensure modal is not hidden before showing
-            void changeOrderModal.offsetWidth; // Force reflow
+            changeOrderInput.value = taskIndex + 1; // ایندکس 1-مبنا
+            changeOrderModal.classList.remove('hidden'); // اطمینان از عدم پنهان بودن مودال قبل از نمایش
+            void changeOrderModal.offsetWidth; // اجبار به reflow
             changeOrderModal.classList.add('show');
             changeOrderInput.focus();
-            changeOrderInput.select(); // Auto-select the text
+            changeOrderInput.select(); // انتخاب خودکار متن
         }
 
-        // Save Changed Order
+        // ذخیره چیدمان تغییر یافته
         saveChangedOrderBtn.addEventListener('click', () => {
             const taskId = currentTaskBeingEditedId;
             const newPosition = parseInt(convertPersianNumbersToEnglish(changeOrderInput.value), 10);
@@ -1913,9 +1871,9 @@
 
             const taskToMove = tasks[taskIndexInTasks];
 
-            // Only allow reordering of active tasks
+            // فقط اجازه مرتب‌سازی مجدد وظایف فعال
             if (taskToMove.completed) {
-                showMessageBox('نمی‌توان ترتیب وظایف تکمیل شده را تغییر داد.', 'error');
+                showMessageBox('نمی‌توان ترتیب وظایف تکمیل شده را تغییر داد.', 'info');
                 return;
             }
 
@@ -1928,79 +1886,79 @@
             }
 
             if (taskInActiveTasksIndex > -1) {
-                // Remove the task from its current position in the active tasks array
+                // حذف وظیفه از موقعیت فعلی آن در آرایه وظایف فعال
                 const [movedTask] = activeTasks.splice(taskInActiveTasksIndex, 1);
                 
-                // Insert the task at the new desired position in the active tasks array
+                // درج وظیفه در موقعیت جدید مورد نظر در آرایه وظایف فعال
                 activeTasks.splice(newPosition - 1, 0, movedTask);
 
-                // If the task was pinned, unpin it when manually reordered
+                // اگر وظیفه پین شده بود، هنگام مرتب‌سازی دستی آن را از پین خارج کنید
                 if (movedTask.isPinned) {
                     movedTask.isPinned = false;
                     showMessageBox('وظیفه از پین خارج شد زیرا ترتیب آن به صورت دستی تغییر یافت.', 'info');
                 }
 
-                // Reconstruct the main tasks array to reflect the new order
+                // بازسازی آرایه اصلی وظایف برای منعکس کردن ترتیب جدید
                 const completedTasks = tasks.filter(t => t.completed);
-                tasks = [...activeTasks, ...completedTasks]; // Active tasks first, then completed
+                tasks = [...activeTasks, ...completedTasks]; // وظایف فعال اول، سپس تکمیل شده‌ها
 
                 saveToLocalStorage();
                 renderTasks();
                 showMessageBox('وظیفه با موفقیت مرتب شد!', 'success');
                 changeOrderModal.classList.remove('show');
-                setTimeout(() => { // Add timeout to hide after transition
+                setTimeout(() => { // اضافه کردن تأخیر برای پنهان کردن پس از انتقال
                     changeOrderModal.classList.add('hidden');
-                }, 50); // Changed to 50ms
+                }, 50);
             } else {
                 showMessageBox('خطا در تغییر ترتیب وظیفه. وظیفه یافت نشد یا قبلاً تکمیل شده است.', 'error');
             }
         });
 
-        // Cancel Change Order
+        // لغو تغییر چیدمان
         cancelChangeOrderBtn.addEventListener('click', () => {
             changeOrderModal.classList.remove('show');
-            setTimeout(() => { // Add timeout to hide after transition
+            setTimeout(() => { // اضافه کردن تأخیر برای پنهان کردن پس از انتقال
                 changeOrderModal.classList.add('hidden');
-            }, 50); // Changed to 50ms
+            }, 50);
             showMessageBox('تغییر ترتیب لغو شد.', 'info');
         });
 
-        // Delete Task function (called from menu)
+        // تابع حذف وظیفه (از منو فراخوانی می‌شود)
         function deleteTask(taskId) {
             const taskIndex = tasks.findIndex(t => t.id === taskId);
             if (taskIndex > -1) {
                 const taskItemElement = document.querySelector(`.task-item[data-id="${taskId}"]`);
                 const taskToDelete = tasks[taskIndex];
-                taskToDelete.isPinned = false; // Unpin task when deleted
+                taskToDelete.isPinned = false; // وظیفه را هنگام حذف از پین خارج کنید
 
-                // Create a copy of the task with its original index for undo
+                // ایجاد یک کپی از وظیفه با ایندکس اصلی آن برای بازگردانی
                 const deletedTaskCopy = { ...taskToDelete, originalIndex: taskIndex };
 
-                tasks.splice(taskIndex, 1); // Remove task
+                tasks.splice(taskIndex, 1); // حذف وظیفه
                 saveToLocalStorage();
 
-                // Delete animation
+                // انیمیشن حذف
                 if (taskItemElement) {
                     taskItemElement.style.transform = `translateX(-100vw)`;
                     taskItemElement.style.opacity = '0';
                     taskItemElement.addEventListener('transitionend', () => {
-                        renderTasks(); // Re-render after animation
-                        // Use showMessageBox for undo message
+                        renderTasks(); // رندر مجدد پس از انیمیشن
+                        // استفاده از showMessageBox برای پیام بازگردانی
                         showMessageBox(`وظیفه "${deletedTaskCopy.name}" حذف شد. برای بازگرداندن ضربه بزنید.`, 'info', {
                             position: 'bottom-center',
                             isUndo: true,
                             duration: 5000,
-                            taskData: deletedTaskCopy // Pass the specific task data for undo
+                            taskData: deletedTaskCopy // ارسال داده‌های وظیفه خاص برای بازگردانی
                         });
                     }, { once: true });
                 } else {
-                    // If element not found, still delete from data and re-render
+                    // اگر عنصر یافت نشد، همچنان از داده‌ها حذف و رندر مجدد شود
                     renderTasks();
                     showMessageBox(`وظیفه "${deletedTaskCopy.name}" حذف شد. برای بازگرداندن ضربه بزنید.`, 'info', {
                         position: 'bottom-center',
                         isUndo: true,
                         duration: 5000,
-                        taskData: deletedTaskCopy // Pass the specific task data for undo
+                        taskData: deletedTaskCopy // ارسال داده‌های وظیفه خاص برای بازگردانی
                     });
                 }
             } else {
@@ -2008,19 +1966,19 @@
             }
         }
 
-        // Copy Task function (for completed tasks)
+        // تابع کپی وظیفه (برای وظایف تکمیل شده)
         function copyTask(taskId) {
             const originalTask = tasks.find(t => t.id === taskId);
             if (originalTask) {
                 const newTask = {
-                    id: Date.now().toString(), // New unique ID
+                    id: Date.now().toString(), // ID منحصر به فرد جدید
                     name: originalTask.name,
-                    completed: false, // Always active
+                    completed: false, // همیشه فعال
                     importance: originalTask.importance,
-                    customPoints: originalTask.customPoints, // Keep original custom points
-                    isPinned: false // New task is never pinned by default
+                    customPoints: originalTask.customPoints, // حفظ پوینت‌های سفارشی اصلی
+                    isPinned: false // وظیفه جدید هرگز به طور پیش‌فرض پین نمی‌شود
                 };
-                tasks.push(newTask); // Add to the end of the list
+                tasks.push(newTask); // اضافه کردن به انتهای لیست
                 saveToLocalStorage();
                 renderTasks();
                 showMessageBox(`وظیفه "${newTask.name}" به وظایف فعال کپی شد!`, 'success');
@@ -2029,40 +1987,40 @@
             }
         }
 
-        // --- Drag and Drop Logic (Mouse Events) ---
+        // --- منطق کشیدن و رها کردن (رویدادهای ماوس) ---
         activeTaskList.addEventListener('dragstart', (e) => {
             const taskItem = e.target.closest('.task-item');
-            // Ensure only active tasks are draggable and prevent dragging completed tasks
+            // اطمینان از اینکه فقط وظایف فعال قابل کشیدن هستند و از کشیدن وظایف تکمیل شده جلوگیری شود
             if (taskItem && !taskItem.classList.contains('bg-green-100')) { 
                 draggedTaskId = taskItem.dataset.id;
                 draggedElement = taskItem;
                 e.dataTransfer.setData('text/plain', draggedTaskId);
                 e.dataTransfer.effectAllowed = 'move';
                 setTimeout(() => {
-                    taskItem.classList.add('opacity-0'); // Hide original element during drag
+                    taskItem.classList.add('opacity-0'); // پنهان کردن عنصر اصلی در حین کشیدن
                 }, 0);
             } else {
-                e.preventDefault(); // Prevent drag if not an active task
+                e.preventDefault(); // جلوگیری از کشیدن اگر وظیفه فعال نباشد
             }
         });
 
         activeTaskList.addEventListener('dragover', (e) => {
-            e.preventDefault(); // Allow dropping
+            e.preventDefault(); // اجازه رها کردن
             e.dataTransfer.dropEffect = 'move';
             const targetItem = e.target.closest('.task-item');
 
-            // Clear all existing drop-target highlights
+            // پاک کردن تمام هایلایت‌های drop-target موجود
             document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
 
-            // Only highlight if dropping on an active task and not the dragged task itself
+            // فقط در صورتی هایلایت شود که روی یک وظیفه فعال رها شود و نه خود وظیفه در حال کشیدن
             if (targetItem && targetItem.dataset.id !== draggedTaskId && !targetItem.classList.contains('bg-green-100')) {
                 const boundingBox = targetItem.getBoundingClientRect();
                 const offset = e.clientY - boundingBox.top;
 
                 if (offset < boundingBox.height / 2) {
-                    targetItem.classList.add('drop-target'); // Indicate dropping above
+                    targetItem.classList.add('drop-target'); // نشان دادن رها کردن در بالا
                 } else {
-                    // Highlight the next active element if dropping below, or the target itself if it's the last
+                    // هایلایت کردن عنصر فعال بعدی اگر در پایین رها شود، یا خود هدف اگر آخرین باشد
                     let nextActiveTask = null;
                     let current = targetItem.nextElementSibling;
                     while (current) {
@@ -2076,14 +2034,14 @@
                     if (nextActiveTask) {
                         nextActiveTask.classList.add('drop-target');
                     } else {
-                        targetItem.classList.add('drop-target'); // If no other active item below, highlight target itself
+                        targetItem.classList.add('drop-target'); // اگر هیچ آیتم فعال دیگری در پایین نباشد، خود هدف هایلایت شود
                     }
                 }
             }
         });
 
         activeTaskList.addEventListener('dragleave', (e) => {
-            // Remove drop-target from all elements when dragging leaves
+            // حذف drop-target از تمام عناصر هنگام ترک کشیدن
             document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
         });
 
@@ -2091,10 +2049,10 @@
             e.preventDefault();
             const dropTargetItem = e.target.closest('.task-item');
             
-            // Clean up visual feedback
+            // پاکسازی بازخورد بصری
             document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
             if (draggedElement) {
-                draggedElement.classList.remove('opacity-0'); // Show original element again
+                draggedElement.classList.remove('opacity-0'); // نمایش مجدد عنصر اصلی
             }
 
             if (!dropTargetItem || !draggedTaskId) {
@@ -2108,26 +2066,26 @@
             const droppedOnTaskIndex = tasks.findIndex(t => t.id === droppedOnTaskId);
 
             if (draggedTaskIndex === -1 || droppedOnTaskIndex === -1 || draggedTaskId === droppedOnTaskId) {
-                // Invalid drag or drop onto self
+                // کشیدن نامعتبر یا رها کردن روی خود
                 showMessageBox('نمی‌توان وظیفه را اینجا رها کرد.', 'error');
                 resetDragState();
                 return;
             }
 
-            // Ensure we only reorder active tasks
+            // اطمینان از اینکه فقط وظایف فعال را مرتب می‌کنیم
             if (tasks[draggedTaskIndex].completed || tasks[droppedOnTaskIndex].completed) {
                 showMessageBox('فقط وظایف فعال را می‌توان دوباره مرتب کرد.', 'info');
                 resetDragState();
                 return;
             }
 
-            // Get active tasks to perform reordering within that subset
+            // دریافت وظایف فعال برای انجام مرتب‌سازی مجدد در آن زیرمجموعه
             const activeTasks = tasks.filter(task => !task.completed);
             const draggedActiveIndex = activeTasks.findIndex(t => t.id === draggedTaskId);
             const droppedActiveIndex = activeTasks.findIndex(t => t.id === droppedOnTaskId);
 
             if (draggedActiveIndex === -1 || droppedActiveIndex === -1) {
-                 // This should ideally not happen if the above checks are correct, but as a safeguard
+                 // این نباید اتفاق بیفتد اگر بررسی‌های بالا صحیح باشند، اما به عنوان یک محافظ
                 showMessageBox('خطا در یافتن وظایف فعال برای مرتب‌سازی مجدد.', 'error');
                 resetDragState();
                 return;
@@ -2136,27 +2094,33 @@
             const [draggedTask] = activeTasks.splice(draggedActiveIndex, 1);
             let newActiveIndex = droppedActiveIndex;
 
-            // Adjust index based on drop position (above or below)
+            // تنظیم ایندکس بر اساس موقعیت رها کردن (بالا یا پایین)
             const boundingBox = dropTargetItem.getBoundingClientRect();
             const offset = e.clientY - boundingBox.top;
             if (offset > boundingBox.height / 2) {
-                newActiveIndex++; // Dropped below target
+                newActiveIndex++; // در پایین هدف رها شد
             }
 
             activeTasks.splice(newActiveIndex, 0, draggedTask);
 
-            // Reconstruct the main tasks array
+            // اگر وظیفه پین شده بود، هنگام مرتب‌سازی دستی آن را از پین خارج کنید
+            if (draggedTask.isPinned) {
+                draggedTask.isPinned = false;
+                showMessageBox('وظیفه از پین خارج شد زیرا ترتیب آن به صورت دستی تغییر یافت.', 'info');
+            }
+
+            // بازسازی آرایه اصلی وظایف
             const completedTasks = tasks.filter(t => t.completed);
             tasks = [...activeTasks, ...completedTasks];
 
             saveToLocalStorage();
-            renderTasks(); // Re-render to show new order
+            renderTasks(); // رندر مجدد برای نمایش ترتیب جدید
             showMessageBox('وظیفه با موفقیت مرتب شد!', 'success');
             resetDragState();
         });
 
         activeTaskList.addEventListener('dragend', (e) => {
-            // Clean up dragging classes regardless of drop success
+            // پاکسازی کلاس‌های کشیدن بدون توجه به موفقیت رها کردن
             if (draggedElement) {
                 draggedElement.classList.remove('opacity-0');
             }
@@ -2169,7 +2133,7 @@
             draggedElement = null;
         }
 
-        // --- Drag and Drop Logic (Touch Events) ---
+        // --- منطق کشیدن و رها کردن (رویدادهای لمس) ---
         activeTaskList.addEventListener('touchstart', (e) => {
             const taskItem = e.target.closest('.task-item');
             if (!taskItem) return;
@@ -2181,8 +2145,8 @@
                                        e.target.closest('.three-dot-menu-btn');
 
             if (isInteractiveChild) {
-                resetTouchStates(); // Ensure states are clean even if not starting drag
-                return; // Let native behavior handle it (e.g., checkbox click, menu button click)
+                resetTouchStates(); // اطمینان از پاک بودن وضعیت‌ها حتی اگر کشیدن شروع نشده باشد
+                return; // اجازه دهید رفتار بومی آن را مدیریت کند (مثلاً کلیک چک‌باکس، کلیک دکمه منو)
             }
 
             if (e.touches.length === 1) {
@@ -2195,10 +2159,10 @@
                 initialTouchOffsetX = e.touches[0].clientX - boundingBox.left;
                 initialTouchOffsetY = e.touches[0].clientY - boundingBox.top;
 
-                resetTouchStates(); // Ensure all states are clean before starting a new gesture
+                resetTouchStates(); // اطمینان از پاک بودن تمام وضعیت‌ها قبل از شروع یک ژست جدید
                 isGestureStarted = true;
 
-                // Only start long press timer if it's an active task (draggable)
+                // فقط در صورتی تایمر نگه داشتن طولانی شروع شود که وظیفه فعال باشد (قابل کشیدن)
                 if (!taskItem.classList.contains('bg-green-100')) {
                     longPressTimer = setTimeout(() => {
                         isLongPressDetected = true;
@@ -2206,7 +2170,7 @@
                         draggedTaskId = taskItem.dataset.id;
                         draggedElement = taskItem;
 
-                        // Create ghost element and hide original
+                        // ایجاد عنصر شبح و پنهان کردن اصلی
                         ghostElement = taskItem.cloneNode(true);
                         ghostElement.style.position = 'fixed';
                         ghostElement.style.width = boundingBox.width + 'px';
@@ -2219,15 +2183,15 @@
 
                         ghostElement.style.left = (touchStartX - initialTouchOffsetX) + 'px';
                         ghostElement.style.top = (touchStartY - initialTouchOffsetY) + 'px';
-                        ghostElement.style.transform = 'none'; // Clear any previous transforms
+                        ghostElement.style.transform = 'none'; // پاک کردن هرگونه تبدیل قبلی
 
-                        taskItem.classList.add('opacity-0'); // Hide the original element
-                        // Prevent default touch behavior (like scrolling or tap) once dragging is confirmed
-                        e.preventDefault(); // Prevent scrolling immediately on long press activation
+                        taskItem.classList.add('opacity-0'); // پنهان کردن عنصر اصلی
+                        // جلوگیری از رفتار پیش‌فرض لمس (مانند اسکرول یا ضربه) پس از تأیید کشیدن
+                        e.preventDefault(); // جلوگیری از اسکرول بلافاصله پس از فعال شدن نگه داشتن طولانی
                     }, DRAG_LONG_PRESS_TIME);
                 }
             }
-        }, { passive: false }); // Use passive: false to allow e.preventDefault() in touchstart/touchmove
+        }, { passive: false }); // استفاده از passive: false برای اجازه e.preventDefault() در touchstart/touchmove
 
         activeTaskList.addEventListener('touchmove', (e) => {
             const touch = e.touches[0];
@@ -2240,24 +2204,24 @@
             const absDeltaX = Math.abs(deltaX);
             const absDeltaY = Math.abs(deltaY);
 
-            // If a gesture has started and significant movement before long press, clear long-press timer
+            // اگر یک ژست شروع شده و حرکت قابل توجهی قبل از نگه داشتن طولانی وجود داشته باشد، تایمر نگه داشتن طولانی را پاک کنید
             if (isGestureStarted && !isLongPressDetected && (absDeltaX > TAP_THRESHOLD || absDeltaY > TAP_THRESHOLD)) {
                 clearTimeout(longPressTimer);
                 longPressTimer = null;
-                isGestureStarted = false; // It's a scroll, not a tap or drag attempt
-                // Allow native scrolling, don't prevent default here
+                isGestureStarted = false; // این یک اسکرول است، نه یک ضربه یا تلاش برای کشیدن
+                // اجازه اسکرول بومی، در اینجا از پیش‌فرض جلوگیری نکنید
                 return; 
             }
 
-            // If dragging has officially started (long press detected)
+            // اگر کشیدن رسماً شروع شده باشد (نگه داشتن طولانی تشخیص داده شده باشد)
             if (isDragging) {
-                e.preventDefault(); // Prevent scrolling and other default behaviors
+                e.preventDefault(); // جلوگیری از اسکرول و سایر رفتارهای پیش‌فرض
                 if (ghostElement) {
                     ghostElement.style.left = (touchCurrentX - initialTouchOffsetX) + 'px';
                     ghostElement.style.top = (touchCurrentY - initialTouchOffsetY) + 'px';
 
-                    // Logic for drop-target highlighting
-                    // Temporarily hide ghost to get element under it
+                    // منطق برای هایلایت drop-target
+                    // موقتاً شبح را پنهان کنید تا عنصر زیر آن را دریافت کنید
                     ghostElement.style.display = 'none';
                     const elementUnderTouch = document.elementFromPoint(touch.clientX, touch.clientY);
                     ghostElement.style.display = 'block';
@@ -2290,24 +2254,24 @@
                     }
                 }
             }
-        }, { passive: false }); // Use passive: false to allow e.preventDefault()
+        }, { passive: false }); // استفاده از passive: false برای اجازه e.preventDefault()
 
         activeTaskList.addEventListener('touchend', (e) => {
             clearTimeout(longPressTimer);
             longPressTimer = null;
 
             if (draggedElement) {
-                draggedElement.classList.remove('opacity-0'); // Show original element again
+                draggedElement.classList.remove('opacity-0'); // نمایش مجدد عنصر اصلی
             }
             if (ghostElement) {
-                ghostElement.remove(); // Remove ghost element
+                ghostElement.remove(); // حذف عنصر شبح
             }
-            document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target')); // Clear drop target highlight
+            document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target')); // پاک کردن هایلایت drop target
 
             const absDeltaX = Math.abs(touchCurrentX - touchStartX);
             const absDeltaY = Math.abs(touchCurrentY - touchStartY);
 
-            if (isDragging) { // If a drag operation was in progress
+            if (isDragging) { // اگر عملیات کشیدن در حال انجام بود
                 const elementAtEnd = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
                 const dropTargetItem = elementAtEnd ? elementAtEnd.closest('.task-item') : null;
 
@@ -2315,14 +2279,14 @@
                 const draggedTask = tasks[originalDraggedTaskIndex];
 
                 if (!dropTargetItem || draggedTask.completed) {
-                    // If dropped outside a valid target or on a completed task, revert
-                    renderTasks(); // Re-render to revert visual changes
+                    // اگر در خارج از یک هدف معتبر یا روی یک وظیفه تکمیل شده رها شد، بازگردانی شود
+                    renderTasks(); // رندر مجدد برای بازگردانی تغییرات بصری
                     showMessageBox('مرتب‌سازی وظیفه لغو شد.', 'info');
                 } else if (dropTargetItem.dataset.id === draggedTaskId) {
-                    // Dropped on itself, no change
+                    // روی خود رها شد، بدون تغییر
                     renderTasks();
                 } else {
-                    // Replicate the mouse drop logic for touch
+                    // تکرار منطق رها کردن ماوس برای لمس
                     const activeTasks = tasks.filter(task => !task.completed);
                     const draggedActiveIndex = activeTasks.findIndex(t => t.id === draggedTaskId);
                     const droppedActiveIndex = activeTasks.findIndex(t => t.id === dropTargetItem.dataset.id);
@@ -2340,17 +2304,17 @@
                     const boundingBox = dropTargetItem.getBoundingClientRect();
                     const offset = e.changedTouches[0].clientY - boundingBox.top;
                     if (offset > boundingBox.height / 2) {
-                        newActiveIndex++; // Dropped below target
+                        newActiveIndex++; // در پایین هدف رها شد
                     }
                     activeTasks.splice(newActiveIndex, 0, movedTask);
 
-                    // If the task was pinned, unpin it when manually reordered by drag/drop
+                    // اگر وظیفه پین شده بود، هنگام مرتب‌سازی دستی با کشیدن/رها کردن آن را از پین خارج کنید
                     if (movedTask.isPinned) {
                         movedTask.isPinned = false;
                         showMessageBox('وظیفه از پین خارج شد زیرا ترتیب آن به صورت دستی تغییر یافت.', 'info');
                     }
 
-                    // Reconstruct the main tasks array
+                    // بازسازی آرایه اصلی وظایف
                     const completedTasks = tasks.filter(t => t.completed);
                     tasks = [...activeTasks, ...completedTasks];
 
@@ -2359,20 +2323,20 @@
                     showMessageBox('وظیفه با موفقیت مرتب شد!', 'success');
                 }
             } else if (isGestureStarted && absDeltaX < TAP_THRESHOLD && absDeltaY < TAP_THRESHOLD) {
-                // This was a pure tap (not a drag or swipe, and minimal movement)
-                handleTaskClick(e); // Simulate click for tap
+                // این یک ضربه خالص بود (نه کشیدن یا سوایپ، و حداقل حرکت)
+                handleTaskClick(e); // شبیه‌سازی کلیک برای ضربه
             }
 
-            // Reset all flags and element transforms
+            // بازنشانی تمام پرچم‌ها و تبدیل‌های عنصر
             resetTouchStates();
-            // Ensure task item position is reset visually if it was moved by touchstart/touchmove
+            // اطمینان از بازنشانی موقعیت آیتم وظیفه به صورت بصری اگر توسط touchstart/touchmove جابجا شده بود
             const taskItem = e.target.closest('.task-item');
             if (taskItem) {
                 taskItem.style.transform = 'translateX(0)';
             }
         });
 
-        // For completed tasks, only allow tap to toggle completion
+        // برای وظایف تکمیل شده، فقط اجازه ضربه برای تغییر وضعیت تکمیل
         completedTasksContainer.addEventListener('touchstart', (e) => {
             const taskItem = e.target.closest('.task-item');
             if (!taskItem) return;
@@ -2384,11 +2348,11 @@
                                        e.target.closest('.three-dot-menu-btn');
 
             if (isInteractiveChild) {
-                resetTouchStates(); // Ensure states are clean even if not starting drag
-                return; // Let native behavior handle it
+                resetTouchStates(); // اطمینان از پاک بودن وضعیت‌ها حتی اگر کشیدن شروع نشده باشد
+                return; // اجازه دهید رفتار بومی آن را مدیریت کند
             }
 
-            // No e.preventDefault() here to allow scrolling for completed tasks
+            // در اینجا e.preventDefault() وجود ندارد تا اسکرول برای وظایف تکمیل شده مجاز باشد
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
             touchCurrentX = touchStartX;
@@ -2402,16 +2366,16 @@
             const absDeltaX = Math.abs(touchCurrentX - touchStartX);
             const absDeltaY = Math.abs(touchCurrentY - touchStartY);
 
-            // If significant movement, it's not a tap
+            // اگر حرکت قابل توجهی وجود داشته باشد، این یک ضربه نیست
             if (absDeltaX > TAP_THRESHOLD || absDeltaY > TAP_THRESHOLD) {
-                isGestureStarted = false; // Not a tap
+                isGestureStarted = false; // ضربه نیست
             }
         });
 
         completedTasksContainer.addEventListener('touchend', (e) => {
             const taskItem = e.target.closest('.task-item');
             if (!taskItem) {
-                resetTouchStates(); // If touch ends outside a task item, reset
+                resetTouchStates(); // اگر لمس خارج از یک آیتم وظیفه به پایان رسید، بازنشانی شود
                 return;
             }
 
@@ -2419,12 +2383,12 @@
             const absDeltaY = Math.abs(touchCurrentY - touchStartY);
 
             if (isGestureStarted && absDeltaX < TAP_THRESHOLD && absDeltaY < TAP_THRESHOLD) {
-                handleTaskClick(e); // Simulate click for tap
+                handleTaskClick(e); // شبیه‌سازی کلیک برای ضربه
             }
-            resetTouchStates(); // Reset for next gesture
+            resetTouchStates(); // بازنشانی برای ژست بعدی
         });
 
-        // Helper function to reset all touch-related states
+        // تابع کمکی برای بازنشانی تمام وضعیت‌های مربوط به لمس
         function resetTouchStates() {
             isDragging = false;
             isGestureStarted = false;
@@ -2443,47 +2407,47 @@
             longPressTimer = null;
         }
 
-        // Function to undo a specific deletion
+        // تابع برای بازگردانی یک حذف خاص
         function undoLastDeletion(taskToRestore) {
             if (taskToRestore) {
-                // Find the correct position to re-insert the task
-                // If originalIndex is valid and within bounds, try to insert there.
-                // Otherwise, add to the end of the active tasks.
-                let insertIndex = tasks.length; // Default to end
+                // یافتن موقعیت صحیح برای درج مجدد وظیفه
+                // اگر originalIndex معتبر و در محدوده باشد، سعی کنید در آنجا درج کنید.
+                // در غیر این صورت، به انتهای وظایف فعال اضافه کنید.
+                let insertIndex = tasks.length; // پیش‌فرض به انتها
                 if (taskToRestore.originalIndex !== undefined && taskToRestore.originalIndex <= tasks.length) {
                     insertIndex = taskToRestore.originalIndex;
                 }
 
-                // Ensure the task is not already present (e.g., if undo was clicked twice quickly)
+                // اطمینان از عدم وجود وظیفه از قبل (مثلاً اگر بازگردانی دو بار سریع کلیک شد)
                 if (!tasks.some(t => t.id === taskToRestore.id)) {
                     tasks.splice(insertIndex, 0, taskToRestore);
                     saveToLocalStorage();
                     renderTasks();
                     showMessageBox(`وظیفه "${taskToRestore.name}" بازگردانده شد.`, 'info');
                 } else {
-                    console.warn(`Task with ID ${taskToRestore.id} already exists, not re-adding.`);
+                    console.warn(`وظیفه با ID ${taskToRestore.id} از قبل وجود دارد، مجدداً اضافه نمی‌شود.`);
                 }
             }
         }
 
 
-        // --- Theme Change Logic ---
+        // --- منطق تغییر تم ---
         function applyTheme(theme) {
             const htmlElement = document.documentElement;
             if (theme === 'dark') {
                 htmlElement.classList.add('dark');
-                // Moon icon for dark mode
+                // آیکون ماه برای حالت تاریک
                 themeIcon.innerHTML = `<path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>`;
             } else {
                 htmlElement.classList.remove('dark');
-                // Sun icon for light mode
+                // آیکون خورشید برای حالت روشن
                 themeIcon.innerHTML = `<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.325 6.675l-.707-.707M6.318 6.318l-.707-.707m12.728 0l-.707.707M6.318 17.682l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>`;
             }
-            // Re-apply level theme after overall light/dark mode change
+            // اعمال مجدد تم سطح پس از تغییر کلی حالت روشن/تاریک
             applyLevelTheme(level);
         }
 
-        // Initialize theme on load and listen for system theme changes
+        // مقداردهی اولیه تم در بارگذاری و گوش دادن به تغییرات تم سیستم
         function initializeTheme() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
@@ -2494,30 +2458,30 @@
                 applyTheme('light');
             }
 
-            // Listen for changes in system's preferred color scheme
+            // گوش دادن به تغییرات در طرح رنگی ترجیحی سیستم
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
                 const newSystemTheme = e.matches ? 'dark' : 'light';
-                // Always apply system theme if no specific theme is saved by the user
+                // همیشه تم سیستم را اعمال کنید اگر تم خاصی توسط کاربر ذخیره نشده باشد
                 applyTheme(newSystemTheme);
             });
         }
 
-        // --- Menu and Modal Logic ---
+        // --- منطق منو و مودال ---
         menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent click from propagating to window and closing dropdown
+            e.stopPropagation(); // جلوگیری از انتشار کلیک به پنجره و بستن دراپ‌داون
             menuDropdown.classList.toggle('hidden');
         });
 
-        // Close dropdown when clicking outside
+        // بستن دراپ‌داون هنگام کلیک در خارج
         window.addEventListener('click', (e) => {
-            // Check if the click target is within the menu button or the dropdown itself
+            // بررسی اینکه آیا هدف کلیک در داخل دکمه منو یا خود دراپ‌داون است
             const isClickInsideMenu = menuBtn.contains(e.target) || menuDropdown.contains(e.target);
-            // Check if the click target is an interactive element outside the menu/button (e.g., a checkbox, another button)
+            // بررسی اینکه آیا هدف کلیک یک عنصر تعاملی خارج از منو/دکمه است (مثلاً یک چک‌باکس، دکمه دیگر)
             const isInteractiveElement = e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON' || e.target.type === 'checkbox';
 
-            // Close the menu if the click is outside the menu and its button,
-            // AND if the click is not on another interactive element which should be allowed to function.
-            // If it's an interactive element, we still want the menu to close, but the element's action to proceed.
+            // بستن منو اگر کلیک در خارج از منو و دکمه آن باشد،
+            // و اگر کلیک روی یک عنصر تعاملی دیگر نباشد که باید اجازه عملکرد داشته باشد.
+            // اگر یک عنصر تعاملی است، همچنان می‌خواهیم منو بسته شود، اما اقدام عنصر ادامه یابد.
             if (!isClickInsideMenu) {
                 menuDropdown.classList.add('hidden');
             }
@@ -2526,11 +2490,11 @@
 
         profileMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
-            menuDropdown.classList.add('hidden'); // Hide dropdown
+            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون
 
-            // Show profile modal with animation
+            // نمایش مودال پروفایل با انیمیشن
             profileModal.classList.remove('hidden');
-            void profileModalContent.offsetWidth; // Force reflow
+            void profileModalContent.offsetWidth; // اجبار به reflow
             profileModalContent.classList.remove('opacity-0', 'scale-95');
             profileModalContent.classList.add('opacity-100', 'scale-100');
 
@@ -2571,7 +2535,7 @@
                 achievementsHtml = `<p class="text-gray-500 dark:text-gray-400 mt-4">هنوز دستاوردی کسب نشده است.</p>`;
             }
 
-            // Redesigned profile modal body
+            // بدنه مودال پروفایل بازطراحی شده
             profileModalBody.innerHTML = `
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
                     <div class="p-3 rounded-lg shadow-sm bg-blue-50 dark:bg-blue-900 text-blue-800 dark:text-blue-200 flex items-center justify-between">
@@ -2606,12 +2570,12 @@
                 ${achievementsHtml}
             `;
 
-            // Add event listener to newly created clickable items in profile modal
+            // اضافه کردن شنونده رویداد به آیتم‌های قابل کلیک تازه ایجاد شده در مودال پروفایل
             profileModalBody.querySelectorAll('.clickable-item').forEach(item => {
                 item.addEventListener('click', (event) => {
                     const type = event.currentTarget.dataset.type;
                     const id = event.currentTarget.dataset.id;
-                    const name = event.currentTarget.dataset.id; // Corrected to use data-id for name
+                    const name = event.currentTarget.dataset.id; // اصلاح شده برای استفاده از data-id برای نام
                     if (type === 'level') {
                         showDetailModal('level', id);
                     } else {
@@ -2626,35 +2590,35 @@
             profileModalContent.classList.add('opacity-0', 'scale-95');
             setTimeout(() => {
                 profileModal.classList.add('hidden');
-            }, 50); // Changed to 50ms
+            }, 50);
         });
 
         helpMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
-            menuDropdown.classList.add('hidden'); // Hide dropdown
+            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون
 
-            // Show help modal with animation
+            // نمایش مودال راهنما با انیمیشن
             helpModal.classList.remove('hidden');
-            void helpModalContent.offsetWidth; // Force reflow
+            void helpModalContent.offsetWidth; // اجبار به reflow
             helpModalContent.classList.remove('opacity-0', 'scale-95');
             helpModalContent.classList.add('opacity-100', 'scale-100');
 
-            // Dynamically update help modal content with current point values
+            // به‌روزرسانی پویا محتوای مودال راهنما با مقادیر پوینت فعلی
             helpModalBody.innerHTML = `
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">به زی تسک خوش آمدید!</h3>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 text-gray-600 dark:text-gray-300">به زی تسک خوش آمدید!</h3>
                 <p class="mb-3 text-gray-700 dark:text-gray-300">این برنامه به شما کمک می‌کند تا وظایف خود را مدیریت کنید، پوینت کسب کنید، سطح خود را ارتقا دهید و از طریق گیمیفیکیشن به نقاط عطف مختلفی دست یابید.</p>
 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">نحوه استفاده از برنامه</h3>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">افزودن وظیفه:</strong> نام وظیفه را وارد کرده و اهمیت آن (مهم/عادی/سفارشی) را انتخاب کنید. وظایف مهم و سفارشی پوینت بیشتری به شما می‌دهند.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تغییر ترتیب وظایف:</strong> می‌توانید وظایف فعال را با کشیدن و رها کردن مرتب کنید.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تکمیل وظیفه:</strong> برای تکمیل یک وظیفه، کادر کنار آن را علامت بزنید. این به شما پوینت می‌دهد و وظیفه را به بخش "وظایف تکمیل شده" منتقل می‌کند.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">ویرایش وظیفه:</strong> برای ویرایش نام و اهمیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "ویرایش" را انتخاب کنید یا روی خود وظیفه کلیک کنید.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">حذف وظیفه:</strong> برای حذف یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "حذف" را انتخاب کنید.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تغییر ترتیب دستی:</strong> برای تغییر دستی موقعیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "تغییر ترتیب" را انتخاب کنید.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">وظایف تکمیل شده:</strong> روی دکمه کلیک کنید تا وظایف تکمیل شده خود را نمایش یا پنهان کنید.</p>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">نحوه استفاده از برنامه</h3>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">افزودن وظیفه:</strong> نام وظیفه را وارد کرده و اهمیت آن (مهم/عادی/سفارشی) را انتخاب کنید. وظایف مهم و سفارشی پوینت بیشتری به شما می‌دهند.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">تغییر ترتیب وظایف:</strong> می‌توانید وظایف فعال را با کشیدن و رها کردن مرتب کنید.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">تکمیل وظیفه:</strong> برای تکمیل یک وظیفه، کادر کنار آن را علامت بزنید. این به شما پوینت می‌دهد و وظیفه را به بخش "وظایف تکمیل شده" منتقل می‌کند.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">ویرایش وظیفه:</strong> برای ویرایش نام و اهمیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "ویرایش" را انتخاب کنید یا روی خود وظیفه کلیک کنید.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">حذف وظیفه:</strong> برای حذف یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "حذف" را انتخاب کنید.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">تغییر ترتیب دستی:</strong> برای تغییر دستی موقعیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "تغییر ترتیب" را انتخاب کنید.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">وظایف تکمیل شده:</strong> روی دکمه کلیک کنید تا وظایف تکمیل شده خود را نمایش یا پنهان کنید.</p>
 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">سیستم گیمیفیکیشن</h3>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">پوینت:</strong>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">سیستم گیمیفیکیشن</h3>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">پوینت:</strong>
                     پوینت‌ها صرفاً نمادین هستند و برای اندازه‌گیری پیشرفت و فعالیت شما در برنامه استفاده می‌شوند.
                     <ul>
                         <li>وظایف عادی: ${pointsPerNormalTask} پوینت</li>
@@ -2662,25 +2626,25 @@
                         <li>وظایف سفارشی: تا ${MAX_CUSTOM_POINTS} پوینت</li>
                     </ul>
                 </p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">زنجیره روزانه:</strong> تکمیل حداقل یک وظیفه در روزهای متوالی، زنجیره روزانه شما را افزایش می‌دهد و به شما امکان می‌دهد دستاوردهای ویژه‌ای کسب کنید.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">زنجیره روزانه:</strong> تکمیل حداقل یک وظیفه در روزهای متوالی، زنجیره روزانه شما را افزایش می‌دهد و به شما امکان می‌دهد دستاوردهای ویژه‌ای کسب کنید.</p>
                 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">سطوح و تم‌های رنگی</h3>
-                <p class="mb-2 text-gray-700 dark:text-gray-300">با کسب پوینت، به سطوح بالاتر صعود خواهید کرد. هر سطح دارای یک تم رنگی منحصر به فرد است که با پیشرفت شما تغییر می‌کند. برای جزئیات بیشتر روی یک سطح کلیک کنید:</p>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">سطوح</h3>
+                <p class="mb-2 text-gray-700 dark:text-gray-300">با کسب پوینت، به سطوح بالاتر صعود خواهید کرد. برای جزئیات بیشتر روی یک سطح کلیک کنید:</p>
                 <div class="flex flex-wrap gap-2 mb-3">
                     ${levelPointsThresholds.map((levelInfo, index) => {
                         return `
-                            <span class="bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm flex items-center clickable-item" data-type="level" data-id="${index + 1}">
+                            <span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm flex items-center clickable-item" data-type="level" data-id="${index + 1}">
                                 سطح ${index + 1}: ${levelInfo.name}
                             </span>
                         `;
                     }).join('')}
                 </div>
 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">دستاوردها</h3>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">دستاوردها</h3>
                 <p class="mb-2 text-gray-700 dark:text-gray-300">با پیشرفت در بازی، دستاوردهای مختلفی کسب خواهید کرد. برای جزئیات بیشتر روی یک دستاورد کلیک کنید:</p>
                 <div class="flex flex-wrap gap-2 mb-3">
                     ${achievementsData.map(ach => {
-                        // Only list non-level achievements here
+                        // فقط دستاوردهای غیرسطحی را در اینجا لیست کنید
                         if (ach.type !== 'level') {
                             return `<span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm flex items-center clickable-item" data-type="achievement" data-name="${ach.name}">${ach.icon} <span class="mr-1">${ach.name}</span></span>`;
                         }
@@ -2688,17 +2652,17 @@
                     }).join('')}
                 </div>
 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">پشتیبان‌گیری و بازیابی داده‌ها</h3>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">امنیت داده‌ها:</strong> تمام داده‌های شما به صورت امن در حافظه محلی مرورگر شما ذخیره می‌شوند و هیچ اطلاعاتی به هیچ سروری ارسال نمی‌شود.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">پشتیبان‌گیری (خروجی گرفتن):</strong> می‌توانید با کلیک بر روی دکمه "ذخیره داده‌ها"، یک فایل پشتیبان JSON از تمام داده‌های برنامه خود دانلود کنید. این فایل را در مکانی امن نگهداری کنید.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">بازیابی (ورودی گرفتن):</strong> برای بازیابی داده‌ها، به سادگی فایل پشتیبان JSON را که قبلاً دانلود کرده‌اید از طریق بخش "انتخاب فایل" انتخاب کنید، سپس روی دکمه "بارگذاری از فایل" کلیک کنید. این کار داده‌های فعلی برنامه شما را با داده‌های موجود در فایل جایگزین می‌کند.</p>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">پشتیبان‌گیری و بازیابی داده‌ها</h3>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">امنیت داده‌ها:</strong> تمام داده‌های شما به صورت امن در حافظه محلی مرورگر شما ذخیره می‌شوند و هیچ اطلاعاتی به هیچ سروری ارسال نمی‌شود.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">پشتیبان‌گیری (خروجی گرفتن):</strong> می‌توانید با کلیک بر روی دکمه "ذخیره داده‌ها"، یک فایل پشتیبان JSON از تمام داده‌های برنامه خود دانلود کنید. این فایل را در مکانی امن نگهداری کنید.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">بازیابی (ورودی گرفتن):</strong> برای بازیابی داده‌ها، به سادگی فایل پشتیبان JSON را که قبلاً دانلود کرده‌اید از طریق بخش "انتخاب فایل" انتخاب کنید، سپس روی دکمه "بارگذاری از فایل" کلیک کنید. این کار داده‌های فعلی برنامه شما را با داده‌های موجود در فایل جایگزین می‌کند.</p>
 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">دونیت</h3>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">حمایت مالی</h3>
                 <p class="mb-2 text-gray-700 dark:text-gray-300">این بخش در حال حاضر غیرفعال است. از علاقه شما سپاسگزاریم!</p>
 
-                <p class="mt-4 text-center text-gray-700 dark:text-gray-300">هدف این برنامه انگیزه دادن به شما و کمک به سازماندهی بهتر وظایف شماست. موفق باشید!</p>
+                <p class="mt-4 text-center text-gray-700 dark:text-gray-300">هدف این برنامه ایجاد انگیزه و کمک به سازماندهی بهتر وظایف شماست. موفق باشید!</p>
             `;
-            // Add event listener to newly created clickable items in help modal
+            // اضافه کردن شنونده رویداد به آیتم‌های قابل کلیک تازه ایجاد شده در مودال راهنما
             helpModalBody.querySelectorAll('.clickable-item').forEach(item => {
                 item.addEventListener('click', (event) => {
                     const type = event.currentTarget.dataset.type;
@@ -2718,23 +2682,23 @@
             helpModalContent.classList.add('opacity-0', 'scale-95');
             setTimeout(() => {
                 helpModal.classList.add('hidden');
-            }, 50); // Changed to 50ms
+            }, 50);
         });
 
         aboutMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
-            menuDropdown.classList.add('hidden'); // Hide dropdown
+            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون
 
-            // Show about modal with animation
+            // نمایش مودال درباره ما با انیمیشن
             aboutModal.classList.remove('hidden');
-            void aboutModalContent.offsetWidth; // Force reflow
+            void aboutModalContent.offsetWidth; // اجبار به reflow
             aboutModalContent.classList.remove('opacity-0', 'scale-95');
             aboutModalContent.classList.add('opacity-100', 'scale-100');
 
             aboutModalBody.innerHTML = `
-                <p class="mb-3">این برنامه برای کمک به مدیریت وظایف و افزایش انگیزه طراحی شده است.</p>
-                <p class="mb-3">این پروژه به صورت اختصاصی توسط <strong class="text-blue-600 dark:text-blue-400"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">سایت عمو لئو</a></strong> طراحی شده است، این آولین و آخرین نسخه از از این پروژه است.</p>
-                <p class="mb-3">تمامی حقوق متعلق به <strong class="text-blue-600 dark:text-blue-400"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
+                <p class="mb-3">این برنامه به منظور مدیریت وظایف و افزایش انگیزه طراحی شده است.</p>
+                <p class="mb-3">این پروژه به صورت اختصاصی توسط <strong class="text-gray-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">سایت عمو لئو</a></strong> طراحی شده است. این نسخه، اولین و آخرین نسخه از این پروژه است.</p>
+                <p class="mb-3">تمامی حقوق متعلق به <strong class="text-gray-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
                 <p class="mb-3">تاریخ: ۴ خرداد ۱۴۰۴</p>
             `;
         });
@@ -2744,54 +2708,52 @@
             aboutModalContent.classList.add('opacity-0', 'scale-95');
             setTimeout(() => {
                 aboutModal.classList.add('hidden');
-            }, 50); // Changed to 50ms
+            }, 50);
         });
 
         backupMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
-            menuDropdown.classList.add('hidden'); // Hide dropdown
+            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون
 
-            // Show backup modal with animation
+            // نمایش مودال پشتیبان‌گیری با انیمیشن
             backupModal.classList.remove('hidden');
-            void backupModalContent.offsetWidth; // Force reflow
+            void backupModalContent.offsetWidth; // اجبار به reflow
             backupModalContent.classList.remove('opacity-0', 'scale-95');
             backupModalContent.classList.add('opacity-100', 'scale-100');
 
-            importFileInput.value = ''; // Clear file input on open
+            importFileInput.value = ''; // پاک کردن ورودی فایل در باز شدن
             selectedFileNameSpan.textContent = 'فایلی انتخاب نشده است.';
         });
 
-        // Add listener to close backup modal button
+        // اضافه کردن شنونده برای دکمه بستن مودال پشتیبان‌گیری
         closeBackupModalBtn.addEventListener('click', () => {
             backupModalContent.classList.remove('opacity-100', 'scale-95');
             backupModalContent.classList.add('opacity-0', 'scale-95');
             setTimeout(() => {
                 backupModal.classList.add('hidden');
-            }, 50); // Changed to 50ms
+            }, 50);
         });
 
         donateMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
-            // const donateLink = "YOUR_DONATION_LINK_HERE"; // TODO: Replace with actual donation link
-            // window.open(donateLink, '_blank');
             showMessageBox('این بخش در حال حاضر غیرفعال است. از علاقه شما سپاسگزاریم!', 'info');
-            menuDropdown.classList.add('hidden'); // Hide dropdown after selection
+            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون پس از انتخاب
         });
 
         resetMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
-            menuDropdown.classList.add('hidden'); // Hide dropdown
+            menuDropdown.classList.add('hidden'); // پنهان کردن دراپ‌داون
 
-            // Show reset confirmation modal with animation
+            // نمایش مودال تأیید بازنشانی با انیمیشن
             resetConfirmModal.classList.remove('hidden');
-            void resetConfirmModalContent.offsetWidth; // Force reflow
+            void resetConfirmModalContent.offsetWidth; // اجبار به reflow
             resetConfirmModalContent.classList.remove('opacity-0', 'scale-95');
             resetConfirmModalContent.classList.add('opacity-100', 'scale-100');
         });
 
         confirmResetBtn.addEventListener('click', () => {
-            localStorage.clear(); // Clear all data from local storage
-            location.reload(); // Reload page to reset application
+            localStorage.clear(); // پاک کردن تمام داده‌ها از local storage
+            location.reload(); // بارگذاری مجدد صفحه برای بازنشانی برنامه
         });
 
         cancelResetBtn.addEventListener('click', () => {
@@ -2799,7 +2761,7 @@
             resetConfirmModalContent.classList.add('opacity-0', 'scale-95');
             setTimeout(() => {
                 resetConfirmModal.classList.add('hidden');
-            }, 50); // Changed to 50ms
+            }, 50);
         });
 
         closeResetModalBtn.addEventListener('click', () => {
@@ -2807,10 +2769,10 @@
             resetConfirmModalContent.classList.add('opacity-0', 'scale-95');
             setTimeout(() => {
                 resetConfirmModal.classList.add('hidden');
-            }, 50); // Changed to 50ms
+            }, 50);
         });
 
-        // Welcome modal logic
+        // منطق مودال خوش‌آمدگویی
         startBtn.addEventListener('click', () => {
             const inputName = userNameInput.value.trim();
             if (inputName.length === 0) {
@@ -2818,7 +2780,7 @@
                 return;
             }
             if (inputName.length > 15) {
-                showMessageBox('مقدار ورودی نباید بیشتر از ۱۵ کارکتر باشد.', 'error'); // Added validation for length
+                showMessageBox('مقدار ورودی نباید بیشتر از ۱۵ کاراکتر باشد.', 'error');
                 return;
             }
 
@@ -2828,18 +2790,18 @@
             welcomeModalContent.classList.add('opacity-0', 'scale-95');
             setTimeout(() => {
                 welcomeModal.classList.add('hidden');
-            }, 50); // Changed to 50ms
-            showMessageBox(`خوش آمدید، ${userName}!`, 'success');
+            }, 50);
+            showMessageBox(`${userName}، خوش آمدید!`, 'success');
         });
 
-        // Export data (download as file)
+        // خروجی گرفتن داده‌ها (دانلود به عنوان فایل)
         exportDataBtn.addEventListener('click', () => {
             const dataToSave = {
                 tasks: tasks,
                 zPoint: zPoint,
                 level: level,
                 dailyStreak: dailyStreak,
-                highestDailyStreak: highestDailyStreak, // Include highest streak in export
+                highestDailyStreak: highestDailyStreak, // شامل بالاترین زنجیره در خروجی
                 lastCompletionDate: lastCompletionDate,
                 totalCustomTasksCompleted: totalCustomTasksCompleted,
                 userName: userName
@@ -2856,11 +2818,11 @@
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            URL.revokeObjectURL(url); // Clean up URL object
+            URL.revokeObjectURL(url); // پاکسازی شیء URL
             showMessageBox('فایل پشتیبان با موفقیت دانلود شد!', 'success');
         });
 
-        // Update selected file name display
+        // به‌روزرسانی نمایش نام فایل انتخاب شده
         importFileInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
                 selectedFileNameSpan.textContent = e.target.files[0].name;
@@ -2869,11 +2831,11 @@
             }
         });
 
-        // Import data (load from file)
+        // وارد کردن داده‌ها (بارگذاری از فایل)
         importDataBtn.addEventListener('click', () => {
             const file = importFileInput.files[0];
             if (!file) {
-                showMessageBox('لطفاً یک فایل پشتیبان برای آپلود انتخاب کنید.', 'info');
+                showMessageBox('لطفاً یک فایل پشتیبان برای بارگذاری انتخاب کنید.', 'info');
                 return;
             }
 
@@ -2883,13 +2845,13 @@
                     const dataString = e.target.result;
                     const importedData = JSON.parse(dataString);
 
-                    // Basic validation of imported data structure
+                    // اعتبار سنجی اولیه ساختار داده وارد شده
                     if (
                         typeof importedData.tasks === 'object' && Array.isArray(importedData.tasks) &&
                         typeof importedData.zPoint === 'number' &&
                         typeof importedData.level === 'number' &&
                         typeof importedData.dailyStreak === 'number' &&
-                        (typeof importedData.highestDailyStreak === 'number' || typeof importedData.highestDailyStreak === 'undefined') && // Validate highest streak
+                        (typeof importedData.highestDailyStreak === 'number' || typeof importedData.highestDailyStreak === 'undefined') && // اعتبار سنجی بالاترین زنجیره
                         (typeof importedData.lastCompletionDate === 'string' || importedData.lastCompletionDate === null) &&
                         typeof importedData.totalCustomTasksCompleted === 'number' &&
                         (typeof importedData.userName === 'string' || importedData.userName === null || importedData.userName === undefined)
@@ -2898,48 +2860,48 @@
                         zPoint = importedData.zPoint;
                         level = importedData.level;
                         dailyStreak = importedData.dailyStreak;
-                        highestDailyStreak = importedData.highestDailyStreak || 0; // Set highest streak, default to 0 if undefined
+                        highestDailyStreak = importedData.highestDailyStreak || 0; // تنظیم بالاترین زنجیره، پیش‌فرض 0 اگر تعریف نشده باشد
                         lastCompletionDate = importedData.lastCompletionDate;
                         totalCustomTasksCompleted = importedData.totalCustomTasksCompleted;
-                        userName = importedData.userName || null; // Ensure userName is set or null
+                        userName = importedData.userName || null; // اطمینان از تنظیم userName یا null بودن
 
-                        // Ensure imported tasks have the new 'isPinned' property
+                        // اطمینان از اینکه وظایف وارد شده دارای ویژگی 'isPinned' جدید هستند
                         tasks.forEach(task => {
                             if (typeof task.isPinned === 'undefined') {
                                 task.isPinned = false;
                             }
                         });
 
-                        saveToLocalStorage(); // Save imported data to local storage
-                        renderTasks(); // Re-render UI with new data
+                        saveToLocalStorage(); // ذخیره داده‌های وارد شده در local storage
+                        renderTasks(); // رندر مجدد UI با داده‌های جدید
                         
-                        // Hide backup modal with animation
+                        // پنهان کردن مودال پشتیبان‌گیری با انیمیشن
                         backupModalContent.classList.remove('opacity-100', 'scale-95');
                         backupModalContent.classList.add('opacity-0', 'scale-95');
                         setTimeout(() => {
                             backupModal.classList.add('hidden');
-                        }, 50); // Changed to 50ms
+                        }, 50);
                         showMessageBox('داده‌ها با موفقیت بارگذاری شدند!', 'success');
                     } else {
                         showMessageBox('فرمت داده وارد شده نامعتبر است. لطفاً یک فایل پشتیبان معتبر وارد کنید.', 'error');
                     }
                 } catch (error) {
-                    console.error("Error parsing imported data:", error);
+                    console.error("خطا در تجزیه داده‌های وارد شده:", error);
                     showMessageBox('خطا در پردازش فایل وارد شده. اطمینان حاصل کنید که فایل JSON صحیح است.', 'error');
                 }
             };
             reader.onerror = (e) => {
-                console.error("Error reading file:", e);
+                console.error("خطا در خواندن فایل:", e);
                 showMessageBox('خطا در خواندن فایل. لطفاً دوباره امتحان کنید.', 'error');
             };
             reader.readAsText(file);
         });
 
-        // --- Level/Achievement Detail Modal Logic ---
+        // --- منطق مودال جزئیات سطح/دستاورد ---
         function showDetailModal(type, identifier) {
             detailModal.classList.remove('hidden');
-            void detailModalContent.offsetWidth; // Force reflow
-            // Add animation classes for modal entry
+            void detailModalContent.offsetWidth; // اجبار به reflow
+            // اضافه کردن کلاس‌های انیمیشن برای ورود مودال
             detailModalContent.classList.remove('opacity-0', 'scale-95');
             detailModalContent.classList.add('opacity-100', 'scale-100');
 
@@ -2949,20 +2911,19 @@
             if (type === 'level') {
                 const levelNum = parseInt(identifier, 10);
                 const levelInfo = levelPointsThresholds[levelNum - 1];
-                const themeData = levelThemes[levelNum - 1]; // Get theme data for level
-
+                
                 titleText = levelInfo.name;
 
                 contentHtml = `
-                    <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">توضیحات:</strong> برای رسیدن به این سطح، شما به ${levelInfo.points} پوینت نیاز دارید. تم رنگی کلی برای این سطح ${themeData.description} است.</p>
+                    <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">توضیحات:</strong> برای رسیدن به این سطح، شما به ${levelInfo.points} پوینت نیاز دارید.</p>
                 `;
-            } else { // This else block now covers all non-level types like 'totalTasks', 'importantTasks', etc.
+            } else { // این بلوک else اکنون تمام انواع غیرسطحی مانند 'totalTasks', 'importantTasks' و غیره را پوشش می‌دهد.
                 const achievement = achievementsData.find(ach => ach.name === identifier);
                 
                 if (achievement) {
                     titleText = achievement.name;
                     contentHtml = `
-                        <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">توضیحات:</strong> ${achievement.description || 'توضیحات در دسترس نیست.'}</p>
+                        <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">توضیحات:</strong> ${achievement.description || 'توضیحات در دسترس نیست.'}</p>
                     `;
                 } else {
                     titleText = `خطا`;
@@ -2979,95 +2940,82 @@
             detailModalContent.classList.add('opacity-0', 'scale-95');
             setTimeout(() => {
                 detailModal.classList.add('hidden');
-            }, 50); // Changed to 50ms
+            }, 50);
         });
 
-        // Add click listener to show current level on main page
+        // اضافه کردن شنونده کلیک برای نمایش سطح فعلی در صفحه اصلی
         currentLevelDisplay.addEventListener('click', () => showDetailModal('level', level));
 
 
-        // --- Enter Key Logic ---
-        // Helper function to find the next focusable element within a container
-        function getNextFocusableElement(currentElement, container) {
-            const focusableElements = Array.from(container.querySelectorAll('input:not([type="hidden"]), select, button:not([disabled])'));
-            const currentIndex = focusableElements.indexOf(currentElement);
-            
-            // Filter out elements that are currently hidden by CSS (e.g., customPointsInput)
-            const visibleFocusableElements = focusableElements.filter(el => {
-                const style = window.getComputedStyle(el);
-                return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
-            });
-
-            const currentVisibleIndex = visibleFocusableElements.indexOf(currentElement);
-
-            if (currentVisibleIndex > -1 && currentVisibleIndex < visibleFocusableElements.length - 1) {
-                return visibleFocusableElements[currentVisibleIndex + 1];
-            }
-            return null; // No next focusable element
-        }
-
-        // Global keydown listener for Enter key
+        // --- منطق کلید Enter (مدیریت خودکار حذف شد) ---
+        // شنونده سراسری keydown برای کلید Enter (فقط برای دکمه‌های مودال خاص)
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const activeElement = document.activeElement;
 
-                // 1. Welcome Modal
-                if (welcomeModal.classList.contains('show') || !welcomeModal.classList.contains('hidden')) { // Check if welcome modal is active
+                // 1. مودال خوش‌آمدگویی (فقط برای userNameInput)
+                if (welcomeModal.classList.contains('show') || !welcomeModal.classList.contains('hidden')) {
                     if (activeElement === userNameInput) {
-                        e.preventDefault(); // Prevent default Enter behavior (e.g., new line in textarea)
-                        startBtn.click();
+                        e.preventDefault(); // جلوگیری از رفتار پیش‌فرض Enter (مثلاً خط جدید در تکست‌آریا)
+                        // startBtn.click(); // حذف شد
                         return;
                     }
                 }
 
-                // 2. Add Task Section
+                // 2. بخش افزودن وظیفه (فقط برای customPointsInput)
                 if (addTaskSection.contains(activeElement)) {
-                    e.preventDefault();
-                    const nextElement = getNextFocusableElement(activeElement, addTaskSection);
-                    if (nextElement) {
-                        nextElement.focus();
-                    } else {
-                        addTaskBtn.click();
-                    }
-                    return;
-                }
-
-                // 3. Edit Task Modal
-                if (editTaskModal.classList.contains('show') || !editTaskModal.classList.contains('hidden')) {
-                    if (editTaskModalContent.contains(activeElement)) { // Now editTaskModalContent is correctly defined
+                    // اگر customPointsInput فوکوس شده باشد
+                    if (activeElement === customPointsInput) {
                         e.preventDefault();
-                        const nextElement = getNextFocusableElement(activeElement, editTaskModalContent);
-                        if (nextElement) {
-                            nextElement.focus();
-                        } else {
-                            saveEditedTaskBtn.click();
-                        }
+                        // addTaskBtn.click(); // حذف شد
                         return;
                     }
                 }
 
-                // 4. Change Order Modal
+                // 3. مودال ویرایش وظیفه (فقط برای customPointsInput)
+                if (editTaskModal.classList.contains('show') || !editTaskModal.classList.contains('hidden')) {
+                    if (editTaskModalContent.contains(activeElement)) {
+                        // اگر editTaskCustomPointsInput فوکوس شده باشد
+                        if (activeElement === editTaskCustomPointsInput) {
+                            e.preventDefault();
+                            // saveEditedTask(); // حذف شد
+                            return;
+                        }
+                    }
+                }
+
+                // 4. مودال تغییر چیدمان (فقط برای changeOrderInput)
                 if (changeOrderModal.classList.contains('show') || !changeOrderModal.classList.contains('hidden')) {
                     if (activeElement === changeOrderInput) {
                         e.preventDefault();
-                        saveChangedOrderBtn.click();
+                        // saveChangedOrderBtn.click(); // حذف شد
                         return;
                     }
                 }
             }
         });
 
+        // شنونده رویداد برای importanceSelect برای نمایش/پنهان کردن ورودی پوینت سفارشی
+        importanceSelect.addEventListener('change', () => {
+            if (importanceSelect.value === 'custom') {
+                customPointsInput.classList.remove('hidden');
+                customPointsInput.focus();
+            } else {
+                customPointsInput.classList.add('hidden');
+                customPointsInput.value = ''; // پاک کردن مقدار در صورت پنهان بودن
+            }
+        });
 
-        // Load data from Local Storage and initialize theme on window load
+        // بارگذاری داده‌ها از Local Storage و مقداردهی اولیه تم در بارگذاری پنجره
         window.onload = () => {
             loadFromLocalStorage();
             initializeTheme();
 
-            // Show welcome modal if user name is not set
+            // نمایش مودال خوش‌آمدگویی اگر نام کاربر تنظیم نشده باشد
             if (!userName) {
                 welcomeModal.classList.remove('hidden');
-                void welcomeModalContent.offsetWidth; // Force reflow
-                welcomeModalContent.classList.remove('opacity-0', 'scale-95'); // Ensure animation starts
+                void welcomeModalContent.offsetWidth; // اجبار به reflow
+                welcomeModalContent.classList.remove('opacity-0', 'scale-95'); // اطمینان از شروع انیمیشن
                 welcomeModalContent.classList.add('opacity-100', 'scale-100');
                 userNameInput.focus();
             }
