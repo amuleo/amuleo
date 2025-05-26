@@ -82,6 +82,13 @@
             user-select: text;
         }
 
+        /* Force Vazirmatn to use Persian numerals for all numbers */
+        body, input[type="number"], input[type="text"], select {
+            font-feature-settings: "ss02", "locl"; /* Stylistic Set 2 and Localized Forms for Vazirmatn */
+            font-variant-numeric: traditional; /* Use traditional numeral forms */
+            unicode-bidi: plaintext; /* Helps with mixed directionality in inputs */
+        }
+
         /* Modal box styles */
         .modal-box {
             height: 75vh; /* Dynamic height: 3/4 of viewport height */
@@ -527,7 +534,7 @@
     </div>
 
     <div id="changeOrderModal" class="dynamic-modal hidden">
-        <div class="dynamic-modal-content text-gray-800 dark:text-gray-100">
+        <div class="dynamic-modal-content text-gray-800 dark:text-gray-100" id="changeOrderModalContent">
             <h3 class="text-xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">تغییر چیدمان وظیفه</h3>
             <p class="mb-2 text-sm text-gray-700 dark:text-gray-300">موقعیت جدید وظیفه را (به صورت عددی) وارد کنید:</p>
             <input type="number" id="changeOrderInput" placeholder="موقعیت جدید..."
@@ -835,12 +842,34 @@
         const cancelEditTaskBtn = document.getElementById('cancelEditTaskBtn');
 
         const changeOrderModal = document.getElementById('changeOrderModal');
+        const changeOrderModalContent = document.getElementById('changeOrderModalContent'); // Added ID here
         const changeOrderInput = document.getElementById('changeOrderInput');
         const saveChangedOrderBtn = document.getElementById('saveChangedOrderBtn');
         const cancelChangeOrderBtn = document.getElementById('cancelChangeOrderBtn');
 
         let currentTaskBeingEditedId = null; // To keep track of which task is being edited/reordered
 
+
+        // Helper function to convert Persian numerals to English numerals
+        function convertPersianNumbersToEnglish(inputString) {
+            if (typeof inputString !== 'string') {
+                return inputString; // Return as is if not a string
+            }
+            const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            const englishNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+            let convertedString = '';
+            for (let i = 0; i < inputString.length; i++) {
+                const char = inputString[i];
+                const index = persianNumbers.indexOf(char);
+                if (index !== -1) {
+                    convertedString += englishNumbers[index];
+                } else {
+                    convertedString += char;
+                }
+            }
+            return convertedString;
+        }
 
         // Event listener for importance selection to show/hide custom points input
         importanceSelect.addEventListener('change', () => {
@@ -1244,11 +1273,11 @@
             let activeTasks = tasks.filter(task => !task.completed);
             const completedTasks = tasks.filter(task => task.completed);
 
-            // Sort active tasks: pinned first, then by original order (using creation timestamp for stability)
+            // Sort active tasks: pinned first, then maintain their relative order (manual order)
             activeTasks.sort((a, b) => {
                 if (a.isPinned && !b.isPinned) return -1;
                 if (!a.isPinned && b.isPinned) return 1;
-                return parseInt(a.id) - parseInt(b.id); // Sort by creation time for stable order
+                return 0; // Maintain existing order for unpinned tasks
             });
 
             // Calculate total pages for active tasks
@@ -1380,7 +1409,7 @@
                 input.select(); // Auto-select the text
 
                 const handleInputBlur = () => {
-                    let newPage = parseInt(input.value, 10);
+                    let newPage = parseInt(convertPersianNumbersToEnglish(input.value), 10); // Convert before parsing
                     if (isNaN(newPage) || newPage < 1 || newPage > totalPages) {
                         newPage = parseInt(input.dataset.originalValue, 10); // Revert to original value if invalid
                         showMessageBox(`شماره صفحه نامعتبر است. مقدار باید بین ۱ تا ${totalPages} باشد. بازگشت به صفحه ${newPage}.`, 'error');
@@ -1484,7 +1513,8 @@
             }
 
             if (importance === 'custom') {
-                customPoints = parseInt(customPointsInput.value, 10);
+                const convertedPoints = convertPersianNumbersToEnglish(customPointsInput.value);
+                customPoints = parseInt(convertedPoints, 10);
                 if (isNaN(customPoints) || customPoints <= 0 || customPoints > MAX_CUSTOM_POINTS) {
                     showMessageBox(`لطفاً یک مقدار معتبر برای پوینت سفارشی وارد کنید (حداکثر ${MAX_CUSTOM_POINTS}).`, 'info');
                     return;
@@ -1817,7 +1847,8 @@
             }
 
             if (newImportance === 'custom') {
-                newCustomPoints = parseInt(editTaskCustomPointsInput.value, 10);
+                const convertedPoints = convertPersianNumbersToEnglish(editTaskCustomPointsInput.value); // FIXED: Added conversion
+                newCustomPoints = parseInt(convertedPoints, 10);
                 if (isNaN(newCustomPoints) || newCustomPoints <= 0 || newCustomPoints > MAX_CUSTOM_POINTS) {
                     showMessageBox(`لطفاً یک مقدار معتبر برای پوینت سفارشی وارد کنید (حداکثر ${MAX_CUSTOM_POINTS}).`, 'info');
                     return;
@@ -1872,7 +1903,7 @@
         // Save Changed Order
         saveChangedOrderBtn.addEventListener('click', () => {
             const taskId = currentTaskBeingEditedId;
-            const newPosition = parseInt(changeOrderInput.value, 10);
+            const newPosition = parseInt(convertPersianNumbersToEnglish(changeOrderInput.value), 10);
 
             const taskIndexInTasks = tasks.findIndex(t => t.id === taskId);
             if (taskIndexInTasks === -1) {
@@ -2479,10 +2510,19 @@
 
         // Close dropdown when clicking outside
         window.addEventListener('click', (e) => {
-            if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+            // Check if the click target is within the menu button or the dropdown itself
+            const isClickInsideMenu = menuBtn.contains(e.target) || menuDropdown.contains(e.target);
+            // Check if the click target is an interactive element outside the menu/button (e.g., a checkbox, another button)
+            const isInteractiveElement = e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON' || e.target.type === 'checkbox';
+
+            // Close the menu if the click is outside the menu and its button,
+            // AND if the click is not on another interactive element which should be allowed to function.
+            // If it's an interactive element, we still want the menu to close, but the element's action to proceed.
+            if (!isClickInsideMenu) {
                 menuDropdown.classList.add('hidden');
             }
         });
+
 
         profileMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
@@ -2608,7 +2648,7 @@
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">افزودن وظیفه:</strong> نام وظیفه را وارد کرده و اهمیت آن (مهم/عادی/سفارشی) را انتخاب کنید. وظایف مهم و سفارشی پوینت بیشتری به شما می‌دهند.</p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تغییر ترتیب وظایف:</strong> می‌توانید وظایف فعال را با کشیدن و رها کردن مرتب کنید.</p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تکمیل وظیفه:</strong> برای تکمیل یک وظیفه، کادر کنار آن را علامت بزنید. این به شما پوینت می‌دهد و وظیفه را به بخش "وظایف تکمیل شده" منتقل می‌کند.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">ویرایش وظیفه:</strong> برای ویرایش نام و اهمیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "ویرایش" را انتخاب کنید.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">ویرایش وظیفه:</strong> برای ویرایش نام و اهمیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "ویرایش" را انتخاب کنید یا روی خود وظیفه کلیک کنید.</p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">حذف وظیفه:</strong> برای حذف یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "حذف" را انتخاب کنید.</p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تغییر ترتیب دستی:</strong> برای تغییر دستی موقعیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "تغییر ترتیب" را انتخاب کنید.</p>
                 <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">وظایف تکمیل شده:</strong> روی دکمه کلیک کنید تا وظایف تکمیل شده خود را نمایش یا پنهان کنید.</p>
