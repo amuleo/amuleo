@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مای تسک | پلتفرم آنلاین انجام وظایف</title>
-    <meta name="description" content="مای تسک: پلتفرم مدیریت وظایف گیمیفای شده برای افزایش انگیزه و بهره‌وری. وظایف خود را مدیریت کنید، پوینت کسب کنید و به سطوح بالاتر برسید.">
-    <meta name="keywords" content="مدیریت وظایف, گیمیفیکیشن, مای تسک, پوینت, بهره‌وری, سازماندهی, برنامه ریزی, انگیزه, وظایف روزانه">
+    <title>زی تسک | پلتفرم آنلاین انجام وظایف</title>
+    <meta name="description" content="زی تسک: پلتفرم مدیریت وظایف گیمیفای شده برای افزایش انگیزه و بهره‌وری. وظایف خود را مدیریت کنید، زی پوینت کسب کنید و به سطوح بالاتر برسید.">
+    <meta name="keywords" content="مدیریت وظایف, گیمیفیکیشن, زی تسک, Z-Point, بهره‌وری, سازماندهی, برنامه ریزی, انگیزه, وظایف روزانه">
     <!-- اگر هدف این است که برنامه توسط موتورهای جستجو قابل کشف باشد،
          این متاتگ باید حذف شود یا به "index, follow" تغییر یابد.
          در حال حاضر، از ایندکس شدن صفحه توسط موتورهای جستجو جلوگیری می‌کند. -->
@@ -322,7 +322,7 @@
         </button>
 
         <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700 md:px-16">
-            <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 text-center md:text-right w-full md:w-auto">مای تسک</h1>
+            <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 text-center md:text-right w-full md:w-auto">زی تسک</h1>
             <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 sm:space-x-reverse w-full md:w-auto justify-center md:justify-end">
                 <div class="flex items-center bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full shadow-sm">
                     <span class="text-xl mr-2">💰</span>
@@ -402,7 +402,7 @@
 
     <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100 transition-transform duration-300 transform scale-95 opacity-0" id="welcomeModalContent">
-            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700 text-center">به مای تسک خوش آمدید!</h3>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700 text-center">به زی تسک خوش آمدید!</h3>
             <p class="mb-4 text-center text-gray-700 dark:text-gray-300">لطفاً نام خود را وارد کنید تا شروع کنیم:</p>
             <input type="text" id="userNameInput" placeholder="نام شما..." maxlength="15"
                    class="w-full p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-500 bg-white dark:bg-gray-700 mb-4">
@@ -508,8 +508,7 @@
     </div>
 
     <div id="editTaskModal" class="dynamic-modal hidden">
-        <div class="dynamic-modal-content text-gray-800 dark:text-gray-100">
-            <h3 class="text-xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">ویرایش وظیفه</h3>
+        <div class="dynamic-modal-content text-gray-800 dark:text-gray-100" id="editTaskModalContent"> <h3 class="text-xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">ویرایش وظیفه</h3>
             <input type="text" id="editTaskNameInput" placeholder="نام وظیفه را وارد کنید..." maxlength="15"
                    class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700">
             <select id="editTaskImportanceSelect"
@@ -701,7 +700,7 @@
             { type: 'streak', value: 30, name: 'زنجیره ماهانه', icon: '🗓️🗓️🔥', description: 'Earned by completing at least one task for 30 consecutive days.' },
             { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: '💯✅', description: 'Earned by completing 100 tasks.' },
             { type: 'totalTasks', value: 250, name: 'دویست و پنجاه وظیفه', icon: '🌟💯', description: 'Earned by completing 250 tasks.' },
-            { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: '🏆💯', description: 'Earned by completing 500 tasks.' },
+            { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: '🏆💯', description: 'Earned by collecting 500 Points.' },
             { type: 'importantTasks', value: 20, name: 'بیست وظیفه مهم', icon: '🛑🛑', description: 'Earned by completing 20 important tasks.' },
             { type: 'customTasks', value: 1, name: 'اولین وظیفه سفارشی', icon: '💡', description: 'Earned by completing the first custom-point task.' },
             { type: 'customTasks', value: 5, name: 'پنج وظیفه سفارشی', icon: '⚙️✅', description: 'Earned by completing 5 custom-point tasks.' },
@@ -828,6 +827,7 @@
 
         // Dynamic Modal elements
         const editTaskModal = document.getElementById('editTaskModal');
+        const editTaskModalContent = document.getElementById('editTaskModalContent'); // Correctly selected
         const editTaskNameInput = document.getElementById('editTaskNameInput');
         const editTaskImportanceSelect = document.getElementById('editTaskImportanceSelect');
         const editTaskCustomPointsInput = document.getElementById('editTaskCustomPointsInput');
@@ -846,6 +846,7 @@
         importanceSelect.addEventListener('change', () => {
             if (importanceSelect.value === 'custom') {
                 customPointsInput.classList.remove('hidden');
+                customPointsInput.focus(); // Auto-focus when custom is selected
             } else {
                 customPointsInput.classList.add('hidden');
             }
@@ -1745,6 +1746,10 @@
             // Close menu when clicking outside
             const closeMenu = (e) => {
                 // Check if the click was outside the menu and outside the button that opened it
+                // Also check if the click target is an interactive element (input, select, button, checkbox)
+                // If it's an interactive element, allow its default action to proceed, but still close the menu.
+                const isInteractiveElement = e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON' || e.target.type === 'checkbox';
+
                 if (!menu.contains(e.target) && !buttonElement.contains(e.target)) {
                     menu.remove();
                     document.removeEventListener('click', closeMenu);
@@ -1772,6 +1777,7 @@
             if (task.importance === 'custom') {
                 editTaskCustomPointsInput.classList.remove('hidden');
                 editTaskCustomPointsInput.value = task.customPoints || '';
+                editTaskCustomPointsInput.focus(); // Auto-focus when custom is selected
             } else {
                 editTaskCustomPointsInput.classList.add('hidden');
                 editTaskCustomPointsInput.value = ''; // Clear value when hidden
@@ -1780,6 +1786,7 @@
             editTaskImportanceSelect.onchange = () => {
                 if (editTaskImportanceSelect.value === 'custom') {
                     editTaskCustomPointsInput.classList.remove('hidden');
+                    editTaskCustomPointsInput.focus(); // Auto-focus when custom is selected
                 } else {
                     editTaskCustomPointsInput.classList.add('hidden');
                     editTaskCustomPointsInput.value = ''; // Clear value when hidden
@@ -2594,7 +2601,7 @@
 
             // Dynamically update help modal content with current point values
             helpModalBody.innerHTML = `
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">به مای تسک خوش آمدید!</h3>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">به زی تسک خوش آمدید!</h3>
                 <p class="mb-3 text-gray-700 dark:text-gray-300">این برنامه به شما کمک می‌کند تا وظایف خود را مدیریت کنید، پوینت کسب کنید، سطح خود را ارتقا دهید و از طریق گیمیفیکیشن به نقاط عطف مختلفی دست یابید.</p>
 
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">نحوه استفاده از برنامه</h3>
@@ -2805,7 +2812,7 @@
             a.href = url;
             const date = new Date();
             const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
-            a.download = `tasks_backup_${dateString}_mytask.json`;
+            a.download = `tasks_backup_${dateString}_zitask.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -2937,6 +2944,78 @@
 
         // Add click listener to show current level on main page
         currentLevelDisplay.addEventListener('click', () => showDetailModal('level', level));
+
+
+        // --- Enter Key Logic ---
+        // Helper function to find the next focusable element within a container
+        function getNextFocusableElement(currentElement, container) {
+            const focusableElements = Array.from(container.querySelectorAll('input:not([type="hidden"]), select, button:not([disabled])'));
+            const currentIndex = focusableElements.indexOf(currentElement);
+            
+            // Filter out elements that are currently hidden by CSS (e.g., customPointsInput)
+            const visibleFocusableElements = focusableElements.filter(el => {
+                const style = window.getComputedStyle(el);
+                return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+            });
+
+            const currentVisibleIndex = visibleFocusableElements.indexOf(currentElement);
+
+            if (currentVisibleIndex > -1 && currentVisibleIndex < visibleFocusableElements.length - 1) {
+                return visibleFocusableElements[currentVisibleIndex + 1];
+            }
+            return null; // No next focusable element
+        }
+
+        // Global keydown listener for Enter key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const activeElement = document.activeElement;
+
+                // 1. Welcome Modal
+                if (welcomeModal.classList.contains('show') || !welcomeModal.classList.contains('hidden')) { // Check if welcome modal is active
+                    if (activeElement === userNameInput) {
+                        e.preventDefault(); // Prevent default Enter behavior (e.g., new line in textarea)
+                        startBtn.click();
+                        return;
+                    }
+                }
+
+                // 2. Add Task Section
+                if (addTaskSection.contains(activeElement)) {
+                    e.preventDefault();
+                    const nextElement = getNextFocusableElement(activeElement, addTaskSection);
+                    if (nextElement) {
+                        nextElement.focus();
+                    } else {
+                        addTaskBtn.click();
+                    }
+                    return;
+                }
+
+                // 3. Edit Task Modal
+                if (editTaskModal.classList.contains('show') || !editTaskModal.classList.contains('hidden')) {
+                    if (editTaskModalContent.contains(activeElement)) { // Now editTaskModalContent is correctly defined
+                        e.preventDefault();
+                        const nextElement = getNextFocusableElement(activeElement, editTaskModalContent);
+                        if (nextElement) {
+                            nextElement.focus();
+                        } else {
+                            saveEditedTaskBtn.click();
+                        }
+                        return;
+                    }
+                }
+
+                // 4. Change Order Modal
+                if (changeOrderModal.classList.contains('show') || !changeOrderModal.classList.contains('hidden')) {
+                    if (activeElement === changeOrderInput) {
+                        e.preventDefault();
+                        saveChangedOrderBtn.click();
+                        return;
+                    }
+                }
+            }
+        });
 
 
         // Load data from Local Storage and initialize theme on window load
