@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>زی تسک | پلتفرم آنلاین انجام وظایف</title>
-    <meta name="description" content="زی تسک: پلتفرم مدیریت وظایف گیمیفای شده برای افزایش انگیزه و بهره‌وری. وظایف خود را مدیریت کنید، زی پوینت کسب کنید و به سطوح بالاتر برسید.">
-    <meta name="keywords" content="مدیریت وظایف, گیمیفیکیشن, زی تسک, Z-Point, بهره‌وری, سازماندهی, برنامه ریزی, انگیزه, وظایف روزانه">
+    <title>مای تسک | پلتفرم آنلاین انجام وظایف</title>
+    <meta name="description" content="مای تسک: پلتفرم مدیریت وظایف گیمیفای شده برای افزایش انگیزه و بهره‌وری. وظایف خود را مدیریت کنید، پوینت کسب کنید و به سطوح بالاتر برسید.">
+    <meta name="keywords" content="مدیریت وظایف, گیمیفیکیشن, مای تسک, پوینت, بهره‌وری, سازماندهی, برنامه ریزی, انگیزه, وظایف روزانه">
     <!-- اگر هدف این است که برنامه توسط موتورهای جستجو قابل کشف باشد،
          این متاتگ باید حذف شود یا به "index, follow" تغییر یابد.
          در حال حاضر، از ایندکس شدن صفحه توسط موتورهای جستجو جلوگیری می‌کند. -->
@@ -146,6 +146,11 @@
             10% {
                 opacity: 1;
             }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+            /* Adjusted to ensure confetti falls off screen */
             100% {
                 opacity: 0;
                 transform: translateY(100vh) rotate(720deg);
@@ -304,7 +309,7 @@
                 <a href="#" id="profileMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">پروفایل</a>
                 <a href="#" id="helpMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">راهنما</a>
                 <a href="#" id="aboutMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">درباره</a>
-                <a href="#" id="backupMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">پشتیبان‌گیری</a>
+                <a href="#" id="backupMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-300 ease-in-out">پشتیبان‌گیری</a>
                 <a href="#" id="donateMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out">دونیت</a>
                 <a href="#" id="resetMenuItem" class="block px-4 py-2 text-sm text-red-700 dark:text-red-200 hover:bg-red-100 dark:hover:bg-red-600 transition duration-200 ease-in-out">بازنشانی داده‌ها</a>
             </div>
@@ -317,11 +322,11 @@
         </button>
 
         <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700 md:px-16">
-            <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 text-center md:text-right w-full md:w-auto">زی تسک</h1>
+            <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 text-center md:text-right w-full md:w-auto">مای تسک</h1>
             <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 sm:space-x-reverse w-full md:w-auto justify-center md:justify-end">
                 <div class="flex items-center bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full shadow-sm">
                     <span class="text-xl mr-2">💰</span>
-                    <span class="text-base sm:text-lg font-semibold">زی پوینت: <span id="zPoint" class="text-yellow-800 dark:text-yellow-200">0</span></span>
+                    <span class="text-base sm:text-lg font-semibold">پوینت: <span id="zPoint" class="text-yellow-800 dark:text-yellow-200">0</span></span>
                 </div>
                 <div class="flex items-center bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full shadow-sm clickable-item" id="currentLevelDisplay">
                     <span class="text-xl mr-2">🏆</span>
@@ -329,7 +334,7 @@
                 </div>
                 <div class="flex items-center bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full shadow-sm">
                     <span class="text-xl mr-2">🔥</span>
-                    <span class="text-base sm:text-lg font-semibold">رشته روزانه: <span id="dailyStreak" class="text-purple-800 dark:text-purple-200">0</span></span>
+                    <span class="text-base sm:text-lg font-semibold">زنجیره روزانه: <span id="dailyStreak" class="text-purple-800 dark:text-purple-200">0</span></span>
                 </div>
             </div>
         </div>
@@ -360,7 +365,7 @@
                     <option value="normal" selected>عادی</option>
                     <option value="custom">سفارشی</option>
                 </select>
-                <input type="number" id="customPointsInput" placeholder="زی پوینت سفارشی (حداکثر 50)"
+                <input type="number" id="customPointsInput" placeholder="پوینت سفارشی (حداکثر 50)"
                        class="p-3 border rounded-lg text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12 w-full md:w-32 hidden">
                 <button id="addTaskBtn"
                         class="text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 text-lg w-full md:w-auto">
@@ -397,7 +402,7 @@
 
     <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100 transition-transform duration-300 transform scale-95 opacity-0" id="welcomeModalContent">
-            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700 text-center">به زی تسک خوش آمدید!</h3>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700 text-center">به مای تسک خوش آمدید!</h3>
             <p class="mb-4 text-center text-gray-700 dark:text-gray-300">لطفاً نام خود را وارد کنید تا شروع کنیم:</p>
             <input type="text" id="userNameInput" placeholder="نام شما..."
                    class="w-full p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-500 bg-white dark:bg-gray-700 mb-4">
@@ -434,9 +439,10 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="aboutModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">درباره</h3>
             <div id="aboutModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
-                <p class="mb-3">این برنامه برای کمک به مدیریت وظایف و افزایش انگیزه از طریق گیمیفیکیشن طراحی شده است.</p>
-                <p class="mb-3">تمامی حقوق متعلق به عمو لئو است.</p>
-                <p class="mb-3">نسخه: 1.0.0</p>
+                <p class="mb-3">این برنامه برای کمک به مدیریت وظایف و افزایش انگیزه طراحی شده است.</p>
+                <p class="mb-3">این پروژه به صورت اختصاصی توسط سایت عمو لئو طراحی شده است، این آولین و آخرین نسخه از از این پروژه است.</p>
+                <p class="mb-3">تمامی حقوق متعلق به <strong class="text-blue-600 dark:text-blue-400"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
+                <p class="mb-3">تاریخ: ۴ خرداد ۱۴۰۴</p>
             </div>
             <button id="closeAboutModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -501,10 +507,10 @@
         </div>
     </div>
 
-    <div id="editTaskModal" class="dynamic-modal">
+    <div id="editTaskModal" class="dynamic-modal hidden">
         <div class="dynamic-modal-content text-gray-800 dark:text-gray-100">
             <h3 class="text-xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">ویرایش وظیفه</h3>
-            <input type="text" id="editTaskNameInput" placeholder="Enter task name..." maxlength="40"
+            <input type="text" id="editTaskNameInput" placeholder="نام وظیفه را وارد کنید..." maxlength="40"
                    class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700">
             <select id="editTaskImportanceSelect"
                     class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none">
@@ -512,7 +518,7 @@
                 <option value="normal">عادی</option>
                 <option value="custom">سفارشی</option>
             </select>
-            <input type="number" id="editTaskCustomPointsInput" placeholder="Custom Z-Point (max 50)"
+            <input type="number" id="editTaskCustomPointsInput" placeholder="پوینت سفارشی (حداکثر 50)"
                    class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 hidden">
             <div class="flex justify-end space-x-2 space-x-reverse">
                 <button id="saveEditedTaskBtn" class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white">ذخیره</button>
@@ -521,11 +527,11 @@
         </div>
     </div>
 
-    <div id="changeOrderModal" class="dynamic-modal">
+    <div id="changeOrderModal" class="dynamic-modal hidden">
         <div class="dynamic-modal-content text-gray-800 dark:text-gray-100">
             <h3 class="text-xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">تغییر چیدمان وظیفه</h3>
             <p class="mb-2 text-sm text-gray-700 dark:text-gray-300">موقعیت جدید وظیفه را (به صورت عددی) وارد کنید:</p>
-            <input type="number" id="changeOrderInput" placeholder="New position..."
+            <input type="number" id="changeOrderInput" placeholder="موقعیت جدید..."
                    class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700">
             <div class="flex justify-end space-x-2 space-x-reverse">
                 <button id="saveChangedOrderBtn" class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white">ذخیره</button>
@@ -536,7 +542,7 @@
 
     <div id="confettiContainer" class="confetti-container"></div>
 
-    <div id="undoMessageBox" class="fixed bottom-4 left-1/2 -translate-x-1/2 p-4 rounded-lg shadow-lg text-white bg-gray-800 dark:bg-gray-700 z-50 transition-all duration-300 transform scale-0 opacity-0 flex items-center justify-between min-w-[200px] max-w-sm cursor-pointer">
+    <div id="undoMessageBox" class="fixed bottom-4 left-1/2 -translate-x-1/2 p-4 rounded-lg shadow-lg text-white bg-gray-800 dark:bg-gray-700 z-50 transition-all duration-300 transform scale-0 opacity-0 flex items-center justify-between min-w-[200px] max-w-sm cursor-pointer hidden">
         <span id="undoMessageText" class="flex-grow mr-2"></span>
         <span id="undoCountdown" class="font-bold text-sm"></span>
     </div>
@@ -554,7 +560,7 @@
         const pointsPerNormalTask = 10; // Points for normal tasks
         const pointsPerImportantTask = 25; // Points for important tasks
         const MAX_CUSTOM_POINTS = 50; // Max points for custom tasks
-        const TASKS_PER_PAGE = 7; // Number of tasks displayed per page
+        const TASKS_PER_PAGE = 7; // Number of tasks displayed per page (Changed from 8 to 7)
 
         // Pagination status variables
         let activeCurrentPage = 1;
@@ -688,10 +694,10 @@
             { type: 'totalTasks', value: 50, name: 'پنجاه وظیفه', icon: '💯', description: 'Earned by completing 50 tasks.' },
             { type: 'importantTasks', value: 5, name: 'پنج وظیفه مهم', icon: '🚨', description: 'Earned by completing 5 important tasks.' },
             { type: 'importantTasks', value: 10, name: 'ده وظیفه مهم', icon: '🛑', description: 'Earned by completing 10 important tasks.' },
-            { type: 'streak', value: 3, name: 'رشته سه روزه', icon: '🔥', description: 'Earned by completing at least one task for 3 consecutive days.' },
-            { type: 'streak', value: 7, name: 'رشته هفت روزه', icon: '✨🔥', description: 'Earned by completing at least one task for 7 consecutive days.' },
-            { type: 'streak', value: 14, name: 'رشته دو هفته‌ای', icon: '🗓️🔥', description: 'Earned by completing at least one task for 14 consecutive days.' },
-            { type: 'streak', value: 30, name: 'رشته ماهانه', icon: '🗓️🗓️🔥', description: 'Earned by completing at least one task for 30 consecutive days.' },
+            { type: 'streak', value: 3, name: 'زنجیره سه روزه', icon: '🔥', description: 'Earned by completing at least one task for 3 consecutive days.' },
+            { type: 'streak', value: 7, name: 'زنجیره هفت روزه', icon: '✨🔥', description: 'Earned by completing at least one task for 7 consecutive days.' },
+            { type: 'streak', value: 14, name: 'زنجیره دو هفته‌ای', icon: '🗓️🔥', description: 'Earned by completing at least one task for 14 consecutive days.' },
+            { type: 'streak', value: 30, name: 'زنجیره ماهانه', icon: '🗓️🗓️🔥', description: 'Earned by completing at least one task for 30 consecutive days.' },
             { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: '💯✅', description: 'Earned by completing 100 tasks.' },
             { type: 'totalTasks', value: 250, name: 'دویست و پنجاه وظیفه', icon: '🌟💯', description: 'Earned by completing 250 tasks.' },
             { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: '🏆💯', description: 'Earned by completing 500 tasks.' },
@@ -699,8 +705,8 @@
             { type: 'customTasks', value: 1, name: 'اولین وظیفه سفارشی', icon: '💡', description: 'Earned by completing the first custom-point task.' },
             { type: 'customTasks', value: 5, name: 'پنج وظیفه سفارشی', icon: '⚙️✅', description: 'Earned by completing 5 custom-point tasks.' },
             { type: 'customTasks', value: 10, name: 'ده وظیفه سفارشی', icon: '⚙️💯', description: 'Earned by completing 10 custom-point tasks.' },
-            { type: 'points', value: 500, name: 'پانصد زی پوینت', icon: '💰', description: 'Earned by collecting 500 Z-Points.' },
-            { type: 'points', value: 1000, name: 'هزار زی پوینت', icon: '💎💰', description: 'Earned by collecting 1000 Z-Points.' },
+            { type: 'points', value: 500, name: 'پانصد پوینت', icon: '💰', description: 'Earned by collecting 500 Points.' },
+            { type: 'points', value: 1000, name: 'هزار پوینت', icon: '💎💰', description: 'Earned by collecting 1000 Points.' },
             { level: 10, name: 'افسانه', icon: '✨', type: 'level' },
             { level: 11, name: 'جاودان', icon: '♾️', type: 'level' },
             { level: 12, name: 'خدایگان', icon: '⚡', type: 'level' },
@@ -804,20 +810,20 @@
         const DRAG_LONG_PRESS_TIME = 1500; // 1.5 seconds to activate Drag & Drop
         const TAP_THRESHOLD = 20; // Max pixels moved for a touch to still be considered a tap (increased for better touch recognition)
 
-        // Undo variables
-        let lastDeletedTask = null;
-        let lastDeletedTaskOriginalIndex = -1;
-        let undoMessageTimeout = null;
-        let undoCountdownInterval = null;
-
         // DOM elements for Undo Message Box
         const undoMessageBox = document.getElementById('undoMessageBox');
         const undoMessageText = document.getElementById('undoMessageText');
         const undoCountdown = document.getElementById('undoCountdown');
 
-        // Message queue for sequential display
-        const messageQueue = [];
-        let isMessageDisplaying = false;
+        // Message queues for sequential display (separate for top-right and bottom-center)
+        const topRightMessageQueue = [];
+        const bottomCenterMessageQueue = [];
+        let isTopRightDisplaying = false;
+        let isBottomCenterDisplaying = false;
+        let currentTopRightTimeout = null;
+        let currentBottomCenterTimeout = null;
+        let currentCountdownInterval = null; // Holds the interval for the current countdown (if it's an undo message)
+
 
         // Dynamic Modal elements
         const editTaskModal = document.getElementById('editTaskModal');
@@ -845,48 +851,118 @@
         });
 
         // Function to show a custom message box instead of alert()
-        function showMessageBox(message, type = 'info') {
-            messageQueue.push({ message, type });
-            processMessageQueue();
+        // Options can include: position ('top-right', 'bottom-center'), duration (ms), isUndo (boolean), taskId (for undo)
+        function showMessageBox(message, type = 'info', options = {}) {
+            const { position = 'top-right', duration = 3000, isUndo = false, taskData = null } = options;
+            const messageObject = { message, type, position, duration, isUndo, taskData };
+
+            if (position === 'top-right') {
+                topRightMessageQueue.push(messageObject);
+                processTopRightQueue();
+            } else if (position === 'bottom-center') {
+                bottomCenterMessageQueue.push(messageObject);
+                processBottomCenterQueue();
+            }
         }
 
-        // Function to process the message queue
-        function processMessageQueue() {
-            if (messageQueue.length > 0 && !isMessageDisplaying) {
-                isMessageDisplaying = true;
-                const { message, type } = messageQueue.shift(); // Get next message from queue
+        // Function to process the top-right message queue
+        function processTopRightQueue() {
+            if (topRightMessageQueue.length === 0 || isTopRightDisplaying) {
+                return;
+            }
 
-                const messageBox = document.createElement('div');
-                let bgColorClass = '';
-                if (type === 'info') {
-                    bgColorClass = 'bg-blue-500 dark:bg-blue-700';
-                } else if (type === 'success') {
-                    bgColorClass = 'bg-green-500 dark:bg-green-700';
-                } else if (type === 'error') {
-                    bgColorClass = 'bg-red-500 dark:bg-red-700';
-                }
-                messageBox.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg text-white z-50 transition-all duration-300 transform translate-x-full opacity-0 ${bgColorClass}`;
-                messageBox.textContent = message;
-                document.body.appendChild(messageBox);
+            isTopRightDisplaying = true;
+            const { message, type, duration } = topRightMessageQueue.shift();
+
+            const messageBox = document.createElement('div');
+            let bgColorClass = '';
+            if (type === 'info') {
+                bgColorClass = 'bg-blue-500 dark:bg-blue-700';
+            } else if (type === 'success') {
+                bgColorClass = 'bg-green-500 dark:bg-green-700';
+            } else if (type === 'error') {
+                bgColorClass = 'bg-red-500 dark:bg-red-700';
+            }
+            messageBox.className = `fixed p-4 rounded-lg shadow-lg text-white z-50 transition-all duration-300 transform opacity-0 top-4 right-4 translate-x-full ${bgColorClass}`;
+            messageBox.textContent = message;
+            document.body.appendChild(messageBox);
+
+            setTimeout(() => {
+                messageBox.classList.remove('translate-x-full', 'opacity-0');
+                messageBox.classList.add('translate-x-0', 'opacity-100');
+            }, 100);
+
+            currentTopRightTimeout = setTimeout(() => {
+                messageBox.classList.remove('translate-x-0', 'opacity-100');
+                messageBox.classList.add('translate-x-full', 'opacity-0');
+                messageBox.addEventListener('transitionend', () => {
+                    messageBox.remove();
+                    isTopRightDisplaying = false;
+                    processTopRightQueue(); // Process next message
+                }, { once: true });
+            }, duration);
+        }
+
+        // Function to process the bottom-center message queue (for undo messages)
+        function processBottomCenterQueue() {
+            if (bottomCenterMessageQueue.length === 0 || isBottomCenterDisplaying) {
+                return;
+            }
+
+            isBottomCenterDisplaying = true;
+            const { message, duration, isUndo, taskData } = bottomCenterMessageQueue.shift();
+
+            // Only the undoMessageBox uses bottom-center position and undo logic
+            if (isUndo) {
+                undoMessageText.textContent = message;
+                undoMessageBox.classList.remove('hidden'); // Ensure it's not hidden
+                undoMessageBox._currentUndoTaskData = taskData; // Store the specific task data for this message
+                
+                let timeLeft = duration / 1000;
+                undoCountdown.textContent = `(${timeLeft}s)`;
+                clearInterval(currentCountdownInterval); // Clear previous interval
+                currentCountdownInterval = setInterval(() => {
+                    timeLeft--;
+                    undoCountdown.textContent = `(${timeLeft}s)`;
+                    if (timeLeft <= 0) {
+                        clearInterval(currentCountdownInterval);
+                        hideBottomCenterMessage(); // Hide the undo message
+                    }
+                }, 1000);
+
+                undoMessageBox.onclick = () => {
+                    if (undoMessageBox._currentUndoTaskData) {
+                        undoLastDeletion(undoMessageBox._currentUndoTaskData);
+                    }
+                    hideBottomCenterMessage(); // Hide the undo message immediately on click
+                };
 
                 // Entry animation
                 setTimeout(() => {
-                    messageBox.classList.remove('translate-x-full', 'opacity-0');
-                    messageBox.classList.add('translate-x-0', 'opacity-100');
+                    undoMessageBox.classList.remove('scale-0', 'opacity-0');
+                    undoMessageBox.classList.add('scale-100', 'opacity-100');
                 }, 100);
 
-                // Exit animation and removal, then process next message
-                setTimeout(() => {
-                    messageBox.classList.remove('translate-x-0', 'opacity-100');
-                    messageBox.classList.add('translate-x-full', 'opacity-0');
-                    messageBox.addEventListener('transitionend', () => {
-                        messageBox.remove();
-                        isMessageDisplaying = false; // Message display finished
-                        processMessageQueue(); // Process next message in queue
-                    }, { once: true }); // Ensure this listener runs only once
-                }, 3000);
+                currentBottomCenterTimeout = setTimeout(() => {
+                    hideBottomCenterMessage();
+                }, duration);
+            }
+
+            function hideBottomCenterMessage() {
+                clearTimeout(currentBottomCenterTimeout);
+                clearInterval(currentCountdownInterval);
+                undoMessageBox.classList.remove('scale-100', 'opacity-100');
+                undoMessageBox.classList.add('scale-0', 'opacity-0');
+                undoMessageBox.addEventListener('transitionend', () => {
+                    undoMessageBox.classList.add('hidden'); // Hide completely after animation
+                    undoMessageBox.onclick = null; // Remove click handler
+                    undoMessageBox._currentUndoTaskData = null; // Clear the stored task data
+                    isBottomCenterDisplaying = false;
+                    processBottomCenterQueue(); // Process next message
+                }, { once: true });
             }
         }
+
 
         // Function to show points gain feedback
         function showPointsGainFeedback(pointsGained, taskElement) {
@@ -983,7 +1059,7 @@
             }
 
             if (newLevel > level) {
-                showMessageBox(`Congratulations! You reached Level ${newLevel}!`, 'success');
+                showMessageBox(`تبریک! به سطح ${newLevel} رسیدید!`, 'success'); // Changed message to Persian
                 triggerConfetti();
             }
             level = newLevel; // Update global level variable
@@ -994,6 +1070,7 @@
             // Progress bar logic up to level 15
             if (level <= levelPointsThresholds.length) {
                 const currentLevelThreshold = levelPointsThresholds[level - 1].points;
+                // Ensure nextLevelThreshold is correctly calculated, especially for the last level
                 const nextLevelThreshold = (level < levelPointsThresholds.length) ? levelPointsThresholds[level].points : zPoint;
                 
                 let pointsIntoCurrentLevel = zPoint - currentLevelThreshold;
@@ -1008,14 +1085,14 @@
 
                 progressBar.style.width = `${progressPercentage}%`;
                 if (level < levelPointsThresholds.length) {
-                    progressText.textContent = `${Math.round(progressPercentage)}% progress to Level ${level + 1}`;
+                    progressText.textContent = `${Math.round(progressPercentage)}% پیشرفت به سطح ${level + 1}`; // Changed message to Persian
                 } else {
-                    progressText.textContent = `You have reached the maximum level (${level})!`;
+                    progressText.textContent = `شما به حداکثر سطح (${level}) رسیده‌اید!`; // Changed message to Persian
                 }
             } else {
                 // After max level, progress bar remains full and only points accumulate
                 progressBar.style.width = `100%`;
-                progressText.textContent = `You have reached the maximum level (${levelPointsThresholds.length})!`;
+                progressText.textContent = `شما به حداکثر سطح (${levelPointsThresholds.length}) رسیده‌اید!`; // Changed message to Persian
             }
             
             renderAchievements(); // Call renderAchievements here
@@ -1044,19 +1121,28 @@
             const storedUserName = localStorage.getItem('userName');
 
             if (storedTasks) {
-                tasks = JSON.parse(storedTasks);
+                try {
+                    tasks = JSON.parse(storedTasks);
+                } catch (e) {
+                    console.error("Error parsing stored tasks from Local Storage:", e);
+                    tasks = []; // Reset tasks if parsing fails
+                }
             }
             if (storedZPoint) {
                 zPoint = parseInt(storedZPoint, 10);
+                if (isNaN(zPoint)) zPoint = 0; // Ensure it's a number
             }
             if (storedLevel) {
                 level = parseInt(storedLevel, 10);
+                if (isNaN(level)) level = 1; // Ensure it's a number
             }
             if (storedDailyStreak) {
                 dailyStreak = parseInt(storedDailyStreak, 10);
+                if (isNaN(dailyStreak)) dailyStreak = 0; // Ensure it's a number
             }
             if (storedTotalCustomTasksCompleted) {
                 totalCustomTasksCompleted = parseInt(storedTotalCustomTasksCompleted, 10);
+                if (isNaN(totalCustomTasksCompleted)) totalCustomTasksCompleted = 0; // Ensure it's a number
             }
             if (storedUserName) {
                 userName = storedUserName;
@@ -1076,9 +1162,10 @@
                 const yesterday = new Date();
                 yesterday.setDate(yesterday.getDate() - 1);
 
+                // Compare only the date parts for streak
                 if (lastDate.toDateString() !== yesterday.toDateString()) { // If not yesterday, reset streak
                     dailyStreak = 0;
-                    showMessageBox('Your daily streak has been reset.', 'info');
+                    showMessageBox('زنجیره روزانه شما بازنشانی شد.', 'info'); // Changed message to Persian
                 }
                 // If it was yesterday, streak has already incremented (on task completion) and no change is needed.
             } else if (!lastCompletionDate) { // If no completion date exists
@@ -1094,6 +1181,7 @@
             // Apply dark mode classes based on task status and importance
             taskItem.className = `task-item flex items-center justify-between p-3 mb-2 sm:p-4 sm:mb-3 rounded-lg shadow-sm transition-all duration-300 ease-in-out
                                 ${task.completed ? 'bg-green-100 dark:bg-green-800 border-l-4 border-green-500 dark:border-green-600 line-through text-gray-500 dark:text-gray-400' :
+                                task.isPinned ? 'bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-500 dark:border-yellow-600' : // Pinned style
                                 task.importance === 'important' ? 'bg-red-50 dark:bg-red-900 border-l-4 border-red-500 dark:border-red-600' :
                                 task.importance === 'custom' ? 'bg-purple-50 dark:bg-purple-900 border-l-4 border-purple-500 dark:border-purple-600' :
                                 'bg-gray-50 dark:bg-gray-700 border-l-4 border-gray-300 dark:border-gray-600'}`;
@@ -1110,7 +1198,7 @@
                 importanceText = 'عادی';
                 importanceClasses = 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
             } else if (task.importance === 'custom') {
-                importanceText = `زی پوینت سفارشی: ${task.customPoints}`; // Display custom points
+                importanceText = `${task.customPoints} پوینت`; // Display custom points as "35 پوینت"
                 importanceClasses = 'bg-purple-200 dark:bg-purple-700 text-purple-800 dark:text-purple-200';
             }
 
@@ -1119,19 +1207,20 @@
                     <input type="checkbox" data-id="${task.id}" ${task.completed ? 'checked' : ''}
                         class="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-400 rounded focus:ring-blue-500 dark:focus:ring-blue-300 ml-2">
                     <div class="task-name-wrapper ml-3 text-base sm:text-lg font-medium ${task.completed ? 'text-gray-500 dark:text-gray-400 line-through' : 'text-gray-800 dark:text-gray-100'}">
+                        ${task.isPinned ? `<span class="ml-2 text-yellow-500" title="وظیفه پین شده">📌</span>` : ''}
                         <span class="task-name">${task.name}</span>
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 space-x-reverse mr-2">
-                    <span class="task-importance-display text-sm px-2 py-1 rounded-full ${importanceClasses}">
-                        ${importanceText}
-                    </span>
                     <button data-id="${task.id}" data-action="menu"
                         class="three-dot-menu-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 100-2 1 1 0 000 2zm0 7a1 1 0 100-2 1 1 0 000 2zm0 7a1 1 0 100-2 1 1 0 000 2z"></path>
                         </svg>
                     </button>
+                    <span class="task-importance-display text-sm px-2 py-1 rounded-full ${importanceClasses}">
+                        ${importanceText}
+                    </span>
                 </div>
             `;
             return taskItem;
@@ -1142,12 +1231,20 @@
             activeTaskList.innerHTML = ''; // Clear existing active tasks
             completedTasksContainer.innerHTML = ''; // Clear existing completed tasks
 
-            const activeTasks = tasks.filter(task => !task.completed);
+            // Separate active and completed tasks
+            let activeTasks = tasks.filter(task => !task.completed);
             const completedTasks = tasks.filter(task => task.completed);
+
+            // Sort active tasks: pinned first, then by original order (using creation timestamp for stability)
+            activeTasks.sort((a, b) => {
+                if (a.isPinned && !b.isPinned) return -1;
+                if (!a.isPinned && b.isPinned) return 1;
+                return parseInt(a.id) - parseInt(b.id); // Sort by creation time for stable order
+            });
 
             // Calculate total pages for active tasks
             const activeTotalPages = Math.ceil(activeTasks.length / TASKS_PER_PAGE);
-            // Ensure current page is valid
+            // Ensure current page is valid and adjust if tasks are removed
             if (activeCurrentPage > activeTotalPages && activeTotalPages > 0) {
                 activeCurrentPage = activeTotalPages;
             } else if (activeTotalPages === 0) {
@@ -1164,7 +1261,7 @@
                 const noActiveItem = document.createElement('div');
                 noActiveItem.id = 'dynamicNoActiveMessage';
                 noActiveItem.className = 'text-gray-500 dark:text-gray-400 text-center py-4';
-                noActiveItem.textContent = 'Create your first active task!';
+                noActiveItem.textContent = 'اولین وظیفه فعال خود را ایجاد کنید!';
                 activeTaskList.appendChild(noActiveItem);
             } else {
                 activeTasksToRender.forEach(task => {
@@ -1177,7 +1274,7 @@
 
             // Calculate total pages for completed tasks
             const completedTotalPages = Math.ceil(completedTasks.length / TASKS_PER_PAGE);
-            // Ensure current page is valid
+            // Ensure current page is valid and adjust if tasks are removed
             if (completedCurrentPage > completedTotalPages && completedTotalPages > 0) {
                 completedCurrentPage = completedTotalPages;
             } else if (completedTotalPages === 0) {
@@ -1194,7 +1291,7 @@
                 const noCompletedItem = document.createElement('div');
                 noCompletedItem.id = 'dynamicNoCompletedMessage';
                 noCompletedItem.className = 'text-gray-500 dark:text-gray-400 text-center py-4';
-                noCompletedItem.textContent = 'No completed tasks yet.';
+                noCompletedItem.textContent = 'هنوز وظیفه تکمیل شده‌ای وجود ندارد.';
                 completedTasksContainer.appendChild(noCompletedItem);
             } else {
                 completedTasksToRender.forEach(task => {
@@ -1225,6 +1322,7 @@
                 return;
             } else {
                 // Only show pagination if the corresponding section is visible
+                // For active tasks, always show if > 1 page. For completed, show only if section is visible.
                 if (listType === 'completed' && completedTasksSection.classList.contains('hidden')) {
                     containerElement.classList.add('hidden');
                     containerElement.innerHTML = ''; // Clear content when hidden
@@ -1240,7 +1338,7 @@
             prevBtn.className = `p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`;
             prevBtn.innerHTML = `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
             prevBtn.disabled = currentPage === 1;
-            prevBtn.title = "Previous Page";
+            prevBtn.title = "صفحه قبلی";
             prevBtn.addEventListener('click', () => {
                 if (listType === 'active') {
                     activeCurrentPage = Math.max(1, activeCurrentPage - 1);
@@ -1255,7 +1353,7 @@
             const pageNumberSpan = document.createElement('span');
             pageNumberSpan.className = 'px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 font-semibold cursor-pointer min-w-[3rem] text-center';
             pageNumberSpan.textContent = currentPage;
-            pageNumberSpan.title = `Page ${currentPage} of ${totalPages}. Double-click to edit.`;
+            pageNumberSpan.title = `صفحه ${currentPage} از ${totalPages}. برای ویرایش دوبار کلیک کنید.`;
             pageNumberSpan.dataset.listType = listType; // Store list type for event handling
 
             // Double click to edit page number
@@ -1276,7 +1374,7 @@
                     let newPage = parseInt(input.value, 10);
                     if (isNaN(newPage) || newPage < 1 || newPage > totalPages) {
                         newPage = parseInt(input.dataset.originalValue, 10); // Revert to original value if invalid
-                        showMessageBox(`Invalid page number. Reverting to page ${newPage}.`, 'error');
+                        showMessageBox(`شماره صفحه نامعتبر است. مقدار باید بین ۱ تا ${totalPages} باشد. بازگشت به صفحه ${newPage}.`, 'error');
                     }
                     if (listType === 'active') {
                         activeCurrentPage = newPage;
@@ -1304,7 +1402,7 @@
             nextBtn.className = `p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`;
             nextBtn.innerHTML = `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>`;
             nextBtn.disabled = currentPage === totalPages;
-            nextBtn.title = "Next Page";
+            prevBtn.title = "صفحه بعدی";
             nextBtn.addEventListener('click', () => {
                 if (listType === 'active') {
                     activeCurrentPage = Math.min(totalPages, activeCurrentPage + 1);
@@ -1367,19 +1465,19 @@
             let customPoints = 0;
 
             if (taskName.length === 0) {
-                showMessageBox('Please enter a task name.', 'info');
+                showMessageBox('لطفاً نام وظیفه را وارد کنید.', 'info');
                 return;
             }
 
             if (taskName.length > 40) {
-                showMessageBox('Task title cannot be more than 40 characters.', 'error');
+                showMessageBox('عنوان وظیفه نمی‌تواند بیش از 40 کاراکتر باشد.', 'error');
                 return;
             }
 
             if (importance === 'custom') {
                 customPoints = parseInt(customPointsInput.value, 10);
                 if (isNaN(customPoints) || customPoints <= 0 || customPoints > MAX_CUSTOM_POINTS) {
-                    showMessageBox(`Please enter a valid value for custom Z-Point (max ${MAX_CUSTOM_POINTS}).`, 'info');
+                    showMessageBox(`لطفاً یک مقدار معتبر برای پوینت سفارشی وارد کنید (حداکثر ${MAX_CUSTOM_POINTS}).`, 'info');
                     return;
                 }
             }
@@ -1389,7 +1487,8 @@
                 name: taskName,
                 completed: false,
                 importance: importance,
-                customPoints: importance === 'custom' ? customPoints : undefined // Store custom points if importance is custom
+                customPoints: importance === 'custom' ? customPoints : undefined, // Store custom points if importance is custom
+                isPinned: false // New property for pinning
             };
             tasks.push(newTask);
             taskInput.value = ''; // Clear input
@@ -1398,7 +1497,7 @@
             customPointsInput.classList.add('hidden'); // Hide custom points input
             saveToLocalStorage(); // Save after adding
             renderTasks(); // Re-render tasks after adding
-            showMessageBox('New task added successfully!', 'success');
+            showMessageBox('وظیفه جدید با موفقیت اضافه شد!', 'success');
         });
 
         // Toggle completed tasks section visibility
@@ -1422,6 +1521,7 @@
             // Check if the click was on an interactive child element (checkbox, menu button)
             const isCheckbox = (target.tagName === 'INPUT' && target.type === 'checkbox');
             const isMenuButton = target.closest('.three-dot-menu-btn');
+            const action = target.closest('button')?.dataset.action; // Get action from menu button
 
             if (isCheckbox) {
                 // If checkbox is clicked, toggle completion status
@@ -1432,11 +1532,19 @@
                 if (task) {
                     showTaskActionsMenu(taskId, isMenuButton, task.completed);
                 }
-            } else {
+            } else if (action === 'pin-task' || action === 'unpin-task') {
+                pinTask(taskId);
+            }
+            else {
                 // If the task card itself (and not an interactive child) was clicked, toggle completion status
                 toggleTaskCompletion(taskId, taskItemElement);
             }
         }
+
+        // Attach event listener to activeTaskList and completedTasksContainer for delegation
+        activeTaskList.addEventListener('click', handleTaskClick);
+        completedTasksContainer.addEventListener('click', handleTaskClick);
+
 
         function toggleTaskCompletion(taskId, taskItemElement) {
             const taskIndex = tasks.findIndex(t => t.id === taskId);
@@ -1446,6 +1554,7 @@
 
                 if (!task.completed) { // User wants to complete the task
                     task.completed = true;
+                    task.isPinned = false; // Unpin task when completed
                     if (task.importance === 'important') {
                         pointsGained = pointsPerImportantTask;
                     } else if (task.importance === 'normal') {
@@ -1455,15 +1564,15 @@
                         totalCustomTasksCompleted++; // Increment custom tasks counter
                     }
                     zPoint += pointsGained;
-                    showMessageBox(`Task completed! +${pointsGained} Z-Point`, 'success');
-                    showPointsGainFeedback(pointsGained, taskItemElement);
+                    showMessageBox(`وظیفه تکمیل شد! +${pointsGained} پوینت`, 'success');
+                    showPointsGainFeedback(pointsGained, taskItemElement); // Show animation for all completed tasks
 
                     // Daily streak logic (only on completion)
                     const today = new Date().toDateString();
 
                     if (!lastCompletionDate) {
                         dailyStreak = 1;
-                        showMessageBox('Your daily streak has started!', 'info');
+                        showMessageBox('زنجیره روزانه شما آغاز شد!', 'info');
                     } else {
                         const lastDate = new Date(lastCompletionDate);
                         const yesterday = new Date();
@@ -1471,13 +1580,16 @@
 
                         if (lastDate.toDateString() === yesterday.toDateString()) {
                             dailyStreak++;
-                            showMessageBox(`Daily streak: ${dailyStreak} consecutive days!`, 'info');
+                            showMessageBox(`زنجیره روزانه: ${dailyStreak} روز متوالی!`, 'info');
                         } else if (lastDate.toDateString() !== today) {
                             dailyStreak = 1; // Reset if not consecutive and not completed today already
-                            showMessageBox('Your daily streak has been reset and restarted.', 'info');
+                            showMessageBox('زنجیره روزانه شما بازنشانی و دوباره آغاز شد.', 'info');
                         }
                     }
                     lastCompletionDate = today;
+
+                    // Re-sort tasks so completed ones are at the end
+                    tasks.sort((a, b) => (a.completed === b.completed) ? 0 : a.completed ? 1 : -1);
 
                 } else { // User wants to un-complete (reset) the task
                     task.completed = false;
@@ -1490,12 +1602,35 @@
                         totalCustomTasksCompleted = Math.max(0, totalCustomTasksCompleted - 1); // Decrement custom tasks counter
                     }
                     zPoint = Math.max(0, zPoint - pointsGained);
-                    showMessageBox(`Task uncompleted! -${pointsGained} Z-Point`, 'info');
+                    showMessageBox(`وظیفه ناتمام شد! -${pointsGained} پوینت`, 'info');
                     // Note: Uncompleting a task does NOT break the daily streak.
                     // The streak only advances on new completions or resets if a day is missed.
+
+                    // When uncompleted, move to the end of the active tasks list
+                    const uncompletedTask = tasks.splice(taskIndex, 1)[0]; // Remove from current position
+                    // Find the index of the last active task
+                    let lastActiveIndex = tasks.filter(t => !t.completed).length -1;
+                    // If there are no other active tasks, lastActiveIndex will be -1, so insert at 0.
+                    // Otherwise, insert after the last active task.
+                    tasks.splice(lastActiveIndex + 1, 0, uncompletedTask); // Insert at the end of active tasks
+                    
+                    // Re-sort to ensure all active tasks are before completed tasks, maintaining relative order
+                    tasks.sort((a, b) => (a.completed === b.completed) ? 0 : a.completed ? 1 : -1);
                 }
                 saveToLocalStorage();
                 renderTasks();
+            }
+        }
+
+        // Function to toggle pin status of a task
+        function pinTask(taskId) {
+            const taskIndex = tasks.findIndex(t => t.id === taskId);
+            if (taskIndex > -1) {
+                const task = tasks[taskIndex];
+                task.isPinned = !task.isPinned; // Toggle pin status
+                saveToLocalStorage();
+                renderTasks();
+                showMessageBox(`وظیفه "${task.name}" ${task.isPinned ? 'پین شد!' : 'از پین خارج شد.'}`, 'info');
             }
         }
 
@@ -1513,31 +1648,41 @@
 
             document.body.appendChild(menu); // Append to get actual width
 
+            const task = tasks.find(t => t.id === taskId);
             let menuHtml = ``;
             if (isCompletedTask) {
                 menuHtml = `
                     <button data-action="copy-task">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v4a1 1 0 001 1h4m-4 0h4m-4 0v4m0 0l-4-4m4 4l-4-4m0 0a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                        Copy
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        کپی
                     </button>
                     <button data-action="delete-task">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        Delete
+                        حذف
                     </button>
                 `;
             } else {
                 menuHtml = `
                     <button data-action="edit-task">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                        Edit
+                        ویرایش
                     </button>
                     <button data-action="change-order">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                        Change Order
+                        تغییر چیدمان
+                    </button>
+                    <button data-action="${task.isPinned ? 'unpin-task' : 'pin-task'}">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            ${task.isPinned ?
+                                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14m-5 0l4 4m-4-4l-4 4m-4-4l4-4m-4-4l4 4"></path>' : // Unpin icon (example: broken pin)
+                                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0L6.343 16.657a4 4 0 115.656-5.656l1.414 1.414a1.998 1.998 0 002.828 0l1.414-1.414a4 4 0 115.656 5.656z"></path>' // Pin icon (example: standard pin)
+                            }
+                        </svg>
+                        ${task.isPinned ? 'برداشتن پین' : 'پین کردن'}
                     </button>
                     <button data-action="delete-task">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        Delete
+                        حذف
                     </button>
                 `;
             }
@@ -1551,11 +1696,11 @@
             let menuTop = rect.bottom + window.scrollY + 5;
             let menuLeft = rect.left + window.scrollX;
 
-            // Adjust if menu goes off screen to the right
+            // Adjust if menu goes off screen to the right (RTL context, so right edge is more important)
             if (menuLeft + menu.offsetWidth > window.innerWidth - padding) {
                 menuLeft = window.innerWidth - menu.offsetWidth - padding;
             }
-            // Adjust if menu goes off screen to the left (shouldn't happen with RTL but good for robustness)
+            // Adjust if menu goes off screen to the left
             if (menuLeft < padding) {
                 menuLeft = padding;
             }
@@ -1586,25 +1731,35 @@
                         deleteTask(taskId);
                     } else if (action === 'copy-task') {
                         copyTask(taskId);
+                    } else if (action === 'pin-task' || action === 'unpin-task') {
+                        pinTask(taskId);
                     }
                 }
             });
 
             // Close menu when clicking outside
             const closeMenu = (e) => {
+                // Check if the click was outside the menu and outside the button that opened it
                 if (!menu.contains(e.target) && !buttonElement.contains(e.target)) {
                     menu.remove();
                     document.removeEventListener('click', closeMenu);
                 }
             };
-            document.addEventListener('click', closeMenu);
+            // Add a slight delay to allow the menu to render before attaching the global click listener
+            // This prevents the initial click that opens the menu from immediately closing it.
+            setTimeout(() => {
+                document.addEventListener('click', closeMenu);
+            }, 50);
         }
 
         // Function to show the Edit Task Modal
         function showEditTaskModal(taskId) {
             currentTaskBeingEditedId = taskId;
             const task = tasks.find(t => t.id === taskId);
-            if (!task) return;
+            if (!task) {
+                showMessageBox('خطا: وظیفه برای ویرایش یافت نشد.', 'error');
+                return;
+            }
 
             editTaskNameInput.value = task.name;
             editTaskImportanceSelect.value = task.importance;
@@ -1613,6 +1768,7 @@
                 editTaskCustomPointsInput.value = task.customPoints || '';
             } else {
                 editTaskCustomPointsInput.classList.add('hidden');
+                editTaskCustomPointsInput.value = ''; // Clear value when hidden
             }
 
             editTaskImportanceSelect.onchange = () => {
@@ -1620,9 +1776,12 @@
                     editTaskCustomPointsInput.classList.remove('hidden');
                 } else {
                     editTaskCustomPointsInput.classList.add('hidden');
+                    editTaskCustomPointsInput.value = ''; // Clear value when hidden
                 }
             };
-
+            
+            editTaskModal.classList.remove('hidden'); // Ensure modal is not hidden before showing
+            void editTaskModal.offsetWidth; // Force reflow
             editTaskModal.classList.add('show');
             editTaskNameInput.focus();
         }
@@ -1635,19 +1794,19 @@
             let newCustomPoints = undefined;
 
             if (newTaskName.length === 0) {
-                showMessageBox('Task name cannot be empty.', 'info');
+                showMessageBox('نام وظیفه نمی‌تواند خالی باشد.', 'info');
                 return;
             }
 
             if (newTaskName.length > 40) {
-                showMessageBox('Task name cannot be more than 40 characters.', 'error');
+                showMessageBox('نام وظیفه نمی‌تواند بیش از 40 کاراکتر باشد.', 'error');
                 return;
             }
 
             if (newImportance === 'custom') {
                 newCustomPoints = parseInt(editTaskCustomPointsInput.value, 10);
                 if (isNaN(newCustomPoints) || newCustomPoints <= 0 || newCustomPoints > MAX_CUSTOM_POINTS) {
-                    showMessageBox(`Please enter a valid value for custom Z-Point (max ${MAX_CUSTOM_POINTS}).`, 'info');
+                    showMessageBox(`لطفاً یک مقدار معتبر برای پوینت سفارشی وارد کنید (حداکثر ${MAX_CUSTOM_POINTS}).`, 'info');
                     return;
                 }
             }
@@ -1659,17 +1818,23 @@
                 tasks[taskIndex].customPoints = newCustomPoints;
                 saveToLocalStorage();
                 renderTasks();
-                showMessageBox('Task edited successfully!', 'success');
+                showMessageBox('وظیفه با موفقیت ویرایش شد!', 'success');
                 editTaskModal.classList.remove('show');
+                setTimeout(() => { // Add timeout to hide after transition
+                    editTaskModal.classList.add('hidden');
+                }, 50); // Changed to 50ms
             } else {
-                showMessageBox('Error: Task not found for editing.', 'error');
+                showMessageBox('خطا: وظیفه برای ویرایش یافت نشد.', 'error');
             }
         });
 
         // Cancel Edit Task
         cancelEditTaskBtn.addEventListener('click', () => {
             editTaskModal.classList.remove('show');
-            showMessageBox('Task editing cancelled.', 'info');
+            setTimeout(() => { // Add timeout to hide after transition
+                editTaskModal.classList.add('hidden');
+            }, 50); // Changed to 50ms
+            showMessageBox('ویرایش وظیفه لغو شد.', 'info');
         });
 
         // Function to show the Change Order Modal
@@ -1679,11 +1844,13 @@
             const taskIndex = activeTasks.findIndex(t => t.id === taskId);
             
             if (taskIndex === -1) {
-                showMessageBox('Cannot change order for completed tasks or task not found.', 'error');
+                showMessageBox('نمی‌توان ترتیب وظایف تکمیل شده یا وظیفه یافت نشده را تغییر داد.', 'error');
                 return;
             }
 
             changeOrderInput.value = taskIndex + 1; // 1-based index
+            changeOrderModal.classList.remove('hidden'); // Ensure modal is not hidden before showing
+            void changeOrderModal.offsetWidth; // Force reflow
             changeOrderModal.classList.add('show');
             changeOrderInput.focus();
             changeOrderInput.select(); // Auto-select the text
@@ -1694,48 +1861,64 @@
             const taskId = currentTaskBeingEditedId;
             const newPosition = parseInt(changeOrderInput.value, 10);
 
-            const activeTasks = tasks.filter(t => !t.completed);
-            const taskIndex = tasks.findIndex(t => t.id === taskId); // Index in the main tasks array
-            const currentActiveIndex = activeTasks.findIndex(t => t.id === taskId); // Index in the filtered active tasks array
-
-            if (isNaN(newPosition) || newPosition < 1 || newPosition > activeTasks.length) {
-                showMessageBox(`Please enter a valid position between 1 and ${activeTasks.length}.`, 'info');
+            const taskIndexInTasks = tasks.findIndex(t => t.id === taskId);
+            if (taskIndexInTasks === -1) {
+                showMessageBox('خطا در تغییر ترتیب وظیفه. وظیفه یافت نشد.', 'error');
                 return;
             }
 
-            if (taskIndex > -1 && currentActiveIndex > -1) {
-                const [taskToMove] = tasks.splice(taskIndex, 1); // Remove from main array
+            const taskToMove = tasks[taskIndexInTasks];
 
-                // Find the new index in the *original* tasks array based on the new position in active tasks
-                let targetIndexInActive = newPosition - 1;
-                let actualTargetIndex = 0;
-                let activeCount = 0;
-                for (let i = 0; i < tasks.length; i++) {
-                    if (!tasks[i].completed) {
-                        if (activeCount === targetIndexInActive) {
-                            actualTargetIndex = i;
-                            break;
-                        }
-                        activeCount++;
-                    }
-                    actualTargetIndex = i + 1; // If loop finishes, insert at end of active tasks
-                }
+            // Only allow reordering of active tasks
+            if (taskToMove.completed) {
+                showMessageBox('نمی‌توان ترتیب وظایف تکمیل شده را تغییر داد.', 'error');
+                return;
+            }
+
+            const activeTasks = tasks.filter(t => !t.completed);
+            const taskInActiveTasksIndex = activeTasks.findIndex(t => t.id === taskId);
+
+            if (isNaN(newPosition) || newPosition < 1 || newPosition > activeTasks.length) {
+                showMessageBox(`لطفاً یک موقعیت معتبر بین 1 و ${activeTasks.length} وارد کنید.`, 'info');
+                return;
+            }
+
+            if (taskInActiveTasksIndex > -1) {
+                // Remove the task from its current position in the active tasks array
+                const [movedTask] = activeTasks.splice(taskInActiveTasksIndex, 1);
                 
-                tasks.splice(actualTargetIndex, 0, taskToMove); // Insert into main array
+                // Insert the task at the new desired position in the active tasks array
+                activeTasks.splice(newPosition - 1, 0, movedTask);
+
+                // If the task was pinned, unpin it when manually reordered
+                if (movedTask.isPinned) {
+                    movedTask.isPinned = false;
+                    showMessageBox('وظیفه از پین خارج شد زیرا ترتیب آن به صورت دستی تغییر یافت.', 'info');
+                }
+
+                // Reconstruct the main tasks array to reflect the new order
+                const completedTasks = tasks.filter(t => t.completed);
+                tasks = [...activeTasks, ...completedTasks]; // Active tasks first, then completed
 
                 saveToLocalStorage();
                 renderTasks();
-                showMessageBox('Task order changed successfully!', 'success');
+                showMessageBox('وظیفه با موفقیت مرتب شد!', 'success');
                 changeOrderModal.classList.remove('show');
+                setTimeout(() => { // Add timeout to hide after transition
+                    changeOrderModal.classList.add('hidden');
+                }, 50); // Changed to 50ms
             } else {
-                showMessageBox('Error changing task order. Task not found or already completed.', 'error');
+                showMessageBox('خطا در تغییر ترتیب وظیفه. وظیفه یافت نشد یا قبلاً تکمیل شده است.', 'error');
             }
         });
 
         // Cancel Change Order
         cancelChangeOrderBtn.addEventListener('click', () => {
             changeOrderModal.classList.remove('show');
-            showMessageBox('Change order cancelled.', 'info');
+            setTimeout(() => { // Add timeout to hide after transition
+                changeOrderModal.classList.add('hidden');
+            }, 50); // Changed to 50ms
+            showMessageBox('تغییر ترتیب لغو شد.', 'info');
         });
 
         // Delete Task function (called from menu)
@@ -1743,28 +1926,41 @@
             const taskIndex = tasks.findIndex(t => t.id === taskId);
             if (taskIndex > -1) {
                 const taskItemElement = document.querySelector(`.task-item[data-id="${taskId}"]`);
-                if (taskItemElement) {
-                    lastDeletedTask = tasks[taskIndex]; // Save task for Undo
-                    lastDeletedTaskOriginalIndex = taskIndex; // Save original index
-                    tasks.splice(taskIndex, 1); // Remove task
-                    saveToLocalStorage();
+                const taskToDelete = tasks[taskIndex];
+                taskToDelete.isPinned = false; // Unpin task when deleted
 
-                    // Delete animation
+                // Create a copy of the task with its original index for undo
+                const deletedTaskCopy = { ...taskToDelete, originalIndex: taskIndex };
+
+                tasks.splice(taskIndex, 1); // Remove task
+                saveToLocalStorage();
+
+                // Delete animation
+                if (taskItemElement) {
                     taskItemElement.style.transform = `translateX(-100vw)`;
                     taskItemElement.style.opacity = '0';
                     taskItemElement.addEventListener('transitionend', () => {
                         renderTasks(); // Re-render after animation
-                        showUndoMessage(lastDeletedTask.name, lastDeletedTask.id, lastDeletedTask);
+                        // Use showMessageBox for undo message
+                        showMessageBox(`وظیفه "${deletedTaskCopy.name}" حذف شد. برای بازگرداندن ضربه بزنید.`, 'info', {
+                            position: 'bottom-center',
+                            isUndo: true,
+                            duration: 5000,
+                            taskData: deletedTaskCopy // Pass the specific task data for undo
+                        });
                     }, { once: true });
                 } else {
                     // If element not found, still delete from data and re-render
-                    tasks.splice(taskIndex, 1);
-                    saveToLocalStorage();
                     renderTasks();
-                    showMessageBox('Task deleted successfully!', 'success');
+                    showMessageBox(`وظیفه "${deletedTaskCopy.name}" حذف شد. برای بازگرداندن ضربه بزنید.`, 'info', {
+                        position: 'bottom-center',
+                        isUndo: true,
+                        duration: 5000,
+                        taskData: deletedTaskCopy // Pass the specific task data for undo
+                    });
                 }
             } else {
-                showMessageBox('Error: Task not found for deletion.', 'error');
+                showMessageBox('خطا: وظیفه برای حذف یافت نشد.', 'error');
             }
         }
 
@@ -1777,27 +1973,29 @@
                     name: originalTask.name,
                     completed: false, // Always active
                     importance: originalTask.importance,
-                    customPoints: originalTask.customPoints // Keep original custom points
+                    customPoints: originalTask.customPoints, // Keep original custom points
+                    isPinned: false // New task is never pinned by default
                 };
                 tasks.push(newTask); // Add to the end of the list
                 saveToLocalStorage();
                 renderTasks();
-                showMessageBox(`Task "${newTask.name}" copied to active tasks!`, 'success');
+                showMessageBox(`وظیفه "${newTask.name}" به وظایف فعال کپی شد!`, 'success');
             } else {
-                showMessageBox('Error: Original task not found for copying.', 'error');
+                showMessageBox('خطا: وظیفه اصلی برای کپی یافت نشد.', 'error');
             }
         }
 
         // --- Drag and Drop Logic (Mouse Events) ---
         activeTaskList.addEventListener('dragstart', (e) => {
             const taskItem = e.target.closest('.task-item');
-            if (taskItem && !taskItem.classList.contains('bg-green-100')) { // Only active tasks are draggable
+            // Ensure only active tasks are draggable and prevent dragging completed tasks
+            if (taskItem && !taskItem.classList.contains('bg-green-100')) { 
                 draggedTaskId = taskItem.dataset.id;
                 draggedElement = taskItem;
                 e.dataTransfer.setData('text/plain', draggedTaskId);
                 e.dataTransfer.effectAllowed = 'move';
                 setTimeout(() => {
-                    taskItem.classList.add('opacity-0'); // Hide original element
+                    taskItem.classList.add('opacity-0'); // Hide original element during drag
                 }, 0);
             } else {
                 e.preventDefault(); // Prevent drag if not an active task
@@ -1812,6 +2010,7 @@
             // Clear all existing drop-target highlights
             document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
 
+            // Only highlight if dropping on an active task and not the dragged task itself
             if (targetItem && targetItem.dataset.id !== draggedTaskId && !targetItem.classList.contains('bg-green-100')) {
                 const boundingBox = targetItem.getBoundingClientRect();
                 const offset = e.clientY - boundingBox.top;
@@ -1851,11 +2050,11 @@
             // Clean up visual feedback
             document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
             if (draggedElement) {
-                draggedElement.classList.remove('opacity-0');
+                draggedElement.classList.remove('opacity-0'); // Show original element again
             }
 
             if (!dropTargetItem || !draggedTaskId) {
-                showMessageBox('Invalid drop target or no task being dragged.', 'error');
+                showMessageBox('هدف رها کردن نامعتبر است یا وظیفه‌ای در حال کشیدن نیست.', 'error');
                 resetDragState();
                 return;
             }
@@ -1866,34 +2065,49 @@
 
             if (draggedTaskIndex === -1 || droppedOnTaskIndex === -1 || draggedTaskId === droppedOnTaskId) {
                 // Invalid drag or drop onto self
-                showMessageBox('Cannot drop task here.', 'error');
+                showMessageBox('نمی‌توان وظیفه را اینجا رها کرد.', 'error');
                 resetDragState();
                 return;
             }
 
             // Ensure we only reorder active tasks
             if (tasks[draggedTaskIndex].completed || tasks[droppedOnTaskIndex].completed) {
-                showMessageBox('Only active tasks can be reordered.', 'info');
+                showMessageBox('فقط وظایف فعال را می‌توان دوباره مرتب کرد.', 'info');
                 resetDragState();
                 return;
             }
 
-            // Reorder the tasks array
-            const [draggedTask] = tasks.splice(draggedTaskIndex, 1);
-            let newIndex = tasks.findIndex(t => t.id === droppedOnTaskId);
+            // Get active tasks to perform reordering within that subset
+            const activeTasks = tasks.filter(task => !task.completed);
+            const draggedActiveIndex = activeTasks.findIndex(t => t.id === draggedTaskId);
+            const droppedActiveIndex = activeTasks.findIndex(t => t.id === droppedOnTaskId);
+
+            if (draggedActiveIndex === -1 || droppedActiveIndex === -1) {
+                 // This should ideally not happen if the above checks are correct, but as a safeguard
+                showMessageBox('خطا در یافتن وظایف فعال برای مرتب‌سازی مجدد.', 'error');
+                resetDragState();
+                return;
+            }
+
+            const [draggedTask] = activeTasks.splice(draggedActiveIndex, 1);
+            let newActiveIndex = droppedActiveIndex;
 
             // Adjust index based on drop position (above or below)
             const boundingBox = dropTargetItem.getBoundingClientRect();
             const offset = e.clientY - boundingBox.top;
             if (offset > boundingBox.height / 2) {
-                newIndex++; // Dropped below target
+                newActiveIndex++; // Dropped below target
             }
 
-            tasks.splice(newIndex, 0, draggedTask);
+            activeTasks.splice(newActiveIndex, 0, draggedTask);
+
+            // Reconstruct the main tasks array
+            const completedTasks = tasks.filter(t => t.completed);
+            tasks = [...activeTasks, ...completedTasks];
 
             saveToLocalStorage();
             renderTasks(); // Re-render to show new order
-            showMessageBox('Task reordered successfully!', 'success');
+            showMessageBox('وظیفه با موفقیت مرتب شد!', 'success');
             resetDragState();
         });
 
@@ -1917,7 +2131,7 @@
             if (!taskItem) return;
 
             const targetTagName = e.target.tagName;
-            const isInteractiveChild = (targetTagName === 'INPUT' && (target.type === 'checkbox' || target.type === 'number' || target.type === 'text')) ||
+            const isInteractiveChild = (targetTagName === 'INPUT' && (e.target.type === 'checkbox' || e.target.type === 'number' || e.target.type === 'text')) ||
                                        targetTagName === 'BUTTON' ||
                                        targetTagName === 'SELECT' ||
                                        e.target.closest('.three-dot-menu-btn');
@@ -1987,7 +2201,8 @@
                 clearTimeout(longPressTimer);
                 longPressTimer = null;
                 isGestureStarted = false; // It's a scroll, not a tap or drag attempt
-                return; // Allow native scrolling
+                // Allow native scrolling, don't prevent default here
+                return; 
             }
 
             // If dragging has officially started (long press detected)
@@ -2058,30 +2273,46 @@
                 if (!dropTargetItem || draggedTask.completed) {
                     // If dropped outside a valid target or on a completed task, revert
                     renderTasks(); // Re-render to revert visual changes
-                    showMessageBox('Task reordering cancelled.', 'info');
+                    showMessageBox('مرتب‌سازی وظیفه لغو شد.', 'info');
                 } else if (dropTargetItem.dataset.id === draggedTaskId) {
                     // Dropped on itself, no change
                     renderTasks();
                 } else {
-                    const originalDroppedOnTaskIndex = tasks.findIndex(t => t.id === dropTargetItem.dataset.id);
-                    let finalInsertIndex = originalDroppedOnTaskIndex;
+                    // Replicate the mouse drop logic for touch
+                    const activeTasks = tasks.filter(task => !task.completed);
+                    const draggedActiveIndex = activeTasks.findIndex(t => t.id === draggedTaskId);
+                    const droppedActiveIndex = activeTasks.findIndex(t => t.id === dropTargetItem.dataset.id);
+
+                    if (draggedActiveIndex === -1 || droppedActiveIndex === -1) {
+                        showMessageBox('خطا در یافتن وظایف فعال برای مرتب‌سازی مجدد (لمس).', 'error');
+                        renderTasks();
+                        resetTouchStates();
+                        return;
+                    }
+
+                    const [movedTask] = activeTasks.splice(draggedActiveIndex, 1);
+                    let newActiveIndex = droppedActiveIndex;
+
                     const boundingBox = dropTargetItem.getBoundingClientRect();
                     const offset = e.changedTouches[0].clientY - boundingBox.top;
-
                     if (offset > boundingBox.height / 2) {
-                        finalInsertIndex++;
+                        newActiveIndex++; // Dropped below target
+                    }
+                    activeTasks.splice(newActiveIndex, 0, movedTask);
+
+                    // If the task was pinned, unpin it when manually reordered by drag/drop
+                    if (movedTask.isPinned) {
+                        movedTask.isPinned = false;
+                        showMessageBox('وظیفه از پین خارج شد زیرا ترتیب آن به صورت دستی تغییر یافت.', 'info');
                     }
 
-                    tasks.splice(originalDraggedTaskIndex, 1);
-                    // Adjust finalInsertIndex if the splice operation shifted elements
-                    if (originalDraggedTaskIndex < finalInsertIndex) {
-                        finalInsertIndex--;
-                    }
-                    tasks.splice(finalInsertIndex, 0, draggedTask);
+                    // Reconstruct the main tasks array
+                    const completedTasks = tasks.filter(t => t.completed);
+                    tasks = [...activeTasks, ...completedTasks];
 
                     saveToLocalStorage();
                     renderTasks();
-                    showMessageBox('Task reordered successfully!', 'success');
+                    showMessageBox('وظیفه با موفقیت مرتب شد!', 'success');
                 }
             } else if (isGestureStarted && absDeltaX < TAP_THRESHOLD && absDeltaY < TAP_THRESHOLD) {
                 // This was a pure tap (not a drag or swipe, and minimal movement)
@@ -2103,7 +2334,7 @@
             if (!taskItem) return;
 
             const targetTagName = e.target.tagName;
-            const isInteractiveChild = (targetTagName === 'INPUT' && (target.type === 'checkbox' || target.type === 'number' || target.type === 'text')) ||
+            const isInteractiveChild = (targetTagName === 'INPUT' && (e.target.type === 'checkbox' || e.target.type === 'number' || e.target.type === 'text')) ||
                                        targetTagName === 'BUTTON' ||
                                        targetTagName === 'SELECT' ||
                                        e.target.closest('.three-dot-menu-btn');
@@ -2168,70 +2399,26 @@
             longPressTimer = null;
         }
 
-        // Function to show the Undo message
-        function showUndoMessage(taskName, taskId, taskData) {
-            // Clear any previously active Undo message
-            clearTimeout(undoMessageTimeout);
-            clearInterval(undoCountdownInterval);
-            undoMessageBox.classList.remove('scale-100', 'opacity-100');
-            undoMessageBox.classList.add('scale-0', 'opacity-0');
-
-            // Truncate task name if too long
-            const displayedTaskName = taskName.length > 30 ? taskName.substring(0, 27) + '...' : taskName;
-
-            undoMessageText.textContent = `Task "${displayedTaskName}" deleted. Tap to undo.`;
-            undoMessageBox.classList.remove('scale-0', 'opacity-0');
-            undoMessageBox.classList.add('scale-100', 'opacity-100');
-
-            let timeLeft = 5; // 5 seconds
-            undoCountdown.textContent = `(${timeLeft}s)`;
-
-            undoCountdownInterval = setInterval(() => {
-                timeLeft--;
-                undoCountdown.textContent = `(${timeLeft}s)`;
-                if (timeLeft <= 0) {
-                    clearInterval(undoCountdownInterval);
-                    hideUndoMessage();
-                    lastDeletedTask = null; // Clear Undo data
-                    lastDeletedTaskOriginalIndex = -1;
+        // Function to undo a specific deletion
+        function undoLastDeletion(taskToRestore) {
+            if (taskToRestore) {
+                // Find the correct position to re-insert the task
+                // If originalIndex is valid and within bounds, try to insert there.
+                // Otherwise, add to the end of the active tasks.
+                let insertIndex = tasks.length; // Default to end
+                if (taskToRestore.originalIndex !== undefined && taskToRestore.originalIndex <= tasks.length) {
+                    insertIndex = taskToRestore.originalIndex;
                 }
-            }, 1000);
 
-            undoMessageBox.onclick = () => {
-                undoLastDeletion();
-                hideUndoMessage();
-            };
-
-            undoMessageTimeout = setTimeout(() => {
-                hideUndoMessage();
-                lastDeletedTask = null; // Clear Undo data
-                lastDeletedTaskOriginalIndex = -1;
-            }, 5000); // 5 seconds
-        }
-
-        // Function to hide the Undo message
-        function hideUndoMessage() {
-            clearTimeout(undoMessageTimeout);
-            clearInterval(undoCountdownInterval);
-            undoMessageBox.classList.remove('scale-100', 'opacity-100');
-            undoMessageBox.classList.add('scale-0', 'opacity-0');
-            undoMessageBox.onclick = null; // Remove click listener
-        }
-
-        // Function to undo the last deletion
-        function undoLastDeletion() {
-            if (lastDeletedTask) {
-                // If original index is valid, insert there, otherwise add to end of active list
-                if (lastDeletedTaskOriginalIndex !== -1 && lastDeletedTaskOriginalIndex <= tasks.length) {
-                    tasks.splice(lastDeletedTaskOriginalIndex, 0, lastDeletedTask);
+                // Ensure the task is not already present (e.g., if undo was clicked twice quickly)
+                if (!tasks.some(t => t.id === taskToRestore.id)) {
+                    tasks.splice(insertIndex, 0, taskToRestore);
+                    saveToLocalStorage();
+                    renderTasks();
+                    showMessageBox(`وظیفه "${taskToRestore.name}" بازگردانده شد.`, 'info');
                 } else {
-                    tasks.push(lastDeletedTask);
+                    console.warn(`Task with ID ${taskToRestore.id} already exists, not re-adding.`);
                 }
-                saveToLocalStorage();
-                renderTasks();
-                showMessageBox(`Task "${lastDeletedTask.name}" restored.`, 'info');
-                lastDeletedTask = null; // Clear Undo data
-                lastDeletedTaskOriginalIndex = -1;
             }
         }
 
@@ -2277,12 +2464,20 @@
             menuDropdown.classList.toggle('hidden');
         });
 
+        // Close dropdown when clicking outside
+        window.addEventListener('click', (e) => {
+            if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+                menuDropdown.classList.add('hidden');
+            }
+        });
+
         profileMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
             menuDropdown.classList.add('hidden'); // Hide dropdown
 
             // Show profile modal with animation
             profileModal.classList.remove('hidden');
+            void profileModalContent.offsetWidth; // Force reflow
             profileModalContent.classList.remove('opacity-0', 'scale-95');
             profileModalContent.classList.add('opacity-100', 'scale-100');
 
@@ -2310,7 +2505,7 @@
 
             if (unlockedAchievements.length > 0) {
                 achievementsHtml = `
-                    <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2 mt-4">Achievements:</h4> <div class="flex flex-wrap gap-2">
+                    <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2 mt-4">دستاوردها:</h4> <div class="flex flex-wrap gap-2">
                         ${unlockedAchievements.map(ach => `
                             <span class="flex items-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm clickable-item" data-type="${ach.type}" data-id="${ach.type === 'level' ? ach.level : ach.name}">
                                 <span class="text-xl mr-2">${ach.icon}</span><span>${ach.name}</span>
@@ -2319,16 +2514,16 @@
                     </div>
                 `;
             } else {
-                achievementsHtml = `<p class="text-gray-500 dark:text-gray-400 mt-4">No achievements unlocked yet.</p>`;
+                achievementsHtml = `<p class="text-gray-500 dark:text-gray-400 mt-4">هنوز دستاوردی کسب نشده است.</p>`;
             }
 
             profileModalBody.innerHTML = `
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Username:</strong> ${userName || 'Anonymous'}</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Total Tasks:</strong> ${totalTasks}</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Completed Tasks:</strong> ${completedTasksCount}</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Z-Point:</strong> ${zPoint}</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Level:</strong> ${level}</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Daily Streak:</strong> ${dailyStreak} days</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">نام کاربری:</strong> ${userName || 'ناشناس'}</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">کل وظایف:</strong> ${totalTasks}</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">وظایف تکمیل شده:</strong> ${completedTasksCount}</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">پوینت:</strong> ${zPoint}</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">سطح:</strong> ${level}</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">زنجیره روزانه:</strong> ${dailyStreak} روز</p>
                 ${achievementsHtml}
             `;
 
@@ -2337,7 +2532,7 @@
                 item.addEventListener('click', (event) => {
                     const type = event.currentTarget.dataset.type;
                     const id = event.currentTarget.dataset.id;
-                    const name = event.currentTarget.dataset.id;
+                    const name = event.currentTarget.dataset.id; // Corrected to use data-id for name
                     if (type === 'level') {
                         showDetailModal('level', id);
                     } else {
@@ -2350,9 +2545,9 @@
         closeProfileModalBtn.addEventListener('click', () => {
             profileModalContent.classList.remove('opacity-100', 'scale-100');
             profileModalContent.classList.add('opacity-0', 'scale-95');
-            profileModalContent.addEventListener('transitionend', () => {
+            setTimeout(() => {
                 profileModal.classList.add('hidden');
-            }, { once: true });
+            }, 50); // Changed to 50ms
         });
 
         helpMenuItem.addEventListener('click', (e) => {
@@ -2361,48 +2556,49 @@
 
             // Show help modal with animation
             helpModal.classList.remove('hidden');
+            void helpModalContent.offsetWidth; // Force reflow
             helpModalContent.classList.remove('opacity-0', 'scale-95');
             helpModalContent.classList.add('opacity-100', 'scale-100');
 
             // Dynamically update help modal content with current point values
             helpModalBody.innerHTML = `
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">Welcome to Z-Task!</h3>
-                <p class="mb-3 text-gray-700 dark:text-gray-300">This app helps you manage your tasks, earn Z-Points, level up, and achieve various milestones through gamification.</p>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">به مای تسک خوش آمدید!</h3>
+                <p class="mb-3 text-gray-700 dark:text-gray-300">این برنامه به شما کمک می‌کند تا وظایف خود را مدیریت کنید، پوینت کسب کنید، سطح خود را ارتقا دهید و از طریق گیمیفیکیشن به نقاط عطف مختلفی دست یابید.</p>
 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">How to Use the App</h3>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Add Task:</strong> Enter a task name and select its importance (Important/Normal/Custom). Important and Custom tasks give you more Z-Points.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Reorder Tasks:</strong> You can reorder active tasks by dragging and dropping them.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Complete Task:</strong> Check the box next to a task to complete it. This earns you Z-Points and moves the task to the "Completed Tasks" section.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Edit Task:</strong> To edit a task's name and importance, click the three-dot icon next to it and select "Edit".</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Delete Task:</strong> To delete a task, click the three-dot icon next to it and select "Delete".</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Change Order Manually:</strong> To manually change a task's position, click the three-dot icon next to it and select "Change Order".</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Completed Tasks:</strong> Click the button to show or hide your completed tasks.</p>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">نحوه استفاده از برنامه</h3>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">افزودن وظیفه:</strong> نام وظیفه را وارد کرده و اهمیت آن (مهم/عادی/سفارشی) را انتخاب کنید. وظایف مهم و سفارشی پوینت بیشتری به شما می‌دهند.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تغییر ترتیب وظایف:</strong> می‌توانید وظایف فعال را با کشیدن و رها کردن مرتب کنید.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تکمیل وظیفه:</strong> برای تکمیل یک وظیفه، کادر کنار آن را علامت بزنید. این به شما پوینت می‌دهد و وظیفه را به بخش "وظایف تکمیل شده" منتقل می‌کند.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">ویرایش وظیفه:</strong> برای ویرایش نام و اهمیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "ویرایش" را انتخاب کنید.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">حذف وظیفه:</strong> برای حذف یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "حذف" را انتخاب کنید.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">تغییر ترتیب دستی:</strong> برای تغییر دستی موقعیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "تغییر ترتیب" را انتخاب کنید.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">وظایف تکمیل شده:</strong> روی دکمه کلیک کنید تا وظایف تکمیل شده خود را نمایش یا پنهان کنید.</p>
 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">Gamification System</h3>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Z-Point:</strong>
-                    Z-Points are purely symbolic and are used to measure your progress and activity in the app.
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">سیستم گیمیفیکیشن</h3>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">پوینت:</strong>
+                    پوینت‌ها صرفاً نمادین هستند و برای اندازه‌گیری پیشرفت و فعالیت شما در برنامه استفاده می‌شوند.
                     <ul>
-                        <li>Normal Tasks: ${pointsPerNormalTask} Z-Points</li>
-                        <li>Important Tasks: ${pointsPerImportantTask} Z-Points</li>
-                        <li>Custom Tasks: Up to ${MAX_CUSTOM_POINTS} Z-Points</li>
+                        <li>وظایف عادی: ${pointsPerNormalTask} پوینت</li>
+                        <li>وظایف مهم: ${pointsPerImportantTask} پوینت</li>
+                        <li>وظایف سفارشی: تا ${MAX_CUSTOM_POINTS} پوینت</li>
                     </ul>
                 </p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Daily Streak:</strong> Completing at least one task on consecutive days increases your daily streak, allowing you to earn special achievements.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">زنجیره روزانه:</strong> تکمیل حداقل یک وظیفه در روزهای متوالی، زنجیره روزانه شما را افزایش می‌دهد و به شما امکان می‌دهد دستاوردهای ویژه‌ای کسب کنید.</p>
                 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">Levels and Color Themes</h3>
-                <p class="mb-2 text-gray-700 dark:text-gray-300">As you earn Z-Points, you will ascend to higher levels. Each level has a unique color theme that changes as you progress. Click on a level for more details:</p>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">سطوح و تم‌های رنگی</h3>
+                <p class="mb-2 text-gray-700 dark:text-gray-300">با کسب پوینت، به سطوح بالاتر صعود خواهید کرد. هر سطح دارای یک تم رنگی منحصر به فرد است که با پیشرفت شما تغییر می‌کند. برای جزئیات بیشتر روی یک سطح کلیک کنید:</p>
                 <div class="flex flex-wrap gap-2 mb-3">
                     ${levelPointsThresholds.map((levelInfo, index) => {
                         return `
                             <span class="bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm flex items-center clickable-item" data-type="level" data-id="${index + 1}">
-                                Level ${index + 1}: ${levelInfo.name}
+                                سطح ${index + 1}: ${levelInfo.name}
                             </span>
                         `;
                     }).join('')}
                 </div>
 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">Achievements</h3>
-                <p class="mb-2 text-gray-700 dark:text-gray-300">You will earn various achievements as you progress in the game. Click on an achievement for more details:</p>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">دستاوردها</h3>
+                <p class="mb-2 text-gray-700 dark:text-gray-300">با پیشرفت در بازی، دستاوردهای مختلفی کسب خواهید کرد. برای جزئیات بیشتر روی یک دستاورد کلیک کنید:</p>
                 <div class="flex flex-wrap gap-2 mb-3">
                     ${achievementsData.map(ach => {
                         // Only list non-level achievements here
@@ -2413,15 +2609,15 @@
                     }).join('')}
                 </div>
 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">Data Backup and Restore</h3>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Data Security:</strong> All your data is securely stored in your browser's Local Storage, and no information is sent to any server.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Backup (Export):</strong> You can download a JSON backup file of all your app data by clicking the "Save Data" button. Keep this file in a safe place.</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Restore (Import):</strong> To restore data, simply select the JSON backup file you previously downloaded via the "Choose File" section, then click the "Load from File" button. This will replace your current app data with the data from the file.</p>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">پشتیبان‌گیری و بازیابی داده‌ها</h3>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">امنیت داده‌ها:</strong> تمام داده‌های شما به صورت امن در حافظه محلی مرورگر شما ذخیره می‌شوند و هیچ اطلاعاتی به هیچ سروری ارسال نمی‌شود.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">پشتیبان‌گیری (خروجی گرفتن):</strong> می‌توانید با کلیک بر روی دکمه "ذخیره داده‌ها"، یک فایل پشتیبان JSON از تمام داده‌های برنامه خود دانلود کنید. این فایل را در مکانی امن نگهداری کنید.</p>
+                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">بازیابی (ورودی گرفتن):</strong> برای بازیابی داده‌ها، به سادگی فایل پشتیبان JSON را که قبلاً دانلود کرده‌اید از طریق بخش "انتخاب فایل" انتخاب کنید، سپس روی دکمه "بارگذاری از فایل" کلیک کنید. این کار داده‌های فعلی برنامه شما را با داده‌های موجود در فایل جایگزین می‌کند.</p>
 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">Donate</h3>
-                <p class="mb-2 text-gray-700 dark:text-gray-300">This section is currently inactive. Thank you for your interest!</p>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-blue-600 dark:text-blue-400">دونیت</h3>
+                <p class="mb-2 text-gray-700 dark:text-gray-300">این بخش در حال حاضر غیرفعال است. از علاقه شما سپاسگزاریم!</p>
 
-                <p class="mt-4 text-center text-gray-700 dark:text-gray-300">The goal of this app is to motivate you and help you organize your tasks better. Good luck!</p>
+                <p class="mt-4 text-center text-gray-700 dark:text-gray-300">هدف این برنامه انگیزه دادن به شما و کمک به سازماندهی بهتر وظایف شماست. موفق باشید!</p>
             `;
             // Add event listener to newly created clickable items in help modal
             helpModalBody.querySelectorAll('.clickable-item').forEach(item => {
@@ -2441,9 +2637,9 @@
         closeHelpModalBtn.addEventListener('click', () => {
             helpModalContent.classList.remove('opacity-100', 'scale-95');
             helpModalContent.classList.add('opacity-0', 'scale-95');
-            helpModalContent.addEventListener('transitionend', () => {
+            setTimeout(() => {
                 helpModal.classList.add('hidden');
-            }, { once: true });
+            }, 50); // Changed to 50ms
         });
 
         aboutMenuItem.addEventListener('click', (e) => {
@@ -2452,22 +2648,24 @@
 
             // Show about modal with animation
             aboutModal.classList.remove('hidden');
+            void aboutModalContent.offsetWidth; // Force reflow
             aboutModalContent.classList.remove('opacity-0', 'scale-95');
             aboutModalContent.classList.add('opacity-100', 'scale-100');
 
             aboutModalBody.innerHTML = `
-                <p class="mb-3">This application is designed to help manage tasks and increase motivation through gamification.</p>
-                <p class="mb-3">All rights reserved to Uncle Leo.</p>
-                <p class="mb-3">Version: 1.0.0</p>
+                <p class="mb-3">این برنامه برای کمک به مدیریت وظایف و افزایش انگیزه طراحی شده است.</p>
+                <p class="mb-3">این پروژه به صورت اختصاصی توسط سایت عمو لئو طراحی شده است، این آولین و آخرین نسخه از از این پروژه است.</p>
+                <p class="mb-3">تمامی حقوق متعلق به <strong class="text-blue-600 dark:text-blue-400"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
+                <p class="mb-3">تاریخ: ۴ خرداد ۱۴۰۴</p>
             `;
         });
 
         closeAboutModalBtn.addEventListener('click', () => {
             aboutModalContent.classList.remove('opacity-100', 'scale-95');
             aboutModalContent.classList.add('opacity-0', 'scale-95');
-            aboutModalContent.addEventListener('transitionend', () => {
+            setTimeout(() => {
                 aboutModal.classList.add('hidden');
-            }, { once: true });
+            }, 50); // Changed to 50ms
         });
 
         backupMenuItem.addEventListener('click', (e) => {
@@ -2476,27 +2674,28 @@
 
             // Show backup modal with animation
             backupModal.classList.remove('hidden');
+            void backupModalContent.offsetWidth; // Force reflow
             backupModalContent.classList.remove('opacity-0', 'scale-95');
             backupModalContent.classList.add('opacity-100', 'scale-100');
 
             importFileInput.value = ''; // Clear file input on open
-            selectedFileNameSpan.textContent = 'No file selected.'; // Reset file name display
+            selectedFileNameSpan.textContent = 'فایلی انتخاب نشده است.';
         });
 
         // Add listener to close backup modal button
         closeBackupModalBtn.addEventListener('click', () => {
             backupModalContent.classList.remove('opacity-100', 'scale-95');
             backupModalContent.classList.add('opacity-0', 'scale-95');
-            backupModalContent.addEventListener('transitionend', () => {
+            setTimeout(() => {
                 backupModal.classList.add('hidden');
-            }, { once: true });
+            }, 50); // Changed to 50ms
         });
 
         donateMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
             // const donateLink = "YOUR_DONATION_LINK_HERE"; // TODO: Replace with actual donation link
             // window.open(donateLink, '_blank');
-            showMessageBox('This section is currently inactive. Thank you for your interest!', 'info');
+            showMessageBox('این بخش در حال حاضر غیرفعال است. از علاقه شما سپاسگزاریم!', 'info');
             menuDropdown.classList.add('hidden'); // Hide dropdown after selection
         });
 
@@ -2506,6 +2705,7 @@
 
             // Show reset confirmation modal with animation
             resetConfirmModal.classList.remove('hidden');
+            void resetConfirmModalContent.offsetWidth; // Force reflow
             resetConfirmModalContent.classList.remove('opacity-0', 'scale-95');
             resetConfirmModalContent.classList.add('opacity-100', 'scale-100');
         });
@@ -2518,17 +2718,17 @@
         cancelResetBtn.addEventListener('click', () => {
             resetConfirmModalContent.classList.remove('opacity-100', 'scale-95');
             resetConfirmModalContent.classList.add('opacity-0', 'scale-95');
-            resetConfirmModalContent.addEventListener('transitionend', () => {
+            setTimeout(() => {
                 resetConfirmModal.classList.add('hidden');
-            }, { once: true });
+            }, 50); // Changed to 50ms
         });
 
         closeResetModalBtn.addEventListener('click', () => {
             resetConfirmModalContent.classList.remove('opacity-100', 'scale-95');
             resetConfirmModalContent.classList.add('opacity-0', 'scale-95');
-            resetConfirmModalContent.addEventListener('transitionend', () => {
+            setTimeout(() => {
                 resetConfirmModal.classList.add('hidden');
-            }, { once: true });
+            }, 50); // Changed to 50ms
         });
 
         // Welcome modal logic
@@ -2539,12 +2739,12 @@
                 saveToLocalStorage();
                 welcomeModalContent.classList.remove('opacity-100', 'scale-100');
                 welcomeModalContent.classList.add('opacity-0', 'scale-95');
-                welcomeModalContent.addEventListener('transitionend', () => {
+                setTimeout(() => {
                     welcomeModal.classList.add('hidden');
-                }, { once: true });
-                showMessageBox(`Welcome, ${userName}!`, 'success');
+                }, 50); // Changed to 50ms
+                showMessageBox(`خوش آمدید، ${userName}!`, 'success');
             } else {
-                showMessageBox('Please enter your name.', 'info');
+                showMessageBox('لطفاً نام خود را وارد کنید.', 'info');
             }
         });
 
@@ -2567,12 +2767,12 @@
             a.href = url;
             const date = new Date();
             const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
-            a.download = `tasks_backup_${dateString}_ztask.json`;
+            a.download = `tasks_backup_${dateString}_mytask.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url); // Clean up URL object
-            showMessageBox('Backup file downloaded successfully!', 'success');
+            showMessageBox('فایل پشتیبان با موفقیت دانلود شد!', 'success');
         });
 
         // Update selected file name display
@@ -2580,7 +2780,7 @@
             if (e.target.files.length > 0) {
                 selectedFileNameSpan.textContent = e.target.files[0].name;
             } else {
-                selectedFileNameSpan.textContent = 'No file selected.';
+                selectedFileNameSpan.textContent = 'فایلی انتخاب نشده است.';
             }
         });
 
@@ -2588,7 +2788,7 @@
         importDataBtn.addEventListener('click', () => {
             const file = importFileInput.files[0];
             if (!file) {
-                showMessageBox('Please select a backup file to upload.', 'info');
+                showMessageBox('لطفاً یک فایل پشتیبان برای آپلود انتخاب کنید.', 'info');
                 return;
             }
 
@@ -2616,41 +2816,42 @@
                         totalCustomTasksCompleted = importedData.totalCustomTasksCompleted;
                         userName = importedData.userName || null; // Ensure userName is set or null
 
+                        // Ensure imported tasks have the new 'isPinned' property
+                        tasks.forEach(task => {
+                            if (typeof task.isPinned === 'undefined') {
+                                task.isPinned = false;
+                            }
+                        });
+
                         saveToLocalStorage(); // Save imported data to local storage
                         renderTasks(); // Re-render UI with new data
                         
                         // Hide backup modal with animation
                         backupModalContent.classList.remove('opacity-100', 'scale-95');
                         backupModalContent.classList.add('opacity-0', 'scale-95');
-                        backupModalContent.addEventListener('transitionend', () => {
+                        setTimeout(() => {
                             backupModal.classList.add('hidden');
-                        }, { once: true });
-                        showMessageBox('Data loaded successfully!', 'success');
+                        }, 50); // Changed to 50ms
+                        showMessageBox('داده‌ها با موفقیت بارگذاری شدند!', 'success');
                     } else {
-                        showMessageBox('Invalid imported data format. Please import a valid backup file.', 'error');
+                        showMessageBox('فرمت داده وارد شده نامعتبر است. لطفاً یک فایل پشتیبان معتبر وارد کنید.', 'error');
                     }
                 } catch (error) {
                     console.error("Error parsing imported data:", error);
-                    showMessageBox('Error processing imported file. Ensure the JSON file is correct.', 'error');
+                    showMessageBox('خطا در پردازش فایل وارد شده. اطمینان حاصل کنید که فایل JSON صحیح است.', 'error');
                 }
             };
             reader.onerror = (e) => {
                 console.error("Error reading file:", e);
-                showMessageBox('Error reading file. Please try again.', 'error');
+                showMessageBox('خطا در خواندن فایل. لطفاً دوباره امتحان کنید.', 'error');
             };
             reader.readAsText(file);
-        });
-
-        // Close dropdown when clicking outside
-        window.addEventListener('click', (e) => {
-            if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
-                menuDropdown.classList.add('hidden');
-            }
         });
 
         // --- Level/Achievement Detail Modal Logic ---
         function showDetailModal(type, identifier) {
             detailModal.classList.remove('hidden');
+            void detailModalContent.offsetWidth; // Force reflow
             // Add animation classes for modal entry
             detailModalContent.classList.remove('opacity-0', 'scale-95');
             detailModalContent.classList.add('opacity-100', 'scale-100');
@@ -2666,7 +2867,7 @@
                 titleText = levelInfo.name;
 
                 contentHtml = `
-                    <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Description:</strong> To reach this level, you need ${levelInfo.points} Z-Points. The overall color theme for this level is ${themeData.description}.</p>
+                    <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">توضیحات:</strong> برای رسیدن به این سطح، شما به ${levelInfo.points} پوینت نیاز دارید. تم رنگی کلی برای این سطح ${themeData.description} است.</p>
                 `;
             } else { // This else block now covers all non-level types like 'totalTasks', 'importantTasks', etc.
                 const achievement = achievementsData.find(ach => ach.name === identifier);
@@ -2674,11 +2875,11 @@
                 if (achievement) {
                     titleText = achievement.name;
                     contentHtml = `
-                        <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">Description:</strong> ${achievement.description || 'Description not available.'}</p>
+                        <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">توضیحات:</strong> ${achievement.description || 'توضیحات در دسترس نیست.'}</p>
                     `;
                 } else {
-                    titleText = `Error`;
-                    contentHtml = `<p class="text-red-500">Achievement not found.</p>`;
+                    titleText = `خطا`;
+                    contentHtml = `<p class="text-red-500">دستاورد یافت نشد.</p>`;
                 }
             }
 
@@ -2689,9 +2890,9 @@
         closeDetailModalBtn.addEventListener('click', () => {
             detailModalContent.classList.remove('opacity-100', 'scale-95');
             detailModalContent.classList.add('opacity-0', 'scale-95');
-            detailModalContent.addEventListener('transitionend', () => {
+            setTimeout(() => {
                 detailModal.classList.add('hidden');
-            }, { once: true });
+            }, 50); // Changed to 50ms
         });
 
         // Add click listener to show current level on main page
@@ -2706,6 +2907,7 @@
             // Show welcome modal if user name is not set
             if (!userName) {
                 welcomeModal.classList.remove('hidden');
+                void welcomeModalContent.offsetWidth; // Force reflow
                 welcomeModalContent.classList.remove('opacity-0', 'scale-95'); // Ensure animation starts
                 welcomeModalContent.classList.add('opacity-100', 'scale-100');
                 userNameInput.focus();
