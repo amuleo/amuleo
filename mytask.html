@@ -334,7 +334,7 @@
                 </div>
                 <div class="flex items-center bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full shadow-sm">
                     <span class="text-xl mr-2">🔥</span>
-                    <span class="text-base sm:text-lg font-semibold">زنجیره روزانه: <span id="dailyStreak" class="text-purple-800 dark:text-purple-200">0</span></span>
+                    <span class="text-base sm:text-lg font-semibold">زنجیره: <span id="dailyStreak" class="text-purple-800 dark:text-purple-200">0</span></span>
                 </div>
             </div>
         </div>
@@ -357,7 +357,7 @@
         <div class="mb-8 p-4 rounded-lg shadow-sm" id="addTaskSection">
             <h2 class="text-xl sm:text-2xl font-semibold mb-4" id="addTaskTitle">افزودن وظیفه جدید</h2>
             <div class="flex flex-col md:flex-row gap-4 items-stretch md:items-center">
-                <input type="text" id="taskInput" placeholder="نام وظیفه را وارد کنید..." maxlength="40"
+                <input type="text" id="taskInput" placeholder="نام وظیفه را وارد کنید..." maxlength="15"
                        class="flex-grow p-3 border rounded-lg text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12">
                 <select id="importanceSelect"
                         class="p-3 border rounded-lg text-base sm:text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12 w-full md:w-40">
@@ -404,7 +404,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100 transition-transform duration-300 transform scale-95 opacity-0" id="welcomeModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700 text-center">به مای تسک خوش آمدید!</h3>
             <p class="mb-4 text-center text-gray-700 dark:text-gray-300">لطفاً نام خود را وارد کنید تا شروع کنیم:</p>
-            <input type="text" id="userNameInput" placeholder="نام شما..."
+            <input type="text" id="userNameInput" placeholder="نام شما..." maxlength="15"
                    class="w-full p-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-500 bg-white dark:bg-gray-700 mb-4">
             <button id="startBtn"
                     class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 text-lg">
@@ -440,7 +440,7 @@
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">درباره</h3>
             <div id="aboutModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
                 <p class="mb-3">این برنامه برای کمک به مدیریت وظایف و افزایش انگیزه طراحی شده است.</p>
-                <p class="mb-3">این پروژه به صورت اختصاصی توسط سایت عمو لئو طراحی شده است، این آولین و آخرین نسخه از از این پروژه است.</p>
+                <p class="mb-3">این پروژه به صورت اختصاصی توسط <strong class="text-blue-600 dark:text-blue-400"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">سایت عمو لئو</a></strong> طراحی شده است، این آولین و آخرین نسخه از از این پروژه است.</p>
                 <p class="mb-3">تمامی حقوق متعلق به <strong class="text-blue-600 dark:text-blue-400"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
                 <p class="mb-3">تاریخ: ۴ خرداد ۱۴۰۴</p>
             </div>
@@ -510,7 +510,7 @@
     <div id="editTaskModal" class="dynamic-modal hidden">
         <div class="dynamic-modal-content text-gray-800 dark:text-gray-100">
             <h3 class="text-xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">ویرایش وظیفه</h3>
-            <input type="text" id="editTaskNameInput" placeholder="نام وظیفه را وارد کنید..." maxlength="40"
+            <input type="text" id="editTaskNameInput" placeholder="نام وظیفه را وارد کنید..." maxlength="15"
                    class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700">
             <select id="editTaskImportanceSelect"
                     class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none">
@@ -553,6 +553,7 @@
         let zPoint = 0; // Z-Point
         let level = 1; // Current level
         let dailyStreak = 0; // Daily streak counter
+        let highestDailyStreak = 0; // New variable for highest streak
         let lastCompletionDate = null; // Date of last task completion
         let totalCustomTasksCompleted = 0; // Counter for completed custom tasks
         let userName = null; // User's name
@@ -1105,6 +1106,7 @@
             localStorage.setItem('zPoint', zPoint);
             localStorage.setItem('level', level);
             localStorage.setItem('dailyStreak', dailyStreak);
+            localStorage.setItem('highestDailyStreak', highestDailyStreak); // Save highest streak
             localStorage.setItem('lastCompletionDate', lastCompletionDate);
             localStorage.setItem('totalCustomTasksCompleted', totalCustomTasksCompleted);
             localStorage.setItem('userName', userName);
@@ -1116,6 +1118,7 @@
             const storedZPoint = localStorage.getItem('zPoint');
             const storedLevel = localStorage.getItem('level');
             const storedDailyStreak = localStorage.getItem('dailyStreak');
+            const storedHighestDailyStreak = localStorage.getItem('highestDailyStreak'); // Load highest streak
             const storedLastCompletionDate = localStorage.getItem('lastCompletionDate');
             const storedTotalCustomTasksCompleted = localStorage.getItem('totalCustomTasksCompleted');
             const storedUserName = localStorage.getItem('userName');
@@ -1139,6 +1142,10 @@
             if (storedDailyStreak) {
                 dailyStreak = parseInt(storedDailyStreak, 10);
                 if (isNaN(dailyStreak)) dailyStreak = 0; // Ensure it's a number
+            }
+            if (storedHighestDailyStreak) { // Parse highest streak
+                highestDailyStreak = parseInt(storedHighestDailyStreak, 10);
+                if (isNaN(highestDailyStreak)) highestDailyStreak = 0;
             }
             if (storedTotalCustomTasksCompleted) {
                 totalCustomTasksCompleted = parseInt(storedTotalCustomTasksCompleted, 10);
@@ -1171,6 +1178,7 @@
             } else if (!lastCompletionDate) { // If no completion date exists
                 dailyStreak = 0;
             }
+            highestDailyStreak = Math.max(highestDailyStreak, dailyStreak); // Ensure highest is updated on load too
             saveToLocalStorage(); // Save updated streak if reset
             renderTasks(); // Render tasks immediately after loading
         }
@@ -1469,8 +1477,8 @@
                 return;
             }
 
-            if (taskName.length > 40) {
-                showMessageBox('عنوان وظیفه نمی‌تواند بیش از 40 کاراکتر باشد.', 'error');
+            if (taskName.length > 15) {
+                showMessageBox('مقدار ورودی نباید بیشتر از ۱۵ کارکتر باشد.', 'error'); // Updated error message
                 return;
             }
 
@@ -1580,42 +1588,39 @@
 
                         if (lastDate.toDateString() === yesterday.toDateString()) {
                             dailyStreak++;
-                            showMessageBox(`زنجیره روزانه: ${dailyStreak} روز متوالی!`, 'info');
+                            showMessageBox(`زنجیره: ${dailyStreak} روز متوالی!`, 'info');
                         } else if (lastDate.toDateString() !== today) {
                             dailyStreak = 1; // Reset if not consecutive and not completed today already
                             showMessageBox('زنجیره روزانه شما بازنشانی و دوباره آغاز شد.', 'info');
                         }
                     }
                     lastCompletionDate = today;
+                    highestDailyStreak = Math.max(highestDailyStreak, dailyStreak); // Update highest streak
 
                     // Re-sort tasks so completed ones are at the end
                     tasks.sort((a, b) => (a.completed === b.completed) ? 0 : a.completed ? 1 : -1);
 
-                } else { // User wants to un-complete (reset) the task
-                    task.completed = false;
-                    if (task.importance === 'important') {
-                        pointsGained = pointsPerImportantTask; // Points to deduct
-                    } else if (task.importance === 'normal') {
-                        pointsGained = pointsPerNormalTask;
-                    } else if (task.importance === 'custom' && task.customPoints) {
-                        pointsGained = task.customPoints;
-                        totalCustomTasksCompleted = Math.max(0, totalCustomTasksCompleted - 1); // Decrement custom tasks counter
-                    }
-                    zPoint = Math.max(0, zPoint - pointsGained);
-                    showMessageBox(`وظیفه ناتمام شد! -${pointsGained} پوینت`, 'info');
-                    // Note: Uncompleting a task does NOT break the daily streak.
-                    // The streak only advances on new completions or resets if a day is missed.
+                } else { // User clicked on a completed task, implying they want to create a new active instance and remove the original completed one
+                    // Create a new task based on the completed one
+                    const newActiveTask = {
+                        id: Date.now().toString(), // New unique ID
+                        name: task.name,
+                        completed: false, // This new instance is active
+                        importance: task.importance,
+                        customPoints: task.customPoints,
+                        isPinned: false // New tasks are not pinned by default
+                    };
 
-                    // When uncompleted, move to the end of the active tasks list
-                    const uncompletedTask = tasks.splice(taskIndex, 1)[0]; // Remove from current position
-                    // Find the index of the last active task
-                    let lastActiveIndex = tasks.filter(t => !t.completed).length -1;
-                    // If there are no other active tasks, lastActiveIndex will be -1, so insert at 0.
-                    // Otherwise, insert after the last active task.
-                    tasks.splice(lastActiveIndex + 1, 0, uncompletedTask); // Insert at the end of active tasks
-                    
-                    // Re-sort to ensure all active tasks are before completed tasks, maintaining relative order
-                    tasks.sort((a, b) => (a.completed === b.completed) ? 0 : a.completed ? 1 : -1);
+                    tasks.push(newActiveTask); // Add the new active task to the end of the tasks array
+
+                    // Now, delete the original completed task from the array
+                    tasks.splice(taskIndex, 1); // Remove the original completed task
+
+                    // No points deduction for the original task, as it remains completed.
+                    // No change to daily streak for this operation.
+
+                    // Changed message as per user request
+                    showMessageBox(`وظیفه بازنشانی شد!`, 'success');
                 }
                 saveToLocalStorage();
                 renderTasks();
@@ -1762,6 +1767,7 @@
             }
 
             editTaskNameInput.value = task.name;
+            editTaskNameInput.setAttribute('maxlength', '15'); // Set maxlength here
             editTaskImportanceSelect.value = task.importance;
             if (task.importance === 'custom') {
                 editTaskCustomPointsInput.classList.remove('hidden');
@@ -1798,8 +1804,8 @@
                 return;
             }
 
-            if (newTaskName.length > 40) {
-                showMessageBox('نام وظیفه نمی‌تواند بیش از 40 کاراکتر باشد.', 'error');
+            if (newTaskName.length > 15) {
+                showMessageBox('مقدار ورودی نباید بیشتر از ۱۵ کارکتر باشد.', 'error'); // Updated error message
                 return;
             }
 
@@ -2505,7 +2511,8 @@
 
             if (unlockedAchievements.length > 0) {
                 achievementsHtml = `
-                    <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2 mt-4">دستاوردها:</h4> <div class="flex flex-wrap gap-2">
+                    <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2 mt-4">دستاوردها:</h4>
+                    <div class="flex flex-wrap gap-2">
                         ${unlockedAchievements.map(ach => `
                             <span class="flex items-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm clickable-item" data-type="${ach.type}" data-id="${ach.type === 'level' ? ach.level : ach.name}">
                                 <span class="text-xl mr-2">${ach.icon}</span><span>${ach.name}</span>
@@ -2517,13 +2524,38 @@
                 achievementsHtml = `<p class="text-gray-500 dark:text-gray-400 mt-4">هنوز دستاوردی کسب نشده است.</p>`;
             }
 
+            // Redesigned profile modal body
             profileModalBody.innerHTML = `
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">نام کاربری:</strong> ${userName || 'ناشناس'}</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">کل وظایف:</strong> ${totalTasks}</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">وظایف تکمیل شده:</strong> ${completedTasksCount}</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">پوینت:</strong> ${zPoint}</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">سطح:</strong> ${level}</p>
-                <p class="mb-2"><strong class="text-purple-600 dark:text-purple-400">زنجیره روزانه:</strong> ${dailyStreak} روز</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                    <div class="p-3 rounded-lg shadow-sm bg-blue-50 dark:bg-blue-900 text-blue-800 dark:text-blue-200 flex items-center justify-between">
+                        <span class="font-semibold">نام کاربری:</span>
+                        <span>${userName || 'ناشناس'}</span>
+                    </div>
+                    <div class="p-3 rounded-lg shadow-sm bg-green-50 dark:bg-green-900 text-green-800 dark:text-green-200 flex items-center justify-between">
+                        <span class="font-semibold">کل وظایف:</span>
+                        <span>${totalTasks}</span>
+                    </div>
+                    <div class="p-3 rounded-lg shadow-sm bg-teal-50 dark:bg-teal-900 text-teal-800 dark:text-teal-200 flex items-center justify-between">
+                        <span class="font-semibold">وظایف تکمیل شده:</span>
+                        <span>${completedTasksCount}</span>
+                    </div>
+                    <div class="p-3 rounded-lg shadow-sm bg-yellow-50 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 flex items-center justify-between">
+                        <span class="font-semibold">تعداد پوینت:</span>
+                        <span>${zPoint}</span>
+                    </div>
+                    <div class="p-3 rounded-lg shadow-sm bg-purple-50 dark:bg-purple-900 text-purple-800 dark:text-purple-200 flex items-center justify-between">
+                        <span class="font-semibold">سطح:</span>
+                        <span>${level}</span>
+                    </div>
+                    <div class="p-3 rounded-lg shadow-sm bg-orange-50 dark:bg-orange-900 text-orange-800 dark:text-orange-200 flex items-center justify-between">
+                        <span class="font-semibold">زنجیره:</span>
+                        <span>${dailyStreak} روز</span>
+                    </div>
+                    <div class="p-3 rounded-lg shadow-sm bg-pink-50 dark:bg-pink-900 text-pink-800 dark:text-pink-200 flex items-center justify-between">
+                        <span class="font-semibold">بیشترین زنجیره:</span>
+                        <span>${highestDailyStreak} روز</span>
+                    </div>
+                </div>
                 ${achievementsHtml}
             `;
 
@@ -2654,7 +2686,7 @@
 
             aboutModalBody.innerHTML = `
                 <p class="mb-3">این برنامه برای کمک به مدیریت وظایف و افزایش انگیزه طراحی شده است.</p>
-                <p class="mb-3">این پروژه به صورت اختصاصی توسط سایت عمو لئو طراحی شده است، این آولین و آخرین نسخه از از این پروژه است.</p>
+                <p class="mb-3">این پروژه به صورت اختصاصی توسط <strong class="text-blue-600 dark:text-blue-400"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">سایت عمو لئو</a></strong> طراحی شده است، این آولین و آخرین نسخه از از این پروژه است.</p>
                 <p class="mb-3">تمامی حقوق متعلق به <strong class="text-blue-600 dark:text-blue-400"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
                 <p class="mb-3">تاریخ: ۴ خرداد ۱۴۰۴</p>
             `;
@@ -2734,18 +2766,23 @@
         // Welcome modal logic
         startBtn.addEventListener('click', () => {
             const inputName = userNameInput.value.trim();
-            if (inputName) {
-                userName = inputName;
-                saveToLocalStorage();
-                welcomeModalContent.classList.remove('opacity-100', 'scale-100');
-                welcomeModalContent.classList.add('opacity-0', 'scale-95');
-                setTimeout(() => {
-                    welcomeModal.classList.add('hidden');
-                }, 50); // Changed to 50ms
-                showMessageBox(`خوش آمدید، ${userName}!`, 'success');
-            } else {
+            if (inputName.length === 0) {
                 showMessageBox('لطفاً نام خود را وارد کنید.', 'info');
+                return;
             }
+            if (inputName.length > 15) {
+                showMessageBox('مقدار ورودی نباید بیشتر از ۱۵ کارکتر باشد.', 'error'); // Added validation for length
+                return;
+            }
+
+            userName = inputName;
+            saveToLocalStorage();
+            welcomeModalContent.classList.remove('opacity-100', 'scale-100');
+            welcomeModalContent.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                welcomeModal.classList.add('hidden');
+            }, 50); // Changed to 50ms
+            showMessageBox(`خوش آمدید، ${userName}!`, 'success');
         });
 
         // Export data (download as file)
@@ -2755,6 +2792,7 @@
                 zPoint: zPoint,
                 level: level,
                 dailyStreak: dailyStreak,
+                highestDailyStreak: highestDailyStreak, // Include highest streak in export
                 lastCompletionDate: lastCompletionDate,
                 totalCustomTasksCompleted: totalCustomTasksCompleted,
                 userName: userName
@@ -2804,6 +2842,7 @@
                         typeof importedData.zPoint === 'number' &&
                         typeof importedData.level === 'number' &&
                         typeof importedData.dailyStreak === 'number' &&
+                        (typeof importedData.highestDailyStreak === 'number' || typeof importedData.highestDailyStreak === 'undefined') && // Validate highest streak
                         (typeof importedData.lastCompletionDate === 'string' || importedData.lastCompletionDate === null) &&
                         typeof importedData.totalCustomTasksCompleted === 'number' &&
                         (typeof importedData.userName === 'string' || importedData.userName === null || importedData.userName === undefined)
@@ -2812,6 +2851,7 @@
                         zPoint = importedData.zPoint;
                         level = importedData.level;
                         dailyStreak = importedData.dailyStreak;
+                        highestDailyStreak = importedData.highestDailyStreak || 0; // Set highest streak, default to 0 if undefined
                         lastCompletionDate = importedData.lastCompletionDate;
                         totalCustomTasksCompleted = importedData.totalCustomTasksCompleted;
                         userName = importedData.userName || null; // Ensure userName is set or null
