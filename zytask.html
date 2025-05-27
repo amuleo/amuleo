@@ -393,24 +393,9 @@
             height: 16px; /* Adjust icon size if needed, h-4 w-4 is 16px */
             width: 16px;
         }
-
-        /* Loading screen specific styles */
-        #loadingScreen {
-            transition: opacity 0.5s ease-in-out; /* Default transition for first load */
-        }
-        #loadingScreen.instant-hide {
-            transition: none !important; /* Override transition for instant hide on subsequent loads */
-        }
     </style>
 </head>
 <body class="px-0 py-2 sm:p-4 flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-    <div id="loadingScreen" class="fixed inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 z-[1000] opacity-0 hidden">
-        <h2 class="text-2xl font-bold mb-4">در حال بارگیری برنامه...</h2>
-        <div class="w-64 bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-            <div id="loadingProgressBar" class="h-3 rounded-full bg-blue-500 transition-all duration-100 ease-linear" style="width: 0%;"></div>
-        </div>
-    </div>
-
     <div class="container bg-white dark:bg-gray-800 rounded-none sm:rounded-xl p-2 sm:p-6 md:p-8 w-full max-w-4xl relative pt-16 md:pt-20">
         <div class="absolute top-4 right-4 md:top-6 md:right-6 z-10">
             <button id="menuBtn" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400" aria-label="Open menu">
@@ -573,7 +558,7 @@
             <div id="aboutModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
                 <p class="mb-3">این برنامه به منظور مدیریت وظایف و افزایش انگیزه طراحی شده است.</p>
                 <p class="mb-3">این پروژه به صورت اختصاصی توسط <strong class="text-gray-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">سایت عمو لئو</a></strong> طراحی شده است. این نسخه، اولین و آخرین نسخه از این پروژه است.</p>
-                <p class="mb-3">تمامی حقوق متعلق به <strong class="text-gray-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
+                <p class="mb-3">تمامی حقوق متعلق به <strong class="text-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
                 <p class="mb-3">تاریخ: ۴ خرداد ۱۴۰۴</p>
             </div>
             <button id="closeAboutModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -847,10 +832,6 @@
         const cancelEditTaskBtn = document.getElementById('cancelEditTaskBtn');
 
         let currentTaskBeingEditedId = null; // To track the task currently being edited
-
-        // Loading screen elements
-        const loadingScreen = document.getElementById('loadingScreen');
-        const loadingProgressBar = document.getElementById('loadingProgressBar');
 
         // Helper function to convert Persian numbers to English
         function convertPersianNumbersToEnglish(inputString) {
@@ -2814,69 +2795,33 @@
             }
         });
 
-        // Function to hide the loading screen (with transition)
-        function hideLoadingScreen() {
-            loadingScreen.classList.remove('opacity-100');
-            loadingScreen.classList.add('opacity-0');
-            loadingScreen.addEventListener('transitionend', () => {
-                loadingScreen.style.display = 'none';
-                loadingScreen.style.pointerEvents = 'none';
-            }, { once: true });
-        }
-
         // Load data from local storage and initialize theme on window load
         window.onload = () => {
-            // Check if there's any data in localStorage (tasks is a good indicator)
-            const hasSavedData = localStorage.getItem('tasks') !== null && localStorage.getItem('tasks') !== '[]';
-            // Check if the page has already loaded in the current session
-            const hasLoadedBeforeInSession = sessionStorage.getItem('hasLoadedBefore') === 'true';
+            loadFromLocalStorage(); // Load all data
+            initializeTheme(); // Initialize theme
 
-            if (hasSavedData || hasLoadedBeforeInSession) {
-                // If data exists or already loaded in session, hide loading screen instantly
-                loadingScreen.style.transition = 'none'; // Remove transition for instant hide
-                loadingScreen.style.opacity = '0';
-                loadingScreen.style.display = 'none';
-                loadingScreen.style.pointerEvents = 'none';
-
-                loadFromLocalStorage();
-                initializeTheme();
-                if (!userName) {
-                    welcomeModal.classList.remove('hidden');
-                    void welcomeModalContent.offsetWidth;
-                    welcomeModalContent.classList.remove('opacity-0', 'scale-95');
-                    welcomeModalContent.classList.add('opacity-100', 'scale-100');
-                    userNameInput.focus();
-                }
-            } else {
-                // First time load with no saved data: show progress bar and animate fade out
-                loadingScreen.classList.remove('hidden'); // Make it visible
-                loadingScreen.classList.add('opacity-100'); // Ensure full opacity
-                loadingScreen.style.transition = 'opacity 0.5s ease-in-out'; // Re-apply transition for fade-out
-
-                let progress = 0;
-                const interval = setInterval(() => {
-                    progress += 10;
-                    if (progress > 100) progress = 100;
-                    loadingProgressBar.style.width = `${progress}%`;
-                    if (progress === 100) {
-                        clearInterval(interval);
-                        setTimeout(() => { // Keep a small delay for visual fill on first load
-                            loadFromLocalStorage();
-                            initializeTheme();
-                            if (!userName) {
-                                welcomeModal.classList.remove('hidden');
-                                void welcomeModalContent.offsetWidth;
-                                welcomeModalContent.classList.remove('opacity-0', 'scale-95');
-                                welcomeModalContent.classList.add('opacity-100', 'scale-100');
-                                userNameInput.focus();
-                            }
-                            hideLoadingScreen(); // Use the function with transition
-                            sessionStorage.setItem('hasLoadedBefore', 'true'); // Mark as loaded for this session
-                        }, 200);
-                    }
-                }, 100);
+            // Show welcome modal if user name is not set
+            if (!userName) {
+                welcomeModal.classList.remove('hidden');
+                void welcomeModalContent.offsetWidth; // Force reflow
+                welcomeModalContent.classList.remove('opacity-0', 'scale-95'); // Ensure animation starts
+                welcomeModalContent.classList.add('opacity-100', 'scale-100');
+                userNameInput.focus();
             }
         };
+
+        // Register Service Worker for offline capability
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.error('Service Worker registration failed:', error);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
