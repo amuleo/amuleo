@@ -433,7 +433,7 @@
 
         /* Adjusted icon size for achievement cards to be responsive and consistent */
         .achievement-item-card .icon {
-            font-size: clamp(2rem, 5vw, 2.5rem); /* Responsive icon size, min 2rem, max 2.5rem */
+            font-size: 2.25rem; /* Changed to text-4xl equivalent */
             margin-bottom: 0.75rem; /* Adjusted margin */
             color: var(--theme-primary); /* Icon color based on theme */
             transition: color 0.3s ease-in-out;
@@ -441,6 +441,37 @@
         .achievement-item-card:hover .icon {
             color: #fff; /* White icon on hover */
         }
+
+        /* Styles for unachieved achievements */
+        .achievement-item-card.unachieved {
+            opacity: 0.5; /* Faded appearance */
+            filter: grayscale(100%); /* Grayscale effect */
+            cursor: default; /* No pointer on hover for unachieved */
+        }
+        .achievement-item-card.unachieved:hover {
+            transform: none; /* No hover transform */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* No prominent shadow on hover */
+            background: linear-gradient(to bottom right, var(--theme-accent-bg), var(--theme-accent-bg)); /* No gradient on hover */
+            color: inherit; /* Inherit text color */
+        }
+        .dark .achievement-item-card.unachieved:hover {
+            background: linear-gradient(to bottom right, #374151, #1f2937);
+        }
+        .achievement-item-card.unachieved .icon {
+            color: var(--theme-secondary); /* Use secondary color for faded icon */
+        }
+        .achievement-item-card.unachieved:hover .icon {
+            color: var(--theme-secondary); /* Keep secondary color on hover */
+        }
+        .achievement-item-card.unachieved .name,
+        .achievement-item-card.unachieved .description {
+            color: var(--theme-secondary); /* Faded text color */
+        }
+        .achievement-item-card.unachieved:hover .name,
+        .achievement-item-card.unachieved:hover .description {
+            color: var(--theme-secondary); /* Keep faded text color on hover */
+        }
+
 
         .achievement-item-card .name {
             font-size: 1.1rem; /* Slightly smaller default name size */
@@ -489,7 +520,7 @@
 
         /* Adjusted icon size for achievement notification modal to be consistent with achievement cards */
         #achievementNotificationModalContent .icon {
-            font-size: clamp(3rem, 8vw, 4rem); /* Responsive icon size, slightly larger than card icons */
+            font-size: 2.25rem; /* Changed to text-4xl equivalent */
             margin-bottom: 1rem; /* Adjusted margin */
             color: #ffeb3b; /* Bright yellow for icon */
             animation: pulse 1.5s infinite; /* Pulsing animation for icon */
@@ -689,6 +720,17 @@
         </div>
     </div>
 
+    <div id="achievementNotificationModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100 transition-transform duration-300 transform scale-95 opacity-0" id="achievementNotificationModalContent">
+            <i id="achievementNotificationIcon" class="icon"></i>
+            <h3 id="achievementNotificationTitle" class="title"></h3>
+            <p id="achievementNotificationMessage" class="message"></p>
+            <button id="closeAchievementNotificationModalBtn" class="close-btn">
+                بستن
+            </button>
+        </div>
+    </div>
+
     <div id="helpModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="helpModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">راهنما</h3>
@@ -791,17 +833,6 @@
         </div>
     </div>
 
-    <div id="achievementNotificationModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100 transition-transform duration-300 transform scale-95 opacity-0" id="achievementNotificationModalContent">
-            <i id="achievementNotificationIcon" class="icon"></i>
-            <h3 id="achievementNotificationTitle" class="title"></h3>
-            <p id="achievementNotificationMessage" class="message"></p>
-            <button id="closeAchievementNotificationModalBtn" class="close-btn">
-                بستن
-            </button>
-        </div>
-    </div>
-
     <div id="confettiContainer" class="confetti-container"></div>
 
     <div id="undoMessageBox" class="fixed bottom-4 left-1/2 -translate-x-1/2 p-4 rounded-lg text-white bg-gray-800 dark:bg-gray-700 z-50 transition-all duration-300 transform scale-0 opacity-0 flex items-center justify-between min-w-[200px] max-w-sm cursor-pointer hidden">
@@ -820,6 +851,7 @@
         let totalCustomTasksCompleted = 0; // Counter for custom tasks completed
         let userName = null; // User's name
         let unlockedAchievements = []; // Array to store IDs of unlocked achievements
+        let achievementUnlockDates = {}; // New: Object to store unlock dates for achievements
         let hasPinnedTaskEver = false; // New: Tracks if a task has ever been pinned
 
         const pointsPerNormalTask = 10; // Points for normal tasks
@@ -1138,7 +1170,7 @@
             void achievementNotificationModalContent.offsetWidth; // Force reflow
             achievementNotificationModalContent.classList.remove('opacity-0', 'scale-95');
             achievementNotificationModalContent.classList.add('opacity-100', 'scale-100');
-            triggerConfetti(); // Trigger confetti for achievement modals
+            triggerConfetti();
             // The close button for this modal will set isAchievementNotificationDisplaying = false and call processAchievementNotificationQueue()
         }
 
@@ -1400,6 +1432,7 @@
 
                 if (isAchieved && !unlockedAchievements.includes(achievement.name)) {
                     unlockedAchievements.push(achievement.name);
+                    achievementUnlockDates[achievement.name] = new Date().toISOString(); // Store unlock date
                     showMessageBox(`دستاورد: ${achievement.name}`, 'success', { // Changed to use showMessageBox for achievement type
                         type: 'achievement',
                         iconClass: achievement.icon,
@@ -1422,6 +1455,7 @@
             localStorage.setItem('totalCustomTasksCompleted', totalCustomTasksCompleted);
             localStorage.setItem('userName', userName);
             localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements)); // Save unlocked achievements
+            localStorage.setItem('achievementUnlockDates', JSON.stringify(achievementUnlockDates)); // Save achievement unlock dates
             localStorage.setItem('hasPinnedTaskEver', hasPinnedTaskEver); // Save new flag
         }
 
@@ -1436,6 +1470,7 @@
             const storedTotalCustomTasksCompleted = localStorage.getItem('totalCustomTasksCompleted');
             const storedUserName = localStorage.getItem('userName');
             const storedUnlockedAchievements = localStorage.getItem('unlockedAchievements'); // Load unlocked achievements
+            const storedAchievementUnlockDates = localStorage.getItem('achievementUnlockDates'); // Load achievement unlock dates
             const storedHasPinnedTaskEver = localStorage.getItem('hasPinnedTaskEver'); // Load new flag
 
             if (storedTasks) {
@@ -1477,6 +1512,22 @@
                     unlockedAchievements = [];
                 }
             }
+            if (storedAchievementUnlockDates) {
+                try {
+                    achievementUnlockDates = JSON.parse(storedAchievementUnlockDates);
+                } catch (e) {
+                    console.error("Error parsing achievement unlock dates from Local Storage:", e);
+                    achievementUnlockDates = {};
+                }
+            } else {
+                // If achievementUnlockDates is not found (old version), populate it with current unlockedAchievements
+                unlockedAchievements.forEach(achName => {
+                    if (!achievementUnlockDates[achName]) {
+                        achievementUnlockDates[achName] = new Date().toISOString(); // Set current date as unlock date
+                    }
+                });
+            }
+
             if (storedHasPinnedTaskEver) {
                 hasPinnedTaskEver = (storedHasPinnedTaskEver === 'true'); // Convert string to boolean
             }
@@ -1892,7 +1943,12 @@
         // Function to render achievements into the Achievements Modal
         function renderAchievementsIntoModal() {
             achievementsModalBody.innerHTML = ''; // Clear existing achievements
-            const achievedAndSorted = achievementsData.filter(achievement => {
+
+            const achievedList = [];
+            const unachievedList = [];
+
+            // Populate achieved and unachieved lists
+            achievementsData.forEach(achievement => {
                 let isAchieved = false;
                 if (achievement.type === 'level') {
                     const levelInfo = levelPointsThresholds.find(l => l.name === achievement.name);
@@ -1924,33 +1980,55 @@
                         isAchieved = true;
                     }
                 }
-                return isAchieved;
-            }).sort((a, b) => {
-                // Sort by type (levels first, then others) and then by value/level
+
+                if (isAchieved) {
+                    achievedList.push({ ...achievement, unlockedDate: achievementUnlockDates[achievement.name] });
+                } else {
+                    unachievedList.push(achievement);
+                }
+            });
+
+            // Sort achieved list by unlocked date (oldest first)
+            achievedList.sort((a, b) => {
+                const dateA = new Date(a.unlockedDate || 0); // Use 0 for achievements without a date (shouldn't happen with new logic)
+                const dateB = new Date(b.unlockedDate || 0);
+                return dateA.getTime() - dateB.getTime();
+            });
+
+            // Sort unachieved list (levels first, then by value/level)
+            unachievedList.sort((a, b) => {
                 if (a.type === 'level' && b.type !== 'level') return -1;
                 if (a.type !== 'level' && b.type === 'level') return 1;
                 if (a.type === 'level' && b.type === 'level') return a.level - b.level;
                 return (a.value || 0) - (b.value || 0); // Sort other types by value
             });
 
+            const sortedAchievements = [...achievedList, ...unachievedList];
 
-            if (achievedAndSorted.length === 0) {
+            if (sortedAchievements.length === 0) {
                 const noAchievementsMessage = document.createElement('p');
                 noAchievementsMessage.className = 'text-gray-500 dark:text-gray-400 text-center col-span-full py-4';
                 noAchievementsMessage.textContent = 'هنوز دستاوردی کسب نشده است.';
                 achievementsModalBody.appendChild(noAchievementsMessage);
             } else {
-                achievedAndSorted.forEach(achievement => {
+                sortedAchievements.forEach(achievement => {
                     const achievementItem = document.createElement('div');
-                    achievementItem.className = `achievement-item-card`;
+                    const isAchieved = unlockedAchievements.includes(achievement.name);
                     
+                    achievementItem.className = `achievement-item-card ${isAchieved ? '' : 'unachieved'}`;
+                    
+                    // Determine which icon to show
+                    const displayIcon = isAchieved ? achievement.icon : 'fa-solid fa-lock';
+
                     achievementItem.innerHTML = `
-                        <i class="${achievement.icon} icon"></i>
+                        <i class="${displayIcon} icon"></i>
                         <span class="name">${achievement.name}</span>
                         `;
                     
-                    // Add click listener to show details
-                    achievementItem.addEventListener('click', () => showDetailModal(achievement.type, achievement.type === 'level' ? achievement.level : achievement.name));
+                    // Add click listener to show details only for achieved items
+                    if (isAchieved) {
+                        achievementItem.addEventListener('click', () => showDetailModal(achievement.type, achievement.type === 'level' ? achievement.level : achievement.name));
+                    }
                     
                     achievementsModalBody.appendChild(achievementItem);
                 });
@@ -2272,7 +2350,7 @@
                     menu.remove();
                     document.removeEventListener('click', closeMenu);
                 } else if (isInteractiveElement && !menu.contains(e.target)) {
-                    // If an interactive element outside the menu was clicked, close the menu but allow the element's action.
+                    // If an interactive element outside the menu was clicked, close the menu, but allow the element's action.
                     menu.remove();
                     document.removeEventListener('click', closeMenu);
                 }
@@ -2293,7 +2371,7 @@
             renderTasks(taskId); // Re-render to show arrows and disable other items, focus on the reordering task
         }
 
-        // Function to deactivate reordering mode
+        // Function to deactivate reorder mode
         function deactivateReorderMode() {
             isReorderingMode = false;
             reorderingTaskId = null;
@@ -2386,11 +2464,11 @@
         // Handler for editTaskImportanceSelect change event
         function handleEditTaskImportanceChange() {
             if (editTaskImportanceSelect.value === 'custom') {
-                editTaskCustomPointsInput.classList.remove('hidden');
-                editTaskCustomPointsInput.focus();
+                customPointsInput.classList.remove('hidden');
+                customPointsInput.focus();
             } else {
-                editTaskCustomPointsInput.classList.add('hidden');
-                editTaskCustomPointsInput.value = ''; // Clear value if hidden
+                customPointsInput.classList.add('hidden');
+                customPointsInput.value = ''; // Clear value if hidden
             }
         }
 
@@ -2777,7 +2855,10 @@
             setTimeout(() => {
                 achievementNotificationModal.classList.add('hidden'); // Fully hide the modal overlay
                 isAchievementNotificationDisplaying = false; // Release the flag ONLY AFTER hiding
-                processAchievementNotificationQueue(); // Process next in queue
+                // Call processAchievementNotificationQueue with a delay for the *next* modal
+                setTimeout(() => { // NEW: Add 600ms delay here
+                    processAchievementNotificationQueue(); // Process next in queue
+                }, 600); // 600ms delay before showing next modal
             }, 350); // A little buffer after 300ms transition
         });
 
@@ -2996,6 +3077,7 @@
                 totalCustomTasksCompleted: totalCustomTasksCompleted,
                 userName: userName,
                 unlockedAchievements: unlockedAchievements, // Include unlocked achievements in export
+                achievementUnlockDates: achievementUnlockDates, // Include achievement unlock dates in export
                 hasPinnedTaskEver: hasPinnedTaskEver // Include new flag in export
             };
             const jsonString = JSON.stringify(dataToSave, null, 2);
@@ -3048,6 +3130,7 @@
                         typeof importedData.totalCustomTasksCompleted === 'number' &&
                         (typeof importedData.userName === 'string' || importedData.userName === null || importedData.userName === undefined) &&
                         (typeof importedData.unlockedAchievements === 'object' && Array.isArray(importedData.unlockedAchievements) || typeof importedData.unlockedAchievements === 'undefined') &&
+                        (typeof importedData.achievementUnlockDates === 'object' || typeof importedData.achievementUnlockDates === 'undefined') &&
                         (typeof importedData.hasPinnedTaskEver === 'boolean' || typeof importedData.hasPinnedTaskEver === 'undefined')
                     ) {
                         tasks = importedData.tasks;
@@ -3059,6 +3142,7 @@
                         totalCustomTasksCompleted = importedData.totalCustomTasksCompleted;
                         userName = importedData.userName || null;
                         unlockedAchievements = importedData.unlockedAchievements || [];
+                        achievementUnlockDates = importedData.achievementUnlockDates || {};
                         hasPinnedTaskEver = importedData.hasPinnedTaskEver || false;
 
                         // Ensure imported tasks have the new 'isPinned' property
