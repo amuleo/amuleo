@@ -2826,11 +2826,29 @@
 
         // Load data from local storage and initialize theme on window load
         window.onload = () => {
-            const hasSavedData = localStorage.getItem('tasks') !== null;
+            // Check if there's any data in localStorage (tasks is a good indicator)
+            const hasSavedData = localStorage.getItem('tasks') !== null && localStorage.getItem('tasks') !== '[]';
+            // Check if the page has already loaded in the current session
             const hasLoadedBeforeInSession = sessionStorage.getItem('hasLoadedBefore') === 'true';
 
-            if (!hasLoadedBeforeInSession && !hasSavedData) {
-                // First load experience: show progress bar and fade out
+            if (hasSavedData || hasLoadedBeforeInSession) {
+                // If data exists or already loaded in session, hide loading screen instantly
+                loadingScreen.style.transition = 'none'; // Remove transition for instant hide
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.display = 'none';
+                loadingScreen.style.pointerEvents = 'none';
+
+                loadFromLocalStorage();
+                initializeTheme();
+                if (!userName) {
+                    welcomeModal.classList.remove('hidden');
+                    void welcomeModalContent.offsetWidth;
+                    welcomeModalContent.classList.remove('opacity-0', 'scale-95');
+                    welcomeModalContent.classList.add('opacity-100', 'scale-100');
+                    userNameInput.focus();
+                }
+            } else {
+                // First time load with no saved data: show progress bar and animate fade out
                 let progress = 0;
                 const interval = setInterval(() => {
                     progress += 10;
@@ -2849,27 +2867,10 @@
                                 userNameInput.focus();
                             }
                             hideLoadingScreen(); // Use the function with transition
-                            sessionStorage.setItem('hasLoadedBefore', 'true');
+                            sessionStorage.setItem('hasLoadedBefore', 'true'); // Mark as loaded for this session
                         }, 200);
                     }
                 }, 100);
-            } else {
-                // Subsequent loads: instant hide
-                loadFromLocalStorage();
-                initializeTheme();
-                if (!userName) {
-                    welcomeModal.classList.remove('hidden');
-                    void welcomeModalContent.offsetWidth;
-                    welcomeModalContent.classList.remove('opacity-0', 'scale-95');
-                    welcomeModalContent.classList.add('opacity-100', 'scale-100');
-                    userNameInput.focus();
-                }
-                // Apply instant hide classes and remove transition
-                loadingScreen.classList.add('instant-hide'); // Add new class to remove transition
-                loadingScreen.classList.remove('opacity-100'); // Ensure opacity is 0
-                loadingScreen.classList.add('opacity-0');
-                loadingScreen.style.display = 'none'; // Instantly hide
-                loadingScreen.style.pointerEvents = 'none';
             }
         };
     </script>
