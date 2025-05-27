@@ -7,9 +7,10 @@
     <meta name="description" content="زی تسک: پلتفرم مدیریت وظایف گیمیفای شده برای افزایش انگیزه و بهره‌وری. وظایف خود را مدیریت کنید، زی پوینت کسب کنید و به سطوح بالاتر برسید.">
     <meta name="keywords" content="مدیریت وظایف, گیمیفیکیشن, زی تسک, Z-Point, بهره‌وری, سازماندهی, برنامه ریزی, انگیزه, وظایف روزانه">
     <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✅</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@33.003/misc/Farsi-Digits/Vazirmatn-FD-font-face.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==\" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* CSS variables for dynamic theming */
         :root {
@@ -224,7 +225,7 @@
             pointer-events: none;
         }
         .task-item.reordering-active {
-            box-shadow: 0 0 0 2px var(--theme-primary); /* Highlight the active reordering task */
+            /* Removed box-shadow for cleaner look */
         }
 
         /* Highlight animation for focus */
@@ -318,7 +319,7 @@
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); /* Keep shadow for modals for visibility */
             padding: 1.5rem;
             width: 100%;
-            max-width: 400px;
+            max-width: 400px; /* Kept for general modal content */
             transform: translateY(-20px);
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
             opacity: 0;
@@ -349,14 +350,18 @@
         /* Mobile specific styles for the main container */
         @media (max-width: 639px) { /* Tailwind's 'sm' breakpoint is 640px */
             body {
-                padding-left: 0;
-                padding-right: 0;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                padding-top: 0 !important; /* Remove top padding on mobile */
+                padding-bottom: 0 !important; /* Remove bottom padding on mobile */
             }
             .container {
                 border-radius: 0 !important; /* Override rounded corners */
                 box-shadow: none !important; /* Override shadow */
                 padding-left: 0.5rem !important; /* Smaller padding on mobile */
                 padding-right: 0.5rem !important;
+                padding-top: 0 !important; /* Ensure no top padding from container itself */
+                padding-bottom: 0 !important; /* Ensure no bottom padding from container itself */
             }
             /* Header adjustments for mobile */
             .header-mobile-flex {
@@ -366,15 +371,19 @@
             }
             .header-mobile-stats {
                 display: flex;
-                flex-wrap: wrap;
+                flex-wrap: nowrap; /* Prevent wrapping on mobile */
                 justify-content: center;
                 gap: 0.5rem; /* Smaller gap for mobile stats */
                 margin-top: 1rem;
+                overflow-x: auto; /* Enable horizontal scroll */
+                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+                padding-bottom: 0.5rem; /* Add some padding for scrollbar if needed */
             }
             .header-mobile-stats > div {
-                flex: 1 1 auto; /* Allow items to grow/shrink, but not wrap too aggressively */
-                min-width: 100px; /* Ensure a minimum width */
-                max-width: 48%; /* Two items per row */
+                flex-shrink: 0; /* Prevent shrinking */
+                min-width: fit-content; /* Ensure content fits */
+                padding-left: 0.75rem; /* Adjust padding for items */
+                padding-right: 0.75rem;
             }
         }
 
@@ -393,10 +402,145 @@
             height: 16px; /* Adjust icon size if needed, h-4 w-4 is 16px */
             width: 16px;
         }
+
+        /* Styles for the new Achievements Modal */
+        .achievement-item-card {
+            background: linear-gradient(to bottom right, var(--theme-accent-bg), var(--theme-accent-bg)); /* Use accent background for base */
+            border: 1px solid var(--theme-input-border);
+            border-radius: 0.75rem; /* More rounded corners */
+            padding: 1.5rem; /* More padding */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            min-height: 150px; /* Ensure a minimum height */
+            max-height: 200px; /* Prevent excessive stretching */
+            justify-content: center; /* Center content vertically */
+        }
+        .achievement-item-card:hover {
+            transform: translateY(-5px) scale(1.02); /* Lift and grow on hover */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* More prominent shadow on hover */
+            background: linear-gradient(to bottom right, var(--theme-secondary), var(--theme-primary)); /* Gradient on hover */
+            color: #fff; /* White text on hover */
+        }
+        .dark .achievement-item-card {
+            background: linear-gradient(to bottom right, #374151, #1f2937); /* Darker gradient for dark mode */
+            border-color: #4b5563;
+        }
+        .dark .achievement-item-card:hover {
+            background: linear-gradient(to bottom right, var(--theme-secondary), var(--theme-primary)); /* Dark mode hover gradient */
+            color: #fff;
+        }
+
+        .achievement-item-card .icon {
+            font-size: 2.5rem; /* Slightly smaller default icon size */
+            margin-bottom: 0.75rem; /* Adjusted margin */
+            color: var(--theme-primary); /* Icon color based on theme */
+            transition: color 0.3s ease-in-out;
+        }
+        .achievement-item-card:hover .icon {
+            color: #fff; /* White icon on hover */
+        }
+
+        .achievement-item-card .name {
+            font-size: 1.1rem; /* Slightly smaller default name size */
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--theme-accent-text);
+            transition: color 0.3s ease-in-out;
+        }
+        .achievement-item-card:hover .name {
+            color: #fff;
+        }
+
+        .achievement-item-card .description {
+            font-size: 0.9rem;
+            color: var(--theme-secondary);
+            transition: color 0.3s ease-in-out;
+            /* Removed description from here as it's now only in detail modal */
+            display: none; /* Hide description in the main achievement card */
+        }
+        .achievement-item-card:hover .description {
+            color: #e5e7eb; /* Lighter text on hover */
+        }
+
+        /* New Achievement Notification Modal Styles */
+        #achievementNotificationModal {
+            background-color: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
+        }
+        #achievementNotificationModalContent {
+            background: linear-gradient(to bottom right, #6366f1, #8b5cf6); /* Vibrant gradient */
+            color: white;
+            border-radius: 1rem; /* More rounded */
+            padding: 1.5rem; /* Adjusted padding */
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Stronger shadow */
+            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Bouncy animation */
+            /* Removed max-width and max-height from here to allow content to dictate size */
+            /* Removed overflow-y: auto; */
+            position: relative;
+            overflow: hidden; /* For confetti */
+            width: 90%; /* Responsive width */
+            max-width: 400px; /* Max width for the modal content itself */
+        }
+        .dark #achievementNotificationModalContent {
+            background: linear-gradient(to bottom right, #4f46e5, #7c3aed); /* Darker vibrant gradient */
+        }
+
+        #achievementNotificationModalContent .icon {
+            /* Increased icon size */
+            font-size: clamp(5rem, 12vw, 8rem); /* Responsive icon size, min 5rem (80px), max 8rem (128px) */
+            margin-bottom: 1rem; /* Adjusted margin */
+            color: #ffeb3b; /* Bright yellow for icon */
+            animation: pulse 1.5s infinite; /* Pulsing animation for icon */
+        }
+
+        #achievementNotificationModalContent .title {
+            font-size: 1.5rem; /* Adjusted title size */
+            font-weight: bold;
+            margin-bottom: 0.5rem; /* Adjusted margin */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        #achievementNotificationModalContent .message {
+            font-size: 1rem; /* Reverted message size to 1rem */
+            margin-bottom: 1.5rem; /* Adjusted margin */
+            line-height: 1.5;
+        }
+
+        #achievementNotificationModalContent .close-btn {
+            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px; /* Pill shape */
+            font-weight: bold;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+            border: 2px solid rgba(255, 255, 255, 0.5); /* White border */
+        }
+        #achievementNotificationModalContent .close-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
-<body class="px-0 py-2 sm:p-4 flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-    <div class="container bg-white dark:bg-gray-800 rounded-none sm:rounded-xl p-2 sm:p-6 md:p-8 w-full max-w-4xl relative pt-16 md:pt-20">
+<body class="px-0 py-0 sm:p-4 flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+    <div class="container bg-white dark:bg-gray-800 rounded-none sm:rounded-xl p-0 sm:p-6 md:p-8 w-full max-w-4xl relative pt-16 md:pt-20">
         <div class="absolute top-4 right-4 md:top-6 md:right-6 z-10">
             <button id="menuBtn" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400" aria-label="Open menu">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -406,6 +550,9 @@
             <div id="menuDropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg py-1 hidden z-20">
                 <a href="#" id="profileMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out flex items-center">
                     <i class="fa-solid fa-user ml-2"></i> پروفایل
+                </a>
+                <a href="#" id="achievementsMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out flex items-center">
+                    <i class="fa-solid fa-trophy ml-2"></i> دستاوردها
                 </a>
                 <a href="#" id="helpMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out flex items-center">
                     <i class="fa-solid fa-circle-question ml-2"></i> راهنما
@@ -433,16 +580,16 @@
 
         <div class="flex flex-col items-center md:flex-row md:justify-between mb-6 border-b pb-4 border-gray-200 dark:border-gray-700 md:px-16 header-mobile-flex">
             <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 text-center w-full md:w-auto sm:text-5xl md:text-6xl md:text-right">زی تسک</h1>
-            <div class="flex flex-wrap justify-center gap-2 sm:flex-row sm:space-x-4 sm:space-x-reverse w-full md:w-auto header-mobile-stats">
-                <div class="flex items-center bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full">
+            <div class="flex flex-wrap justify-center gap-2 sm:flex-row sm:space-x-4 sm:space-x-reverse w-full md:w-auto header-mobile-stats overflow-x-auto whitespace-nowrap">
+                <div class="flex items-center bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full flex-shrink-0">
                     <i class="fa-solid fa-coins text-xl ml-2"></i>
                     <span class="text-base sm:text-lg font-semibold">پوینت: <span id="zPoint" class="text-yellow-800 dark:text-yellow-200">0</span></span>
                 </div>
-                <div class="flex items-center bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full clickable-item" id="currentLevelDisplay">
+                <div class="flex items-center bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full clickable-item flex-shrink-0" id="currentLevelDisplay">
                     <i id="levelIcon" class="text-xl ml-2"></i>
                     <span class="text-base sm:text-lg font-semibold">سطح: <span id="level" class="text-blue-800 dark:text-blue-200">1</span></span>
                 </div>
-                <div class="flex items-center bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full">
+                <div class="flex items-center bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full flex-shrink-0">
                     <i class="fa-solid fa-fire text-xl ml-2"></i>
                     <span class="text-base sm:text-lg font-semibold">زنجیره: <span id="dailyStreak" class="text-purple-800 dark:text-purple-200">0</span></span>
                 </div>
@@ -457,17 +604,17 @@
             <p id="progressText" class="text-sm text-gray-500 dark:text-gray-400 mt-1 text-left">0%</p>
         </div>
 
-        <div class="mb-6 px-2 md:px-0">
+        <!-- <div class="mb-6 px-2 md:px-0">
             <h2 class="text-lg sm:text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">دستاوردها:</h2>
             <div id="achievementsList" class="flex flex-wrap gap-3">
                 <p id="noAchievementsMessage" class="text-gray-500 dark:text-gray-400">هنوز دستاوردی کسب نشده است.</p>
             </div>
-        </div>
+        </div> -->
 
-        <div class="mb-8 p-4 rounded-lg" id="addTaskSection">
-            <h2 class="text-xl sm:text-2xl font-semibold mb-4" id="addTaskTitle">افزودن وظیفه جدید</h2>
+        <div class="mb-8 p-4 rounded-lg bg-gray-100 dark:bg-gray-900" id="addTaskSection">
+            <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-50" id="addTaskTitle">افزودن وظیفه جدید</h2>
             <div class="flex flex-col md:flex-row gap-4 items-stretch md:items-center">
-                <input type="text" id="taskInput" placeholder="نام وظیفه را وارد کنید..." maxlength="15"
+                <input type="text" id="taskInput" placeholder="نام وظیفه را وارد کنید..." maxlength="30"
                        class="flex-grow p-3 border rounded-lg text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12 text-right">
                 <select id="importanceSelect"
                         class="p-3 border rounded-lg text-base sm:text-lg text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none h-12 w-full md:w-40 text-right">
@@ -475,7 +622,7 @@
                     <option value="normal" selected>عادی</option>
                     <option value="custom">سفارشی</option>
                 </select>
-                <input type="text" id="customPointsInput" placeholder="پوینت سفارشی (حداکثر ۵۰)" inputmode="numeric"
+                <input type="text" id="customPointsInput" placeholder="پوینت سفارشی (حداکثر ۲۰)" inputmode="numeric"
                        class="p-3 border rounded-lg text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12 w-full md:w-32 hidden text-right">
                 <button id="addTaskBtn"
                         class="text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 text-lg w-full md:w-auto">
@@ -536,6 +683,17 @@
             <div id="profileModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
                 </div>
             <button id="closeProfileModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="achievementsModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="achievementsModalContent">
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">دستاوردها</h3>
+            <div id="achievementsModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                </div>
+            <button id="closeAchievementsModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
@@ -626,7 +784,7 @@
 
     <div id="editTaskModal" class="dynamic-modal hidden">
         <div class="dynamic-modal-content text-gray-800 dark:text-gray-100" id="editTaskModalContent"> <h3 class="text-xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">ویرایش وظیفه</h3>
-            <input type="text" id="editTaskNameInput" placeholder="نام وظیفه را وارد کنید..." maxlength="15"
+            <input type="text" id="editTaskNameInput" placeholder="نام وظیفه را وارد کنید..." maxlength="30"
                    class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 text-right">
             <select id="editTaskImportanceSelect"
                     class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 appearance-none text-right">
@@ -634,12 +792,23 @@
                 <option value="normal">عادی</option>
                 <option value="custom">سفارشی</option>
             </select>
-            <input type="text" id="editTaskCustomPointsInput" placeholder="پوینت سفارشی (حداکثر ۵۰)" inputmode="numeric"
+            <input type="text" id="editTaskCustomPointsInput" placeholder="پوینت سفارشی (حداکثر ۲۰)" inputmode="numeric"
                    class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 hidden text-right">
             <div class="flex justify-end space-x-2 space-x-reverse">
                 <button id="saveEditedTaskBtn" class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white">ذخیره</button>
                 <button id="cancelEditTaskBtn" class="bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-100">لغو</button>
             </div>
+        </div>
+    </div>
+
+    <div id="achievementNotificationModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100 transition-transform duration-300 transform scale-95 opacity-0" id="achievementNotificationModalContent">
+            <i id="achievementNotificationIcon" class="icon"></i>
+            <h3 id="achievementNotificationTitle" class="title"></h3>
+            <p id="achievementNotificationMessage" class="message"></p>
+            <button id="closeAchievementNotificationModalBtn" class="close-btn">
+                بستن
+            </button>
         </div>
     </div>
 
@@ -660,10 +829,12 @@
         let lastCompletionDate = null; // Date of last task completion
         let totalCustomTasksCompleted = 0; // Counter for custom tasks completed
         let userName = null; // User's name
+        let unlockedAchievements = []; // Array to store IDs of unlocked achievements
+        let hasPinnedTaskEver = false; // New: Tracks if a task has ever been pinned
 
         const pointsPerNormalTask = 10; // Points for normal tasks
         const pointsPerImportantTask = 25; // Points for important tasks
-        const MAX_CUSTOM_POINTS = 50; // Max points for custom tasks
+        const MAX_CUSTOM_POINTS = 20; // Max points for custom tasks (Changed from 50 to 20)
         const TASKS_PER_PAGE = 7; // Number of tasks displayed per page
 
         // Pagination status variables
@@ -676,57 +847,77 @@
 
         // Points required to reach each level (Level 1 is zero points)
         const levelPointsThresholds = [
-            { name: 'نوب', points: 0, icon: 'fa-solid fa-baby' },
-            { name: 'مبتدی', points: 30, icon: 'fa-solid fa-seedling' },
-            { name: 'جنگجو', points: 70, icon: 'fa-solid fa-helmet-battle' },
-            { name: 'شوالیه', points: 120, icon: 'fa-solid fa-shield-halved' },
-            { name: 'هیرو', points: 180, icon: 'fa-solid fa-mask' },
-            { name: 'استاد', points: 250, icon: 'fa-solid fa-graduation-cap' },
-            { name: 'فرمانده', points: 330, icon: 'fa-solid fa-star' },
-            { name: 'سلطان', points: 420, icon: 'fa-solid fa-crown' },
-            { name: 'کار درست', points: 520, icon: 'fa-solid fa-dragon' },
-            { name: 'خفن', points: 630, icon: 'fa-solid fa-star-and-crescent' }, // Added icon for Level 10
-            { name: 'جاودان', points: 750, icon: 'fa-solid fa-infinity' },
-            { name: 'کیهان‌سالار', points: 900, icon: 'fa-solid fa-bolt' }, // Renamed from خدایگان
-            { name: 'کیهان‌نورد', points: 1080, icon: 'fa-solid fa-rocket' },
-            { name: 'بتمن', points: 1290, icon: 'fa-solid fa-user-secret' }, // Using a generic hero icon
-            { name: 'سیگما', points: 1500, icon: 'fa-solid fa-chess-king' }
+            { name: 'نوب', points: 0, icon: 'fa-solid fa-child', motivational: 'شروع هر سفر با گام اول است. شما در ابتدای مسیر هستید و آماده برای کشف توانایی‌هایتان!' },
+            { name: 'مبتدی', points: 50, icon: 'fa-solid fa-seedling', motivational: 'شما با تلاش و پشتکار، بذر موفقیت را کاشته‌اید. به رشد خود ادامه دهید!' },
+            { name: 'جنگجو', points: 120, icon: 'fa-solid fa-hand-fist', motivational: 'شما با هر چالش، قوی‌تر و مصمم‌تر می‌شوید. روحیه جنگجویانه شما ستودنی است!' },
+            { name: 'شوالیه', points: 220, icon: 'fa-solid fa-shield-halved', motivational: 'با هر وظیفه، زره‌ای از تجربه بر تن می‌کنید. شجاعت شما راهگشاست!' },
+            { name: 'هیرو', points: 350, icon: 'fa-solid fa-mask', motivational: 'شما الهام‌بخش دیگران هستید. قدم‌هایتان ردپایی از موفقیت بر جای می‌گذارد!' },
+            { name: 'استاد', points: 500, icon: 'fa-solid fa-graduation-cap', motivational: 'دانش و مهارت شما در حال شکوفایی است. از هر تجربه درسی بیاموزید!' },
+            { name: 'فرمانده', points: 700, icon: 'fa-solid fa-star', motivational: 'اکنون می‌توانید رهبری کنید و مسیر را برای دیگران هموار سازید. قدرت در دستان شماست!' },
+            { name: 'سلطان', points: 950, icon: 'fa-solid fa-crown', motivational: 'شما بر قلمرو وظایف خود مسلط شده‌اید. با اقتدار به سوی اهداف بزرگتر گام بردارید!' },
+            { name: 'کار درست', points: 1250, icon: 'fa-solid fa-dragon', motivational: 'شما به قدرتی بی‌نظیر دست یافته‌اید. هیچ مانعی جلودار شما نخواهد بود!' },
+            { name: 'خفن', points: 1600, icon: 'fa-solid fa-fire-alt', motivational: 'شما به یک ستاره درخشان تبدیل شده‌اید. انرژی و خلاقیت شما بی‌حد و مرز است و هر کاری را به بهترین شکل ممکن انجام می‌دهید!' },
+            { name: 'جاودان', points: 2000, icon: 'fa-solid fa-infinity', motivational: 'پشتکار شما بی‌حد و مرز است. این مسیر، راهی برای جاودانگی دستاوردهای شماست!' },
+            { name: 'کیهان‌سالار', points: 2500, icon: 'fa-solid fa-bolt', motivational: 'شما با سرعتی باورنکردنی در حال پیشرفت هستید. انرژی شما جهان را به حرکت درمی‌آورد!' },
+            { name: 'کیهان‌نورد', points: 3100, icon: 'fa-solid fa-rocket', motivational: 'شما مرزها را درنوردیده‌اید و به سوی ناشناخته‌ها پرواز می‌کنید. آسمان حد شما نیست!' },
+            { name: 'بتمن', points: 3800, icon: 'fa-solid fa-user-secret', motivational: 'شما در سایه‌ها نیز قدرتمندید. با هوش و اراده، هر مشکلی را حل می‌کنید!' },
+            { name: 'سیگما', points: 5000, icon: 'fa-solid fa-chess-king', motivational: 'شما به اوج رسیده‌اید. با خرد و استراتژی، هر بازی را به نفع خود به پایان می‌رسانید!' }
         ];
 
         // Achievement data with Font Awesome icons
         const achievementsData = [
-            { level: 1, name: 'نوب', icon: 'fa-solid fa-baby', type: 'level' },
-            { level: 2, name: 'مبتدی', icon: 'fa-solid fa-seedling', type: 'level' },
-            { level: 3, name: 'جنگجو', icon: 'fa-solid fa-helmet-battle', type: 'level' },
-            { level: 4, name: 'شوالیه', icon: 'fa-solid fa-shield-halved', type: 'level' },
-            { level: 5, name: 'هیرو', icon: 'fa-solid fa-mask', type: 'level' },
-            { level: 6, name: 'استاد', icon: 'fa-solid fa-graduation-cap', type: 'level' },
-            { level: 7, name: 'فرمانده', icon: 'fa-solid fa-star', type: 'level' },
-            { level: 8, name: 'سلطان', icon: 'fa-solid fa-crown', type: 'level' },
-            { level: 9, name: 'کار درست', icon: 'fa-solid fa-dragon', type: 'level' },
-            { type: 'totalTasks', value: 10, name: 'ده وظیفه', icon: 'fa-solid fa-check-double', description: 'با تکمیل ۱۰ وظیفه کسب می‌شود.' },
-            { type: 'totalTasks', value: 50, name: 'پنجاه وظیفه', icon: 'fa-solid fa-clipboard-check', description: 'با تکمیل ۵۰ وظیفه کسب می‌شود.' },
-            { type: 'importantTasks', value: 5, name: 'پنج وظیفه مهم', icon: 'fa-solid fa-triangle-exclamation', description: 'با تکمیل ۵ وظیفه مهم کسب می‌شود.' },
-            { type: 'importantTasks', value: 10, name: 'ده وظیفه مهم', icon: 'fa-solid fa-circle-exclamation', description: 'با تکمیل ۱۰ وظیفه مهم کسب می‌شود.' },
-            { type: 'streak', value: 3, name: 'زنجیره سه روزه', icon: 'fa-solid fa-fire', description: 'با تکمیل حداقل یک وظیفه برای ۳ روز متوالی کسب می‌شود.' },
-            { type: 'streak', value: 7, name: 'زنجیره هفت روزه', icon: 'fa-solid fa-fire-flame-curved', description: 'با تکمیل حداقل یک وظیفه برای ۷ روز متوالی کسب می‌شود.' },
-            { type: 'streak', value: 14, name: 'زنجیره دو هفته‌ای', icon: 'fa-solid fa-calendar-days', description: 'با تکمیل حداقل یک وظیفه برای ۱۴ روز متوالی کسب می‌شود.' },
-            { type: 'streak', value: 30, name: 'زنجیره ماهانه', icon: 'fa-solid fa-calendar-check', description: 'با تکمیل حداقل یک وظیفه برای ۳۰ روز متوالی کسب می‌شود.' },
-            { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: 'fa-solid fa-list-check', description: 'با تکمیل ۱۰۰ وظیفه کسب می‌شود.' },
-            { type: 'totalTasks', value: 250, name: 'دویست و پنجاه وظیفه', icon: 'fa-solid fa-trophy', description: 'با تکمیل ۲۵۰ وظیفه کسب می‌شود.' },
-            { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: 'fa-solid fa-award', description: 'با جمع‌آوری ۵۰۰ پوینت کسب می‌شود.' },
-            { type: 'importantTasks', value: 20, name: 'بیست وظیفه مهم', icon: 'fa-solid fa-bell', description: 'با تکمیل ۲۰ وظیفه مهم کسب می‌شود.' },
-            { type: 'customTasks', value: 1, name: 'اولین وظیفه سفارشی', icon: 'fa-solid fa-lightbulb', description: 'با تکمیل اولین وظیفه با پوینت سفارشی کسب می‌شود.' },
-            { type: 'customTasks', value: 5, name: 'پنج وظیفه سفارشی', icon: 'fa-solid fa-gear', description: 'با تکمیل ۵ وظیفه با پوینت سفارشی کسب می‌شود.' },
-            { type: 'customTasks', value: 10, name: 'ده وظیفه سفارشی', icon: 'fa-solid fa-gears', description: 'با تکمیل ۱۰ وظیفه با پوینت سفارشی کسب می‌شود.' },
-            { type: 'points', value: 500, name: 'پانصد پوینت', icon: 'fa-solid fa-money-bill-wave', description: 'با جمع‌آوری ۵۰۰ پوینت کسب می‌شود.' },
-            { type: 'points', value: 1000, name: 'هزار پوینت', icon: 'fa-solid fa-gem', description: 'با جمع‌آوری ۱۰۰۰ پوینت کسب می‌شود.' },
-            { level: 10, name: 'خفن', icon: 'fa-solid fa-star-and-crescent', type: 'level' }, // Updated icon for Level 10
-            { level: 11, name: 'جاودان', icon: 'fa-solid fa-infinity', type: 'level' },
-            { level: 12, name: 'کیهان‌سالار', icon: 'fa-solid fa-bolt', type: 'level' }, // Renamed from خدایگان
-            { level: 13, name: 'کیهان‌نورد', icon: 'fa-solid fa-rocket', type: 'level' },
-            { level: 14, name: 'بتمن', icon: 'fa-solid fa-user-secret', type: 'level' },
-            { level: 15, name: 'سیگما', icon: 'fa-solid fa-chess-king', type: 'level' },
+            { level: 1, name: 'نوب', icon: 'fa-solid fa-child', type: 'level', description: 'شروع هر سفر با گام اول است. شما در ابتدای مسیر هستید و آماده برای کشف توانایی‌هایتان!' },
+            { level: 2, name: 'مبتدی', icon: 'fa-solid fa-seedling', type: 'level', description: 'شما با تلاش و پشتکار، بذر موفقیت را کاشته‌اید. به رشد خود ادامه دهید!' },
+            { level: 3, name: 'جنگجو', icon: 'fa-solid fa-hand-fist', type: 'level', description: 'شما با هر چالش، قوی‌تر و مصمم‌تر می‌شوید. روحیه جنگجویانه شما ستودنی است!' },
+            { level: 4, name: 'شوالیه', icon: 'fa-solid fa-shield-halved', type: 'level', description: 'با هر وظیفه، زره‌ای از تجربه بر تن می‌کنید. شجاعت شما راهگشاست!' },
+            { level: 5, name: 'هیرو', icon: 'fa-solid fa-mask', type: 'level', description: 'شما الهام‌بخش دیگران هستید. قدم‌هایتان ردپایی از موفقیت بر جای می‌گذارد!' },
+            { level: 6, name: 'استاد', icon: 'fa-solid fa-graduation-cap', type: 'level', description: 'دانش و مهارت شما در حال شکوفایی است. از هر تجربه درسی بیاموزید!' },
+            { level: 7, name: 'فرمانده', icon: 'fa-solid fa-star', type: 'level', description: 'اکنون می‌توانید رهبری کنید و مسیر را برای دیگران هموار سازید. قدرت در دستان شماست!' },
+            { level: 8, name: 'سلطان', icon: 'fa-solid fa-crown', type: 'level', description: 'شما بر قلمرو وظایف خود مسلط شده‌اید. با اقتدار به سوی اهداف بزرگتر گام بردارید!' },
+            { level: 9, name: 'کار درست', icon: 'fa-solid fa-dragon', type: 'level', description: 'شما به قدرتی بی‌نظیر دست یافته‌اید. هیچ مانعی جلودار شما نخواهد بود!' },
+            { level: 10, name: 'خفن', icon: 'fa-solid fa-fire-alt', type: 'level', description: 'شما به یک ستاره درخشان تبدیل شده‌اید. انرژی و خلاقیت شما بی‌حد و مرز است و هر کاری را به بهترین شکل ممکن انجام می‌دهید!' },
+            { level: 11, name: 'جاودان', icon: 'fa-solid fa-infinity', type: 'level', description: 'پشتکار شما بی‌حد و مرز است. این مسیر، راهی برای جاودانگی دستاوردهای شماست!' },
+            { level: 12, name: 'کیهان‌سالار', icon: 'fa-solid fa-bolt', type: 'level', description: 'شما با سرعتی باورنکردنی در حال پیشرفت هستید. انرژی شما جهان را به حرکت درمی‌آورد!' },
+            { level: 13, name: 'کیهان‌نورد', icon: 'fa-solid fa-rocket', type: 'level', description: 'شما مرزها را درنوردیده‌اید و به سوی ناشناخته‌ها پرواز می‌کنید. آسمان حد شما نیست!' },
+            { level: 14, name: 'بتمن', icon: 'fa-solid fa-user-secret', type: 'level', description: 'شما در سایه‌ها نیز قدرتمندید. با هوش و اراده، هر مشکلی را حل می‌کنید!' },
+            { level: 15, name: 'سیگما', icon: 'fa-solid fa-chess-king', type: 'level', description: 'شما به اوج رسیده‌اید. با خرد و استراتژی، هر بازی را به نفع خود به پایان می‌رسانید!' },
+            // Original Achievements
+            { type: 'totalTasks', value: 1, name: 'اولین قدم', icon: 'fa-solid fa-shoe-prints', description: 'اولین وظیفه خود را با موفقیت تکمیل کنید. هر سفر طولانی با یک قدم آغاز می‌شود!' },
+            { type: 'totalTasks', value: 5, name: 'پنج ستاره', icon: 'fa-solid fa-star-half-stroke', description: 'با تکمیل ۵ وظیفه، نشان می‌دهید که در مسیر درستی هستید. به همین ترتیب ادامه دهید!' },
+            { type: 'totalTasks', value: 10, name: 'ده وظیفه', icon: 'fa-solid fa-check-double', description: 'با تکمیل ۱۰ وظیفه، گام‌های محکم‌تری برداشته‌اید. این نشان از تعهد شماست!' },
+            { type: 'totalTasks', value: 25, name: 'ربع قرن', icon: 'fa-solid fa-calendar-check', description: '۲۵ وظیفه را به پایان رساندید. نظم و پیگیری شما مثال‌زدنی است!' },
+            { type: 'totalTasks', value: 50, name: 'پنجاه وظیفه', icon: 'fa-solid fa-clipboard-check', description: 'نیم قرن از وظایف را به اتمام رساندید! شما یک ماشین بهره‌وری هستید!' },
+            { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: 'fa-solid fa-list-check', description: 'به باشگاه صدتایی‌ها خوش آمدید! شما در حال ساختن عادت‌های موفقیت‌آمیز هستید.' },
+            { type: 'totalTasks', value: 250, name: 'دویست و پنجاه وظیفه', icon: 'fa-solid fa-trophy', description: 'شما یک قهرمان واقعی هستید! ۲۵۰ وظیفه تکمیل شده، گواه عزم راسخ شماست.' },
+            { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: 'fa-solid fa-award', description: 'نیمی از راه هزار وظیفه را پیمودید! شما بی‌وقفه در حال پیشرفتید.' },
+            { type: 'totalTasks', value: 1000, name: 'هزار وظیفه', icon: 'fa-solid fa-medal', description: 'شما به یک اسطوره تبدیل شدید! هزار وظیفه تکمیل شده، نشان از اراده پولادین شماست.' },
+            { type: 'importantTasks', value: 1, name: 'اولین چالش', icon: 'fa-solid fa-exclamation', description: 'اولین وظیفه مهم خود را به اتمام رساندید. شما آماده مقابله با چالش‌ها هستید!' },
+            { type: 'importantTasks', value: 5, name: 'پنج وظیفه مهم', icon: 'fa-solid fa-triangle-exclamation', description: 'با تکمیل ۵ وظیفه مهم، نشان دادید که می‌توانید بر اولویت‌ها مسلط شوید.' },
+            { type: 'importantTasks', value: 10, name: 'ده وظیفه مهم', icon: 'fa-solid fa-circle-exclamation', description: 'ده وظیفه مهم را به سرانجام رساندید. شما استاد مدیریت زمان هستید!' },
+            { type: 'importantTasks', value: 20, name: 'بیست وظیفه مهم', icon: 'fa-solid fa-bell', description: 'با تکمیل ۲۰ وظیفه مهم، هیچ چیز نمی‌تواند شما را متوقف کند!' },
+            { type: 'streak', value: 3, name: 'زنجیره سه روزه', icon: 'fa-solid fa-fire', description: 'سه روز متوالی با انگیزه بالا! این شروع یک عادت عالی است.' },
+            { type: 'streak', value: 7, name: 'زنجیره هفت روزه', icon: 'fa-solid fa-fire-flame-curved', description: 'یک هفته کامل از تلاش بی‌وقفه! زنجیره شما شعله‌ور است!' },
+            { type: 'streak', value: 14, name: 'زنجیره دو هفته‌ای', icon: 'fa-solid fa-calendar-days', description: 'دو هفته مداوم! شما ثابت کردید که می‌توانید به اهداف بلندمدت خود پایبند باشید.' },
+            { type: 'streak', value: 30, name: 'زنجیره ماهانه', icon: 'fa-solid fa-calendar-check', description: 'یک ماه کامل از تعهد و پشتکار! شما یک قهرمان بهره‌وری هستید.' },
+            { type: 'customTasks', value: 1, name: 'اولین وظیفه سفارشی', icon: 'fa-solid fa-lightbulb', description: 'اولین وظیفه با پوینت سفارشی را تکمیل کردید. شما خلاق و هدفمندید!' },
+            { type: 'customTasks', value: 5, name: 'پنج وظیفه سفارشی', icon: 'fa-solid fa-gear', description: 'پنج وظیفه سفارشی را به پایان رساندید. شما به خوبی می‌دانید چه چیزی برایتان ارزشمند است.' },
+            { type: 'customTasks', value: 10, name: 'ده وظیفه سفارشی', icon: 'fa-solid fa-gears', description: 'ده وظیفه سفارشی را تکمیل کردید. شما سازنده مسیر موفقیت خود هستید!' },
+            { type: 'points', value: 100, name: 'صد پوینت', icon: 'fa-solid fa-gem', description: 'اولین ۱۰۰ پوینت را کسب کردید. هر پوینت، گامی به سوی اهداف بزرگتر است!' },
+            { type: 'points', value: 500, name: 'پانصد پوینت', icon: 'fa-solid fa-money-bill-wave', description: 'با جمع‌آوری ۵۰۰ پوینت، ارزش تلاش‌هایتان نمایان شده است.' },
+            { type: 'points', value: 1000, name: 'هزار پوینت', icon: 'fa-solid fa-coins', description: 'هزار پوینت کسب کردید! شما در حال ساختن ثروت از جنس موفقیت هستید.' },
+            { type: 'points', value: 2500, name: 'دو هزار و پانصد پوینت', icon: 'fa-solid fa-star-of-life', description: '۲۵۰۰ پوینت! شما در حال درخشش هستید و به اوج نزدیک می‌شوید.' },
+            { type: 'points', value: 5000, name: 'پنج هزار پوینت', icon: 'fa-solid fa-meteor', description: '۵۰۰۰ پوینت! شما به یک نیروی غیرقابل توقف تبدیل شده‌اید. تبریک می‌گوییم!' },
+            // New Achievements (10 more)
+            { type: 'streak', value: 60, name: 'زنجیره دو ماهه', icon: 'fa-solid fa-calendar-alt', description: 'شصت روز متوالی از تلاش و تعهد! شما الگوی پایداری هستید.' },
+            { type: 'streak', value: 90, name: 'زنجیره سه ماهه', icon: 'fa-solid fa-calendar-check', description: 'نود روز مداوم! شما به یک عادت قدرتمند دست یافته‌اید.' },
+            { type: 'streak', value: 180, name: 'زنجیره شش ماهه', icon: 'fa-solid fa-calendar-days', description: 'نیم سال کامل از بهره‌وری بی‌نظیر! شما واقعاً خارق‌العاده‌اید.' },
+            { type: 'streak', value: 365, name: 'زنجیره یک ساله', icon: 'fa-solid fa-earth-americas', description: 'یک سال تمام از موفقیت‌های پی‌درپی! شما به یک افسانه تبدیل شده‌اید.' },
+            { type: 'points', value: 7500, name: 'هفت هزار و پانصد پوینت', icon: 'fa-solid fa-sack-dollar', description: 'با کسب ۷۵۰۰ پوینت، ارزش تلاش‌های شما به اوج رسیده است.' },
+            { type: 'points', value: 10000, name: 'ده هزار پوینت', icon: 'fa-solid fa-money-bill-trend-up', description: 'ده هزار پوینت! شما به یک ثروت از جنس دستاوردها دست یافته‌اید.' },
+            { type: 'points', value: 20000, name: 'بیست هزار پوینت', icon: 'fa-solid fa-hand-holding-usd', description: 'بیست هزار پوینت! شما فراتر از انتظار درخشیده‌اید و به یک اسطوره تبدیل شده‌اید.' },
+            { type: 'importantTasks', value: 50, name: 'پنجاه وظیفه مهم', icon: 'fa-solid fa-bookmark', description: 'پنجاه وظیفه مهم را به اتمام رساندید. شما در مدیریت اولویت‌ها بی‌نظیرید.' },
+            { type: 'customTasks', value: 20, name: 'بیست وظیفه سفارشی', icon: 'fa-solid fa-cogs', description: 'بیست وظیفه سفارشی را تکمیل کردید. شما به خوبی می‌دانید چگونه اهداف خود را تنظیم کنید.' },
+            { type: 'firstPin', value: 1, name: 'اولین پین', icon: 'fa-solid fa-thumbtack', description: 'اولین وظیفه خود را پین کردید. شما سازمان‌دهی را جدی می‌گیرید!' }
         ];
 
         // DOM elements
@@ -735,6 +926,7 @@
         const menuBtn = document.getElementById('menuBtn');
         const menuDropdown = document.getElementById('menuDropdown');
         const profileMenuItem = document.getElementById('profileMenuItem');
+        const achievementsMenuItem = document.getElementById('achievementsMenuItem'); // New: Achievements menu item
         const helpMenuItem = document.getElementById('helpMenuItem');
         const aboutMenuItem = document.getElementById('aboutMenuItem');
         const backupMenuItem = document.getElementById('backupMenuItem');
@@ -752,6 +944,21 @@
         const profileModal = document.getElementById('profileModal');
         const profileModalContent = document.getElementById('profileModalContent');
         const closeProfileModalBtn = document.getElementById('closeProfileModalBtn');
+
+        // New Achievements Modal elements
+        const achievementsModal = document.getElementById('achievementsModal');
+        const achievementsModalContent = document.getElementById('achievementsModalContent');
+        const achievementsModalBody = document.getElementById('achievementsModalBody');
+        const closeAchievementsModalBtn = document.getElementById('closeAchievementsModalBtn');
+
+        // New Achievement Notification Modal elements
+        const achievementNotificationModal = document.getElementById('achievementNotificationModal');
+        const achievementNotificationModalContent = document.getElementById('achievementNotificationModalContent');
+        const achievementNotificationIcon = document.getElementById('achievementNotificationIcon');
+        const achievementNotificationTitle = document.getElementById('achievementNotificationTitle');
+        const achievementNotificationMessage = document.getElementById('achievementNotificationMessage');
+        const closeAchievementNotificationModalBtn = document.getElementById('closeAchievementNotificationModalBtn');
+
 
         const helpModal = document.getElementById('helpModal');
         const helpModalContent = document.getElementById('helpModalContent');
@@ -795,8 +1002,8 @@
         const dailyStreakSpan = document.getElementById('dailyStreak');
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
-        const noAchievementsMessage = document.getElementById('noAchievementsMessage');
-        const achievementsList = document.getElementById('achievementsList');
+        // const noAchievementsMessage = document.getElementById('noAchievementsMessage'); // Removed from main page
+        // const achievementsList = document.getElementById('achievementsList'); // Removed from main page
         const addTaskSection = document.getElementById('addTaskSection');
         const addTaskTitle = document.getElementById('addTaskTitle');
 
@@ -812,13 +1019,16 @@
         const undoMessageText = document.getElementById('undoMessageText');
         const undoCountdown = document.getElementById('undoCountdown');
 
-        // Message queues for sequential display (separate for top-right and bottom-center)
-        const topRightMessageQueue = [];
-        const bottomCenterMessageQueue = [];
-        let isTopRightDisplaying = false;
+        // Message queues for sequential display
+        const notificationQueue = []; // Queue for top-right general messages
+        let isNotificationDisplaying = false; // Flag to prevent simultaneous display of general notifications
+
+        const achievementNotificationQueue = []; // NEW: Queue for achievement notifications
+        let isAchievementNotificationDisplaying = false; // NEW: Flag for achievement notifications
+
+        const bottomCenterMessageQueue = []; // Queue for bottom-center undo messages
         let isBottomCenterDisplaying = false;
-        let currentTopRightTimeout = null;
-        let currentBottomCenterTimeout = null;
+
         let currentCountdownInterval = null; // Holds the interval for the current countdown (if undo message)
 
 
@@ -858,37 +1068,46 @@
         // Options can include: position ('top-right', 'bottom-center'), duration (ms), isUndo (boolean), taskId (for undo)
         function showMessageBox(message, type = 'info', options = {}) {
             const { position = 'top-right', duration = 3000, isUndo = false, taskData = null } = options;
-            const messageObject = { message, type, position, duration, isUndo, taskData };
-
-            if (position === 'top-right') {
-                topRightMessageQueue.push(messageObject);
-                processTopRightQueue();
+            
+            if (options.type === 'achievement') { // NEW: Separate handling for achievement notifications
+                achievementNotificationQueue.push({ iconClass: options.iconClass, title: message, message: options.description }); // Re-purpose message as title for achievement
+                processAchievementNotificationQueue();
+            } else if (position === 'top-right') {
+                notificationQueue.push({ type: 'message', data: { message, msgType: type, duration } });
+                processNotificationQueue();
             } else if (position === 'bottom-center') {
-                bottomCenterMessageQueue.push(messageObject);
+                bottomCenterMessageQueue.push({ message, type, position, duration, isUndo, taskData });
                 processBottomCenterQueue();
             }
         }
 
-        // Function to process the top-right message queue
-        function processTopRightQueue() {
-            if (topRightMessageQueue.length === 0 || isTopRightDisplaying) {
+        // Function to process the top-right notification queue (general messages)
+        function processNotificationQueue() {
+            // If welcome modal is currently visible, do not process other notifications yet.
+            // They will be processed once welcome modal is closed.
+            if (!welcomeModal.classList.contains('hidden')) {
                 return;
             }
 
-            isTopRightDisplaying = true;
-            const { message, type, duration } = topRightMessageQueue.shift();
+            if (notificationQueue.length === 0 || isNotificationDisplaying) {
+                return;
+            }
 
+            isNotificationDisplaying = true;
+            const notification = notificationQueue.shift(); // Get the next notification
+
+            // This function now ONLY handles 'message' type notifications
             const messageBox = document.createElement('div');
             let bgColorClass = '';
-            if (type === 'info') {
+            if (notification.data.msgType === 'info') {
                 bgColorClass = 'bg-gray-500 dark:bg-gray-700';
-            } else if (type === 'success') {
+            } else if (notification.data.msgType === 'success') {
                 bgColorClass = 'bg-green-500 dark:bg-green-700';
-            } else if (type === 'error') {
+            } else if (notification.data.msgType === 'error') {
                 bgColorClass = 'bg-red-500 dark:bg-red-700';
             }
             messageBox.className = `fixed p-4 rounded-lg text-white z-50 transition-all duration-300 transform opacity-0 top-4 right-4 translate-x-full ${bgColorClass}`;
-            messageBox.textContent = message;
+            messageBox.textContent = notification.data.message;
             document.body.appendChild(messageBox);
 
             setTimeout(() => {
@@ -896,15 +1115,44 @@
                 messageBox.classList.add('translate-x-0', 'opacity-100');
             }, 100);
 
-            currentTopRightTimeout = setTimeout(() => {
+            setTimeout(() => {
                 messageBox.classList.remove('translate-x-0', 'opacity-100');
                 messageBox.classList.add('translate-x-full', 'opacity-0');
                 messageBox.addEventListener('transitionend', () => {
                     messageBox.remove();
-                    isTopRightDisplaying = false;
-                    processTopRightQueue(); // Process next message
+                    isNotificationDisplaying = false;
+                    processNotificationQueue(); // Process next message
                 }, { once: true });
-            }, duration);
+            }, notification.data.duration);
+        }
+
+        // NEW: Function to process the achievement notification queue
+        function processAchievementNotificationQueue() {
+            console.log('processAchievementNotificationQueue called. Queue length:', achievementNotificationQueue.length, 'isAchievementNotificationDisplaying:', isAchievementNotificationDisplaying);
+            // If welcome modal is currently visible, or another achievement is displaying, do not process.
+            if (!welcomeModal.classList.contains('hidden') || isAchievementNotificationDisplaying) {
+                console.log('Returning: welcome modal visible or achievement notification already displaying.');
+                return;
+            }
+            if (achievementNotificationQueue.length === 0) {
+                console.log('Returning: achievement notification queue is empty.');
+                return;
+            }
+
+            isAchievementNotificationDisplaying = true;
+            const achievement = achievementNotificationQueue.shift(); // Get the next achievement notification
+            console.log('Displaying achievement:', achievement.name);
+
+            achievementNotificationIcon.className = achievement.iconClass;
+            achievementNotificationTitle.textContent = achievement.title;
+            achievementNotificationMessage.textContent = achievement.message;
+
+            achievementNotificationModal.classList.remove('hidden');
+            void achievementNotificationModalContent.offsetWidth; // Force reflow
+            achievementNotificationModalContent.classList.remove('opacity-0', 'scale-95');
+            achievementNotificationModalContent.classList.add('opacity-100', 'scale-100');
+            triggerConfetti(); // Trigger confetti for achievement modals
+            // The close button for this modal will set isAchievementNotificationDisplaying = false and call processAchievementNotificationQueue()
         }
 
         // Function to process the bottom-center message queue (for undo messages)
@@ -1020,12 +1268,12 @@
                 inputFocusRing: '#6b7280' // Gray-600
             };
             const darkThemeColors = {
-                primary: '#d1d5db', // Gray-300
-                secondary: '#9ca3af', // Gray-400
-                accentBg: '#1f2937', // Gray-900
-                accentText: '#f9fafb', // Gray-50
-                inputBorder: '#4b5563', // Gray-700
-                inputFocusRing: '#9ca3af' // Gray-400
+                primary: '#d1d5db', /* Gray-300 */
+                secondary: '#9ca3af', /* Gray-400 */
+                accentBg: '#1f2937', /* Gray-900 */
+                accentText: '#f9fafb', /* Gray-50 */
+                inputBorder: '#4b5563', /* Gray-700 */
+                inputFocusRing: '#9ca3af' /* Gray-400 */
             };
 
             const currentThemeData = isDarkMode ? darkThemeColors : lightThemeColors;
@@ -1046,9 +1294,9 @@
             addTaskBtn.onmouseover = () => addTaskBtn.style.backgroundColor = currentThemeData.secondary;
             addTaskBtn.onmouseout = () => addTaskBtn.style.backgroundColor = currentThemeData.primary;
 
-            // Background and text of add task section
-            addTaskSection.style.backgroundColor = currentThemeData.accentBg;
-            addTaskTitle.style.color = currentThemeData.accentText;
+            // Background and text of add task section are now handled by Tailwind classes in HTML
+            // addTaskSection.style.backgroundColor = currentThemeData.accentBg; // REMOVED
+            // addTaskTitle.style.color = currentThemeData.accentText; // REMOVED
 
             // Update progress bar gradient
             progressBar.style.backgroundImage = `linear-gradient(to right, ${currentThemeData.primary}, ${currentThemeData.secondary})`;
@@ -1065,6 +1313,11 @@
 
         // Function to update gamification display
         function updateGamificationDisplay() {
+            // NEW: If userName is not set, defer gamification display until it is.
+            if (!userName) {
+                return;
+            }
+
             zPointSpan.textContent = zPoint;
             
             // Calculate current level based on point thresholds
@@ -1080,8 +1333,13 @@
             }
 
             if (newLevel > level) {
-                showMessageBox(`تبریک! به سطح ${levelPointsThresholds[newLevel - 1].name} رسیدید!`, 'success');
-                triggerConfetti();
+                // Trigger achievement notification for new level
+                const achievedLevelInfo = levelPointsThresholds[newLevel - 1];
+                showMessageBox(`تبریک! شما به سطح ${achievedLevelInfo.name} رسیدید!`, 'success', { // Changed to use showMessageBox for achievement type
+                    type: 'achievement',
+                    iconClass: achievedLevelInfo.icon,
+                    description: achievedLevelInfo.motivational
+                });
             }
             level = newLevel; // Update global level variable
             levelSpan.textContent = level;
@@ -1095,7 +1353,7 @@
             if (level <= levelPointsThresholds.length) {
                 const currentLevelThreshold = levelPointsThresholds[level - 1].points;
                 // Ensure correct nextLevelThreshold calculation, especially for the last level
-                const nextLevelThreshold = (level < levelPointsThresholds.length) ? levelPointsThresholds[level].points : zPoint;
+                const nextLevelThreshold = (level < levelPointsThresholds.length) ? levelPointsThresholds[level].points : levelPointsThresholds[levelPointsThresholds.length - 1].points;
                 
                 let pointsIntoCurrentLevel = zPoint - currentLevelThreshold;
                 let pointsNeededForNextLevel = nextLevelThreshold - currentLevelThreshold;
@@ -1111,15 +1369,62 @@
                 if (level < levelPointsThresholds.length) {
                     progressText.textContent = `${Math.round(progressPercentage)}% پیشرفت به سطح ${levelPointsThresholds[level].name}`;
                 } else {
-                    progressText.textContent = `شما به حداکثر سطح (${levelPointsThresholds[levelPointsThresholds.length - 1].name}) رسیده‌اید!`;
+                    progressText.textContent = `شما به حداکثر سطح (${levelPointsThresholds[levelPointsThresholds.length - 1].name}) رسیده‌اید! شما می‌توانید همچنان پوینت کسب کنید!`;
                 }
             } else {
                 // After max level, progress bar remains full and only points accumulate
                 progressBar.style.width = `100%`;
-                progressText.textContent = `شما به حداکثر سطح (${levelPointsThresholds[levelPointsThresholds.length - 1].name}) رسیده‌اید!`;
+                progressText.textContent = `شما به حداکثر سطح (${levelPointsThresholds[levelPointsThresholds.length - 1].name}) رسیده‌اید! شما می‌توانید همچنان پوینت کسب کنید!`;
             }
             
-            renderAchievements(); // Call renderAchievements here
+            // Check for new achievements (excluding levels, which are handled above)
+            const currentTotalTasksCompleted = tasks.filter(t => t.completed).length;
+            const currentImportantTasksCompleted = tasks.filter(t => t.completed && t.importance === 'important').length;
+
+            achievementsData.forEach(achievement => {
+                let isAchieved = false;
+                if (achievement.type === 'level') {
+                    // Levels are handled separately for notification
+                    const levelInfo = levelPointsThresholds.find(l => l.name === achievement.name);
+                    if (levelInfo && zPoint >= levelInfo.points) {
+                        isAchieved = true;
+                    }
+                } else if (achievement.type === 'streak') {
+                    if (dailyStreak >= achievement.value) {
+                        isAchieved = true;
+                    }
+                } else if (achievement.type === 'totalTasks') {
+                    if (currentTotalTasksCompleted >= achievement.value) {
+                        isAchieved = true;
+                    }
+                } else if (achievement.type === 'importantTasks') {
+                    if (currentImportantTasksCompleted >= achievement.value) {
+                        isAchieved = true;
+                    }
+                } else if (achievement.type === 'customTasks') {
+                    if (totalCustomTasksCompleted >= achievement.value) {
+                        isAchieved = true;
+                    }
+                } else if (achievement.type === 'points') {
+                    if (zPoint >= achievement.value) {
+                        isAchieved = true;
+                    }
+                } else if (achievement.type === 'firstPin') {
+                    if (hasPinnedTaskEver) {
+                        isAchieved = true;
+                    }
+                }
+
+                if (isAchieved && !unlockedAchievements.includes(achievement.name)) {
+                    unlockedAchievements.push(achievement.name);
+                    showMessageBox(`دستاورد: ${achievement.name}`, 'success', { // Changed to use showMessageBox for achievement type
+                        type: 'achievement',
+                        iconClass: achievement.icon,
+                        description: achievement.description
+                    });
+                }
+            });
+
             applyLevelTheme(level); // Apply theme for current level
         }
 
@@ -1133,6 +1438,8 @@
             localStorage.setItem('lastCompletionDate', lastCompletionDate);
             localStorage.setItem('totalCustomTasksCompleted', totalCustomTasksCompleted);
             localStorage.setItem('userName', userName);
+            localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements)); // Save unlocked achievements
+            localStorage.setItem('hasPinnedTaskEver', hasPinnedTaskEver); // Save new flag
         }
 
         // Function to load tasks, points, level, streak, and last completion date from Local Storage
@@ -1145,6 +1452,8 @@
             const storedLastCompletionDate = localStorage.getItem('lastCompletionDate');
             const storedTotalCustomTasksCompleted = localStorage.getItem('totalCustomTasksCompleted');
             const storedUserName = localStorage.getItem('userName');
+            const storedUnlockedAchievements = localStorage.getItem('unlockedAchievements'); // Load unlocked achievements
+            const storedHasPinnedTaskEver = localStorage.getItem('hasPinnedTaskEver'); // Load new flag
 
             if (storedTasks) {
                 try {
@@ -1177,6 +1486,17 @@
             if (storedUserName) {
                 userName = storedUserName;
             }
+            if (storedUnlockedAchievements) {
+                try {
+                    unlockedAchievements = JSON.parse(storedUnlockedAchievements);
+                } catch (e) {
+                    console.error("Error parsing unlocked achievements from Local Storage:", e);
+                    unlockedAchievements = [];
+                }
+            }
+            if (storedHasPinnedTaskEver) {
+                hasPinnedTaskEver = (storedHasPinnedTaskEver === 'true'); // Convert string to boolean
+            }
             // Handle 'null' string from localStorage
             if (storedLastCompletionDate && storedLastCompletionDate !== 'null') {
                 lastCompletionDate = storedLastCompletionDate;
@@ -1205,7 +1525,7 @@
             }
             highestDailyStreak = Math.max(highestDailyStreak, dailyStreak); // Ensure highest is updated on load too
             saveToLocalStorage(); // Save updated streak if reset
-            renderTasks(); // Render tasks immediately after loading
+            // renderTasks(); // Render tasks immediately after loading - REMOVED from here
         }
 
         /**
@@ -1302,7 +1622,7 @@
         function renderTasks(focusTaskId = null) {
             // Get current active and completed tasks from the data model
             let activeTasks = tasks.filter(task => !task.completed);
-            const completedTasks = tasks.filter(task => task.completed);
+            const completedTasks = tasks.filter(task => task.completed); // Corrected 't' to 'task'
 
             // Sort active tasks: pinned first, then maintain relative order (manual order)
             activeTasks.sort((a, b) => {
@@ -1382,7 +1702,10 @@
                 // No need for transitionend listener to add 'hidden' anymore
             }
 
-            updateGamificationDisplay();
+            // Only update gamification display if userName is set
+            if (userName) { // NEW: Guard added here
+                updateGamificationDisplay();
+            }
         }
 
         /**
@@ -1416,7 +1739,7 @@
             newTasks.forEach(task => {
                 let taskElement = container.querySelector(`[data-id="${task.id}"]`);
                 if (taskElement) {
-                    // Update existing element (e.g., for completion status change, pin status)
+                    // Update existing element (e.e.g., for completion status change, pin status)
                     const newElement = createTaskElement(task, false, inReorderMode, reorderingTaskId); // Create a new element to get updated classes
                     taskElement.className = newElement.className; // Update classes
                     taskElement.querySelector('input[type="checkbox"]').checked = task.completed;
@@ -1586,47 +1909,70 @@
             containerElement.appendChild(nextBtn);
         }
 
-        // Function to render achievements
-        function renderAchievements() {
-            achievementsList.innerHTML = ''; // Clear existing achievements
-            const unlockedAchievements = achievementsData.filter(achievement => {
+        // Function to render achievements into the Achievements Modal
+        function renderAchievementsIntoModal() {
+            achievementsModalBody.innerHTML = ''; // Clear existing achievements
+            const achievedAndSorted = achievementsData.filter(achievement => {
+                let isAchieved = false;
                 if (achievement.type === 'level') {
                     const levelInfo = levelPointsThresholds.find(l => l.name === achievement.name);
-                    return levelInfo && zPoint >= levelInfo.points;
+                    if (levelInfo && zPoint >= levelInfo.points) {
+                        isAchieved = true;
+                    }
                 } else if (achievement.type === 'streak') {
-                    return dailyStreak >= achievement.value;
+                    if (dailyStreak >= achievement.value) {
+                        isAchieved = true;
+                    }
                 } else if (achievement.type === 'totalTasks') {
-                    return tasks.filter(t => t.completed).length >= achievement.value;
+                    if (tasks.filter(t => t.completed).length >= achievement.value) {
+                        isAchieved = true;
+                    }
                 } else if (achievement.type === 'importantTasks') {
-                    return tasks.filter(t => t.completed && t.importance === 'important').length >= achievement.value;
+                    if (tasks.filter(t => t.completed && t.importance === 'important').length >= achievement.value) {
+                        isAchieved = true;
+                    }
                 } else if (achievement.type === 'customTasks') {
-                    return totalCustomTasksCompleted >= achievement.value;
+                    if (totalCustomTasksCompleted >= achievement.value) {
+                        isAchieved = true;
+                    }
                 } else if (achievement.type === 'points') {
-                    return zPoint >= achievement.value;
+                    if (zPoint >= achievement.value) {
+                        isAchieved = true;
+                    }
+                } else if (achievement.type === 'firstPin') {
+                    if (hasPinnedTaskEver) {
+                        isAchieved = true;
+                    }
                 }
-                return false;
+                return isAchieved;
+            }).sort((a, b) => {
+                // Sort by type (levels first, then others) and then by value/level
+                if (a.type === 'level' && b.type !== 'level') return -1;
+                if (a.type !== 'level' && b.type === 'level') return 1;
+                if (a.type === 'level' && b.type === 'level') return a.level - b.level;
+                return (a.value || 0) - (b.value || 0); // Sort other types by value
             });
 
-            if (unlockedAchievements.length === 0) {
-                noAchievementsMessage.style.display = 'block';
+
+            if (achievedAndSorted.length === 0) {
+                const noAchievementsMessage = document.createElement('p');
+                noAchievementsMessage.className = 'text-gray-500 dark:text-gray-400 text-center col-span-full py-4';
+                noAchievementsMessage.textContent = 'هنوز دستاوردی کسب نشده است.';
+                achievementsModalBody.appendChild(noAchievementsMessage);
             } else {
-                noAchievementsMessage.style.display = 'none';
-                unlockedAchievements.forEach(achievement => {
+                achievedAndSorted.forEach(achievement => {
                     const achievementItem = document.createElement('div');
-                    // Apply dark mode classes for achievement items
-                    achievementItem.className = `flex items-center bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-full px-4 py-2 text-gray-700 dark:text-gray-200 text-sm clickable-item`;
+                    achievementItem.className = `achievement-item-card`;
                     
-                    // Use Font Awesome icon
                     achievementItem.innerHTML = `
-                        <i class="${achievement.icon} text-xl ml-2"></i>
-                        <span>${achievement.name}</span>
-                    `;
+                        <i class="${achievement.icon} icon"></i>
+                        <span class="name">${achievement.name}</span>
+                        `;
                     
                     // Add click listener to show details
-                    // FIX: Pass achievement.level for 'level' type achievements
                     achievementItem.addEventListener('click', () => showDetailModal(achievement.type, achievement.type === 'level' ? achievement.level : achievement.name));
                     
-                    achievementsList.appendChild(achievementItem);
+                    achievementsModalBody.appendChild(achievementItem);
                 });
             }
         }
@@ -1642,8 +1988,8 @@
                 return;
             }
 
-            if (taskName.length > 15) {
-                showMessageBox('مقدار ورودی نباید بیش از ۱۵ کاراکتر باشد.', 'error');
+            if (taskName.length > 30) { // Changed from 15 to 30
+                showMessageBox('مقدار ورودی نباید بیش از ۳۰ کاراکتر باشد.', 'error');
                 return;
             }
 
@@ -1651,7 +1997,7 @@
                 // Convert Persian numbers to English before parsing
                 const convertedPoints = convertPersianNumbersToEnglish(customPointsInput.value);
                 customPoints = parseInt(convertedPoints, 10);
-                if (isNaN(customPoints) || customPoints <= 0 || customPoints > MAX_CUSTOM_POINTS) {
+                if (isNaN(customPoints) || customPoints <= 0 || customPoints > MAX_CUSTOM_POINTS) { // Changed MAX_CUSTOM_POINTS
                     showMessageBox(`لطفاً یک مقدار پوینت سفارشی معتبر (حداکثر ${MAX_CUSTOM_POINTS}) وارد کنید.`, 'info');
                     return;
                 }
@@ -1827,6 +2173,9 @@
             if (taskIndex > -1) {
                 const task = tasks[taskIndex];
                 task.isPinned = !task.isPinned; // Toggle pin status
+                if (task.isPinned && !hasPinnedTaskEver) {
+                    hasPinnedTaskEver = true; // Set flag if this is the first time pinning
+                }
                 saveToLocalStorage();
                 // No need to set activeCurrentPage = 1 here, renderTasks with focusTaskId will handle it
                 renderTasks(taskId); // Re-render and focus on the pinned/unpinned task
@@ -1841,7 +2190,7 @@
             document.querySelectorAll('.task-action-menu').forEach(menu => menu.remove());
 
             // If in reordering mode, do not show menu for other tasks
-            if (isReorderingMode && taskId !== reorderingTaskId) {
+            if (isReorderingMode) { // Removed taskId !== reorderingTaskId, as any menu open should close in reorder mode
                 return;
             }
 
@@ -1940,7 +2289,7 @@
             // Close menu when clicking outside
             const closeMenu = (e) => {
                 // Check if the click was outside the menu and outside the button that opened it
-                // Also check if the click target is an interactive element (input, select, button, checkbox)
+                // Also check if the click target is an.interactive element (input, select, button, checkbox)
                 // If it's an interactive element, allow its default action to proceed, but still close the menu.
                 const isInteractiveElement = e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON' || e.target.type === 'checkbox';
 
@@ -2034,7 +2383,7 @@
             }
 
             editTaskNameInput.value = task.name;
-            editTaskNameInput.setAttribute('maxlength', '15'); // Set max length here
+            editTaskNameInput.setAttribute('maxlength', '30'); // Set max length here (Changed from 15 to 30)
             editTaskImportanceSelect.value = task.importance;
             if (task.importance === 'custom') {
                 editTaskCustomPointsInput.classList.remove('hidden');
@@ -2095,8 +2444,8 @@
                 return;
             }
 
-            if (newTaskName.length > 15) {
-                showMessageBox('مقدار ورودی نباید بیش از ۱۵ کاراکتر باشد.', 'error');
+            if (newTaskName.length > 30) { // Changed from 15 to 30
+                showMessageBox('مقدار ورودی نباید بیش از ۳۰ کاراکتر باشد.', 'error');
                 return;
             }
 
@@ -2104,7 +2453,7 @@
                 // Convert Persian numbers to English before parsing
                 const convertedPoints = convertPersianNumbersToEnglish(editTaskCustomPointsInput.value);
                 newCustomPoints = parseInt(convertedPoints, 10);
-                if (isNaN(newCustomPoints) || newCustomPoints <= 0 || newCustomPoints > MAX_CUSTOM_POINTS) {
+                if (isNaN(newCustomPoints) || newCustomPoints <= 0 || newCustomPoints > MAX_CUSTOM_POINTS) { // Changed MAX_CUSTOM_POINTS
                     showMessageBox(`لطفاً یک مقدار پوینت سفارشی معتبر (حداکثر ${MAX_CUSTOM_POINTS}) وارد کنید.`, 'info');
                     return;
                 }
@@ -2113,7 +2462,7 @@
             const taskIndex = tasks.findIndex(t => t.id === taskId);
             if (taskIndex > -1) {
                 tasks[taskIndex].name = newTaskName;
-                tasks[taskIndex].importance = newImportance;
+                tasks[taskIndex].importance = newImportance; // Corrected this line
                 tasks[taskIndex].customPoints = newCustomPoints;
                 saveToLocalStorage();
                 renderTasks(taskId); // Re-render and focus on the edited task
@@ -2298,29 +2647,53 @@
             const completedTasksCount = tasks.filter(t => t.completed).length;
 
             let achievementsHtml = '';
-            const unlockedAchievements = achievementsData.filter(achievement => {
+            const unlockedAchievementsForDisplay = achievementsData.filter(achievement => {
+                let isAchieved = false;
                 if (achievement.type === 'level') {
                     const levelInfo = levelPointsThresholds.find(l => l.name === achievement.name);
-                    return levelInfo && zPoint >= levelInfo.points;
+                    if (levelInfo && zPoint >= levelInfo.points) {
+                        isAchieved = true;
+                    }
                 } else if (achievement.type === 'streak') {
-                    return dailyStreak >= achievement.value;
+                    if (dailyStreak >= achievement.value) {
+                        isAchieved = true;
+                    }
                 } else if (achievement.type === 'totalTasks') {
-                    return completedTasksCount >= achievement.value;
+                    if (completedTasksCount >= achievement.value) {
+                        isAchieved = true;
+                    }
                 } else if (achievement.type === 'importantTasks') {
-                    return tasks.filter(t => t.completed && t.importance === 'important').length >= achievement.value;
+                    if (tasks.filter(t => t.completed && t.importance === 'important').length >= achievement.value) {
+                        isAchieved = true;
+                    }
                 } else if (achievement.type === 'customTasks') {
-                    return totalCustomTasksCompleted >= achievement.value;
+                    if (totalCustomTasksCompleted >= achievement.value) {
+                        isAchieved = true;
+                    }
                 } else if (achievement.type === 'points') {
-                    return zPoint >= achievement.value;
+                    if (zPoint >= achievement.value) {
+                        isAchieved = true;
+                    }
+                } else if (achievement.type === 'firstPin') {
+                    if (hasPinnedTaskEver) {
+                        isAchieved = true;
+                    }
                 }
-                return false;
+                return isAchieved;
+            }).sort((a, b) => {
+                // Sort by type (levels first, then others) and then by value/level
+                if (a.type === 'level' && b.type !== 'level') return -1;
+                if (a.type !== 'level' && b.type === 'level') return 1;
+                if (a.type === 'level' && b.type === 'level') return a.level - b.level;
+                return (a.value || 0) - (b.value || 0); // Sort other types by value
             });
 
-            if (unlockedAchievements.length > 0) {
+
+            if (unlockedAchievementsForDisplay.length > 0) {
                 achievementsHtml = `
                     <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2 mt-4">دستاوردها:</h4>
                     <div class="flex flex-wrap gap-2">
-                        ${unlockedAchievements.map(ach => `
+                        ${unlockedAchievementsForDisplay.map(ach => `
                             <span class="flex items-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm clickable-item" data-type="${ach.type}" data-id="${ach.type === 'level' ? ach.level : ach.name}">
                                 <i class="${ach.icon} text-xl ml-2"></i><span>${ach.name}</span>
                             </span>
@@ -2388,6 +2761,58 @@
                 profileModal.classList.add('hidden');
             }, 50);
         });
+
+        // Event listener for new Achievements menu item
+        achievementsMenuItem.addEventListener('click', (e) => {
+            e.preventDefault();
+            menuDropdown.classList.add('hidden'); // Hide dropdown
+
+            showAchievementsModal();
+        });
+
+        // Function to show Achievements Modal
+        function showAchievementsModal() {
+            achievementsModal.classList.remove('hidden');
+            void achievementsModalContent.offsetWidth; // Force reflow
+            achievementsModalContent.classList.remove('opacity-0', 'scale-95');
+            achievementsModalContent.classList.add('opacity-100', 'scale-100');
+
+            renderAchievementsIntoModal(); // Render achievements when modal opens
+        }
+
+        // Event listener for closing Achievements Modal
+        closeAchievementsModalBtn.addEventListener('click', () => {
+            achievementsModalContent.classList.remove('opacity-100', 'scale-100');
+            achievementsModalContent.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                achievementsModal.classList.add('hidden');
+            }, 50);
+        });
+
+        // Function to show Achievement Notification Modal (now uses queue)
+        // This function is now internal and only pushes to the queue
+        // The actual display logic is in processAchievementNotificationQueue()
+        function showAchievementNotificationModal(iconClass, title, message) {
+            showMessageBox(title, 'success', { type: 'achievement', iconClass: iconClass, description: message });
+        }
+
+        // Event listener for closing Achievement Notification Modal
+        closeAchievementNotificationModalBtn.addEventListener('click', () => {
+            console.log('Close achievement notification button clicked.');
+            achievementNotificationModalContent.classList.remove('opacity-100', 'scale-100');
+            achievementNotificationModalContent.classList.add('opacity-0', 'scale-95');
+            
+            // Use setTimeout to ensure modal is visually hidden before processing next
+            // The transition duration for achievementNotificationModalContent is 0.3s
+            setTimeout(() => {
+                console.log('Achievement modal transition complete (via setTimeout). Hiding modal.');
+                achievementNotificationModal.classList.add('hidden'); // Fully hide the modal overlay
+                isAchievementNotificationDisplaying = false; // Release the flag ONLY AFTER hiding
+                console.log('isAchievementNotificationDisplaying set to false. Calling processAchievementNotificationQueue.');
+                processAchievementNotificationQueue(); // Process next in queue
+            }, 350); // A little buffer after 300ms transition
+        });
+
 
         helpMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
@@ -2584,6 +3009,9 @@
             welcomeModalContent.classList.add('opacity-0', 'scale-95');
             setTimeout(() => {
                 welcomeModal.classList.add('hidden');
+                updateGamificationDisplay(); // NEW: Call here after userName is set
+                processNotificationQueue(); // NEW: Start processing general notifications
+                processAchievementNotificationQueue(); // NEW: Also process achievement queue on load
             }, 50);
             showMessageBox(`${userName} عزیز، خوش آمدید!`, 'success');
         });
@@ -2598,7 +3026,9 @@
                 highestDailyStreak: highestDailyStreak, // Include highest streak in export
                 lastCompletionDate: lastCompletionDate,
                 totalCustomTasksCompleted: totalCustomTasksCompleted,
-                userName: userName
+                userName: userName,
+                unlockedAchievements: unlockedAchievements, // Include unlocked achievements in export
+                hasPinnedTaskEver: hasPinnedTaskEver // Include new flag in export
             };
             const jsonString = JSON.stringify(dataToSave, null, 2);
             const blob = new Blob([jsonString], { type: 'application/json' });
@@ -2648,7 +3078,9 @@
                         (typeof importedData.highestDailyStreak === 'number' || typeof importedData.highestDailyStreak === 'undefined') && // Validate highest streak
                         (typeof importedData.lastCompletionDate === 'string' || importedData.lastCompletionDate === null) &&
                         typeof importedData.totalCustomTasksCompleted === 'number' &&
-                        (typeof importedData.userName === 'string' || importedData.userName === null || importedData.userName === undefined)
+                        (typeof importedData.userName === 'string' || importedData.userName === null || importedData.userName === undefined) &&
+                        (typeof importedData.unlockedAchievements === 'object' && Array.isArray(importedData.unlockedAchievements) || typeof importedData.unlockedAchievements === 'undefined') && // Validate unlocked achievements
+                        (typeof importedData.hasPinnedTaskEver === 'boolean' || typeof importedData.hasPinnedTaskEver === 'undefined') // Validate new flag
                     ) {
                         tasks = importedData.tasks;
                         zPoint = importedData.zPoint;
@@ -2658,6 +3090,8 @@
                         lastCompletionDate = importedData.lastCompletionDate;
                         totalCustomTasksCompleted = importedData.totalCustomTasksCompleted;
                         userName = importedData.userName || null; // Ensure userName is set or null
+                        unlockedAchievements = importedData.unlockedAchievements || []; // Set unlocked achievements, default to empty array if undefined
+                        hasPinnedTaskEver = importedData.hasPinnedTaskEver || false; // Set new flag, default to false if undefined
 
                         // Ensure imported tasks have the new 'isPinned' property
                         tasks.forEach(task => {
@@ -2710,16 +3144,17 @@
                     contentHtml = `<p class="text-red-500">سطح نامعتبر است.</p>`;
                 } else {
                     const levelInfo = levelPointsThresholds[levelNum - 1];
-                    titleText = levelInfo.name;
+                    titleText = `سطح ${levelNum}: ${levelInfo.name}`;
                     contentHtml = `
-                        <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">توضیحات:</strong> برای رسیدن به این سطح، شما به ${levelInfo.points} پوینت نیاز دارید.</p>
+                        <p class="mb-2 text-gray-700 dark:text-gray-300">${levelInfo.motivational}</p>
+                        <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">پوینت مورد نیاز:</strong> ${levelInfo.points} پوینت</p>
                     `;
                 }
             } else { // This else block now covers all non-level types like 'totalTasks', 'importantTasks', etc.
                 const achievement = achievementsData.find(ach => ach.name === identifier);
                 
                 if (achievement) {
-                    titleText = achievement.name;
+                    titleText = `دستاورد: ${achievement.name}`;
                     contentHtml = `
                         <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">توضیحات:</strong> ${achievement.description || 'توضیحات در دسترس نیست.'}</p>
                     `;
@@ -2799,6 +3234,7 @@
         window.onload = () => {
             loadFromLocalStorage(); // Load all data
             initializeTheme(); // Initialize theme
+            renderTasks(); // Render tasks based on loaded data (without gamification update yet)
 
             // Show welcome modal if user name is not set
             if (!userName) {
@@ -2807,6 +3243,13 @@
                 welcomeModalContent.classList.remove('opacity-0', 'scale-95'); // Ensure animation starts
                 welcomeModalContent.classList.add('opacity-100', 'scale-100');
                 userNameInput.focus();
+                // No processNotificationQueue() or updateGamificationDisplay() here
+            } else {
+                // If welcome modal is not shown (user already has a name),
+                // then it's safe to update gamification and process notifications.
+                updateGamificationDisplay(); // Now it's safe to run
+                processNotificationQueue(); // Now it's safe to process
+                processAchievementNotificationQueue(); // NEW: Also process achievement queue on load
             }
         };
 
