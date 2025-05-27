@@ -313,8 +313,8 @@
         }
     </style>
 </head>
-<body class="p-4 flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-    <div class="container bg-white dark:bg-gray-800 shadow-xl rounded-xl p-4 sm:p-6 md:p-8 w-full max-w-4xl relative pt-16 md:pt-20">
+<body class="p-2 sm:p-4 flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+    <div class="container bg-white dark:bg-gray-800 rounded-none shadow-none p-2 sm:rounded-xl sm:shadow-xl sm:p-6 md:p-8 w-full max-w-4xl relative pt-16 md:pt-20">
         <div class="absolute top-4 right-4 md:top-6 md:right-6 z-10">
             <button id="menuBtn" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400" aria-label="Open menu">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -349,9 +349,9 @@
             </svg>
         </button>
 
-        <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700 md:px-16">
-            <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 text-center md:text-right w-full md:w-auto">زی تسک</h1>
-            <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 sm:space-x-reverse w-full md:w-auto justify-center md:justify-end">
+        <div class="flex flex-col items-center md:flex-row md:justify-between mb-6 border-b pb-4 border-gray-200 dark:border-gray-700 md:px-16">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-0 text-center w-full md:w-auto sm:text-5xl md:text-6xl md:text-right">زی تسک</h1>
+            <div class="flex flex-wrap justify-center gap-2 sm:flex-row sm:space-x-4 sm:space-x-reverse w-full md:w-auto">
                 <div class="flex items-center bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full shadow-sm">
                     <i class="fa-solid fa-coins text-xl ml-2"></i>
                     <span class="text-base sm:text-lg font-semibold">پوینت: <span id="zPoint" class="text-yellow-800 dark:text-yellow-200">0</span></span>
@@ -605,9 +605,9 @@
             { name: 'فرمانده', points: 330, icon: 'fa-solid fa-star' },
             { name: 'سلطان', points: 420, icon: 'fa-solid fa-crown' },
             { name: 'کار درست', points: 520, icon: 'fa-solid fa-dragon' },
-            { name: 'خفن', points: 630, icon: 'fa-solid fa-sparkles' },
+            { name: 'خفن', points: 630, icon: 'fa-solid fa-star-and-crescent' }, // Added icon for Level 10
             { name: 'جاودان', points: 750, icon: 'fa-solid fa-infinity' },
-            { name: 'خدایگان', points: 900, icon: 'fa-solid fa-bolt' },
+            { name: 'کیهان‌سالار', points: 900, icon: 'fa-solid fa-bolt' }, // Renamed from خدایگان
             { name: 'کیهان‌نورد', points: 1080, icon: 'fa-solid fa-rocket' },
             { name: 'بتمن', points: 1290, icon: 'fa-solid fa-user-secret' }, // Using a generic hero icon
             { name: 'سیگما', points: 1500, icon: 'fa-solid fa-chess-king' }
@@ -641,9 +641,9 @@
             { type: 'customTasks', value: 10, name: 'ده وظیفه سفارشی', icon: 'fa-solid fa-gears', description: 'با تکمیل ۱۰ وظیفه با پوینت سفارشی کسب می‌شود.' },
             { type: 'points', value: 500, name: 'پانصد پوینت', icon: 'fa-solid fa-money-bill-wave', description: 'با جمع‌آوری ۵۰۰ پوینت کسب می‌شود.' },
             { type: 'points', value: 1000, name: 'هزار پوینت', icon: 'fa-solid fa-gem', description: 'با جمع‌آوری ۱۰۰۰ پوینت کسب می‌شود.' },
-            { level: 10, name: 'خفن', icon: 'fa-solid fa-sparkles', type: 'level' },
+            { level: 10, name: 'خفن', icon: 'fa-solid fa-star-and-crescent', type: 'level' }, // Updated icon for Level 10
             { level: 11, name: 'جاودان', icon: 'fa-solid fa-infinity', type: 'level' },
-            { level: 12, name: 'خدایگان', icon: 'fa-solid fa-bolt', type: 'level' },
+            { level: 12, name: 'کیهان‌سالار', icon: 'fa-solid fa-bolt', type: 'level' }, // Renamed from خدایگان
             { level: 13, name: 'کیهان‌نورد', icon: 'fa-solid fa-rocket', type: 'level' },
             { level: 14, name: 'بتمن', icon: 'fa-solid fa-user-secret', type: 'level' },
             { level: 15, name: 'سیگما', icon: 'fa-solid fa-chess-king', type: 'level' },
@@ -1192,15 +1192,15 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 space-x-reverse mr-2">
+                    <span class="task-importance-display text-sm px-2 py-1 rounded-full ${importanceClasses}">
+                        ${importanceText}
+                    </span>
                     <button data-id="${task.id}" data-action="menu"
                         class="three-dot-menu-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 p-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 100-2 1 1 0 000 2zm0 7a1 1 0 100-2 1 1 0 000 2zm0 7a1 1 0 100-2 1 1 0 000 2z"></path>
                         </svg>
                     </button>
-                    <span class="task-importance-display text-sm px-2 py-1 rounded-full ${importanceClasses}">
-                        ${importanceText}
-                    </span>
                 </div>
             `;
             return taskItem;
@@ -1432,7 +1432,8 @@
                     `;
                     
                     // Add click listener to show details
-                    achievementItem.addEventListener('click', () => showDetailModal(achievement.type, achievement.name)); // Pass name for achievement lookup
+                    // FIX: Pass achievement.level for 'level' type achievements
+                    achievementItem.addEventListener('click', () => showDetailModal(achievement.type, achievement.type === 'level' ? achievement.level : achievement.name));
                     
                     achievementsList.appendChild(achievementItem);
                 });
@@ -2474,7 +2475,7 @@
                 applyTheme(savedTheme);
             } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 applyTheme('dark');
-            } else { // Corrected from 'سپس' to 'else'
+            } else {
                 applyTheme('light');
             }
 
@@ -2929,13 +2930,17 @@
 
             if (type === 'level') {
                 const levelNum = parseInt(identifier, 10);
-                const levelInfo = levelPointsThresholds[levelNum - 1];
-                
-                titleText = levelInfo.name;
-
-                contentHtml = `
-                    <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">توضیحات:</strong> برای رسیدن به این سطح، شما به ${levelInfo.points} پوینت نیاز دارید.</p>
-                `;
+                // Ensure levelNum is a valid number and within bounds before accessing levelPointsThresholds
+                if (isNaN(levelNum) || levelNum < 1 || levelNum > levelPointsThresholds.length) {
+                    titleText = `خطا`;
+                    contentHtml = `<p class="text-red-500">سطح نامعتبر است.</p>`;
+                } else {
+                    const levelInfo = levelPointsThresholds[levelNum - 1];
+                    titleText = levelInfo.name;
+                    contentHtml = `
+                        <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">توضیحات:</strong> برای رسیدن به این سطح، شما به ${levelInfo.points} پوینت نیاز دارید.</p>
+                    `;
+                }
             } else { // This else block now covers all non-level types like 'totalTasks', 'importantTasks', etc.
                 const achievement = achievementsData.find(ach => ach.name === identifier);
                 
