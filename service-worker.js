@@ -1,12 +1,17 @@
-const CACHE_NAME = 'zytask-v1.0.1'; // Updated cache version to force re-installation
+const CACHE_NAME = 'zytask-v1.0.2'; // Updated cache version to force re-installation
 const urlsToCache = [
     '/', // Caches the root path, assuming zytask.html is served from there
     '/zytask.html', // Explicitly cache the HTML file
     'https://cdn.tailwindcss.com',
     'https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@33.003/misc/Farsi-Digits/Vazirmatn-FD-font-face.css',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
-    // Add any other static assets your app uses (e.g., specific Font Awesome fonts if loaded separately)
-    // Note: Font Awesome's CSS will dynamically request font files. The fetch handler below will cache them.
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
+    // Explicitly caching Font Awesome webfonts for better offline support on iOS/Safari
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.woff2',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.ttf',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-regular-400.woff2',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-regular-400.ttf',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-brands-400.woff2',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-brands-400.ttf'
 ];
 
 self.addEventListener('install', (event) => {
