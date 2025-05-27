@@ -393,10 +393,18 @@
             height: 16px; /* Adjust icon size if needed, h-4 w-4 is 16px */
             width: 16px;
         }
+
+        /* Loading screen specific styles */
+        #loadingScreen {
+            transition: opacity 0.5s ease-in-out; /* Default transition for first load */
+        }
+        #loadingScreen.instant-hide {
+            transition: none !important; /* Override transition for instant hide on subsequent loads */
+        }
     </style>
 </head>
 <body class="px-0 py-2 sm:p-4 flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-    <div id="loadingScreen" class="fixed inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 z-[1000] transition-opacity duration-500 opacity-100">
+    <div id="loadingScreen" class="fixed inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 z-[1000] opacity-100">
         <h2 class="text-2xl font-bold mb-4">در حال بارگیری برنامه...</h2>
         <div class="w-64 bg-gray-200 dark:bg-gray-700 rounded-full h-3">
             <div id="loadingProgressBar" class="h-3 rounded-full bg-blue-500 transition-all duration-100 ease-linear" style="width: 0%;"></div>
@@ -1383,7 +1391,6 @@
 
             // Show/hide "Done Reordering" button (now the reorder bar)
             if (isReorderingMode) {
-                // reorderBar.classList.remove('hidden'); // No longer needed as 'hidden' is not added dynamically
                 // Force reflow to ensure hidden is removed before transition starts (if it was initially hidden by CSS)
                 void reorderBar.offsetWidth; 
                 setTimeout(() => { // Then remove opacity and pointer-events
@@ -2807,13 +2814,13 @@
             }
         });
 
-        // Function to hide the loading screen
+        // Function to hide the loading screen (with transition)
         function hideLoadingScreen() {
             loadingScreen.classList.remove('opacity-100');
             loadingScreen.classList.add('opacity-0');
             loadingScreen.addEventListener('transitionend', () => {
                 loadingScreen.style.display = 'none';
-                loadingScreen.style.pointerEvents = 'none'; // Disable interaction
+                loadingScreen.style.pointerEvents = 'none';
             }, { once: true });
         }
 
@@ -2823,16 +2830,15 @@
             const hasLoadedBeforeInSession = sessionStorage.getItem('hasLoadedBefore') === 'true';
 
             if (!hasLoadedBeforeInSession && !hasSavedData) {
-                // This is likely the very first load for the user, or local storage is empty
+                // First load experience: show progress bar and fade out
                 let progress = 0;
                 const interval = setInterval(() => {
-                    progress += 10; // Simulate progress
+                    progress += 10;
                     if (progress > 100) progress = 100;
                     loadingProgressBar.style.width = `${progress}%`;
                     if (progress === 100) {
                         clearInterval(interval);
-                        // Give a small delay for the progress bar to fill visually
-                        setTimeout(() => {
+                        setTimeout(() => { // Keep a small delay for visual fill on first load
                             loadFromLocalStorage();
                             initializeTheme();
                             if (!userName) {
@@ -2842,13 +2848,13 @@
                                 welcomeModalContent.classList.add('opacity-100', 'scale-100');
                                 userNameInput.focus();
                             }
-                            hideLoadingScreen();
-                            sessionStorage.setItem('hasLoadedBefore', 'true'); // Mark as loaded for this session
-                        }, 200); // Small delay before hiding
+                            hideLoadingScreen(); // Use the function with transition
+                            sessionStorage.setItem('hasLoadedBefore', 'true');
+                        }, 200);
                     }
-                }, 100); // Update every 100ms
+                }, 100);
             } else {
-                // Subsequent loads or data already exists, hide instantly
+                // Subsequent loads: instant hide
                 loadFromLocalStorage();
                 initializeTheme();
                 if (!userName) {
@@ -2858,9 +2864,12 @@
                     welcomeModalContent.classList.add('opacity-100', 'scale-100');
                     userNameInput.focus();
                 }
-                loadingScreen.style.opacity = '0';
+                // Apply instant hide classes and remove transition
+                loadingScreen.classList.add('instant-hide'); // Add new class to remove transition
+                loadingScreen.classList.remove('opacity-100'); // Ensure opacity is 0
+                loadingScreen.classList.add('opacity-0');
+                loadingScreen.style.display = 'none'; // Instantly hide
                 loadingScreen.style.pointerEvents = 'none';
-                loadingScreen.style.display = 'none'; // Ensure display is none immediately
             }
         };
     </script>
