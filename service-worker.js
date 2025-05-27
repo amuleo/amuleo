@@ -1,81 +1,74 @@
-// نام کش (Cache) برای نسخه‌های مختلف
-const CACHE_NAME = 'offline-note-v1';
-
-// لیستی از فایل‌هایی که باید کش شوند تا صفحه کاملاً آفلاین کار کند
+const CACHE_NAME = 'zytask-v1.0.1'; // Updated cache version to force re-installation
 const urlsToCache = [
-    '/', // صفحه اصلی (مهم برای ریشه سایت)
-    '/index.html', // فایل HTML اصلی
-    'https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap', // فونت وزیرمتن
-    'https://cdn.tailwindcss.com' // Tailwind CSS
+    '/', // Caches the root path, assuming zytask.html is served from there
+    '/zytask.html', // Explicitly cache the HTML file
+    'https://cdn.tailwindcss.com',
+    'https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@33.003/misc/Farsi-Digits/Vazirmatn-FD-font-face.css',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
+    // Add any other static assets your app uses (e.g., specific Font Awesome fonts if loaded separately)
+    // Note: Font Awesome's CSS will dynamically request font files. The fetch handler below will cache them.
 ];
 
-/**
- * رویداد 'install': هنگام نصب Service Worker فعال می‌شود.
- * در این مرحله، تمام فایل‌های ضروری را در کش مرورگر ذخیره می‌کنیم.
- */
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('Service Worker: Opened cache');
+                console.log('Opened cache');
                 return cache.addAll(urlsToCache);
             })
             .catch(error => {
-                console.error('Service Worker: Failed to cache all URLs:', error);
+                console.error('Failed to add URLs to cache during install:', error);
             })
     );
 });
 
-/**
- * رویداد 'fetch': هر درخواست شبکه از مرورگر از اینجا عبور می‌کند.
- * ابتدا سعی می‌کنیم پاسخ را از کش پیدا کنیم. اگر پیدا نشد، از شبکه دریافت می‌کنیم و آن را کش می‌کنیم.
- */
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
-                // اگر پاسخ در کش موجود بود، آن را برمی‌گردانیم
+                // Cache hit - return response
                 if (response) {
-                    console.log('Service Worker: Serving from cache:', event.request.url);
                     return response;
                 }
-                // در غیر این صورت، درخواست را از شبکه دریافت می‌کنیم
-                console.log('Service Worker: Fetching from network:', event.request.url);
-                return fetch(event.request).then(
-                    (response) => {
-                        // بررسی می‌کنیم که آیا پاسخ معتبر است
-                        // (مثلاً پاسخ شبکه موفقیت‌آمیز باشد و نه خطای 404 یا 500)
-                        if (!response || response.status !== 200 || response.type !== 'basic') {
-                            return response;
-                        }
 
-                        // یک کپی از پاسخ را برای ذخیره در کش ایجاد می‌کنیم
-                        const responseToCache = response.clone();
+                // IMPORTANT: Clone the request. A request is a stream and
+                // can only be consumed once. We must clone it so that we can
+                // consume the stream twice: once for the cache and once for the network.
+                const fetchRequest = event.request.clone();
 
-                        caches.open(CACHE_NAME)
-                            .then((cache) => {
-                                cache.put(event.request, responseToCache);
-                            });
-
+                return fetch(fetchRequest).then((response) => {
+                    // Check if we received a valid response.
+                    // response.ok is true for 2xx status codes.
+                    // We generally want to cache all successful responses, regardless of type (basic, cors).
+                    // Opaque responses (type 'opaque') are tricky as their status cannot be inspected,
+                    // but for fonts, they are often necessary to cache.
+                    if (!response || !response.ok) {
                         return response;
                     }
-                ).catch(error => {
-                    // در صورت عدم موفقیت در دریافت از شبکه (مثلاً آفلاین بودن)
-                    console.error('Service Worker: Fetch failed:', event.request.url, error);
-                    // می‌توانید در اینجا یک صفحه آفلاین پیش‌فرض را برگردانید
-                    // return caches.match('/offline.html');
-                    return new Response('<h1>شما آفلاین هستید و این صفحه در کش موجود نیست.</h1>', {
-                        headers: { 'Content-Type': 'text/html; charset=utf-8' }
-                    });
+
+                    // IMPORTANT: Clone the response. A response is a stream
+                    // and can only be consumed once. We must clone it so that
+                    // we can consume the stream twice.
+                    const responseToCache = response.clone();
+
+                    caches.open(CACHE_NAME)
+                        .then((cache) => {
+                            cache.put(event.request, responseToCache);
+                        })
+                        .catch(cacheError => {
+                            console.error('Error putting response in cache:', cacheError);
+                        });
+
+                    return response;
+                }).catch((error) => {
+                    // If network request fails (e.g., offline), try to get from cache as a fallback.
+                    console.error('Fetch failed; returning cached resource if available:', error);
+                    return caches.match(event.request); // Try to return from cache if network fails
                 });
             })
     );
 });
 
-/**
- * رویداد 'activate': هنگام فعال شدن Service Worker جدید فعال می‌شود.
- * در این مرحله، کش‌های قدیمی را پاک می‌کنیم تا مطمئن شویم از آخرین نسخه فایل‌ها استفاده می‌شود.
- */
 self.addEventListener('activate', (event) => {
     const cacheWhitelist = [CACHE_NAME];
     event.waitUntil(
@@ -83,8 +76,8 @@ self.addEventListener('activate', (event) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
                     if (cacheWhitelist.indexOf(cacheName) === -1) {
-                        // اگر نام کش در لیست سفید نبود، آن را حذف می‌کنیم
-                        console.log('Service Worker: Deleting old cache:', cacheName);
+                        // Delete old caches
+                        console.log('Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
