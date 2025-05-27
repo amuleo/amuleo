@@ -396,6 +396,13 @@
     </style>
 </head>
 <body class="px-0 py-2 sm:p-4 flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+    <div id="loadingScreen" class="fixed inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 z-[1000] transition-opacity duration-500 opacity-100">
+        <h2 class="text-2xl font-bold mb-4">در حال بارگیری برنامه...</h2>
+        <div class="w-64 bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+            <div id="loadingProgressBar" class="h-3 rounded-full bg-blue-500 transition-all duration-100 ease-linear" style="width: 0%;"></div>
+        </div>
+    </div>
+
     <div class="container bg-white dark:bg-gray-800 rounded-none sm:rounded-xl p-2 sm:p-6 md:p-8 w-full max-w-4xl relative pt-16 md:pt-20">
         <div class="absolute top-4 right-4 md:top-6 md:right-6 z-10">
             <button id="menuBtn" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400" aria-label="Open menu">
@@ -833,6 +840,9 @@
 
         let currentTaskBeingEditedId = null; // To track the task currently being edited
 
+        // Loading screen elements
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingProgressBar = document.getElementById('loadingProgressBar');
 
         // Helper function to convert Persian numbers to English
         function convertPersianNumbersToEnglish(inputString) {
@@ -1973,7 +1983,7 @@
             isReorderingMode = false;
             reorderingTaskId = null;
             renderTasks(); // Re-render to revert to normal display
-            // Removed showMessageBox('حالت تغییر چیدمان غیرفعال شد.', 'info');
+            showMessageBox('چیدمان وظیفه با موفقیت تغییر کرد!', 'success'); // Show message only on finish
         }
 
         // Event listener for the "Done Reordering" button (now the finishReorderBtn in the floating bar)
@@ -2022,7 +2032,7 @@
 
             saveToLocalStorage();
             renderTasks(taskId); // Re-render to show new order and potentially new page, focusing on the moved task
-            showMessageBox('چیدمان وظیفه با موفقیت تغییر کرد!', 'success');
+            // Removed showMessageBox('چیدمان وظیفه با موفقیت تغییر کرد!', 'success'); // Moved to deactivateReorderMode
         }
 
 
@@ -2797,18 +2807,60 @@
             }
         });
 
+        // Function to hide the loading screen
+        function hideLoadingScreen() {
+            loadingScreen.classList.remove('opacity-100');
+            loadingScreen.classList.add('opacity-0');
+            loadingScreen.addEventListener('transitionend', () => {
+                loadingScreen.style.display = 'none';
+                loadingScreen.style.pointerEvents = 'none'; // Disable interaction
+            }, { once: true });
+        }
+
         // Load data from local storage and initialize theme on window load
         window.onload = () => {
-            loadFromLocalStorage();
-            initializeTheme();
+            const hasSavedData = localStorage.getItem('tasks') !== null;
+            const hasLoadedBeforeInSession = sessionStorage.getItem('hasLoadedBefore') === 'true';
 
-            // Show welcome modal if user name is not set
-            if (!userName) {
-                welcomeModal.classList.remove('hidden');
-                void welcomeModalContent.offsetWidth; // Force reflow
-                welcomeModalContent.classList.remove('opacity-0', 'scale-95'); // Ensure animation starts
-                welcomeModalContent.classList.add('opacity-100', 'scale-100');
-                userNameInput.focus();
+            if (!hasLoadedBeforeInSession && !hasSavedData) {
+                // This is likely the very first load for the user, or local storage is empty
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10; // Simulate progress
+                    if (progress > 100) progress = 100;
+                    loadingProgressBar.style.width = `${progress}%`;
+                    if (progress === 100) {
+                        clearInterval(interval);
+                        // Give a small delay for the progress bar to fill visually
+                        setTimeout(() => {
+                            loadFromLocalStorage();
+                            initializeTheme();
+                            if (!userName) {
+                                welcomeModal.classList.remove('hidden');
+                                void welcomeModalContent.offsetWidth;
+                                welcomeModalContent.classList.remove('opacity-0', 'scale-95');
+                                welcomeModalContent.classList.add('opacity-100', 'scale-100');
+                                userNameInput.focus();
+                            }
+                            hideLoadingScreen();
+                            sessionStorage.setItem('hasLoadedBefore', 'true'); // Mark as loaded for this session
+                        }, 200); // Small delay before hiding
+                    }
+                }, 100); // Update every 100ms
+            } else {
+                // Subsequent loads or data already exists, hide instantly
+                loadFromLocalStorage();
+                initializeTheme();
+                if (!userName) {
+                    welcomeModal.classList.remove('hidden');
+                    void welcomeModalContent.offsetWidth;
+                    welcomeModalContent.classList.remove('opacity-0', 'scale-95');
+                    welcomeModalContent.classList.add('opacity-100', 'scale-100');
+                    userNameInput.focus();
+                }
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.pointerEvents = 'none';
+                loadingScreen.style.display = 'none'; // Ensure display is none immediately
             }
         };
     </script>
