@@ -10,7 +10,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✅</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@33.003/misc/Farsi-Digits/Vazirmatn-FD-font-face.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==\" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* CSS variables for dynamic theming */
         :root {
@@ -143,6 +143,7 @@
             opacity: 0;
         }
 
+        /* Corrected confetti-fall keyframes - removed duplicate 100% */
         @keyframes confetti-fall {
             0% {
                 opacity: 0;
@@ -151,11 +152,6 @@
             10% {
                 opacity: 1;
             }
-            100% {
-                opacity: 0;
-                transform: translateY(100vh) rotate(720deg);
-            }
-            /* Adjusted to ensure confetti falls off screen */
             100% {
                 opacity: 0;
                 transform: translateY(100vh) rotate(720deg);
@@ -435,8 +431,9 @@
             color: #fff;
         }
 
+        /* Adjusted icon size for achievement cards to be responsive and consistent */
         .achievement-item-card .icon {
-            font-size: 2.5rem; /* Slightly smaller default icon size */
+            font-size: clamp(2rem, 5vw, 2.5rem); /* Responsive icon size, min 2rem, max 2.5rem */
             margin-bottom: 0.75rem; /* Adjusted margin */
             color: var(--theme-primary); /* Icon color based on theme */
             transition: color 0.3s ease-in-out;
@@ -490,9 +487,9 @@
             background: linear-gradient(to bottom right, #4f46e5, #7c3aed); /* Darker vibrant gradient */
         }
 
+        /* Adjusted icon size for achievement notification modal to be consistent with achievement cards */
         #achievementNotificationModalContent .icon {
-            /* Increased icon size */
-            font-size: clamp(5rem, 12vw, 8rem); /* Responsive icon size, min 5rem (80px), max 8rem (128px) */
+            font-size: clamp(3rem, 8vw, 4rem); /* Responsive icon size, slightly larger than card icons */
             margin-bottom: 1rem; /* Adjusted margin */
             color: #ffeb3b; /* Bright yellow for icon */
             animation: pulse 1.5s infinite; /* Pulsing animation for icon */
@@ -603,13 +600,6 @@
             </div>
             <p id="progressText" class="text-sm text-gray-500 dark:text-gray-400 mt-1 text-left">0%</p>
         </div>
-
-        <!-- <div class="mb-6 px-2 md:px-0">
-            <h2 class="text-lg sm:text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">دستاوردها:</h2>
-            <div id="achievementsList" class="flex flex-wrap gap-3">
-                <p id="noAchievementsMessage" class="text-gray-500 dark:text-gray-400">هنوز دستاوردی کسب نشده است.</p>
-            </div>
-        </div> -->
 
         <div class="mb-8 p-4 rounded-lg bg-gray-100 dark:bg-gray-900" id="addTaskSection">
             <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-50" id="addTaskTitle">افزودن وظیفه جدید</h2>
@@ -1002,8 +992,6 @@
         const dailyStreakSpan = document.getElementById('dailyStreak');
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
-        // const noAchievementsMessage = document.getElementById('noAchievementsMessage'); // Removed from main page
-        // const achievementsList = document.getElementById('achievementsList'); // Removed from main page
         const addTaskSection = document.getElementById('addTaskSection');
         const addTaskTitle = document.getElementById('addTaskTitle');
 
@@ -1064,13 +1052,16 @@
             return convertedString;
         }
 
-        // Function to display a custom message box instead of alert()
-        // Options can include: position ('top-right', 'bottom-center'), duration (ms), isUndo (boolean), taskId (for undo)
+        /**
+         * Function to display a custom message box instead of alert().
+         * Options can include: position ('top-right', 'bottom-center'), duration (ms), isUndo (boolean), taskData (for undo).
+         * For achievement notifications, type should be 'achievement' with iconClass, title, and message.
+         */
         function showMessageBox(message, type = 'info', options = {}) {
             const { position = 'top-right', duration = 3000, isUndo = false, taskData = null } = options;
             
-            if (options.type === 'achievement') { // NEW: Separate handling for achievement notifications
-                achievementNotificationQueue.push({ iconClass: options.iconClass, title: message, message: options.description }); // Re-purpose message as title for achievement
+            if (options.type === 'achievement') { // Separate handling for achievement notifications
+                achievementNotificationQueue.push({ iconClass: options.iconClass, title: message, message: options.description });
                 processAchievementNotificationQueue();
             } else if (position === 'top-right') {
                 notificationQueue.push({ type: 'message', data: { message, msgType: type, duration } });
@@ -1126,22 +1117,18 @@
             }, notification.data.duration);
         }
 
-        // NEW: Function to process the achievement notification queue
+        // Function to process the achievement notification queue
         function processAchievementNotificationQueue() {
-            console.log('processAchievementNotificationQueue called. Queue length:', achievementNotificationQueue.length, 'isAchievementNotificationDisplaying:', isAchievementNotificationDisplaying);
             // If welcome modal is currently visible, or another achievement is displaying, do not process.
             if (!welcomeModal.classList.contains('hidden') || isAchievementNotificationDisplaying) {
-                console.log('Returning: welcome modal visible or achievement notification already displaying.');
                 return;
             }
             if (achievementNotificationQueue.length === 0) {
-                console.log('Returning: achievement notification queue is empty.');
                 return;
             }
 
             isAchievementNotificationDisplaying = true;
             const achievement = achievementNotificationQueue.shift(); // Get the next achievement notification
-            console.log('Displaying achievement:', achievement.name);
 
             achievementNotificationIcon.className = achievement.iconClass;
             achievementNotificationTitle.textContent = achievement.title;
@@ -1294,15 +1281,11 @@
             addTaskBtn.onmouseover = () => addTaskBtn.style.backgroundColor = currentThemeData.secondary;
             addTaskBtn.onmouseout = () => addTaskBtn.style.backgroundColor = currentThemeData.primary;
 
-            // Background and text of add task section are now handled by Tailwind classes in HTML
-            // addTaskSection.style.backgroundColor = currentThemeData.accentBg; // REMOVED
-            // addTaskTitle.style.color = currentThemeData.accentText; // REMOVED
-
             // Update progress bar gradient
             progressBar.style.backgroundImage = `linear-gradient(to right, ${currentThemeData.primary}, ${currentThemeData.secondary})`;
         }
 
-        // Helper function to convert hex color code to RGB format
+        // Helper function to convert hex color code to RGB format (not used in current minimal theme logic)
         function hexToRgb(hex) {
             const bigint = parseInt(hex.slice(1), 16);
             const r = (bigint >> 16) & 255;
@@ -1313,7 +1296,7 @@
 
         // Function to update gamification display
         function updateGamificationDisplay() {
-            // NEW: If userName is not set, defer gamification display until it is.
+            // If userName is not set, defer gamification display until it is.
             if (!userName) {
                 return;
             }
@@ -1515,7 +1498,6 @@
                 // Compare only date parts for streak
                 if (lastDate.toDateString() === yesterday.toDateString()) {
                     dailyStreak++;
-                    // showMessageBox(`Streak: ${dailyStreak} consecutive days!`, 'info'); // This message removed on load
                 } else if (lastDate.toDateString() !== today) {
                     dailyStreak = 0; // Reset if not consecutive and today hasn't been completed yet
                     showMessageBox('زنجیره روزانه شما بازنشانی شد.', 'info');
@@ -1525,7 +1507,6 @@
             }
             highestDailyStreak = Math.max(highestDailyStreak, dailyStreak); // Ensure highest is updated on load too
             saveToLocalStorage(); // Save updated streak if reset
-            // renderTasks(); // Render tasks immediately after loading - REMOVED from here
         }
 
         /**
@@ -1622,7 +1603,7 @@
         function renderTasks(focusTaskId = null) {
             // Get current active and completed tasks from the data model
             let activeTasks = tasks.filter(task => !task.completed);
-            const completedTasks = tasks.filter(task => task.completed); // Corrected 't' to 'task'
+            const completedTasks = tasks.filter(task => task.completed);
 
             // Sort active tasks: pinned first, then maintain relative order (manual order)
             activeTasks.sort((a, b) => {
@@ -1631,7 +1612,7 @@
                 return 0; // Maintain existing order for unpinned tasks
             });
 
-            // --- Dynamic Page Calculation based on focusTaskId ---
+            // Dynamic Page Calculation based on focusTaskId
             if (focusTaskId) {
                 const focusedTask = tasks.find(t => t.id === focusTaskId);
                 if (focusedTask) {
@@ -1653,7 +1634,7 @@
                     }
                 }
             }
-            // --- End Dynamic Page Calculation ---
+            // End Dynamic Page Calculation
 
             // Handle active tasks rendering
             const activeTotalPages = Math.ceil(activeTasks.length / TASKS_PER_PAGE);
@@ -1680,7 +1661,7 @@
             completedCurrentPage = Math.min(Math.max(1, completedCurrentPage), Math.max(1, completedTotalPages));
 
             const completedStartIndex = (completedCurrentPage - 1) * TASKS_PER_PAGE;
-            const completedEndIndex = completedStartIndex + TASKS_PER_PAGE; // Corrected variable name
+            const completedEndIndex = completedStartIndex + TASKS_PER_PAGE;
             const completedTasksToRender = completedTasks.slice(completedStartIndex, completedEndIndex);
 
             // Pass null for focusTaskId for completed tasks unless specifically needed (e.g., undo)
@@ -1699,11 +1680,10 @@
                 }, 10); // Small delay to ensure transition applies
             } else {
                 reorderBar.classList.add('opacity-0', 'pointer-events-none');
-                // No need for transitionend listener to add 'hidden' anymore
             }
 
             // Only update gamification display if userName is set
-            if (userName) { // NEW: Guard added here
+            if (userName) {
                 updateGamificationDisplay();
             }
         }
@@ -1760,7 +1740,7 @@
             });
 
             // Clear container and append fragment (this will cause reflow and trigger transitions)
-            container.innerHTML = ''; // Clear only task items, not pagination
+            container.innerHTML = '';
             container.appendChild(fragment);
 
             // Handle empty message
@@ -1853,9 +1833,9 @@
             // Double-click to edit page number
             pageNumberSpan.addEventListener('dblclick', () => {
                 const input = document.createElement('input');
-                input.type = 'text'; // Changed type to "text"
-                input.inputmode = 'numeric'; // Added numeric inputmode
-                input.className = 'w-12 text-center bg-blue-50 dark:bg-blue-900 text-blue-800 dark:text-blue-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-right'; // Added text-right
+                input.type = 'text';
+                input.inputmode = 'numeric';
+                input.className = 'w-12 text-center bg-blue-50 dark:bg-blue-900 text-blue-800 dark:text-blue-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-right';
                 input.value = currentPage;
                 input.min = 1;
                 input.max = totalPages;
@@ -1988,7 +1968,7 @@
                 return;
             }
 
-            if (taskName.length > 30) { // Changed from 15 to 30
+            if (taskName.length > 30) {
                 showMessageBox('مقدار ورودی نباید بیش از ۳۰ کاراکتر باشد.', 'error');
                 return;
             }
@@ -1997,7 +1977,7 @@
                 // Convert Persian numbers to English before parsing
                 const convertedPoints = convertPersianNumbersToEnglish(customPointsInput.value);
                 customPoints = parseInt(convertedPoints, 10);
-                if (isNaN(customPoints) || customPoints <= 0 || customPoints > MAX_CUSTOM_POINTS) { // Changed MAX_CUSTOM_POINTS
+                if (isNaN(customPoints) || customPoints <= 0 || customPoints > MAX_CUSTOM_POINTS) {
                     showMessageBox(`لطفاً یک مقدار پوینت سفارشی معتبر (حداکثر ${MAX_CUSTOM_POINTS}) وارد کنید.`, 'info');
                     return;
                 }
@@ -2157,9 +2137,6 @@
                     // Now, remove the original completed task from the array
                     tasks.splice(taskIndex, 1); // Remove the original completed task
 
-                    // No point deduction for the original task, as it remains completed.
-                    // No change in daily streak for this operation.
-
                     showMessageBox(`وظیفه بازنشانی شد!`, 'success');
                 }
                 saveToLocalStorage();
@@ -2177,7 +2154,6 @@
                     hasPinnedTaskEver = true; // Set flag if this is the first time pinning
                 }
                 saveToLocalStorage();
-                // No need to set activeCurrentPage = 1 here, renderTasks with focusTaskId will handle it
                 renderTasks(taskId); // Re-render and focus on the pinned/unpinned task
                 showMessageBox(`وظیفه "${task.name}" ${task.isPinned ? 'پین شد!' : 'از پین خارج شد.'}`, 'info');
             }
@@ -2190,7 +2166,7 @@
             document.querySelectorAll('.task-action-menu').forEach(menu => menu.remove());
 
             // If in reordering mode, do not show menu for other tasks
-            if (isReorderingMode) { // Removed taskId !== reorderingTaskId, as any menu open should close in reorder mode
+            if (isReorderingMode) {
                 return;
             }
 
@@ -2289,11 +2265,14 @@
             // Close menu when clicking outside
             const closeMenu = (e) => {
                 // Check if the click was outside the menu and outside the button that opened it
-                // Also check if the click target is an.interactive element (input, select, button, checkbox)
-                // If it's an interactive element, allow its default action to proceed, but still close the menu.
-                const isInteractiveElement = e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON' || e.target.type === 'checkbox';
+                // Use closest for more robust detection of interactive elements
+                const isInteractiveElement = e.target.closest('input, select, button, [type="checkbox"]');
 
-                if (!menu.contains(e.target) && !buttonElement.contains(e.target)) {
+                if (!menu.contains(e.target) && !buttonElement.contains(e.target) && !isInteractiveElement) {
+                    menu.remove();
+                    document.removeEventListener('click', closeMenu);
+                } else if (isInteractiveElement && !menu.contains(e.target)) {
+                    // If an interactive element outside the menu was clicked, close the menu but allow the element's action.
                     menu.remove();
                     document.removeEventListener('click', closeMenu);
                 }
@@ -2312,7 +2291,6 @@
             // Hide all other task action menus
             document.querySelectorAll('.task-action-menu').forEach(menu => menu.remove());
             renderTasks(taskId); // Re-render to show arrows and disable other items, focus on the reordering task
-            // Removed showMessageBox('حالت تغییر چیدمان فعال شد. از فلش‌ها برای جابجایی استفاده کنید.', 'info');
         }
 
         // Function to deactivate reordering mode
@@ -2369,7 +2347,6 @@
 
             saveToLocalStorage();
             renderTasks(taskId); // Re-render to show new order and potentially new page, focusing on the moved task
-            // Removed showMessageBox('چیدمان وظیفه با موفقیت تغییر کرد!', 'success'); // Moved to deactivateReorderMode
         }
 
 
@@ -2383,7 +2360,7 @@
             }
 
             editTaskNameInput.value = task.name;
-            editTaskNameInput.setAttribute('maxlength', '30'); // Set max length here (Changed from 15 to 30)
+            editTaskNameInput.setAttribute('maxlength', '30');
             editTaskImportanceSelect.value = task.importance;
             if (task.importance === 'custom') {
                 editTaskCustomPointsInput.classList.remove('hidden');
@@ -2413,22 +2390,13 @@
                 editTaskCustomPointsInput.focus();
             } else {
                 editTaskCustomPointsInput.classList.add('hidden');
-                editTaskCustomPointsInput.value = '';
-                // Auto-save edited task if name is filled and importance is not custom
-                if (editTaskNameInput.value.trim().length > 0) {
-                    console.log('Edit importance changed to non-custom, attempting to save task.');
-                    // Removed direct call to saveEditedTask() to prevent auto-save on blur/change
-                }
+                editTaskCustomPointsInput.value = ''; // Clear value if hidden
             }
         }
 
         // Handler for editTaskImportanceSelect blur event
         function handleEditTaskImportanceBlur() {
-            // Only trigger if not custom and task input has content
-            if (editTaskImportanceSelect.value !== 'custom' && editTaskNameInput.value.trim().length > 0) {
-                console.log('Edit importance (non-custom) blurred, attempting to save task.');
-                // Removed direct call to saveEditedTask() to prevent auto-save on blur/change
-            }
+            // No auto-save on blur, as per user's original code design.
         }
 
 
@@ -2444,7 +2412,7 @@
                 return;
             }
 
-            if (newTaskName.length > 30) { // Changed from 15 to 30
+            if (newTaskName.length > 30) {
                 showMessageBox('مقدار ورودی نباید بیش از ۳۰ کاراکتر باشد.', 'error');
                 return;
             }
@@ -2453,7 +2421,7 @@
                 // Convert Persian numbers to English before parsing
                 const convertedPoints = convertPersianNumbersToEnglish(editTaskCustomPointsInput.value);
                 newCustomPoints = parseInt(convertedPoints, 10);
-                if (isNaN(newCustomPoints) || newCustomPoints <= 0 || newCustomPoints > MAX_CUSTOM_POINTS) { // Changed MAX_CUSTOM_POINTS
+                if (isNaN(newCustomPoints) || newCustomPoints <= 0 || newCustomPoints > MAX_CUSTOM_POINTS) {
                     showMessageBox(`لطفاً یک مقدار پوینت سفارشی معتبر (حداکثر ${MAX_CUSTOM_POINTS}) وارد کنید.`, 'info');
                     return;
                 }
@@ -2462,7 +2430,7 @@
             const taskIndex = tasks.findIndex(t => t.id === taskId);
             if (taskIndex > -1) {
                 tasks[taskIndex].name = newTaskName;
-                tasks[taskIndex].importance = newImportance; // Corrected this line
+                tasks[taskIndex].importance = newImportance;
                 tasks[taskIndex].customPoints = newCustomPoints;
                 saveToLocalStorage();
                 renderTasks(taskId); // Re-render and focus on the edited task
@@ -2622,12 +2590,15 @@
             // Check if the click target is inside the menu button or the dropdown itself
             const isClickInsideMenu = menuBtn.contains(e.target) || menuDropdown.contains(e.target);
             // Check if the click target is an interactive element outside the menu/button (e.g., another checkbox, button)
-            const isInteractiveElement = e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON' || e.target.type === 'checkbox';
+            const isInteractiveElement = e.target.closest('input, select, button, [type="checkbox"]');
 
             // Close menu if clicked outside menu and its button,
             // AND if the click is not on another interactive element that should be allowed to function.
             // If it's an interactive element, we still want the menu to close, but the element's action to proceed.
-            if (!isClickInsideMenu) {
+            if (!isClickInsideMenu && !isInteractiveElement) {
+                menuDropdown.classList.add('hidden');
+            } else if (isInteractiveElement && !isClickInsideMenu) {
+                // If an interactive element outside the menu was clicked, close the menu.
                 menuDropdown.classList.add('hidden');
             }
         });
@@ -2798,17 +2769,14 @@
 
         // Event listener for closing Achievement Notification Modal
         closeAchievementNotificationModalBtn.addEventListener('click', () => {
-            console.log('Close achievement notification button clicked.');
             achievementNotificationModalContent.classList.remove('opacity-100', 'scale-100');
             achievementNotificationModalContent.classList.add('opacity-0', 'scale-95');
             
             // Use setTimeout to ensure modal is visually hidden before processing next
             // The transition duration for achievementNotificationModalContent is 0.3s
             setTimeout(() => {
-                console.log('Achievement modal transition complete (via setTimeout). Hiding modal.');
                 achievementNotificationModal.classList.add('hidden'); // Fully hide the modal overlay
                 isAchievementNotificationDisplaying = false; // Release the flag ONLY AFTER hiding
-                console.log('isAchievementNotificationDisplaying set to false. Calling processAchievementNotificationQueue.');
                 processAchievementNotificationQueue(); // Process next in queue
             }, 350); // A little buffer after 300ms transition
         });
@@ -2886,7 +2854,7 @@
             helpModalBody.querySelectorAll('.clickable-item').forEach(item => {
                 item.addEventListener('click', (event) => {
                     const type = event.currentTarget.dataset.type;
-                    const id = event.currentTarget.dataset.id; // Corrected to use data-id
+                    const id = event.currentTarget.dataset.id;
                     if (type === 'level') {
                         showDetailModal('level', id);
                     } else {
@@ -3009,9 +2977,9 @@
             welcomeModalContent.classList.add('opacity-0', 'scale-95');
             setTimeout(() => {
                 welcomeModal.classList.add('hidden');
-                updateGamificationDisplay(); // NEW: Call here after userName is set
-                processNotificationQueue(); // NEW: Start processing general notifications
-                processAchievementNotificationQueue(); // NEW: Also process achievement queue on load
+                updateGamificationDisplay(); // Call here after userName is set
+                processNotificationQueue(); // Start processing general notifications
+                processAchievementNotificationQueue(); // Also process achievement queue on load
             }, 50);
             showMessageBox(`${userName} عزیز، خوش آمدید!`, 'success');
         });
@@ -3075,23 +3043,23 @@
                         typeof importedData.zPoint === 'number' &&
                         typeof importedData.level === 'number' &&
                         typeof importedData.dailyStreak === 'number' &&
-                        (typeof importedData.highestDailyStreak === 'number' || typeof importedData.highestDailyStreak === 'undefined') && // Validate highest streak
+                        (typeof importedData.highestDailyStreak === 'number' || typeof importedData.highestDailyStreak === 'undefined') &&
                         (typeof importedData.lastCompletionDate === 'string' || importedData.lastCompletionDate === null) &&
                         typeof importedData.totalCustomTasksCompleted === 'number' &&
                         (typeof importedData.userName === 'string' || importedData.userName === null || importedData.userName === undefined) &&
-                        (typeof importedData.unlockedAchievements === 'object' && Array.isArray(importedData.unlockedAchievements) || typeof importedData.unlockedAchievements === 'undefined') && // Validate unlocked achievements
-                        (typeof importedData.hasPinnedTaskEver === 'boolean' || typeof importedData.hasPinnedTaskEver === 'undefined') // Validate new flag
+                        (typeof importedData.unlockedAchievements === 'object' && Array.isArray(importedData.unlockedAchievements) || typeof importedData.unlockedAchievements === 'undefined') &&
+                        (typeof importedData.hasPinnedTaskEver === 'boolean' || typeof importedData.hasPinnedTaskEver === 'undefined')
                     ) {
                         tasks = importedData.tasks;
                         zPoint = importedData.zPoint;
                         level = importedData.level;
                         dailyStreak = importedData.dailyStreak;
-                        highestDailyStreak = importedData.highestDailyStreak || 0; // Set highest streak, default to 0 if undefined
+                        highestDailyStreak = importedData.highestDailyStreak || 0;
                         lastCompletionDate = importedData.lastCompletionDate;
                         totalCustomTasksCompleted = importedData.totalCustomTasksCompleted;
-                        userName = importedData.userName || null; // Ensure userName is set or null
-                        unlockedAchievements = importedData.unlockedAchievements || []; // Set unlocked achievements, default to empty array if undefined
-                        hasPinnedTaskEver = importedData.hasPinnedTaskEver || false; // Set new flag, default to false if undefined
+                        userName = importedData.userName || null;
+                        unlockedAchievements = importedData.unlockedAchievements || [];
+                        hasPinnedTaskEver = importedData.hasPinnedTaskEver || false;
 
                         // Ensure imported tasks have the new 'isPinned' property
                         tasks.forEach(task => {
@@ -3243,13 +3211,12 @@
                 welcomeModalContent.classList.remove('opacity-0', 'scale-95'); // Ensure animation starts
                 welcomeModalContent.classList.add('opacity-100', 'scale-100');
                 userNameInput.focus();
-                // No processNotificationQueue() or updateGamificationDisplay() here
             } else {
                 // If welcome modal is not shown (user already has a name),
                 // then it's safe to update gamification and process notifications.
                 updateGamificationDisplay(); // Now it's safe to run
                 processNotificationQueue(); // Now it's safe to process
-                processAchievementNotificationQueue(); // NEW: Also process achievement queue on load
+                processAchievementNotificationQueue(); // Also process achievement queue on load
             }
         };
 
