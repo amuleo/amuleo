@@ -404,7 +404,7 @@
     </style>
 </head>
 <body class="px-0 py-2 sm:p-4 flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-    <div id="loadingScreen" class="fixed inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 z-[1000] opacity-100">
+    <div id="loadingScreen" class="fixed inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 z-[1000] opacity-0 hidden">
         <h2 class="text-2xl font-bold mb-4">در حال بارگیری برنامه...</h2>
         <div class="w-64 bg-gray-200 dark:bg-gray-700 rounded-full h-3">
             <div id="loadingProgressBar" class="h-3 rounded-full bg-blue-500 transition-all duration-100 ease-linear" style="width: 0%;"></div>
@@ -2849,6 +2849,10 @@
                 }
             } else {
                 // First time load with no saved data: show progress bar and animate fade out
+                loadingScreen.classList.remove('hidden'); // Make it visible
+                loadingScreen.classList.add('opacity-100'); // Ensure full opacity
+                loadingScreen.style.transition = 'opacity 0.5s ease-in-out'; // Re-apply transition for fade-out
+
                 let progress = 0;
                 const interval = setInterval(() => {
                     progress += 10;
