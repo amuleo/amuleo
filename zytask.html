@@ -393,7 +393,7 @@
                     <option value="normal" selected>عادی</option>
                     <option value="custom">سفارشی</option>
                 </select>
-                <input type="text" id="customPointsInput" placeholder="پوینت سفارشی (حداکثر 50)" inputmode="numeric"
+                <input type="text" id="customPointsInput" placeholder="پوینت سفارشی (حداکثر ۵۰)" inputmode="numeric"
                        class="p-3 border rounded-lg text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12 w-full md:w-32 hidden">
                 <button id="addTaskBtn"
                         class="text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 text-lg w-full md:w-auto">
@@ -545,7 +545,7 @@
                 <option value="normal">عادی</option>
                 <option value="custom">سفارشی</option>
             </select>
-            <input type="text" id="editTaskCustomPointsInput" placeholder="پوینت سفارشی (حداکثر 50)" inputmode="numeric"
+            <input type="text" id="editTaskCustomPointsInput" placeholder="پوینت سفارشی (حداکثر ۵۰)" inputmode="numeric"
                    class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 hidden">
             <div class="flex justify-end space-x-2 space-x-reverse">
                 <button id="saveEditedTaskBtn" class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white">ذخیره</button>
@@ -558,7 +558,7 @@
         <div class="dynamic-modal-content text-gray-800 dark:text-gray-100" id="changeOrderModalContent">
             <h3 class="text-xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">تغییر چیدمان وظیفه</h3>
             <p class="mb-2 text-sm text-gray-700 dark:text-gray-300">موقعیت جدید وظیفه را (به صورت عددی) وارد کنید:</p>
-            <input type="text" id="changeOrderInput" placeholder="موقعیت جدید..." inputmode="numeric"
+            <input type="text" id="changeOrderInput" placeholder="موقعیت جدید (مثلاً ۱، ۲، ۳)..." inputmode="numeric"
                    class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700">
             <div class="flex justify-end space-x-2 space-x-reverse">
                 <button id="saveChangedOrderBtn" class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white">ذخیره</button>
@@ -1145,7 +1145,7 @@
                     // showMessageBox(`Streak: ${dailyStreak} consecutive days!`, 'info'); // This message removed on load
                 } else if (lastDate.toDateString() !== today) {
                     dailyStreak = 0; // Reset if not consecutive and today hasn't been completed yet
-                    showMessageBox('Your daily streak has been reset.', 'info');
+                    showMessageBox('زنجیره روزانه شما بازنشانی شد.', 'info');
                 }
             } else if (!lastCompletionDate) { // If no completion date exists
                 dailyStreak = 0;
@@ -1187,7 +1187,7 @@
                     <input type="checkbox" data-id="${task.id}" ${task.completed ? 'checked' : ''}
                         class="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-400 rounded focus:ring-blue-500 dark:focus:ring-blue-300 ml-2">
                     <div class="task-name-wrapper ml-3 text-base sm:text-lg font-medium ${task.completed ? 'text-gray-500 dark:text-gray-400 line-through' : 'text-gray-800 dark:text-gray-100'}">
-                        ${task.isPinned ? `<i class="fa-solid fa-thumbtack ml-2 text-yellow-500" title="Pinned task"></i>` : ''}
+                        ${task.isPinned ? `<i class="fa-solid fa-thumbtack ml-2 text-yellow-500" title="وظیفه پین شده"></i>` : ''}
                         <span class="task-name">${task.name}</span>
                     </div>
                 </div>
@@ -1318,7 +1318,7 @@
             prevBtn.className = `p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`;
             prevBtn.innerHTML = `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
             prevBtn.disabled = currentPage === 1;
-            prevBtn.title = "Previous page";
+            prevBtn.title = "صفحه قبلی";
             prevBtn.addEventListener('click', () => {
                 if (listType === 'active') {
                     activeCurrentPage = Math.max(1, activeCurrentPage - 1);
@@ -1333,7 +1333,7 @@
             const pageNumberSpan = document.createElement('span');
             pageNumberSpan.className = 'px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 font-semibold cursor-pointer min-w-[3rem] text-center';
             pageNumberSpan.textContent = currentPage;
-            pageNumberSpan.title = `Page ${currentPage} of ${totalPages}. Double-click to edit.`;
+            pageNumberSpan.title = `صفحه ${currentPage} از ${totalPages}. برای ویرایش دو بار کلیک کنید.`;
             pageNumberSpan.dataset.listType = listType; // Store list type for event handling
 
             // Double-click to edit page number
@@ -1355,7 +1355,7 @@
                     let newPage = parseInt(convertPersianNumbersToEnglish(input.value), 10); // Convert before parsing
                     if (isNaN(newPage) || newPage < 1 || newPage > totalPages) {
                         newPage = parseInt(input.dataset.originalValue, 10); // Revert to original value if invalid
-                        showMessageBox(`Invalid page number. Value must be between 1 and ${totalPages}. Reverting to page ${newPage}.`, 'error');
+                        showMessageBox(`شماره صفحه نامعتبر است. مقدار باید بین ۱ و ${totalPages} باشد. بازگشت به صفحه ${newPage}.`, 'error');
                     }
                     if (listType === 'active') {
                         activeCurrentPage = newPage;
@@ -1383,7 +1383,7 @@
             nextBtn.className = `p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`;
             nextBtn.innerHTML = `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>`;
             nextBtn.disabled = currentPage === totalPages;
-            prevBtn.title = "Next page";
+            prevBtn.title = "صفحه بعدی";
             nextBtn.addEventListener('click', () => {
                 if (listType === 'active') {
                     activeCurrentPage = Math.min(totalPages, activeCurrentPage + 1);
@@ -1432,7 +1432,7 @@
                     `;
                     
                     // Add click listener to show details
-                    achievementItem.addEventListener('click', () => showDetailModal(achievement.type, achievement.type === 'level' ? achievement.level : achievement.name));
+                    achievementItem.addEventListener('click', () => showDetailModal(achievement.type, achievement.name)); // Pass name for achievement lookup
                     
                     achievementsList.appendChild(achievementItem);
                 });
@@ -1451,7 +1451,7 @@
             }
 
             if (taskName.length > 15) {
-                showMessageBox('مقدار ورودی نباید بیش از 15 کاراکتر باشد.', 'error');
+                showMessageBox('مقدار ورودی نباید بیش از ۱۵ کاراکتر باشد.', 'error');
                 return;
             }
 
@@ -1555,7 +1555,7 @@
 
                     if (!lastCompletionDate) {
                         dailyStreak = 1;
-                        showMessageBox('Your daily streak has started!', 'info');
+                        showMessageBox('زنجیره روزانه شما آغاز شد!', 'info');
                     } else {
                         const lastDate = new Date(lastCompletionDate);
                         const yesterday = new Date();
@@ -1563,10 +1563,10 @@
 
                         if (lastDate.toDateString() === yesterday.toDateString()) {
                             dailyStreak++;
-                            showMessageBox(`Streak: ${dailyStreak} consecutive days!`, 'info');
+                            showMessageBox(`زنجیره: ${dailyStreak} روز متوالی!`, 'info');
                         } else if (lastDate.toDateString() !== today) {
                             dailyStreak = 1; // Reset if not consecutive and today hasn't been completed yet
-                            showMessageBox('Your daily streak has been reset and restarted.', 'info');
+                            showMessageBox('زنجیره روزانه شما بازنشانی و مجدداً آغاز شد.', 'info');
                         }
                     }
                     lastCompletionDate = today;
@@ -1607,7 +1607,7 @@
                     // No point deduction for the original task, as it remains completed.
                     // No change in daily streak for this operation.
 
-                    showMessageBox(`Task reset!`, 'success');
+                    showMessageBox(`وظیفه بازنشانی شد!`, 'success');
                 }
                 saveToLocalStorage();
                 renderTasks();
@@ -1622,7 +1622,7 @@
                 task.isPinned = !task.isPinned; // Toggle pin status
                 saveToLocalStorage();
                 renderTasks();
-                showMessageBox(`Task "${task.name}" ${task.isPinned ? 'pinned!' : 'unpinned.'}`, 'info');
+                showMessageBox(`وظیفه "${task.name}" ${task.isPinned ? 'پین شد!' : 'از پین خارج شد.'}`, 'info');
             }
         }
 
@@ -1748,7 +1748,7 @@
             currentTaskBeingEditedId = taskId;
             const task = tasks.find(t => t.id === taskId);
             if (!task) {
-                showMessageBox('Error: Task not found for editing.', 'error');
+                showMessageBox('خطا: وظیفه برای ویرایش یافت نشد.', 'error');
                 return;
             }
 
@@ -1810,12 +1810,12 @@
             let newCustomPoints = undefined;
 
             if (newTaskName.length === 0) {
-                showMessageBox('Task name cannot be empty.', 'info');
+                showMessageBox('نام وظیفه نمی‌تواند خالی باشد.', 'info');
                 return;
             }
 
             if (newTaskName.length > 15) {
-                showMessageBox('Input value should not exceed 15 characters.', 'error');
+                showMessageBox('مقدار ورودی نباید بیش از ۱۵ کاراکتر باشد.', 'error');
                 return;
             }
 
@@ -1824,7 +1824,7 @@
                 const convertedPoints = convertPersianNumbersToEnglish(editTaskCustomPointsInput.value);
                 newCustomPoints = parseInt(convertedPoints, 10);
                 if (isNaN(newCustomPoints) || newCustomPoints <= 0 || newCustomPoints > MAX_CUSTOM_POINTS) {
-                    showMessageBox(`Please enter a valid custom point value (max ${MAX_CUSTOM_POINTS}).`, 'info');
+                    showMessageBox(`لطفاً یک مقدار پوینت سفارشی معتبر (حداکثر ${MAX_CUSTOM_POINTS}) وارد کنید.`, 'info');
                     return;
                 }
             }
@@ -1836,13 +1836,13 @@
                 tasks[taskIndex].customPoints = newCustomPoints;
                 saveToLocalStorage();
                 renderTasks();
-                showMessageBox('Task successfully edited!', 'success');
+                showMessageBox('وظیفه با موفقیت ویرایش شد!', 'success');
                 editTaskModal.classList.remove('show');
                 setTimeout(() => { // Add delay for hiding after transition
                     editTaskModal.classList.add('hidden');
                 }, 50);
             } else {
-                showMessageBox('Error: Task not found for editing.', 'error');
+                showMessageBox('خطا: وظیفه برای ویرایش یافت نشد.', 'error');
             }
         }
 
@@ -1855,7 +1855,7 @@
             setTimeout(() => { // Add delay for hiding after transition
                 editTaskModal.classList.add('hidden');
             }, 50);
-            showMessageBox('Task edit cancelled.', 'info');
+            showMessageBox('ویرایش وظیفه لغو شد.', 'info');
         });
 
         // Function to show reorder modal
@@ -1865,7 +1865,7 @@
             const taskIndex = activeTasks.findIndex(t => t.id === taskId);
             
             if (taskIndex === -1) {
-                showMessageBox('Cannot reorder completed tasks or task not found.', 'error');
+                showMessageBox('امکان تغییر چیدمان وظایف تکمیل شده وجود ندارد یا وظیفه یافت نشد.', 'error');
                 return;
             }
 
@@ -1885,7 +1885,7 @@
 
             const taskIndexInTasks = tasks.findIndex(t => t.id === taskId);
             if (taskIndexInTasks === -1) {
-                showMessageBox('Error reordering task. Task not found.', 'error');
+                showMessageBox('خطا در تغییر چیدمان وظیفه. وظیفه یافت نشد.', 'error');
                 return;
             }
 
@@ -1893,7 +1893,7 @@
 
             // Only allow reordering of active tasks
             if (taskToMove.completed) {
-                showMessageBox('Cannot reorder completed tasks.', 'info');
+                showMessageBox('امکان تغییر چیدمان وظایف تکمیل شده وجود ندارد.', 'info');
                 return;
             }
 
@@ -1901,7 +1901,7 @@
             const taskInActiveTasksIndex = activeTasks.findIndex(t => t.id === taskId);
 
             if (isNaN(newPosition) || newPosition < 1 || newPosition > activeTasks.length) {
-                showMessageBox(`Please enter a valid position between 1 and ${activeTasks.length}.`, 'info');
+                showMessageBox(`لطفاً یک موقعیت معتبر بین ۱ و ${activeTasks.length} وارد کنید.`, 'info');
                 return;
             }
 
@@ -1915,7 +1915,7 @@
                 // If the task was pinned, unpin it when manually reordering
                 if (movedTask.isPinned) {
                     movedTask.isPinned = false;
-                    showMessageBox('Task unpinned due to manual reordering.', 'info');
+                    showMessageBox('وظیفه به دلیل تغییر چیدمان دستی از پین خارج شد.', 'info');
                 }
 
                 // Reconstruct the main tasks array to reflect the new order
@@ -1924,13 +1924,13 @@
 
                 saveToLocalStorage();
                 renderTasks();
-                showMessageBox('Task order successfully changed!', 'success');
+                showMessageBox('چیدمان وظیفه با موفقیت تغییر کرد!', 'success');
                 changeOrderModal.classList.remove('show');
                 setTimeout(() => { // Add delay for hiding after transition
                     changeOrderModal.classList.add('hidden');
                 }, 50);
             } else {
-                showMessageBox('Error reordering task. Task not found or already completed.', 'error');
+                showMessageBox('خطا در تغییر چیدمان وظیفه. وظیفه یافت نشد یا قبلاً تکمیل شده است.', 'error');
             }
         });
 
@@ -1940,7 +1940,7 @@
             setTimeout(() => { // Add delay for hiding after transition
                 changeOrderModal.classList.add('hidden');
             }, 50);
-            showMessageBox('Reorder cancelled.', 'info');
+            showMessageBox('تغییر چیدمان لغو شد.', 'info');
         });
 
         // Function to delete task (called from menu)
@@ -1964,7 +1964,7 @@
                     taskItemElement.addEventListener('transitionend', () => {
                         renderTasks(); // Re-render after animation
                         // Use showMessageBox for undo message
-                        showMessageBox(`Task "${deletedTaskCopy.name}" deleted. Tap to undo.`, 'info', {
+                        showMessageBox(`وظیفه "${deletedTaskCopy.name}" حذف شد. برای بازگردانی ضربه بزنید.`, 'info', {
                             position: 'bottom-center',
                             isUndo: true,
                             duration: 5000,
@@ -1974,7 +1974,7 @@
                 } else {
                     // If element not found, still delete from data and re-render
                     renderTasks();
-                    showMessageBox(`Task "${deletedTaskCopy.name}" deleted. Tap to undo.`, 'info', {
+                    showMessageBox(`وظیفه "${deletedTaskCopy.name}" حذف شد. برای بازگردانی ضربه بزنید.`, 'info', {
                         position: 'bottom-center',
                         isUndo: true,
                         duration: 5000,
@@ -1982,7 +1982,7 @@
                     });
                 }
             } else {
-                showMessageBox('Error: Task not found for deletion.', 'error');
+                showMessageBox('خطا: وظیفه برای حذف یافت نشد.', 'error');
             }
         }
 
@@ -2001,9 +2001,9 @@
                 tasks.push(newTask); // Add to end of list
                 saveToLocalStorage();
                 renderTasks();
-                showMessageBox(`Task "${newTask.name}" copied to active tasks!`, 'success');
+                showMessageBox(`وظیفه "${newTask.name}" به وظایف فعال کپی شد!`, 'success');
             } else {
-                showMessageBox('Error: Original task not found for copying.', 'error');
+                showMessageBox('خطا: وظیفه اصلی برای کپی یافت نشد.', 'error');
             }
         }
 
@@ -2076,7 +2076,7 @@
             }
 
             if (!dropTargetItem || !draggedTaskId) {
-                showMessageBox('Invalid drop target or no task being dragged.', 'error');
+                showMessageBox('هدف رها کردن نامعتبر است یا وظیفه‌ای در حال کشیدن نیست.', 'error');
                 resetDragState();
                 return;
             }
@@ -2087,14 +2087,14 @@
 
             if (draggedTaskIndex === -1 || droppedOnTaskIndex === -1 || draggedTaskId === droppedOnTaskId) {
                 // Invalid drag or dropped on self
-                showMessageBox('Cannot drop task here.', 'error');
+                showMessageBox('امکان رها کردن وظیفه در اینجا وجود ندارد.', 'error');
                 resetDragState();
                 return;
             }
 
             // Ensure we are only reordering active tasks
             if (tasks[draggedTaskIndex].completed || tasks[droppedOnTaskIndex].completed) {
-                showMessageBox('Only active tasks can be reordered.', 'info');
+                showMessageBox('فقط وظایف فعال را می‌توان تغییر چیدمان داد.', 'info');
                 resetDragState();
                 return;
             }
@@ -2106,7 +2106,7 @@
 
             if (draggedActiveIndex === -1 || droppedActiveIndex === -1) {
                  // This shouldn't happen if checks above are correct, but as a safeguard
-                showMessageBox('Error finding active tasks for reordering.', 'error');
+                showMessageBox('خطا در یافتن وظایف فعال برای تغییر چیدمان.', 'error');
                 resetDragState();
                 return;
             }
@@ -2126,7 +2126,7 @@
             // If the task was pinned, unpin it when manually reordering
             if (draggedTask.isPinned) {
                 draggedTask.isPinned = false;
-                showMessageBox('Task unpinned due to manual reordering.', 'info');
+                showMessageBox('وظیفه به دلیل تغییر چیدمان دستی از پین خارج شد.', 'info');
             }
 
             // Reconstruct the main tasks array
@@ -2135,7 +2135,7 @@
 
             saveToLocalStorage();
             renderTasks(); // Re-render to show new order
-            showMessageBox('Task order successfully changed!', 'success');
+            showMessageBox('چیدمان وظیفه با موفقیت تغییر کرد!', 'success');
             resetDragState();
         });
 
@@ -2301,7 +2301,7 @@
                 if (!dropTargetItem || draggedTask.completed) {
                     // If dropped outside a valid target or on a completed task, revert
                     renderTasks(); // Re-render to revert visual changes
-                    showMessageBox('Task reorder cancelled.', 'info');
+                    showMessageBox('تغییر چیدمان وظیفه لغو شد.', 'info');
                 } else if (dropTargetItem.dataset.id === draggedTaskId) {
                     // Dropped on self, no change
                     renderTasks();
@@ -2312,7 +2312,7 @@
                     const droppedActiveIndex = activeTasks.findIndex(t => t.id === dropTargetItem.dataset.id);
 
                     if (draggedActiveIndex === -1 || droppedActiveIndex === -1) {
-                        showMessageBox('Error finding active tasks for reordering (touch).', 'error');
+                        showMessageBox('خطا در یافتن وظایف فعال برای تغییر چیدمان (لمس).', 'error');
                         renderTasks();
                         resetTouchStates();
                         return;
@@ -2331,7 +2331,7 @@
                     // If the task was pinned, unpin it when manually reordering by drag/drop
                     if (movedTask.isPinned) {
                         movedTask.isPinned = false;
-                        showMessageBox('Task unpinned due to manual reordering.', 'info');
+                        showMessageBox('وظیفه به دلیل تغییر چیدمان دستی از پین خارج شد.', 'info');
                     }
 
                     // Reconstruct the main tasks array
@@ -2340,7 +2340,7 @@
 
                     saveToLocalStorage();
                     renderTasks();
-                    showMessageBox('Task order successfully changed!', 'success');
+                    showMessageBox('چیدمان وظیفه با موفقیت تغییر کرد!', 'success');
                 }
             } else if (isGestureStarted && absDeltaX < TAP_THRESHOLD && absDeltaY < TAP_THRESHOLD) {
                 // This was a pure tap (not a drag or swipe, and minimal movement)
@@ -2443,7 +2443,7 @@
                     tasks.splice(insertIndex, 0, taskToRestore);
                     saveToLocalStorage();
                     renderTasks();
-                    showMessageBox(`Task "${taskToRestore.name}" restored.`, 'info');
+                    showMessageBox(`وظیفه "${taskToRestore.name}" بازگردانی شد.`, 'info');
                 } else {
                     console.warn(`Task with ID ${taskToRestore.id} already exists, not re-adding.`);
                 }
@@ -2666,7 +2666,7 @@
                     ${achievementsData.map(ach => {
                         // Only list non-level achievements here
                         if (ach.type !== 'level') {
-                            return `<span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm flex items-center clickable-item" data-type="achievement" data-name="${ach.name}"><i class="${ach.icon} ml-2"></i> <span class="mr-1">${ach.name}</span></span>`;
+                            return `<span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm flex items-center clickable-item" data-type="achievement" data-id="${ach.name}"><i class="${ach.icon} ml-2"></i> <span class="mr-1">${ach.name}</span></span>`;
                         }
                         return '';
                     }).join('')}
@@ -2686,12 +2686,11 @@
             helpModalBody.querySelectorAll('.clickable-item').forEach(item => {
                 item.addEventListener('click', (event) => {
                     const type = event.currentTarget.dataset.type;
-                    const id = event.currentTarget.dataset.id;
-                    const name = event.currentTarget.dataset.name;
+                    const id = event.currentTarget.dataset.id; // Corrected to use data-id
                     if (type === 'level') {
                         showDetailModal('level', id);
                     } else {
-                        showDetailModal(type, name);
+                        showDetailModal(type, id); // Use id for achievement name
                     }
                 });
             });
@@ -2796,11 +2795,11 @@
         startBtn.addEventListener('click', () => {
             const inputName = userNameInput.value.trim();
             if (inputName.length === 0) {
-                showMessageBox('Please enter your name.', 'info');
+                showMessageBox('لطفاً نام خود را وارد کنید.', 'info');
                 return;
             }
             if (inputName.length > 15) {
-                showMessageBox('Input value should not exceed 15 characters.', 'error');
+                showMessageBox('مقدار ورودی نباید بیش از ۱۵ کاراکتر باشد.', 'error');
                 return;
             }
 
@@ -2811,7 +2810,7 @@
             setTimeout(() => {
                 welcomeModal.classList.add('hidden');
             }, 50);
-            showMessageBox(`${userName}, welcome!`, 'success');
+            showMessageBox(`${userName} عزیز، خوش آمدید!`, 'success');
         });
 
         // Export data (download as file)
@@ -2839,7 +2838,7 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url); // Clean up URL object
-            showMessageBox('Backup file successfully downloaded!', 'success');
+            showMessageBox('فایل پشتیبان با موفقیت دانلود شد!', 'success');
         });
 
         // Update selected file name display
@@ -2855,7 +2854,7 @@
         importDataBtn.addEventListener('click', () => {
             const file = importFileInput.files[0];
             if (!file) {
-                showMessageBox('Please select a backup file to load.', 'info');
+                showMessageBox('لطفاً یک فایل پشتیبان برای بارگذاری انتخاب کنید.', 'info');
                 return;
             }
 
@@ -2901,18 +2900,18 @@
                         setTimeout(() => {
                             backupModal.classList.add('hidden');
                         }, 50);
-                        showMessageBox('Data successfully loaded!', 'success');
+                        showMessageBox('داده‌ها با موفقیت بارگذاری شدند!', 'success');
                     } else {
-                        showMessageBox('Invalid imported data format. Please import a valid backup file.', 'error');
+                        showMessageBox('فرمت داده‌های وارد شده نامعتبر است. لطفاً یک فایل پشتیبان معتبر را وارد کنید.', 'error');
                     }
                 } catch (error) {
                     console.error("Error parsing imported data:", error);
-                    showMessageBox('Error processing imported file. Ensure it is a valid JSON file.', 'error');
+                    showMessageBox('خطا در پردازش فایل وارد شده. اطمینان حاصل کنید که یک فایل JSON معتبر است.', 'error');
                 }
             };
             reader.onerror = (e) => {
                 console.error("Error reading file:", e);
-                showMessageBox('Error reading file. Please try again.', 'error');
+                showMessageBox('خطا در خواندن فایل. لطفاً دوباره امتحان کنید.', 'error');
             };
             reader.readAsText(file);
         });
@@ -2977,15 +2976,17 @@
                 if (welcomeModal.classList.contains('show') || !welcomeModal.classList.contains('hidden')) {
                     if (activeElement === userNameInput) {
                         e.preventDefault(); // Prevent default Enter behavior (e.g., new line in textarea)
+                        startBtn.click(); // Simulate click on start button
                         return;
                     }
                 }
 
                 // 2. Add task section (only for customPointsInput)
                 if (addTaskSection.contains(activeElement)) {
-                    // If customPointsInput is focused
-                    if (activeElement === customPointsInput) {
+                    // If taskInput or customPointsInput is focused
+                    if (activeElement === taskInput || activeElement === customPointsInput) {
                         e.preventDefault();
+                        addTaskBtn.click(); // Simulate click on add task button
                         return;
                     }
                 }
@@ -2993,9 +2994,10 @@
                 // 3. Edit task modal (only for customPointsInput)
                 if (editTaskModal.classList.contains('show') || !editTaskModal.classList.contains('hidden')) {
                     if (editTaskModalContent.contains(activeElement)) {
-                        // If editTaskCustomPointsInput is focused
-                        if (activeElement === editTaskCustomPointsInput) {
+                        // If editTaskNameInput or editTaskCustomPointsInput is focused
+                        if (activeElement === editTaskNameInput || activeElement === editTaskCustomPointsInput) {
                             e.preventDefault();
+                            saveEditedTaskBtn.click(); // Simulate click on save button
                             return;
                         }
                     }
@@ -3005,6 +3007,7 @@
                 if (changeOrderModal.classList.contains('show') || !changeOrderModal.classList.contains('hidden')) {
                     if (activeElement === changeOrderInput) {
                         e.preventDefault();
+                        saveChangedOrderBtn.click(); // Simulate click on save button
                         return;
                     }
                 }
