@@ -761,7 +761,7 @@
             <div id="aboutModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
                 <p class="mb-3">این برنامه به منظور مدیریت وظایف و افزایش انگیزه طراحی شده است.</p>
                 <p class="mb-3">این پروژه به صورت اختصاصی توسط <strong class="text-gray-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">سایت عمو لئو</a></strong> طراحی شده است. این نسخه، اولین و آخرین نسخه از این پروژه است.</p>
-                <p class="mb-3">تمامی حقوق متعلق به <strong class="text-gray-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
+                <p class="mb-3">تمامی حقوق متعلق به <strong class="text-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
                 <p class="mb-3">تاریخ: ۴ خرداد ۱۴۰۴</p>
             </div>
             <button id="closeAboutModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -1391,6 +1391,7 @@
                     if (achievedLevelInfo && !unlockedAchievements.includes(achievedLevelInfo.name)) {
                         unlockedAchievements.push(achievedLevelInfo.name);
                         achievementUnlockDates[achievedLevelInfo.name] = new Date().toISOString();
+                        console.log(`Achievement Unlocked: ${achievedLevelInfo.name}`); // Log for debugging
                         // Add to queue immediately for sequential display
                         showMessageBox(`دستاورد: ${achievedLevelInfo.name}`, 'success', {
                             type: 'achievement',
@@ -1426,7 +1427,7 @@
 
                 progressBar.style.width = `${progressPercentage}%`;
                 if (level < levelPointsThresholds.length) {
-                    progressText.textContent = `${Math.round(progressPercentage)}% پیشرفت به سطح ${levelPointsThresholds[level].name}`;
+                    progressText.textContent = `شما ${Math.round(progressPercentage)}% از پیشرفت به سطح ${levelPointsThresholds[level].name} را طی کرده‌اید.`;
                 } else {
                     progressText.textContent = `شما به حداکثر سطح (${levelPointsThresholds[levelPointsThresholds.length - 1].name}) رسیده‌اید! شما می‌توانید همچنان پوینت کسب کنید!`;
                 }
@@ -1465,6 +1466,7 @@
                 if (isAchieved && !unlockedAchievements.includes(achievement.name)) {
                     unlockedAchievements.push(achievement.name);
                     achievementUnlockDates[achievement.name] = new Date().toISOString();
+                    console.log(`Achievement Unlocked: ${achievement.name}`); // Log for debugging
                     showMessageBox(`دستاورد: ${achievement.name}`, 'success', {
                         type: 'achievement',
                         iconClass: achievement.icon,
@@ -2061,11 +2063,11 @@
                 }
             });
 
-            // Sort achieved list by unlocked date (oldest first)
+            // Sort achieved list by unlocked date (newest first)
             achievedList.sort((a, b) => {
-                const dateA = new Date(a.unlockedDate || 0); // Use 0 for achievements without a date (shouldn't happen with new logic)
+                const dateA = new Date(a.unlockedDate || 0);
                 const dateB = new Date(b.unlockedDate || 0);
-                return dateA.getTime() - dateB.getTime();
+                return dateB.getTime() - dateA.getTime(); // Newest to oldest
             });
 
             // Sort unachieved list (levels first, then by value/level)
@@ -2755,7 +2757,7 @@
             if (theme === 'dark') {
                 htmlElement.classList.add('dark');
                 // Moon icon for dark mode
-                themeIcon.innerHTML = `<path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>`;
+                themeIcon.innerHTML = `<path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9 0 0012 21a9.003 9 0 008.354-5.646z"></path>`;
             } else {
                 htmlElement.classList.remove('dark');
                 // Sun icon for light mode
@@ -2912,6 +2914,8 @@
             e.preventDefault();
             menuDropdown.classList.add('hidden'); // Hide dropdown
 
+            // Ensure gamification display is updated right before showing achievements
+            updateGamificationDisplay();
             showAchievementsModal();
         });
 
@@ -2972,65 +2976,81 @@
             // Dynamically update help modal content with current point values
             helpModalBody.innerHTML = `
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 text-gray-600 dark:text-gray-300">به زی تسک خوش آمدید!</h3>
-                <p class="mb-3 text-gray-700 dark:text-gray-300">این برنامه به شما کمک می‌کند تا وظایف خود را مدیریت کنید، پوینت کسب کنید، سطح خود را ارتقا دهید و از طریق گیمیفیکیشن به نقاط عطف مختلفی دست یابید.</p>
+                <p class="mb-3 text-gray-700 dark:text-gray-300">زی تسک یک پلتفرم مدیریت وظایف گیمیفای شده است که با هدف افزایش انگیزه و بهره‌وری شما طراحی شده است. با انجام وظایف، پوینت کسب می‌کنید، سطح خود را ارتقا می‌دهید و دستاوردهای ویژه‌ای را باز می‌کنید.</p>
 
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">نحوه استفاده از برنامه</h3>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">افزودن وظیفه:</strong> نام وظیفه را وارد کرده و اهمیت آن (مهم/عادی/سفارشی/یادداشت) را انتخاب کنید. وظایف مهم و سفارشی پوینت بیشتری به شما می‌دهند.</p>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">اهمیت "یادداشت":</strong> این نوع وظایف برای ثبت یادداشت‌ها و اطلاعات بدون نیاز به تکمیل شدن طراحی شده‌اند. آنها پوینت گیمیفیکیشن نمی‌دهند و چک‌باکس تکمیل ندارند. می‌توانید متنی تا ۱۵۰ کاراکتر برای عنوان آنها وارد کنید و همچنین قابلیت پین کردن و تغییر چیدمان برای آنها فعال است.</p>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">تکمیل وظیفه:</strong> برای تکمیل یک وظیفه (به جز یادداشت‌ها)، کادر کنار آن را علامت بزنید. این به شما پوینت می‌دهد و وظیفه را به بخش "وظایف تکمیل شده" منتقل می‌کند.</p>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">ویرایش وظیفه:</strong> برای ویرایش نام و اهمیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "ویرایش" را انتخاب کنید.</p>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">حذف وظیفه:</strong> برای حذف یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "حذف" را انتخاب کنید.</p>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">تغییر ترتیب دستی:</strong> برای تغییر دستی موقعیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "تغییر چیدمان" را انتخاب کنید. سپس با فلش‌های بالا و پایین موقعیت آن را تغییر دهید.</p>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">پین کردن وظیفه:</strong> برای پین کردن یک وظیفه به بالای لیست وظایف فعال، روی آیکون سه نقطه کنار آن کلیک کرده و "پین کردن" را انتخاب کنید. با این کار، وظیفه همیشه در بالای لیست باقی می‌ماند. برای برداشتن پین، دوباره همین گزینه را انتخاب کنید.</p>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">وظایف تکمیل شده:</strong> روی دکمه کلیک کنید تا وظایف تکمیل شده خود را نمایش یا پنهان کنید.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">۱. افزودن وظیفه جدید:</strong>
+                    برای اضافه کردن یک وظیفه، نام آن را در فیلد "نام وظیفه" وارد کنید. سپس، می‌توانید اهمیت آن را از طریق منوی کشویی "اهمیت" انتخاب کنید:
+                    <ul>
+                        <li><strong class="text-red-600 dark:text-red-300">مهم:</strong> وظایف با اولویت بالا که پوینت بیشتری به شما می‌دهند.</li>
+                        <li><strong class="text-gray-600 dark:text-gray-300">عادی:</strong> وظایف روزمره با پوینت استاندارد.</li>
+                        <li><strong class="text-purple-600 dark:text-purple-300">سفارشی:</strong> می‌توانید میزان پوینت دریافتی برای این وظیفه را (تا حداکثر ${MAX_CUSTOM_POINTS} پوینت) به صورت دستی وارد کنید.</li>
+                        <li><strong class="text-orange-600 dark:text-orange-300">یادداشت:</strong> این نوع وظایف برای ثبت نکات، ایده‌ها یا اطلاعاتی هستند که نیازی به تکمیل شدن ندارند و پوینت گیمیفیکیشن نمی‌دهند. حداکثر طول متن برای یادداشت‌ها ۱۵۰ کاراکتر است.</li>
+                    </ul>
+                    پس از وارد کردن اطلاعات، روی دکمه "افزودن وظیفه" کلیک کنید.
+                </p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">۲. تکمیل وظیفه:</strong>
+                    برای علامت زدن یک وظیفه به عنوان "تکمیل شده" (به جز یادداشت‌ها)، کافیست روی چک‌باکس کنار آن کلیک کنید. با این کار، وظیفه به بخش "وظایف تکمیل شده" منتقل می‌شود و پوینت‌های مربوطه به حساب شما اضافه می‌گردد.
+                </p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">۳. ویرایش وظیفه:</strong>
+                    برای تغییر نام یا اهمیت یک وظیفه فعال، روی آیکون سه نقطه (<i class="fa-solid fa-ellipsis-v"></i>) در کنار آن کلیک کرده و گزینه "ویرایش" را انتخاب کنید.
+                </p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">۴. حذف وظیفه:</strong>
+                    برای حذف یک وظیفه (فعال یا تکمیل شده)، روی آیکون سه نقطه (<i class="fa-solid fa-ellipsis-v"></i>) کنار آن کلیک کرده و گزینه "حذف" را انتخاب کنید. پس از حذف، یک پیام "بازگردانی" برای مدت کوتاهی ظاهر می‌شود تا در صورت اشتباه، بتوانید وظیفه را برگردانید.
+                </p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">۵. تغییر چیدمان وظایف:</strong>
+                    برای تغییر دستی ترتیب وظایف فعال، روی آیکون سه نقطه (<i class="fa-solid fa-ellipsis-v"></i>) کنار وظیفه مورد نظر کلیک کرده و "تغییر چیدمان" را انتخاب کنید. سپس با استفاده از فلش‌های بالا و پایین، موقعیت وظیفه را جابجا کنید. پس از اتمام، دکمه "پایان" را فشار دهید.
+                </p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">۶. پین کردن وظیفه:</strong>
+                    می‌توانید وظایف مهم را به بالای لیست وظایف فعال "پین" کنید. برای این کار، روی آیکون سه نقطه (<i class="fa-solid fa-ellipsis-v"></i>) کنار وظیفه کلیک کرده و "پین کردن" را انتخاب کنید. وظایف پین شده همیشه در ابتدای لیست نمایش داده می‌شوند.
+                </p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">۷. مشاهده وظایف تکمیل شده:</strong>
+                    برای نمایش یا پنهان کردن لیست وظایف تکمیل شده، روی دکمه "وظایف تکمیل شده" در پایین صفحه کلیک کنید.
+                </p>
 
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">سیستم گیمیفیکیشن</h3>
                 <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">پوینت:</strong>
-                    پوینت‌ها صرفاً نمادین هستند و برای اندازه‌گیری پیشرفت و فعالیت شما در برنامه استفاده می‌شوند.
+                    پوینت‌ها نمادین هستند و میزان فعالیت و پیشرفت شما را نشان می‌دهند.
                     <ul>
                         <li>وظایف عادی: ${pointsPerNormalTask} پوینت</li>
                         <li>وظایف مهم: ${pointsPerImportantTask} پوینت</li>
-                        <li>وظایف سفارشی: تا ${MAX_CUSTOM_POINTS} پوینت</li>
+                        <li>وظایف سفارشی: تا ${MAX_CUSTOM_POINTS} پوینت (بر اساس مقدار وارد شده)</li>
                     </ul>
                 </p>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">زنجیره روزانه:</strong> تکمیل حداقل یک وظیفه در روزهای متوالی، زنجیره روزانه شما را افزایش می‌دهد و به شما امکان می‌دهد دستاوردهای ویژه‌ای کسب کنید.</p>
-
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">سطوح</h3>
-                <p class="mb-2 text-gray-700 dark:text-gray-300">با کسب پوینت، به سطوح بالاتر صعود خواهید کرد. برای جزئیات بیشتر روی یک سطح کلیک کنید:</p>
-                <div class="flex flex-wrap gap-2 mb-3">
-                    ${levelPointsThresholds.map((levelInfo, index) => {
-                        return `
-                            <span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm flex items-center clickable-item" data-type="level" data-id="${index + 1}">
-                                <i class="${levelInfo.icon} ml-2"></i> سطح ${index + 1}: ${levelInfo.name}
-                            </span>
-                        `;
-                    }).join('')}
-                </div>
-
-                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">دستاوردها</h3>
-                <p class="mb-2 text-gray-700 dark:text-gray-300">با پیشرفت در بازی، دستاوردهای مختلفی کسب خواهید کرد. برای جزئیات بیشتر روی یک دستاورد کلیک کنید:</p>
-                <div class="flex flex-wrap gap-2 mb-3">
-                    ${achievementsData.map(ach => {
-                        // Only list non-level achievements here
-                        if (ach.type !== 'level') {
-                            return `<span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm flex items-center clickable-item" data-type="achievement" data-id="${ach.name}"><i class="${ach.icon} ml-2"></i> <span class="mr-1">${ach.name}</span></span>`;
-                        }
-                        return '';
-                    }).join('')}
-                </div>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">سطوح:</strong>
+                    با کسب پوینت، به سطوح بالاتر صعود خواهید کرد. هر سطح جدید، یک نام و آیکون منحصر به فرد دارد. می‌توانید با کلیک بر روی نمایشگر سطح در بالای صفحه، جزئیات هر سطح را مشاهده کنید.
+                </p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">زنجیره روزانه:</strong>
+                    با تکمیل حداقل یک وظیفه در هر روز، "زنجیره روزانه" شما افزایش می‌یابد. حفظ این زنجیره به شما کمک می‌کند تا عادت‌های مثبت بسازید و دستاوردهای ویژه‌ای کسب کنید. اگر یک روز وظیفه‌ای تکمیل نکنید، زنجیره بازنشانی می‌شود.
+                </p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">دستاوردها:</strong>
+                    زی تسک دارای مجموعه‌ای از دستاوردها است که با رسیدن به نقاط عطف خاصی (مانند تکمیل تعداد مشخصی وظیفه، رسیدن به سطح خاص، یا حفظ زنجیره روزانه) باز می‌شوند. می‌توانید تمام دستاوردهای خود را از طریق منوی اصلی (آیکون سه نقطه در بالا سمت چپ) و انتخاب "دستاوردها" مشاهده کنید. دستاوردهای بازنشده به صورت قفل نمایش داده می‌شوند.
+                </p>
 
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">پشتیبان‌گیری و بازیابی داده‌ها</h3>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">امنیت داده‌ها:</strong> تمام داده‌های شما به صورت امن در حافظه محلی مرورگر شما ذخیره می‌شوند و هیچ اطلاعاتی به هیچ سروری ارسال نمی‌شود.</p>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">پشتیبان‌گیری (خروجی گرفتن):</strong> می‌توانید با کلیک بر روی دکمه "ذخیره داده‌ها"، یک فایل پشتیبان JSON از تمام داده‌های برنامه خود دانلود کنید. این فایل را در مکانی امن نگهداری کنید.</p>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">بازیابی (ورودی گرفتن):</strong> برای بازیابی داده‌ها، به سادگی فایل پشتیبان JSON را که قبلاً دانلود کرده‌اید از طریق بخش "انتخاب فایل" انتخاب کنید، سپس روی دکمه "بارگذاری از فایل" کلیک کنید. این کار داده‌های فعلی برنامه شما را با داده‌های موجود در فایل جایگزین می‌کند.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">امنیت داده‌ها:</strong>
+                    تمام داده‌های شما به صورت امن و فقط در حافظه محلی مرورگر شما ذخیره می‌شوند و هیچ اطلاعاتی به هیچ سروری ارسال نمی‌شود. این به معنای حریم خصوصی کامل است، اما مسئولیت پشتیبان‌گیری از داده‌ها با خود شماست.
+                </p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">پشتیبان‌گیری (خروجی گرفتن):</strong>
+                    برای ایجاد یک نسخه پشتیبان از داده‌های خود، از منوی اصلی، گزینه "پشتیبان‌گیری" را انتخاب کرده و سپس روی دکمه "ذخیره داده‌ها (دانلود فایل)" کلیک کنید. یک فایل JSON حاوی تمام وظایف، پوینت‌ها، سطح و دستاوردهای شما دانلود خواهد شد. این فایل را در مکانی امن نگهداری کنید.
+                </p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">بازیابی (ورودی گرفتن):</strong>
+                    برای بازیابی داده‌ها از یک فایل پشتیبان، در همان بخش "پشتیبان‌گیری"، روی "انتخاب فایل" کلیک کرده و فایل JSON پشتیبان خود را انتخاب کنید. سپس "بارگذاری از فایل" را فشار دهید. این کار داده‌های فعلی برنامه شما را با داده‌های موجود در فایل جایگزین می‌کند.
+                </p>
 
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">بروزرسانی برنامه</h3>
-                <p class="mb-2 text-gray-700 dark:text-gray-300">این برنامه از Service Worker برای ارائه تجربه آفلاین و بارگذاری سریع استفاده می‌کند. برای اطمینان از اینکه همیشه آخرین نسخه برنامه را دارید، می‌توانید روی گزینه "بروزرسانی برنامه" در منوی اصلی کلیک کنید. این کار کش برنامه را پاک کرده و آخرین نسخه را از سرور بارگذاری می‌کند.</p>
+                <p class="mb-2 text-gray-700 dark:text-gray-300">
+                    این برنامه از <strong class="text-gray-600 dark:text-gray-300">سرویس پس‌زمینه (Service Worker)</strong> برای ارائه تجربه آفلاین و بارگذاری سریع استفاده می‌کند. برای اطمینان از اینکه همیشه آخرین نسخه برنامه را دارید و از جدیدترین ویژگی‌ها بهره‌مند می‌شوید، می‌توانید روی گزینه "بروزرسانی برنامه" در منوی اصلی کلیک کنید. این کار کش برنامه را پاک کرده و آخرین نسخه را از سرور بارگذاری می‌کند.
+                </p>
 
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">حمایت مالی</h3>
-                <p class="mb-2 text-gray-700 dark:text-gray-300">این بخش در حال حاضر غیرفعال است. از علاقه شما سپاسگزاریم!</p>
+                <p class="mb-2 text-gray-700 dark:text-gray-300">
+                    این بخش در حال حاضر غیرفعال است. از علاقه شما به حمایت از توسعه‌دهنده سپاسگزاریم!
+                </p>
 
-                <p class="mt-4 text-center text-gray-700 dark:text-gray-300">هدف این برنامه ایجاد انگیزه و کمک به سازماندهی بهتر وظایف شماست. موفق باشید!</p>
+                <p class="mt-4 text-center text-gray-700 dark:text-gray-300">
+                    هدف زی تسک ایجاد انگیزه و کمک به سازماندهی بهتر وظایف شماست. امیدواریم از استفاده از آن لذت ببرید و در مسیر موفقیت خود پیشرفت کنید!
+                </p>
             `;
             // Add event listener to newly created clickable items in help modal
             helpModalBody.querySelectorAll('.clickable-item').forEach(item => {
@@ -3160,7 +3180,7 @@
                     showMessageBox('خطا در بروزرسانی برنامه. لطفاً دوباره امتحان کنید.', 'error');
                 }
             } else {
-                showMessageBox('مرورگر شما از Service Worker پشتیبانی نمی‌کند.', 'info');
+                showMessageBox('مرورگر شما از سرویس پس‌زمینه (Service Worker) پشتیبانی نمی‌کند.', 'info');
             }
         });
 
@@ -3225,8 +3245,11 @@
             setTimeout(() => {
                 welcomeModal.classList.add('hidden');
                 updateGamificationDisplay(); // Call here after userName is set
-                processNotificationQueue(); // Start processing general notifications
-                processAchievementNotificationQueue(); // Also process achievement queue on load
+                // Add a small delay before processing notifications after welcome modal closes
+                setTimeout(() => {
+                    processNotificationQueue(); // Start processing general notifications
+                    processAchievementNotificationQueue(); // Also process achievement queue on load
+                }, 100); // 100ms delay
             }, 50);
             showMessageBox(`${userName} عزیز، خوش آمدید!`, 'success');
         });
@@ -3446,6 +3469,15 @@
             initializeTheme(); // Initialize theme
             renderTasks(); // Render tasks based on loaded data (without gamification update yet)
 
+            // Explicitly unlock "نوب" if zPoint is 0 and it's not already unlocked
+            const noobAchievement = achievementsData.find(ach => ach.name === 'نوب' && ach.type === 'level');
+            if (noobAchievement && zPoint === 0 && !unlockedAchievements.includes(noobAchievement.name)) {
+                unlockedAchievements.push(noobAchievement.name);
+                achievementUnlockDates[noobAchievement.name] = new Date().toISOString();
+                saveToLocalStorage();
+                console.log(`Achievement Unlocked: ${noobAchievement.name} (forced on load)`);
+            }
+
             // Show welcome modal if user name is not set
             if (!userName) {
                 welcomeModal.classList.remove('hidden');
@@ -3457,8 +3489,11 @@
                 // If welcome modal is not shown (user already has a name),
                 // then it's safe to update gamification and process notifications.
                 updateGamificationDisplay(); // Now it's safe to run
-                processNotificationQueue(); // Now it's safe to process
-                processAchievementNotificationQueue(); // Also process achievement queue on load
+                // Add a small delay before processing notifications to ensure all initial UI is stable
+                setTimeout(() => {
+                    processNotificationQueue(); // Start processing general notifications
+                    processAchievementNotificationQueue(); // Also process achievement queue on load
+                }, 100); // 100ms delay
             }
         };
 
