@@ -1,3 +1,4 @@
+// service-worker.js
 const CACHE_NAME = 'zytask-v1.0.2'; // Updated cache version to force re-installation
 const urlsToCache = [
     '/', // Caches the root path, assuming zytask.html is served from there
@@ -15,10 +16,11 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', (event) => {
+    console.log('[Service Worker] Installing...');
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('Opened cache');
+                console.log('[Service Worker] Caching all content');
                 return cache.addAll(urlsToCache);
             })
             .catch(error => {
@@ -28,6 +30,11 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    // Only intercept GET requests
+    if (event.request.method !== 'GET') {
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
@@ -75,6 +82,7 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
+    console.log('[Service Worker] Activating...');
     const cacheWhitelist = [CACHE_NAME];
     event.waitUntil(
         caches.keys().then((cacheNames) => {
@@ -82,11 +90,39 @@ self.addEventListener('activate', (event) => {
                 cacheNames.map((cacheName) => {
                     if (cacheWhitelist.indexOf(cacheName) === -1) {
                         // Delete old caches
-                        console.log('Deleting old cache:', cacheName);
+                        console.log('[Service Worker] Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
             );
+        }).then(() => {
+            console.log('[Service Worker] Claiming clients');
+            return self.clients.claim(); // Take control of all clients immediately
         })
     );
+});
+
+// Listener for messages from the main thread (e.g., from updateAppMenuItem)
+self.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'CLEAR_ALL_CACHES') {
+        console.log('[Service Worker] Received CLEAR_ALL_CACHES message. Clearing all caches...');
+        event.waitUntil(
+            caches.keys().then((cacheNames) => {
+                return Promise.all(
+                    cacheNames.map((cacheName) => {
+                        console.log(`[Service Worker] Deleting cache: ${cacheName}`);
+                        return caches.delete(cacheName);
+                    })
+                );
+            }).then(() => {
+                console.log('[Service Worker] All caches cleared. Sending RELOAD_PAGE message.');
+                // After clearing caches, send a message back to the client to reload the page
+                self.clients.matchAll().then(clients => {
+                    clients.forEach(client => {
+                        client.postMessage({ type: 'RELOAD_PAGE' });
+                    });
+                });
+            })
+        );
+    }
 });
