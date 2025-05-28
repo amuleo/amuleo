@@ -1368,9 +1368,10 @@
                 return;
             }
 
+            const oldLevel = level; // Store the current level before potential update
+
             zPointSpan.textContent = zPoint;
 
-            // Calculate current level based on point thresholds
             let newLevel = 1;
             let currentLevelInfo = levelPointsThresholds[0]; // Default to level 1
             for (let i = 0; i < levelPointsThresholds.length; i++) {
@@ -1382,16 +1383,24 @@
                 }
             }
 
-            if (newLevel > level) {
-                // Trigger achievement notification for new level
-                const achievedLevelInfo = levelPointsThresholds[newLevel - 1];
-                showMessageBox(`تبریک! شما به سطح ${achievedLevelInfo.name} رسیدید!`, 'success', { // Changed to use showMessageBox for achievement type
-                    type: 'achievement',
-                    iconClass: achievedLevelInfo.icon,
-                    description: achievedLevelInfo.motivational
-                });
+            // Check if level has actually changed
+            if (newLevel !== level) {
+                // Trigger achievement for each level gained between oldLevel and newLevel
+                for (let i = oldLevel; i < newLevel; i++) {
+                    const achievedLevelInfo = levelPointsThresholds[i]; // i is 0-indexed, so corresponds to level (i+1)
+                    if (achievedLevelInfo && !unlockedAchievements.includes(achievedLevelInfo.name)) {
+                        unlockedAchievements.push(achievedLevelInfo.name);
+                        achievementUnlockDates[achievedLevelInfo.name] = new Date().toISOString();
+                        // Add to queue immediately for sequential display
+                        showMessageBox(`دستاورد: ${achievedLevelInfo.name}`, 'success', {
+                            type: 'achievement',
+                            iconClass: achievedLevelInfo.icon,
+                            description: achievedLevelInfo.motivational // Use motivational text for level achievements
+                        });
+                    }
+                }
+                level = newLevel; // Update global level variable AFTER processing all intermediate achievements
             }
-            level = newLevel; // Update global level variable
             levelSpan.textContent = level;
 
             // Update dynamic level icon
@@ -1427,23 +1436,15 @@
                 progressText.textContent = `شما به حداکثر سطح (${levelPointsThresholds[levelPointsThresholds.length - 1].name}) رسیده‌اید! شما می‌توانید همچنان پوینت کسب کنید!`;
             }
 
-            // Check for new achievements (excluding levels, which are handled above)
+            // Check for other achievements (totalTasks, streak, points, firstPin)
             const currentTotalTasksCompleted = tasks.filter(t => t.completed).length;
-            // The following two lines are no longer used for achievement unlocking, but kept for clarity if needed elsewhere.
-            // const currentImportantTasksCompleted = tasks.filter(t => t.completed && t.importance === 'important').length;
-            // const currentCustomTasksCompleted = totalCustomTasksCompleted; // Direct use of counter
-
-            const newlyUnlockedAchievements = []; // Array to hold achievements newly unlocked in this call
 
             achievementsData.forEach(achievement => {
+                // Skip level achievements as they are handled above
+                if (achievement.type === 'level') return;
+
                 let isAchieved = false;
-                if (achievement.type === 'level') {
-                    // Levels are handled separately for notification
-                    const levelInfo = levelPointsThresholds.find(l => l.name === achievement.name);
-                    if (levelInfo && zPoint >= levelInfo.points) {
-                        isAchieved = true;
-                    }
-                } else if (achievement.type === 'streak') {
+                if (achievement.type === 'streak') {
                     if (dailyStreak >= achievement.value) {
                         isAchieved = true;
                     }
@@ -1461,24 +1462,18 @@
                     }
                 }
 
-                // IMPORTANT: Only check if the achievement is NOT already unlocked
                 if (isAchieved && !unlockedAchievements.includes(achievement.name)) {
                     unlockedAchievements.push(achievement.name);
-                    achievementUnlockDates[achievement.name] = new Date().toISOString(); // Store unlock date
-                    newlyUnlockedAchievements.push(achievement); // Add to the new list
+                    achievementUnlockDates[achievement.name] = new Date().toISOString();
+                    showMessageBox(`دستاورد: ${achievement.name}`, 'success', {
+                        type: 'achievement',
+                        iconClass: achievement.icon,
+                        description: achievement.description
+                    });
                 }
             });
 
-            // After all achievements are processed and unlockedAchievements is updated
-            saveToLocalStorage(); // Save unlocked achievements
-            newlyUnlockedAchievements.forEach(achievement => {
-                showMessageBox(`دستاورد: ${achievement.name}`, 'success', { // Changed to use showMessageBox for achievement type
-                    type: 'achievement',
-                    iconClass: achievement.icon,
-                    description: achievement.description
-                });
-            });
-
+            saveToLocalStorage(); // Save all updated data
             applyLevelTheme(level); // Apply theme for current level
         }
 
@@ -3118,11 +3113,45 @@
                     const registration = await navigator.serviceWorker.getRegistration();
                     if (registration) {
                         showMessageBox('بروزرسانی برنامه آغاز شد. لطفاً صبر کنید...', 'info');
-                        await registration.update();
-                        showMessageBox('برنامه بروزرسانی شد! صفحه در حال بارگذاری مجدد است.', 'success');
-                        setTimeout(() => {
-                            location.reload(true); // Force reload from server to get new service worker
-                        }, 1500); // Give some time for message to be seen
+
+                        // Check for updates
+                        registration.update();
+
+                        // Listen for a new service worker to be found and activated
+                        if (registration.waiting) {
+                            // A new service worker is already waiting
+                            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                            showMessageBox('نسخه جدید آماده نصب است. صفحه در حال بارگذاری مجدد است.', 'success');
+                            setTimeout(() => {
+                                window.location.reload(); // Reload to activate the new SW
+                            }, 1000);
+                        } else if (registration.installing) {
+                            // A new service worker is installing
+                            newWorker.addEventListener('statechange', function(event) {
+                                if (event.target.state === 'activated') {
+                                    showMessageBox('برنامه بروزرسانی شد! صفحه در حال بارگذاری مجدد است.', 'success');
+                                    setTimeout(() => {
+                                        window.location.reload(); // Reload to activate the new SW
+                                    }, 1000);
+                                }
+                            });
+                        } else {
+                            // No new service worker found immediately, wait for updatefound
+                            registration.addEventListener('updatefound', () => {
+                                const newWorker = registration.installing;
+                                if (newWorker) {
+                                    newWorker.addEventListener('statechange', function(event) {
+                                        if (event.target.state === 'activated') {
+                                            showMessageBox('برنامه بروزرسانی شد! صفحه در حال بارگذاری مجدد است.', 'success');
+                                            setTimeout(() => {
+                                                window.location.reload(); // Reload to activate the new SW
+                                            }, 1000);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+
                     } else {
                         showMessageBox('Service Worker یافت نشد. بروزرسانی خودکار انجام می‌شود.', 'info');
                     }
