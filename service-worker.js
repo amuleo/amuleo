@@ -1,12 +1,15 @@
 // service-worker.js
-const CACHE_NAME = 'zytask-v1.0.2'; // Updated cache version to force re-installation
+// این Service Worker به طور خاص برای مدیریت کش و بروزرسانی‌های برنامه zytask.html طراحی شده است.
+// تمامی عملیات کشینگ و پاکسازی داده‌ها در محدوده این برنامه انجام می‌شود.
+
+const CACHE_NAME = 'zytask-v1.0.2'; // نسخه کش بروزرسانی شده برای اجبار به نصب مجدد
 const urlsToCache = [
-    '/', // Caches the root path, assuming zytask.html is served from there
-    '/zytask.html', // Explicitly cache the HTML file
+    '/', // کش کردن مسیر ریشه، با فرض اینکه zytask.html از آنجا سرو می‌شود
+    '/zytask.html', // کش کردن صریح فایل HTML
     'https://cdn.tailwindcss.com',
     'https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@33.003/misc/Farsi-Digits/Vazirmatn-FD-font-face.css',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-    // Explicitly caching Font Awesome webfonts for better offline support on iOS/Safari
+    // کش کردن صریح فونت‌های Font Awesome برای پشتیبانی بهتر آفلاین در iOS/Safari
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.woff2',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.ttf',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-regular-400.woff2',
@@ -15,22 +18,27 @@ const urlsToCache = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-brands-400.ttf'
 ];
 
+// شنونده رویداد 'install': هنگام نصب Service Worker فراخوانی می‌شود.
+// این رویداد منابع ضروری برنامه را در کش ذخیره می‌کند تا برای استفاده آفلاین در دسترس باشند.
 self.addEventListener('install', (event) => {
-    console.log('[Service Worker] Installing...');
+    console.log('[Service Worker] در حال نصب...');
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('[Service Worker] Caching all content');
+                console.log('[Service Worker] در حال کش کردن تمامی محتوا...');
                 return cache.addAll(urlsToCache);
             })
             .catch(error => {
-                console.error('Failed to add URLs to cache during install:', error);
+                console.error('خطا در افزودن URL‌ها به کش در حین نصب:', error);
             })
     );
 });
 
+// شنونده رویداد 'fetch': هر درخواست شبکه را رهگیری می‌کند.
+// این رویداد ابتدا سعی می‌کند پاسخ را از کش برگرداند؛ اگر در کش نبود، درخواست را از شبکه دریافت می‌کند.
+// این رفتار، قابلیت آفلاین را برای zytask.html و منابع وابسته به آن فراهم می‌کند.
 self.addEventListener('fetch', (event) => {
-    // Only intercept GET requests
+    // فقط درخواست‌های GET را رهگیری می‌کنیم
     if (event.request.method !== 'GET') {
         return;
     }
@@ -38,29 +46,28 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
-                // Cache hit - return response
+                // اگر در کش یافت شد، پاسخ را برگردان
                 if (response) {
                     return response;
                 }
 
-                // IMPORTANT: Clone the request. A request is a stream and
-                // can only be consumed once. We must clone it so that we can
-                // consume the stream twice: once for the cache and once for the network.
+                // مهم: درخواست را کلون کنید. یک درخواست یک جریان است و فقط یک بار می‌تواند مصرف شود.
+                // ما باید آن را کلون کنیم تا بتوانیم جریان را دو بار مصرف کنیم: یک بار برای کش و یک بار برای شبکه.
                 const fetchRequest = event.request.clone();
 
                 return fetch(fetchRequest).then((response) => {
-                    // Check if we received a valid response.
-                    // response.ok is true for 2xx status codes.
-                    // We generally want to cache all successful responses, regardless of type (basic, cors).
-                    // Opaque responses (type 'opaque') are tricky as their status cannot be inspected,
-                    // but for fonts, they are often necessary to cache.
+                    // بررسی می‌کنیم که آیا پاسخ معتبری دریافت کرده‌ایم.
+                    // response.ok برای کدهای وضعیت 2xx صحیح است.
+                    // ما معمولاً می‌خواهیم تمامی پاسخ‌های موفقیت‌آمیز را، صرف نظر از نوع (basic, cors)، کش کنیم.
+                    // پاسخ‌های مبهم (نوع 'opaque') پیچیده هستند زیرا وضعیت آن‌ها قابل بررسی نیست،
+                    // اما برای فونت‌ها، کش کردن آن‌ها اغلب ضروری است.
                     if (!response || !response.ok) {
                         return response;
                     }
 
-                    // IMPORTANT: Clone the response. A response is a stream
-                    // and can only be consumed once. We must clone it so that
-                    // we can consume the stream twice.
+                    // مهم: پاسخ را کلون کنید. یک پاسخ یک جریان است
+                    // و فقط یک بار می‌تواند مصرف شود. ما باید آن را کلون کنیم تا
+                    // بتوانیم جریان را دو بار مصرف کنیم.
                     const responseToCache = response.clone();
 
                     caches.open(CACHE_NAME)
@@ -68,58 +75,87 @@ self.addEventListener('fetch', (event) => {
                             cache.put(event.request, responseToCache);
                         })
                         .catch(cacheError => {
-                            console.error('Error putting response in cache:', cacheError);
+                            console.error('خطا در قرار دادن پاسخ در کش:', cacheError);
                         });
 
                     return response;
                 }).catch((error) => {
-                    // If network request fails (e.g., offline), try to get from cache as a fallback.
-                    console.error('Fetch failed; returning cached resource if available:', error);
-                    return caches.match(event.request); // Try to return from cache if network fails
+                    // اگر درخواست شبکه با شکست مواجه شد (مثلاً آفلاین بود)، سعی کنید به عنوان یک جایگزین از کش دریافت کنید.
+                    console.error('دریافت اطلاعات با شکست مواجه شد؛ در صورت موجود بودن، منبع کش شده برگردانده می‌شود:', error);
+                    return caches.match(event.request); // سعی کنید در صورت شکست شبکه، از کش برگردانید
                 });
             })
     );
 });
 
+// شنونده رویداد 'activate': هنگام فعال شدن Service Worker فراخوانی می‌شود.
+// این رویداد کش‌های قدیمی را پاک می‌کند تا اطمینان حاصل شود که فقط آخرین نسخه برنامه استفاده می‌شود.
 self.addEventListener('activate', (event) => {
-    console.log('[Service Worker] Activating...');
-    const cacheWhitelist = [CACHE_NAME];
+    console.log('[Service Worker] در حال فعال‌سازی...');
+    const cacheWhitelist = [CACHE_NAME]; // لیست کش‌های مجاز (فقط کش فعلی)
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
                     if (cacheWhitelist.indexOf(cacheName) === -1) {
-                        // Delete old caches
-                        console.log('[Service Worker] Deleting old cache:', cacheName);
+                        // حذف کش‌های قدیمی
+                        console.log('[Service Worker] در حال حذف کش قدیمی:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
             );
         }).then(() => {
-            console.log('[Service Worker] Claiming clients');
-            return self.clients.claim(); // Take control of all clients immediately
+            console.log('[Service Worker] در حال تصاحب کلاینت‌ها (صفحات برنامه)...');
+            return self.clients.claim(); // کنترل تمامی کلاینت‌ها را بلافاصله در دست می‌گیرد
         })
     );
 });
 
-// Listener for messages from the main thread (e.g., from updateAppMenuItem)
+// شنونده پیام‌ها از رشته اصلی (مثلاً از zytask.html).
+// این بخش مسئول مدیریت دستور بروزرسانی عمیق از برنامه zytask.html است.
 self.addEventListener('message', (event) => {
-    if (event.data && event.data.type === 'CLEAR_ALL_CACHES') {
-        console.log('[Service Worker] Received CLEAR_ALL_CACHES message. Clearing all caches...');
+    // بررسی می‌کنیم که پیام از zytask.html و از نوع START_DEEP_UPDATE باشد.
+    if (event.data && event.data.type === 'START_DEEP_UPDATE') {
+        console.log('[Service Worker] پیام START_DEEP_UPDATE دریافت شد. در حال پاکسازی تمامی کش‌ها و لغو ثبت...');
         event.waitUntil(
             caches.keys().then((cacheNames) => {
+                // تمامی کش‌های Service Worker را پاک می‌کنیم.
                 return Promise.all(
                     cacheNames.map((cacheName) => {
-                        console.log(`[Service Worker] Deleting cache: ${cacheName}`);
+                        console.log(`[Service Worker] در حال حذف کش: ${cacheName}`);
                         return caches.delete(cacheName);
                     })
                 );
             }).then(() => {
-                console.log('[Service Worker] All caches cleared. Sending RELOAD_PAGE message.');
-                // After clearing caches, send a message back to the client to reload the page
-                self.clients.matchAll().then(clients => {
-                    clients.forEach(client => {
-                        client.postMessage({ type: 'RELOAD_PAGE' });
+                // کلیدهای localStorage که باید در صفحه اصلی حفظ شوند.
+                // این لیست باید با لیست موجود در zytask.html یکسان باشد.
+                const keysToPreserve = [
+                    'tasks',
+                    'zPoint',
+                    'level',
+                    'dailyStreak',
+                    'highestDailyStreak',
+                    'lastCompletionDate',
+                    'totalCustomTasksCompleted',
+                    'userName',
+                    'userCreationDate',
+                    'unlockedAchievements',
+                    'achievementUnlockDates',
+                    'hasPinnedTaskEver',
+                    'theme' // حفظ تم برنامه
+                ];
+
+                console.log('[Service Worker] تمامی کش‌ها پاک شدند. در حال لغو ثبت Service Worker و ارسال پیام به کلاینت.');
+                // Service Worker خودش را لغو ثبت می‌کند تا مرورگر نسخه جدید را نصب کند.
+                return self.registration.unregister().then(() => {
+                    // پیام را به کلاینت (صفحه zytask.html) ارسال می‌کنیم تا پاکسازی localStorage و بارگذاری مجدد را انجام دهد.
+                    self.clients.matchAll().then(clients => {
+                        clients.forEach(client => {
+                            client.postMessage({
+                                type: 'PERFORM_LOCAL_STORAGE_CLEANUP_AND_RELOAD',
+                                keysToPreserve: keysToPreserve
+                            });
+                        });
                     });
                 });
             })
