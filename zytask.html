@@ -816,6 +816,33 @@
         </div>
     </div>
 
+    <div id="updateConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-sm relative text-gray-800 dark:text-gray-100 transition-transform duration-300 transform scale-95 opacity-0" id="updateConfirmModalContent">
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700 text-center">تأیید بروزرسانی برنامه</h3>
+            <p class="mb-4 text-sm text-gray-700 dark:text-gray-300">
+                با تأیید بروزرسانی، برنامه آخرین نسخه خود را از سرور دانلود می‌کند. این کار شامل:
+            </p>
+            <ul class="list-disc list-inside mb-6 text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                <li><strong class="text-blue-600 dark:text-blue-300">پاکسازی کش برنامه:</strong> تمامی فایل‌های کش شده (HTML, CSS, JavaScript و فونت‌ها) حذف می‌شوند تا از جدیدترین نسخه‌ها استفاده شود.</li>
+                <li><strong class="text-green-600 dark:text-green-300">حفظ داده‌های شما:</strong> اطلاعات شخصی شما مانند وظایف، پوینت‌ها، سطح و دستاوردها <strong class="font-bold">حفظ خواهند شد</strong> و پاک نمی‌شوند.</li>
+                <li><strong class="text-purple-600 dark:text-purple-300">بارگذاری مجدد صفحه:</strong> پس از اتمام فرآیند، صفحه به طور خودکار بارگذاری مجدد می‌شود تا تغییرات اعمال گردند.</li>
+            </ul>
+            <p class="mb-6 text-sm text-gray-700 dark:text-gray-300 font-bold">
+                آیا مایل به ادامه هستید؟
+            </p>
+            <div class="flex justify-end space-x-4 space-x-reverse">
+                <button id="confirmUpdateBtn" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    تأیید بروزرسانی
+                </button>
+                <button id="cancelUpdateBtn" class="bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-100 font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400">
+                    لغو
+                </button>
+            </div>
+            <button id="closeUpdateModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
     <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="detailModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700" id="detailModalTitle"></h3>
@@ -1077,6 +1104,14 @@
         const cancelEditTaskBtn = document.getElementById('cancelEditTaskBtn');
 
         let currentTaskBeingEditedId = null; // To track the task currently being edited
+
+        // New: Update Confirmation Modal elements
+        const updateConfirmModal = document.getElementById('updateConfirmModal');
+        const updateConfirmModalContent = document.getElementById('updateConfirmModalContent');
+        const confirmUpdateBtn = document.getElementById('confirmUpdateBtn');
+        const cancelUpdateBtn = document.getElementById('cancelUpdateBtn');
+        const closeUpdateModalBtn = document.getElementById('closeUpdateModalBtn');
+
 
         // Helper function to convert Persian numbers to English
         function convertPersianNumbersToEnglish(inputString) {
@@ -1494,6 +1529,7 @@
             localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements)); // Save unlocked achievements
             localStorage.setItem('achievementUnlockDates', JSON.stringify(achievementUnlockDates)); // Save achievement unlock dates
             localStorage.setItem('hasPinnedTaskEver', hasPinnedTaskEver); // Save new flag
+            // Theme is saved separately in initializeTheme/themeToggleBtn
         }
 
         // Function to load tasks, points, level, streak, and last completion date from Local Storage
@@ -1764,7 +1800,7 @@
             // Handle completed tasks rendering
             const completedTotalPages = Math.ceil(completedTasks.length / TASKS_PER_PAGE);
             if (completedCurrentPage > completedTotalPages && completedTotalPages > 0) {
-                completedCurrentPage = completedTotalPages;
+                completedCurrentPage = totalPages; // Set to last page if current is out of bounds
             } else if (completedTotalPages === 0) {
                 completedCurrentPage = 1;
             }
@@ -2214,7 +2250,7 @@
                 pinTask(taskId);
             } else {
                 // This is the click on the task card itself (not checkbox or menu button)
-                // Only toggle completion if it's not a note
+                // Only toggle completion if it.importance !== 'note'
                 if (task && task.importance !== 'note') {
                     toggleTaskCompletion(taskId, taskItemElement);
                 }
@@ -3124,71 +3160,56 @@
             }, 50);
         });
 
-        // New: Update App menu item functionality
+        // New: Update App menu item functionality (now shows confirmation modal first)
         updateAppMenuItem.addEventListener('click', async (e) => {
             e.preventDefault();
             menuDropdown.classList.add('hidden'); // Hide dropdown
 
+            // Show update confirmation modal
+            updateConfirmModal.classList.remove('hidden');
+            void updateConfirmModalContent.offsetWidth; // Force reflow
+            updateConfirmModalContent.classList.remove('opacity-0', 'scale-95');
+            updateConfirmModalContent.classList.add('opacity-100', 'scale-100');
+        });
+
+        // Event listener for "Confirm Update" button in the new modal
+        confirmUpdateBtn.addEventListener('click', async () => {
+            // Hide confirmation modal
+            updateConfirmModalContent.classList.remove('opacity-100', 'scale-100');
+            updateConfirmModalContent.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                updateConfirmModal.classList.add('hidden');
+            }, 50);
+
             if ('serviceWorker' in navigator) {
                 try {
                     const registration = await navigator.serviceWorker.getRegistration();
-                    if (registration) {
+                    if (registration && registration.active) {
                         showMessageBox('بروزرسانی برنامه آغاز شد. لطفاً صبر کنید...', 'info');
+                        // Send message to active service worker to clear caches and reload
+                        registration.active.postMessage({ type: 'START_DEEP_UPDATE' });
 
-                        // Force the service worker to check for updates
-                        registration.update();
-
-                        // Listen for a new service worker to be found
-                        registration.addEventListener('updatefound', () => {
-                            const newWorker = registration.installing;
-
-                            if (newWorker) {
-                                // Listen for the state changes of the new worker
-                                newWorker.addEventListener('statechange', () => {
-                                    if (newWorker.state === 'installed') {
-                                        // A new service worker has been installed, but not yet activated.
-                                        // We can force it to activate immediately.
-                                        if (navigator.serviceWorker.controller) { // Check if there's an active worker
-                                            newWorker.postMessage({ type: 'SKIP_WAITING' });
-                                            showMessageBox('نسخه جدید آماده نصب است. صفحه در حال بارگذاری مجدد است.', 'success');
-                                            // Wait a moment for the new SW to activate before reloading
-                                            setTimeout(() => {
-                                                window.location.reload();
-                                            }, 500);
-                                        } else {
-                                            // No active worker, so the new one will activate on its own.
-                                            // Just reload to use the newly installed SW.
-                                            showMessageBox('برنامه بروزرسانی شد! صفحه در حال بارگذاری مجدد است.', 'success');
-                                            setTimeout(() => {
-                                                window.location.reload();
-                                            }, 500);
-                                        }
-                                    } else if (newWorker.state === 'activated') {
-                                        // This case handles when the new worker activates without skipWaiting (e.g., first install)
-                                        // Or if skipWaiting was called and it's now active.
-                                        // In most update scenarios, skipWaiting will trigger the reload earlier.
-                                        if (!navigator.serviceWorker.controller) { // Only reload if it's the very first activation
-                                            showMessageBox('برنامه بروزرسانی شد! صفحه در حال بارگذاری مجدد است.', 'success');
-                                            setTimeout(() => {
-                                                window.location.reload();
-                                            }, 500);
-                                        }
-                                    }
-                                });
+                        // Listen for message from service worker indicating reload is ready
+                        navigator.serviceWorker.addEventListener('message', (event) => {
+                            if (event.data && event.data.type === 'PERFORM_LOCAL_STORAGE_CLEANUP_AND_RELOAD') {
+                                // Service worker has cleared its caches and unregistered itself.
+                                // Now, perform localStorage cleanup and reload the page.
+                                performLocalStorageCleanupAndReload(event.data.keysToPreserve);
                             }
-                        });
-
-                        // If there's already a waiting worker from a previous update check, activate it.
-                        if (registration.waiting) {
-                            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-                            showMessageBox('نسخه جدید آماده نصب است. صفحه در حال بارگذاری مجدد است.', 'success');
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 500);
-                        }
+                        }, { once: true });
 
                     } else {
-                        showMessageBox('Service Worker یافت نشد. بروزرسانی خودکار انجام می‌شود.', 'info');
+                        // If no active service worker, try to unregister any existing ones
+                        // and then reload. This is a fallback for a clean slate.
+                        const registrations = await navigator.serviceWorker.getRegistrations();
+                        await Promise.all(registrations.map(reg => reg.unregister()));
+                        showMessageBox('Service Worker یافت نشد یا غیرفعال بود. کش مرورگر پاک شده و صفحه مجدداً بارگذاری می‌شود.', 'info');
+                        // Clear all caches for good measure if no service worker was active
+                        const cacheNames = await caches.keys();
+                        await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
+                        setTimeout(() => {
+                            window.location.reload(); // Force a hard reload
+                        }, 500);
                     }
                 } catch (error) {
                     console.error('بروزرسانی Service Worker با خطا مواجه شد:', error);
@@ -3198,6 +3219,50 @@
                 showMessageBox('مرورگر شما از سرویس پس‌زمینه (Service Worker) پشتیبانی نمی‌کند.', 'info');
             }
         });
+
+        // Event listener for "Cancel Update" button in the new modal
+        cancelUpdateBtn.addEventListener('click', () => {
+            updateConfirmModalContent.classList.remove('opacity-100', 'scale-100');
+            updateConfirmModalContent.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                updateConfirmModal.classList.add('hidden');
+            }, 50);
+            showMessageBox('بروزرسانی برنامه لغو شد.', 'info');
+        });
+
+        // Event listener for closing the update confirmation modal
+        closeUpdateModalBtn.addEventListener('click', () => {
+            updateConfirmModalContent.classList.remove('opacity-100', 'scale-100');
+            updateConfirmModalContent.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                updateConfirmModal.classList.add('hidden');
+            }, 50);
+        });
+
+
+        // Function to perform localStorage cleanup and reload (called by Service Worker)
+        function performLocalStorageCleanupAndReload(keysToPreserve) {
+            const preservedData = {};
+            // Save data for keys to preserve
+            keysToPreserve.forEach(key => {
+                const value = localStorage.getItem(key);
+                if (value !== null) {
+                    preservedData[key] = value;
+                }
+            });
+
+            localStorage.clear(); // Clear all localStorage
+
+            // Restore preserved data
+            for (const key in preservedData) {
+                localStorage.setItem(key, preservedData[key]);
+            }
+
+            showMessageBox('برنامه بروزرسانی شد! صفحه در حال بارگذاری مجدد است.', 'success');
+            setTimeout(() => {
+                window.location.reload(); // Force a hard reload
+            }, 500); // Give a small delay for message to be seen
+        }
 
 
         donateMenuItem.addEventListener('click', (e) => {
@@ -3283,7 +3348,8 @@
                 userCreationDate: userCreationDate, // Include user creation date in export
                 unlockedAchievements: unlockedAchievements, // Include unlocked achievements in export
                 achievementUnlockDates: achievementUnlockDates, // Include achievement unlock dates in export
-                hasPinnedTaskEver: hasPinnedTaskEver // Include new flag in export
+                hasPinnedTaskEver: hasPinnedTaskEver, // Include new flag in export
+                theme: localStorage.getItem('theme') // Include theme in export
             };
             const jsonString = JSON.stringify(dataToSave, null, 2);
             const blob = new Blob([jsonString], { type: 'application/json' });
@@ -3337,7 +3403,8 @@
                         (typeof importedData.userCreationDate === 'string' || importedData.userCreationDate === null || importedData.userCreationDate === undefined) && // Validate new userCreationDate
                         (typeof importedData.unlockedAchievements === 'object' && Array.isArray(importedData.unlockedAchievements) || typeof importedData.unlockedAchievements === 'undefined') &&
                         (typeof importedData.achievementUnlockDates === 'object' || typeof importedData.achievementUnlockDates === 'undefined') &&
-                        (typeof importedData.hasPinnedTaskEver === 'boolean' || typeof importedData.hasPinnedTaskEver === 'undefined')
+                        (typeof importedData.hasPinnedTaskEver === 'boolean' || typeof importedData.hasPinnedTaskEver === 'undefined') &&
+                        (typeof importedData.theme === 'string' || typeof importedData.theme === 'undefined') // Validate theme
                     ) {
                         tasks = importedData.tasks;
                         zPoint = importedData.zPoint;
@@ -3351,6 +3418,7 @@
                         unlockedAchievements = importedData.unlockedAchievements || [];
                         achievementUnlockDates = importedData.achievementUnlockDates || {};
                         hasPinnedTaskEver = importedData.hasPinnedTaskEver || false;
+                        const importedTheme = importedData.theme || null;
 
                         // Ensure imported tasks have the new 'isPinned' property
                         tasks.forEach(task => {
@@ -3358,6 +3426,15 @@
                                 task.isPinned = false;
                             }
                         });
+
+                        // Apply imported theme
+                        if (importedTheme) {
+                            localStorage.setItem('theme', importedTheme);
+                            applyTheme(importedTheme);
+                        } else {
+                            localStorage.removeItem('theme'); // Clear theme if not present in backup
+                            initializeTheme(); // Re-initialize based on system or default
+                        }
 
                         saveToLocalStorage(); // Save imported data to local storage
                         renderTasks(); // Re-render UI with new data
@@ -3518,6 +3595,17 @@
                 navigator.serviceWorker.register('/service-worker.js')
                     .then(registration => {
                         console.log('Service Worker registered with scope:', registration.scope);
+                        // Add a listener to detect when a new service worker is installed
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // A new service worker is installed and ready to take over
+                                    // This is where you might prompt the user to refresh
+                                    // showMessageBox('نسخه جدید برنامه موجود است. برای بروزرسانی صفحه را رفرش کنید.', 'info');
+                                }
+                            });
+                        });
                     })
                     .catch(error => {
                         console.error('Service Worker registration failed:', error);
