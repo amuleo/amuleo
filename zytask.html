@@ -193,6 +193,11 @@
             min-width: 0; /* Allow it to shrink smaller than its content */
         }
 
+        /* New: Justify text for note importance tasks */
+        .task-name-wrapper.text-align-justify-rtl {
+            text-align: justify;
+        }
+
         .line-through .task-name {
             text-decoration: line-through;
         }
@@ -235,11 +240,11 @@
                 transform: scale(1);
             }
             50% {
-                box-shadow: 0 0 0 8px rgba(99, 102, 241, 0); /* Fade out glow */
+                box-shadow: 0 0 0 8px rgba(0, 0, 0, 0); /* Fade out glow */
                 transform: scale(1.02); /* Slight pop */
             }
             100% {
-                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+                box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
                 transform: scale(1);
             }
         }
@@ -348,8 +353,8 @@
             body {
                 padding-left: 0 !important;
                 padding-right: 0 !important;
-                padding-top: 0 !important; /* Remove top padding on mobile */
-                padding-bottom: 0 !important; /* Remove bottom padding on mobile */
+                padding-top: 20px !important; /* Changed to 20px padding */
+                padding-bottom: 20px !important; /* Changed to 20px padding */
             }
             .container {
                 border-radius: 0 !important; /* Override rounded corners */
@@ -433,8 +438,8 @@
 
         /* Adjusted icon size for achievement cards to be responsive and consistent */
         .achievement-item-card .icon {
-            font-size: 2.25rem; /* Changed to text-4xl equivalent */
-            margin-bottom: 0.75rem; /* Adjusted margin */
+            font-size: 2.25rem; /* Reverted to 4xl (2.25rem) */
+            margin-bottom: 0.5rem; /* Adjusted margin for smaller icon */
             color: var(--theme-primary); /* Icon color based on theme */
             transition: color 0.3s ease-in-out;
         }
@@ -504,15 +509,16 @@
             color: white;
             border-radius: 1rem; /* More rounded */
             padding: 1.5rem; /* Adjusted padding */
+            padding-bottom: 2rem; /* Added padding for button */
             text-align: center;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Stronger shadow */
             animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Bouncy animation */
-            /* Removed max-width and max-height from here to allow content to dictate size */
-            /* Removed overflow-y: auto; */
-            position: relative;
-            overflow: hidden; /* For confetti */
             width: 90%; /* Responsive width */
             max-width: 400px; /* Max width for the modal content itself */
+            max-height: 90vh; /* Allow modal to take up to 90% of viewport height */
+            overflow-y: auto; /* Enable scrolling if content exceeds max-height */
+            position: relative; /* Keep relative for positioning children */
+            overflow-x: hidden; /* Hide horizontal overflow */
         }
         .dark #achievementNotificationModalContent {
             background: linear-gradient(to bottom right, #4f46e5, #7c3aed); /* Darker vibrant gradient */
@@ -520,10 +526,13 @@
 
         /* Adjusted icon size for achievement notification modal to be consistent with achievement cards */
         #achievementNotificationModalContent .icon {
-            font-size: 2.25rem; /* Changed to text-4xl equivalent */
-            margin-bottom: 1rem; /* Adjusted margin */
+            font-size: 4.5rem !important; /* Changed to 7xl (4.5rem) */
+            margin-bottom: 0.3125rem; /* 5px from bottom */
             color: #ffeb3b; /* Bright yellow for icon */
             animation: pulse 1.5s infinite; /* Pulsing animation for icon */
+            display: flex; /* Ensure flex properties for centering */
+            align-items: center;
+            justify-content: center;
         }
 
         #achievementNotificationModalContent .title {
@@ -591,6 +600,9 @@
                 <a href="#" id="backupMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-300 ease-in-out flex items-center">
                     <i class="fa-solid fa-download ml-2"></i> پشتیبان‌گیری
                 </a>
+                <a href="#" id="updateAppMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out flex items-center">
+                    <i class="fa-solid fa-sync-alt ml-2"></i> بروزرسانی برنامه
+                </a>
                 <a href="#" id="donateMenuItem" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200 ease-in-out flex items-center">
                     <i class="fa-solid fa-hand-holding-dollar ml-2"></i> حمایت مالی
                 </a>
@@ -642,6 +654,7 @@
                     <option value="important">مهم</option>
                     <option value="normal" selected>عادی</option>
                     <option value="custom">سفارشی</option>
+                    <option value="note">یادداشت</option>
                 </select>
                 <input type="text" id="customPointsInput" placeholder="پوینت سفارشی (حداکثر ۲۰)" inputmode="numeric"
                        class="p-3 border rounded-lg text-base sm:text-lg text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 h-12 w-full md:w-32 hidden text-right">
@@ -656,10 +669,10 @@
             <div class="flex flex-col sm:flex-row items-center justify-between mb-4">
                 <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-2 sm:mb-0">وظایف فعال</h2>
                 <div id="activeTasksPagination" class="flex items-center space-x-2 space-x-reverse hidden">
-                    </div>
+                </div>
             </div>
             <div id="activeTaskList" class="task-list-container pr-2">
-                </div>
+            </div>
         </div>
 
         <div class="mt-8 px-2 md:px-0">
@@ -669,11 +682,12 @@
             </button>
             <div id="completedTasksSection" class="hidden mt-4">
                 <div class="flex flex-col sm:flex-row items-center justify-between mb-4 mt-4">
-                    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-2 sm:mb-0"></h2> <div id="completedTasksPagination" class="flex items-center space-x-2 space-x-reverse hidden">
-                        </div>
+                    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-2 sm:mb-0"></h2>
+                    <div id="completedTasksPagination" class="flex items-center space-x-2 space-x-reverse hidden">
+                    </div>
                 </div>
                 <div id="completedTasksContainer" class="task-list-container pr-2">
-                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -702,7 +716,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="profileModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">پروفایل کاربری</h3>
             <div id="profileModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
-                </div>
+            </div>
             <button id="closeProfileModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
@@ -713,7 +727,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="achievementsModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">دستاوردها</h3>
             <div id="achievementsModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                </div>
+            </div>
             <button id="closeAchievementsModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
@@ -735,7 +749,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md relative text-gray-800 dark:text-gray-100 flex flex-col modal-box transition-transform duration-300 transform scale-95 opacity-0" id="helpModalContent">
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">راهنما</h3>
             <div id="helpModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
-                </div>
+            </div>
             <button id="closeHelpModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
@@ -748,7 +762,7 @@
             <div id="aboutModalBody" class="modal-scrollable-content text-justify text-sm leading-relaxed">
                 <p class="mb-3">این برنامه به منظور مدیریت وظایف و افزایش انگیزه طراحی شده است.</p>
                 <p class="mb-3">این پروژه به صورت اختصاصی توسط <strong class="text-gray-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">سایت عمو لئو</a></strong> طراحی شده است. این نسخه، اولین و آخرین نسخه از این پروژه است.</p>
-                <p class="mb-3">تمامی حقوق متعلق به <strong class="text-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
+                <p class="mb-3">تمامی حقوق متعلق به <strong class="text-gray-600 dark:text-gray-300"><a href="https://amuleo.ir" target="_blank" rel="noopener noreferrer">عمو لئو</a></strong> است.</p>
                 <p class="mb-3">تاریخ: ۴ خرداد ۱۴۰۴</p>
             </div>
             <button id="closeAboutModalBtn" class="absolute top-3 left-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -762,7 +776,7 @@
             <h3 class="text-xl sm:text-2xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">پشتیبان‌گیری و بازیابی داده‌ها</h3>
             <div class="modal-scrollable-content flex flex-col gap-4">
                 <p class="text-sm text-gray-700 dark:text-gray-300">برای پشتیبان‌گیری، دکمه "ذخیره داده‌ها" را فشار دهید تا فایل پشتیبان دانلود شود. برای بازیابی، فایل پشتیبان را انتخاب کرده و "بارگذاری از فایل" را فشار دهید.</p>
-                
+
                 <button id="exportDataBtn" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400">
                     ذخیره داده‌ها (دانلود فایل)
                 </button>
@@ -774,7 +788,7 @@
                     <span id="selectedFileName" class="text-sm text-gray-600 dark:text-gray-300 truncate max-w-[calc(100%-120px)]">فایلی انتخاب نشده است.</span>
                     <input type="file" id="importFileInput" accept=".json" class="hidden">
                 </div>
-                
+
                 <button id="importDataBtn" class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400">
                     بارگذاری از فایل
                 </button>
@@ -815,7 +829,8 @@
     </div>
 
     <div id="editTaskModal" class="dynamic-modal hidden">
-        <div class="dynamic-modal-content text-gray-800 dark:text-gray-100" id="editTaskModalContent"> <h3 class="text-xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">ویرایش وظیفه</h3>
+        <div class="dynamic-modal-content text-gray-800 dark:text-gray-100" id="editTaskModalContent">
+            <h3 class="text-xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">ویرایش وظیفه</h3>
             <input type="text" id="editTaskNameInput" placeholder="نام وظیفه را وارد کنید..." maxlength="30"
                    class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 text-right">
             <select id="editTaskImportanceSelect"
@@ -823,6 +838,7 @@
                 <option value="important">مهم</option>
                 <option value="normal">عادی</option>
                 <option value="custom">سفارشی</option>
+                <option value="note">یادداشت</option>
             </select>
             <input type="text" id="editTaskCustomPointsInput" placeholder="پوینت سفارشی (حداکثر ۲۰)" inputmode="numeric"
                    class="p-3 border rounded-lg text-base text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 hidden text-right">
@@ -848,16 +864,19 @@
         let dailyStreak = 0; // Daily streak counter
         let highestDailyStreak = 0; // Highest recorded streak
         let lastCompletionDate = null; // Date of last task completion
-        let totalCustomTasksCompleted = 0; // Counter for custom tasks completed
+        let totalCustomTasksCompleted = 0; // Counter for custom tasks completed (still used for points, not achievements)
         let userName = null; // User's name
+        let userCreationDate = null; // New: Date when user first set their name
         let unlockedAchievements = []; // Array to store IDs of unlocked achievements
         let achievementUnlockDates = {}; // New: Object to store unlock dates for achievements
         let hasPinnedTaskEver = false; // New: Tracks if a task has ever been pinned
 
         const pointsPerNormalTask = 10; // Points for normal tasks
         const pointsPerImportantTask = 25; // Points for important tasks
-        const MAX_CUSTOM_POINTS = 20; // Max points for custom tasks (Changed from 50 to 20)
+        const MAX_CUSTOM_POINTS = 20; // Max points for custom tasks
         const TASKS_PER_PAGE = 7; // Number of tasks displayed per page
+        const DEFAULT_TASK_MAXLENGTH = 30; // Default max length for task input
+        const NOTE_TASK_MAXLENGTH = 150; // Max length for note task input
 
         // Pagination status variables
         let activeCurrentPage = 1;
@@ -888,6 +907,7 @@
 
         // Achievement data with Font Awesome icons
         const achievementsData = [
+            // Level Achievements (remain as is)
             { level: 1, name: 'نوب', icon: 'fa-solid fa-child', type: 'level', description: 'شروع هر سفر با گام اول است. شما در ابتدای مسیر هستید و آماده برای کشف توانایی‌هایتان!' },
             { level: 2, name: 'مبتدی', icon: 'fa-solid fa-seedling', type: 'level', description: 'شما با تلاش و پشتکار، بذر موفقیت را کاشته‌اید. به رشد خود ادامه دهید!' },
             { level: 3, name: 'جنگجو', icon: 'fa-solid fa-hand-fist', type: 'level', description: 'شما با هر چالش، قوی‌تر و مصمم‌تر می‌شوید. روحیه جنگجویانه شما ستودنی است!' },
@@ -903,42 +923,36 @@
             { level: 13, name: 'کیهان‌نورد', icon: 'fa-solid fa-rocket', type: 'level', description: 'شما مرزها را درنوردیده‌اید و به سوی ناشناخته‌ها پرواز می‌کنید. آسمان حد شما نیست!' },
             { level: 14, name: 'بتمن', icon: 'fa-solid fa-user-secret', type: 'level', description: 'شما در سایه‌ها نیز قدرتمندید. با هوش و اراده، هر مشکلی را حل می‌کنید!' },
             { level: 15, name: 'سیگما', icon: 'fa-solid fa-chess-king', type: 'level', description: 'شما به اوج رسیده‌اید. با خرد و استراتژی، هر بازی را به نفع خود به پایان می‌رسانید!' },
-            // Original Achievements
+            // Total Tasks Achievements (Updated as per request)
             { type: 'totalTasks', value: 1, name: 'اولین قدم', icon: 'fa-solid fa-shoe-prints', description: 'اولین وظیفه خود را با موفقیت تکمیل کنید. هر سفر طولانی با یک قدم آغاز می‌شود!' },
             { type: 'totalTasks', value: 5, name: 'پنج ستاره', icon: 'fa-solid fa-star-half-stroke', description: 'با تکمیل ۵ وظیفه، نشان می‌دهید که در مسیر درستی هستید. به همین ترتیب ادامه دهید!' },
-            { type: 'totalTasks', value: 10, name: 'ده وظیفه', icon: 'fa-solid fa-check-double', description: 'با تکمیل ۱۰ وظیفه، گام‌های محکم‌تری برداشته‌اید. این نشان از تعهد شماست!' },
-            { type: 'totalTasks', value: 25, name: 'ربع قرن', icon: 'fa-solid fa-calendar-check', description: '۲۵ وظیفه را به پایان رساندید. نظم و پیگیری شما مثال‌زدنی است!' },
-            { type: 'totalTasks', value: 50, name: 'پنجاه وظیفه', icon: 'fa-solid fa-clipboard-check', description: 'نیم قرن از وظایف را به اتمام رساندید! شما یک ماشین بهره‌وری هستید!' },
-            { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: 'fa-solid fa-list-check', description: 'به باشگاه صدتایی‌ها خوش آمدید! شما در حال ساختن عادت‌های موفقیت‌آمیز هستید.' },
-            { type: 'totalTasks', value: 250, name: 'دویست و پنجاه وظیفه', icon: 'fa-solid fa-trophy', description: 'شما یک قهرمان واقعی هستید! ۲۵۰ وظیفه تکمیل شده، گواه عزم راسخ شماست.' },
-            { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: 'fa-solid fa-award', description: 'نیمی از راه هزار وظیفه را پیمودید! شما بی‌وقفه در حال پیشرفتید.' },
-            { type: 'totalTasks', value: 1000, name: 'هزار وظیفه', icon: 'fa-solid fa-medal', description: 'شما به یک اسطوره تبدیل شدید! هزار وظیفه تکمیل شده، نشان از اراده پولادین شماست.' },
-            { type: 'importantTasks', value: 1, name: 'اولین چالش', icon: 'fa-solid fa-exclamation', description: 'اولین وظیفه مهم خود را به اتمام رساندید. شما آماده مقابله با چالش‌ها هستید!' },
-            { type: 'importantTasks', value: 5, name: 'پنج وظیفه مهم', icon: 'fa-solid fa-triangle-exclamation', description: 'با تکمیل ۵ وظیفه مهم، نشان دادید که می‌توانید بر اولویت‌ها مسلط شوید.' },
-            { type: 'importantTasks', value: 10, name: 'ده وظیفه مهم', icon: 'fa-solid fa-circle-exclamation', description: 'ده وظیفه مهم را به سرانجام رساندید. شما استاد مدیریت زمان هستید!' },
-            { type: 'importantTasks', value: 20, name: 'بیست وظیفه مهم', icon: 'fa-solid fa-bell', description: 'با تکمیل ۲۰ وظیفه مهم، هیچ چیز نمی‌تواند شما را متوقف کند!' },
+            { type: 'totalTasks', value: 10, name: 'ده وظیفه', icon: 'fa-solid fa-check-double', description: 'با تکمیل ۱۰ وظیفه، گام‌های محکم‌تری برداشته‌اید. این نشان از تعهد شماست و به شما کمک می‌کند تا به اهداف بزرگتر دست یابید.' },
+            { type: 'totalTasks', value: 20, name: 'بیست وظیفه', icon: 'fa-solid fa-list-ol', description: 'بیست وظیفه را به پایان رساندید. این پیوستگی، پایه‌های موفقیت‌های آینده شما را بنا می‌نهد.' },
+            { type: 'totalTasks', value: 50, name: 'پنجاه وظیفه', icon: 'fa-solid fa-clipboard-check', description: 'نیم قرن از وظایف را به اتمام رساندید! این حجم از کار، نشانگر توانایی شما در سازماندهی و پیگیری است.' },
+            { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: 'fa-solid fa-trophy', description: 'به باشگاه صدتایی‌ها خوش آمدید! شما در حال ساختن عادت‌های موفقیت‌آمیز هستید و این ثبات، مسیر را برایتان هموارتر می‌کند.' },
+            { type: 'totalTasks', value: 200, name: 'دویست وظیفه', icon: 'fa-solid fa-medal', description: 'دویست وظیفه تکمیل شده! این عدد، گواه رشد و پیشرفت مداوم شماست. به این روند ادامه دهید.' },
+            { type: 'totalTasks', value: 300, name: 'سیصد وظیفه', icon: 'fa-solid fa-crown', description: 'سیصد وظیفه را با موفقیت پشت سر گذاشتید. شما در حال تسلط بر مدیریت زمان و بهره‌وری خود هستید.' },
+            { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: 'fa-solid fa-award', description: 'پانصد وظیفه! این یک دستاورد بزرگ است که نشان می‌دهد شما در مسیر رسیدن به اهداف بزرگ، مصمم و قدرتمندید.' },
+            { type: 'totalTasks', value: 1000, name: 'هزار وظیفه', icon: 'fa-solid fa-star', description: 'هزار وظیفه تکمیل شده! شما به یک اسطوره تبدیل شدید. این حجم از کار، نشان از اراده پولادین و توانایی بی‌نظیر شما در تحقق اهداف است.' },
+            // Streak Achievements (remain as is)
             { type: 'streak', value: 3, name: 'زنجیره سه روزه', icon: 'fa-solid fa-fire', description: 'سه روز متوالی با انگیزه بالا! این شروع یک عادت عالی است.' },
             { type: 'streak', value: 7, name: 'زنجیره هفت روزه', icon: 'fa-solid fa-fire-flame-curved', description: 'یک هفته کامل از تلاش بی‌وقفه! زنجیره شما شعله‌ور است!' },
             { type: 'streak', value: 14, name: 'زنجیره دو هفته‌ای', icon: 'fa-solid fa-calendar-days', description: 'دو هفته مداوم! شما ثابت کردید که می‌توانید به اهداف بلندمدت خود پایبند باشید.' },
             { type: 'streak', value: 30, name: 'زنجیره ماهانه', icon: 'fa-solid fa-calendar-check', description: 'یک ماه کامل از تعهد و پشتکار! شما یک قهرمان بهره‌وری هستید.' },
-            { type: 'customTasks', value: 1, name: 'اولین وظیفه سفارشی', icon: 'fa-solid fa-lightbulb', description: 'اولین وظیفه با پوینت سفارشی را تکمیل کردید. شما خلاق و هدفمندید!' },
-            { type: 'customTasks', value: 5, name: 'پنج وظیفه سفارشی', icon: 'fa-solid fa-gear', description: 'پنج وظیفه سفارشی را به پایان رساندید. شما به خوبی می‌دانید چه چیزی برایتان ارزشمند است.' },
-            { type: 'customTasks', value: 10, name: 'ده وظیفه سفارشی', icon: 'fa-solid fa-gears', description: 'ده وظیفه سفارشی را تکمیل کردید. شما سازنده مسیر موفقیت خود هستید!' },
+            { type: 'streak', value: 60, name: 'زنجیره دو ماهه', icon: 'fa-solid fa-calendar-alt', description: 'شصت روز متوالی از تلاش و تعهد! شما الگوی پایداری هستید.' },
+            { type: 'streak', value: 90, name: 'زنجیره سه ماهه', icon: 'fa-solid fa-calendar-check', description: 'نود روز مداوم! شما به یک عادت قدرتمند دست یافته‌اید.' },
+            { type: 'streak', value: 180, name: 'زنجیره شش ماهه', icon: 'fa-solid fa-calendar-days', description: 'نیم سال کامل از بهره‌وری بی‌نظیر! شما واقعاً خارق‌العاده‌اید.' },
+            { type: 'streak', value: 365, name: 'زنجیره یک ساله', icon: 'fa-solid fa-earth-americas', description: 'یک سال تمام از موفقیت‌های پی‌درپی! شما به یک افسانه تبدیل شده‌اید.' },
+            // Points Achievements (remain as is)
             { type: 'points', value: 100, name: 'صد پوینت', icon: 'fa-solid fa-gem', description: 'اولین ۱۰۰ پوینت را کسب کردید. هر پوینت، گامی به سوی اهداف بزرگتر است!' },
             { type: 'points', value: 500, name: 'پانصد پوینت', icon: 'fa-solid fa-money-bill-wave', description: 'با جمع‌آوری ۵۰۰ پوینت، ارزش تلاش‌هایتان نمایان شده است.' },
             { type: 'points', value: 1000, name: 'هزار پوینت', icon: 'fa-solid fa-coins', description: 'هزار پوینت کسب کردید! شما در حال ساختن ثروت از جنس موفقیت هستید.' },
             { type: 'points', value: 2500, name: 'دو هزار و پانصد پوینت', icon: 'fa-solid fa-star-of-life', description: '۲۵۰۰ پوینت! شما در حال درخشش هستید و به اوج نزدیک می‌شوید.' },
             { type: 'points', value: 5000, name: 'پنج هزار پوینت', icon: 'fa-solid fa-meteor', description: '۵۰۰۰ پوینت! شما به یک نیروی غیرقابل توقف تبدیل شده‌اید. تبریک می‌گوییم!' },
-            // New Achievements (10 more)
-            { type: 'streak', value: 60, name: 'زنجیره دو ماهه', icon: 'fa-solid fa-calendar-alt', description: 'شصت روز متوالی از تلاش و تعهد! شما الگوی پایداری هستید.' },
-            { type: 'streak', value: 90, name: 'زنجیره سه ماهه', icon: 'fa-solid fa-calendar-check', description: 'نود روز مداوم! شما به یک عادت قدرتمند دست یافته‌اید.' },
-            { type: 'streak', value: 180, name: 'زنجیره شش ماهه', icon: 'fa-solid fa-calendar-days', description: 'نیم سال کامل از بهره‌وری بی‌نظیر! شما واقعاً خارق‌العاده‌اید.' },
-            { type: 'streak', value: 365, name: 'زنجیره یک ساله', icon: 'fa-solid fa-earth-americas', description: 'یک سال تمام از موفقیت‌های پی‌درپی! شما به یک افسانه تبدیل شده‌اید.' },
             { type: 'points', value: 7500, name: 'هفت هزار و پانصد پوینت', icon: 'fa-solid fa-sack-dollar', description: 'با کسب ۷۵۰۰ پوینت، ارزش تلاش‌های شما به اوج رسیده است.' },
             { type: 'points', value: 10000, name: 'ده هزار پوینت', icon: 'fa-solid fa-money-bill-trend-up', description: 'ده هزار پوینت! شما به یک ثروت از جنس دستاوردها دست یافته‌اید.' },
             { type: 'points', value: 20000, name: 'بیست هزار پوینت', icon: 'fa-solid fa-hand-holding-usd', description: 'بیست هزار پوینت! شما فراتر از انتظار درخشیده‌اید و به یک اسطوره تبدیل شده‌اید.' },
-            { type: 'importantTasks', value: 50, name: 'پنجاه وظیفه مهم', icon: 'fa-solid fa-bookmark', description: 'پنجاه وظیفه مهم را به اتمام رساندید. شما در مدیریت اولویت‌ها بی‌نظیرید.' },
-            { type: 'customTasks', value: 20, name: 'بیست وظیفه سفارشی', icon: 'fa-solid fa-cogs', description: 'بیست وظیفه سفارشی را تکمیل کردید. شما به خوبی می‌دانید چگونه اهداف خود را تنظیم کنید.' },
+            // First Pin Achievement (remain as is)
             { type: 'firstPin', value: 1, name: 'اولین پین', icon: 'fa-solid fa-thumbtack', description: 'اولین وظیفه خود را پین کردید. شما سازمان‌دهی را جدی می‌گیرید!' }
         ];
 
@@ -952,6 +966,7 @@
         const helpMenuItem = document.getElementById('helpMenuItem');
         const aboutMenuItem = document.getElementById('aboutMenuItem');
         const backupMenuItem = document.getElementById('backupMenuItem');
+        const updateAppMenuItem = document.getElementById('updateAppMenuItem'); // New: Update App menu item
         const donateMenuItem = document.getElementById('donateMenuItem');
         const resetMenuItem = document.getElementById('resetMenuItem');
 
@@ -993,7 +1008,7 @@
         const resetConfirmModal = document.getElementById('resetConfirmModal');
         const resetConfirmModalContent = document.getElementById('resetConfirmModalContent');
         const closeHelpModalBtn = document.getElementById('closeHelpModalBtn');
-        const closeAboutModalBtn = document.getElementById('closeAboutModalBtn');
+        const closeAboutModalBtn = document = document.getElementById('closeAboutModalBtn');
         const closeBackupModalBtn = document.getElementById('closeBackupModalBtn');
         const confirmResetBtn = document.getElementById('confirmResetBtn');
         const cancelResetBtn = document.getElementById('cancelResetBtn');
@@ -1085,13 +1100,26 @@
         }
 
         /**
+         * Truncates a string to a specified length and appends '...' if truncated.
+         * @param {string} text The input string.
+         * @param {number} maxLength The maximum length before truncation.
+         * @returns {string} The truncated or original string.
+         */
+        function truncateText(text, maxLength) {
+            if (text.length > maxLength) {
+                return text.substring(0, maxLength) + '...';
+            }
+            return text;
+        }
+
+        /**
          * Function to display a custom message box instead of alert().
          * Options can include: position ('top-right', 'bottom-center'), duration (ms), isUndo (boolean), taskData (for undo).
          * For achievement notifications, type should be 'achievement' with iconClass, title, and message.
          */
         function showMessageBox(message, type = 'info', options = {}) {
             const { position = 'top-right', duration = 3000, isUndo = false, taskData = null } = options;
-            
+
             if (options.type === 'achievement') { // Separate handling for achievement notifications
                 achievementNotificationQueue.push({ iconClass: options.iconClass, title: message, message: options.description });
                 processAchievementNotificationQueue();
@@ -1166,6 +1194,14 @@
             achievementNotificationTitle.textContent = achievement.title;
             achievementNotificationMessage.textContent = achievement.message;
 
+            // Apply inline styles directly to the icon element for maximum specificity
+            achievementNotificationIcon.style.fontSize = '4.5rem'; /* 7xl */
+            achievementNotificationIcon.style.display = 'flex';
+            achievementNotificationIcon.style.alignItems = 'center';
+            achievementNotificationIcon.style.justifyContent = 'center';
+            achievementNotificationIcon.style.marginBottom = '5px'; /* 5 pixels from bottom */
+
+
             achievementNotificationModal.classList.remove('hidden');
             void achievementNotificationModalContent.offsetWidth; // Force reflow
             achievementNotificationModalContent.classList.remove('opacity-0', 'scale-95');
@@ -1188,7 +1224,7 @@
                 undoMessageText.textContent = message;
                 undoMessageBox.classList.remove('hidden'); // Ensure it's not hidden
                 undoMessageBox._currentUndoTaskData = taskData; // Store specific task data for this message
-                
+
                 let timeLeft = duration / 1000;
                 undoCountdown.textContent = `(${timeLeft}s)`;
                 clearInterval(currentCountdownInterval); // Clear previous interval
@@ -1276,7 +1312,7 @@
         // Function to apply theme based on current level (modified for minimal theme)
         function applyLevelTheme(currentLevel) {
             const isDarkMode = document.documentElement.classList.contains('dark');
-            
+
             // Define minimal color palette
             const lightThemeColors = {
                 primary: '#4b5563', // Gray-700
@@ -1334,7 +1370,7 @@
             }
 
             zPointSpan.textContent = zPoint;
-            
+
             // Calculate current level based on point thresholds
             let newLevel = 1;
             let currentLevelInfo = levelPointsThresholds[0]; // Default to level 1
@@ -1369,7 +1405,7 @@
                 const currentLevelThreshold = levelPointsThresholds[level - 1].points;
                 // Ensure correct nextLevelThreshold calculation, especially for the last level
                 const nextLevelThreshold = (level < levelPointsThresholds.length) ? levelPointsThresholds[level].points : levelPointsThresholds[levelPointsThresholds.length - 1].points;
-                
+
                 let pointsIntoCurrentLevel = zPoint - currentLevelThreshold;
                 let pointsNeededForNextLevel = nextLevelThreshold - currentLevelThreshold;
 
@@ -1391,10 +1427,12 @@
                 progressBar.style.width = `100%`;
                 progressText.textContent = `شما به حداکثر سطح (${levelPointsThresholds[levelPointsThresholds.length - 1].name}) رسیده‌اید! شما می‌توانید همچنان پوینت کسب کنید!`;
             }
-            
+
             // Check for new achievements (excluding levels, which are handled above)
             const currentTotalTasksCompleted = tasks.filter(t => t.completed).length;
-            const currentImportantTasksCompleted = tasks.filter(t => t.completed && t.importance === 'important').length;
+            // The following two lines are no longer used for achievement unlocking, but kept for clarity if needed elsewhere.
+            // const currentImportantTasksCompleted = tasks.filter(t => t.completed && t.importance === 'important').length;
+            // const currentCustomTasksCompleted = totalCustomTasksCompleted; // Direct use of counter
 
             achievementsData.forEach(achievement => {
                 let isAchieved = false;
@@ -1412,14 +1450,6 @@
                     if (currentTotalTasksCompleted >= achievement.value) {
                         isAchieved = true;
                     }
-                } else if (achievement.type === 'importantTasks') {
-                    if (currentImportantTasksCompleted >= achievement.value) {
-                        isAchieved = true;
-                    }
-                } else if (achievement.type === 'customTasks') {
-                    if (totalCustomTasksCompleted >= achievement.value) {
-                        isAchieved = true;
-                    }
                 } else if (achievement.type === 'points') {
                     if (zPoint >= achievement.value) {
                         isAchieved = true;
@@ -1430,6 +1460,7 @@
                     }
                 }
 
+                // IMPORTANT: Only check if the achievement is NOT already unlocked
                 if (isAchieved && !unlockedAchievements.includes(achievement.name)) {
                     unlockedAchievements.push(achievement.name);
                     achievementUnlockDates[achievement.name] = new Date().toISOString(); // Store unlock date
@@ -1454,6 +1485,7 @@
             localStorage.setItem('lastCompletionDate', lastCompletionDate);
             localStorage.setItem('totalCustomTasksCompleted', totalCustomTasksCompleted);
             localStorage.setItem('userName', userName);
+            localStorage.setItem('userCreationDate', userCreationDate); // Save user creation date
             localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements)); // Save unlocked achievements
             localStorage.setItem('achievementUnlockDates', JSON.stringify(achievementUnlockDates)); // Save achievement unlock dates
             localStorage.setItem('hasPinnedTaskEver', hasPinnedTaskEver); // Save new flag
@@ -1469,6 +1501,7 @@
             const storedLastCompletionDate = localStorage.getItem('lastCompletionDate');
             const storedTotalCustomTasksCompleted = localStorage.getItem('totalCustomTasksCompleted');
             const storedUserName = localStorage.getItem('userName');
+            const storedUserCreationDate = localStorage.getItem('userCreationDate'); // Load user creation date
             const storedUnlockedAchievements = localStorage.getItem('unlockedAchievements'); // Load unlocked achievements
             const storedAchievementUnlockDates = localStorage.getItem('achievementUnlockDates'); // Load achievement unlock dates
             const storedHasPinnedTaskEver = localStorage.getItem('hasPinnedTaskEver'); // Load new flag
@@ -1503,6 +1536,11 @@
             }
             if (storedUserName) {
                 userName = storedUserName;
+            }
+            if (storedUserCreationDate && storedUserCreationDate !== 'null') {
+                userCreationDate = storedUserCreationDate;
+            } else {
+                userCreationDate = null;
             }
             if (storedUnlockedAchievements) {
                 try {
@@ -1576,6 +1614,7 @@
                                 task.isPinned ? 'bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-500 dark:border-yellow-600' : // Pinned style
                                 task.importance === 'important' ? 'bg-red-50 dark:bg-red-900 border-l-4 border-red-500 dark:border-red-600' :
                                 task.importance === 'custom' ? 'bg-purple-50 dark:bg-purple-900 border-l-4 border-purple-500 dark:border-purple-600' :
+                                task.importance === 'note' ? 'bg-orange-50 dark:bg-orange-900 border-l-4 border-orange-500 dark:border-orange-600' : // Note style
                                 'bg-gray-50 dark:bg-gray-700 border-l-4 border-gray-300 dark:border-gray-600'}
                                 ${isNew ? 'new-task-animation' : ''}
                                 ${inReorderMode && task.id !== reorderingTaskId ? 'reordering-disabled' : ''}
@@ -1594,6 +1633,9 @@
             } else if (task.importance === 'custom') {
                 importanceText = `${task.customPoints} پوینت`; // Display custom points as "35 points"
                 importanceClasses = 'bg-purple-200 dark:bg-purple-700 text-purple-800 dark:text-purple-200';
+            } else if (task.importance === 'note') { // New: Note importance
+                importanceText = 'یادداشت';
+                importanceClasses = 'bg-orange-200 dark:bg-orange-700 text-orange-800 dark:text-orange-200';
             }
 
             let actionButtonsHtml = '';
@@ -1622,13 +1664,25 @@
                 `;
             }
 
+            // Conditional rendering for checkbox and clickability
+            const checkboxHtml = task.importance !== 'note' ? `
+                <input type="checkbox" data-id="${task.id}" ${task.completed ? 'checked' : ''}
+                    class="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-400 rounded focus:ring-blue-500 dark:focus:ring-blue-300 ml-2">
+            ` : '';
+
+            // Apply text-align-justify-rtl class only for notes
+            const justifyClass = task.importance === 'note' ? 'text-align-justify-rtl' : '';
+
+            // Dynamic icon for notes: show only if not pinned
+            const noteIconHtml = (task.importance === 'note' && !task.isPinned) ?
+                `<i class="fa-solid fa-note-sticky ml-2 text-orange-500" title="یادداشت"></i>` : '';
 
             taskItem.innerHTML = `
                 <div class="flex items-center flex-grow">
-                    <input type="checkbox" data-id="${task.id}" ${task.completed ? 'checked' : ''}
-                        class="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-400 rounded focus:ring-blue-500 dark:focus:ring-blue-300 ml-2">
-                    <div class="task-name-wrapper ml-3 text-base sm:text-lg font-medium ${task.completed ? 'text-gray-500 dark:text-gray-400 line-through' : 'text-gray-800 dark:text-gray-100'}">
+                    ${checkboxHtml}
+                    <div class="task-name-wrapper ${task.importance !== 'note' ? 'ml-3' : ''} text-base sm:text-lg font-medium ${task.completed ? 'text-gray-500 dark:text-gray-400 line-through' : 'text-gray-800 dark:text-gray-100'} ${justifyClass}">
                         ${task.isPinned ? `<i class="fa-solid fa-thumbtack ml-2 text-yellow-500" title="وظیفه پین شده"></i>` : ''}
+                        ${noteIconHtml}
                         <span class="task-name">${task.name}</span>
                     </div>
                 </div>
@@ -1725,7 +1779,7 @@
             // Show/hide "Done Reordering" button (now the reorder bar)
             if (isReorderingMode) {
                 // Force reflow to ensure hidden is removed before transition starts (if it was initially hidden by CSS)
-                void reorderBar.offsetWidth; 
+                void reorderBar.offsetWidth;
                 setTimeout(() => { // Then remove opacity and pointer-events
                     reorderBar.classList.remove('opacity-0', 'pointer-events-none');
                 }, 10); // Small delay to ensure transition applies
@@ -1773,9 +1827,21 @@
                     // Update existing element (e.e.g., for completion status change, pin status)
                     const newElement = createTaskElement(task, false, inReorderMode, reorderingTaskId); // Create a new element to get updated classes
                     taskElement.className = newElement.className; // Update classes
-                    taskElement.querySelector('input[type="checkbox"]').checked = task.completed;
+                    // Only update checkbox if it exists in the new element (i.e., not a note)
+                    const newCheckbox = newElement.querySelector('input[type="checkbox"]');
+                    const existingCheckbox = taskElement.querySelector('input[type="checkbox"]');
+                    if (newCheckbox && existingCheckbox) {
+                        existingCheckbox.checked = task.completed;
+                    } else if (!newCheckbox && existingCheckbox) {
+                        // If it was a task and now it's a note, remove the checkbox
+                        existingCheckbox.remove();
+                    } else if (newCheckbox && !existingCheckbox) {
+                        // If it was a note and now it's a task, add the checkbox
+                        taskElement.querySelector('.flex-grow').prepend(newCheckbox);
+                    }
+
                     taskElement.querySelector('.task-name').textContent = task.name;
-                    taskElement.querySelector('.task-name-wrapper').innerHTML = newElement.querySelector('.task-name-wrapper').innerHTML; // Update pin icon
+                    taskElement.querySelector('.task-name-wrapper').innerHTML = newElement.querySelector('.task-name-wrapper').innerHTML; // Update pin/note icon
                     taskElement.querySelector('.task-importance-display').className = newElement.querySelector('.task-importance-display').className;
                     taskElement.querySelector('.task-importance-display').textContent = newElement.querySelector('.task-importance-display').textContent;
                     // Update action buttons based on reorder mode
@@ -1950,6 +2016,11 @@
             // Populate achieved and unachieved lists
             achievementsData.forEach(achievement => {
                 let isAchieved = false;
+                // Calculate current counts for achievements
+                const currentTotalTasksCompleted = tasks.filter(t => t.completed).length;
+                const currentImportantTasksCompleted = tasks.filter(t => t.completed && t.importance === 'important').length; // Kept for importantTasks achievements if they were not removed from the data
+                const currentCustomTasksCompleted = totalCustomTasksCompleted; // Direct use of counter
+
                 if (achievement.type === 'level') {
                     const levelInfo = levelPointsThresholds.find(l => l.name === achievement.name);
                     if (levelInfo && zPoint >= levelInfo.points) {
@@ -1960,15 +2031,15 @@
                         isAchieved = true;
                     }
                 } else if (achievement.type === 'totalTasks') {
-                    if (tasks.filter(t => t.completed).length >= achievement.value) {
+                    if (currentTotalTasksCompleted >= achievement.value) {
                         isAchieved = true;
                     }
                 } else if (achievement.type === 'importantTasks') {
-                    if (tasks.filter(t => t.completed && t.importance === 'important').length >= achievement.value) {
+                    if (currentImportantTasksCompleted >= achievement.value) {
                         isAchieved = true;
                     }
                 } else if (achievement.type === 'customTasks') {
-                    if (totalCustomTasksCompleted >= achievement.value) {
+                    if (currentCustomTasksCompleted >= achievement.value) {
                         isAchieved = true;
                     }
                 } else if (achievement.type === 'points') {
@@ -2014,9 +2085,9 @@
                 sortedAchievements.forEach(achievement => {
                     const achievementItem = document.createElement('div');
                     const isAchieved = unlockedAchievements.includes(achievement.name);
-                    
+
                     achievementItem.className = `achievement-item-card ${isAchieved ? '' : 'unachieved'}`;
-                    
+
                     // Determine which icon to show
                     const displayIcon = isAchieved ? achievement.icon : 'fa-solid fa-lock';
 
@@ -2024,12 +2095,12 @@
                         <i class="${displayIcon} icon"></i>
                         <span class="name">${achievement.name}</span>
                         `;
-                    
+
                     // Add click listener to show details only for achieved items
                     if (isAchieved) {
                         achievementItem.addEventListener('click', () => showDetailModal(achievement.type, achievement.type === 'level' ? achievement.level : achievement.name));
                     }
-                    
+
                     achievementsModalBody.appendChild(achievementItem);
                 });
             }
@@ -2046,8 +2117,10 @@
                 return;
             }
 
-            if (taskName.length > 30) {
-                showMessageBox('مقدار ورودی نباید بیش از ۳۰ کاراکتر باشد.', 'error');
+            // Check max length based on importance
+            const currentMaxLength = importance === 'note' ? NOTE_TASK_MAXLENGTH : DEFAULT_TASK_MAXLENGTH;
+            if (taskName.length > currentMaxLength) {
+                showMessageBox(`مقدار ورودی نباید بیش از ${currentMaxLength} کاراکتر باشد.`, 'error');
                 return;
             }
 
@@ -2064,7 +2137,7 @@
             const newTask = {
                 id: Date.now().toString(), // Unique ID for task
                 name: taskName,
-                completed: false,
+                completed: false, // Notes are never "completed" in the gamification sense
                 importance: importance,
                 customPoints: importance === 'custom' ? customPoints : undefined, // Store custom points if importance is custom
                 isPinned: false // New property for pinning
@@ -2074,6 +2147,7 @@
             customPointsInput.value = ''; // Clear custom points input
             importanceSelect.value = 'normal'; // Reset importance selection
             customPointsInput.classList.add('hidden'); // Hide custom points input
+            taskInput.setAttribute('maxlength', DEFAULT_TASK_MAXLENGTH); // Reset max length
             saveToLocalStorage(); // Save after adding
             renderTasks(newTask.id); // Re-render tasks after adding and focus on the new task
             showMessageBox('وظیفه جدید با موفقیت اضافه شد!', 'success');
@@ -2095,6 +2169,7 @@
 
             const taskId = taskItemElement.dataset.id;
             const target = e.target;
+            const task = tasks.find(t => t.id === taskId);
 
             // If in reordering mode, only allow clicks on the move-up/move-down buttons for the active task
             if (isReorderingMode) {
@@ -2110,6 +2185,15 @@
                 return;
             }
 
+            // If it's a 'note' task, prevent completion logic and notifications on click
+            if (task && task.importance === 'note') {
+                const isMenuButton = target.closest('.three-dot-menu-btn');
+                if (!isMenuButton) { // If not clicking the menu button, do nothing
+                    e.preventDefault();
+                    return;
+                }
+            }
+
             // Normal mode logic
             const isCheckbox = (target.tagName === 'INPUT' && target.type === 'checkbox');
             const isMenuButton = target.closest('.three-dot-menu-btn');
@@ -2118,7 +2202,6 @@
             if (isCheckbox) {
                 toggleTaskCompletion(taskId, taskItemElement);
             } else if (isMenuButton) {
-                const task = tasks.find(t => t.id === taskId);
                 if (task) {
                     showTaskActionsMenu(taskId, isMenuButton, task.completed);
                 }
@@ -2126,7 +2209,10 @@
                 pinTask(taskId);
             } else {
                 // This is the click on the task card itself (not checkbox or menu button)
-                toggleTaskCompletion(taskId, taskItemElement);
+                // Only toggle completion if it's not a note
+                if (task && task.importance !== 'note') {
+                    toggleTaskCompletion(taskId, taskItemElement);
+                }
             }
         }
 
@@ -2139,6 +2225,12 @@
             const taskIndex = tasks.findIndex(t => t.id === taskId);
             if (taskIndex > -1) {
                 const task = tasks[taskIndex];
+
+                // If it's a note, do nothing
+                if (task.importance === 'note') {
+                    return;
+                }
+
                 let pointsGained = 0;
                 let focusAfterRender = null; // Initialize focus target
 
@@ -2233,7 +2325,8 @@
                 }
                 saveToLocalStorage();
                 renderTasks(taskId); // Re-render and focus on the pinned/unpinned task
-                showMessageBox(`وظیفه "${task.name}" ${task.isPinned ? 'پین شد!' : 'از پین خارج شد.'}`, 'info');
+                // Use truncateText for the task name in the message
+                showMessageBox(`وظیفه "${truncateText(task.name, 15)}" ${task.isPinned ? 'پین شد!' : 'از پین خارج شد.'}`, 'info');
             }
         }
 
@@ -2438,8 +2531,11 @@
             }
 
             editTaskNameInput.value = task.name;
-            editTaskNameInput.setAttribute('maxlength', '30');
             editTaskImportanceSelect.value = task.importance;
+
+            // Set initial maxlength based on task importance
+            editTaskNameInput.setAttribute('maxlength', task.importance === 'note' ? NOTE_TASK_MAXLENGTH : DEFAULT_TASK_MAXLENGTH);
+
             if (task.importance === 'custom') {
                 editTaskCustomPointsInput.classList.remove('hidden');
                 editTaskCustomPointsInput.value = task.customPoints || '';
@@ -2450,33 +2546,51 @@
             }
 
             // Remove previous onchange handler if exists
-            editTaskImportanceSelect.onchange = null; 
+            editTaskImportanceSelect.onchange = null;
             // Add new event listeners for editTaskImportanceSelect
             editTaskImportanceSelect.addEventListener('change', handleEditTaskImportanceChange);
-            editTaskImportanceSelect.addEventListener('blur', handleEditTaskImportanceBlur);
-            
+
             editTaskModal.classList.remove('hidden'); // Ensure modal is not hidden before showing
             void editTaskModal.offsetWidth; // Force reflow
             editTaskModal.classList.add('show');
             editTaskNameInput.focus();
         }
 
-        // Handler for editTaskImportanceSelect change event
-        function handleEditTaskImportanceChange() {
-            if (editTaskImportanceSelect.value === 'custom') {
+        // Handler for importanceSelect change event (for add task section)
+        importanceSelect.addEventListener('change', () => {
+            const selectedImportance = importanceSelect.value;
+            if (selectedImportance === 'custom') {
                 customPointsInput.classList.remove('hidden');
                 customPointsInput.focus();
+                taskInput.setAttribute('maxlength', DEFAULT_TASK_MAXLENGTH); // Keep default for custom
+            } else if (selectedImportance === 'note') {
+                customPointsInput.classList.add('hidden');
+                customPointsInput.value = '';
+                taskInput.setAttribute('maxlength', NOTE_TASK_MAXLENGTH); // Set to 150 for note
             } else {
                 customPointsInput.classList.add('hidden');
                 customPointsInput.value = ''; // Clear value if hidden
+                taskInput.setAttribute('maxlength', DEFAULT_TASK_MAXLENGTH); // Reset to 30 for other types
+            }
+        });
+
+        // Handler for editTaskImportanceSelect change event (for edit task modal)
+        function handleEditTaskImportanceChange() {
+            const selectedImportance = editTaskImportanceSelect.value;
+            if (selectedImportance === 'custom') {
+                editTaskCustomPointsInput.classList.remove('hidden');
+                editTaskCustomPointsInput.focus();
+                editTaskNameInput.setAttribute('maxlength', DEFAULT_TASK_MAXLENGTH); // Keep default for custom
+            } else if (selectedImportance === 'note') {
+                editTaskCustomPointsInput.classList.add('hidden');
+                editTaskCustomPointsInput.value = '';
+                editTaskNameInput.setAttribute('maxlength', NOTE_TASK_MAXLENGTH); // Set to 150 for note
+            } else {
+                editTaskCustomPointsInput.classList.add('hidden');
+                editTaskCustomPointsInput.value = ''; // Clear value if hidden
+                editTaskNameInput.setAttribute('maxlength', DEFAULT_TASK_MAXLENGTH); // Reset to 30 for other types
             }
         }
-
-        // Handler for editTaskImportanceSelect blur event
-        function handleEditTaskImportanceBlur() {
-            // No auto-save on blur, as per user's original code design.
-        }
-
 
         // Save edited task
         function saveEditedTask() {
@@ -2490,8 +2604,10 @@
                 return;
             }
 
-            if (newTaskName.length > 30) {
-                showMessageBox('مقدار ورودی نباید بیش از ۳۰ کاراکتر باشد.', 'error');
+            // Check max length based on new importance
+            const currentMaxLength = newImportance === 'note' ? NOTE_TASK_MAXLENGTH : DEFAULT_TASK_MAXLENGTH;
+            if (newTaskName.length > currentMaxLength) {
+                showMessageBox(`مقدار ورودی نباید بیش از ${currentMaxLength} کاراکتر باشد.`, 'error');
                 return;
             }
 
@@ -2510,6 +2626,15 @@
                 tasks[taskIndex].name = newTaskName;
                 tasks[taskIndex].importance = newImportance;
                 tasks[taskIndex].customPoints = newCustomPoints;
+                // If changing a note to a task, or vice versa, reset completion status
+                if (tasks[taskIndex].importance === 'note' && tasks[taskIndex].completed) {
+                    tasks[taskIndex].completed = false; // A note cannot be completed
+                } else if (tasks[taskIndex].importance !== 'note' && tasks[taskIndex].completed) {
+                    // If a task was completed and now it's not a note, keep it completed (or handle as per original logic)
+                    // For simplicity, if it was completed, it remains completed unless it becomes a note.
+                    // The logic for re-activating a completed task is handled by clicking it directly.
+                }
+
                 saveToLocalStorage();
                 renderTasks(taskId); // Re-render and focus on the edited task
                 showMessageBox('وظیفه با موفقیت ویرایش شد!', 'success');
@@ -2554,8 +2679,8 @@
                     taskItemElement.style.opacity = '0';
                     taskItemElement.addEventListener('transitionend', () => {
                         renderTasks(); // Re-render after animation
-                        // Use showMessageBox for undo message
-                        showMessageBox(`وظیفه "${deletedTaskCopy.name}" حذف شد. برای بازگردانی ضربه بزنید.`, 'info', {
+                        // Use showMessageBox for undo message, truncate text
+                        showMessageBox(`وظیفه "${truncateText(deletedTaskCopy.name, 15)}" حذف شد. برای بازگردانی ضربه بزنید.`, 'info', {
                             position: 'bottom-center',
                             isUndo: true,
                             duration: 5000,
@@ -2565,7 +2690,7 @@
                 } else {
                     // If element not found, still delete from data and re-render
                     renderTasks();
-                    showMessageBox(`وظیفه "${deletedTaskCopy.name}" حذف شد. برای بازگردانی ضربه بزنید.`, 'info', {
+                    showMessageBox(`وظیفه "${truncateText(deletedTaskCopy.name, 15)}" حذف شد. برای بازگردانی ضربه بزنید.`, 'info', {
                         position: 'bottom-center',
                         isUndo: true,
                         duration: 5000,
@@ -2592,7 +2717,7 @@
                 tasks.push(newTask); // Add to end of list
                 saveToLocalStorage();
                 renderTasks(newTask.id); // Re-render and focus on the new copied task
-                showMessageBox(`وظیفه "${newTask.name}" به وظایف فعال کپی شد!`, 'success');
+                showMessageBox(`وظیفه "${truncateText(newTask.name, 15)}" به وظایف فعال کپی شد!`, 'success');
             } else {
                 showMessageBox('خطا: وظیفه اصلی برای کپی یافت نشد.', 'error');
             }
@@ -2614,7 +2739,7 @@
                     tasks.splice(insertIndex, 0, taskToRestore);
                     saveToLocalStorage();
                     renderTasks(taskToRestore.id); // Re-render and focus on the restored task
-                    showMessageBox(`وظیفه "${taskToRestore.name}" بازگردانی شد.`, 'info');
+                    showMessageBox(`وظیفه "${truncateText(taskToRestore.name, 15)}" بازگردانی شد.`, 'info');
                 } else {
                     console.warn(`Task with ID ${taskToRestore.id} already exists, not re-adding.`);
                 }
@@ -2695,9 +2820,20 @@
             const totalTasks = tasks.length;
             const completedTasksCount = tasks.filter(t => t.completed).length;
 
-            let achievementsHtml = '';
-            const unlockedAchievementsForDisplay = achievementsData.filter(achievement => {
+            // Calculate days since creation
+            let daysSinceCreation = 'نامشخص';
+            if (userCreationDate) {
+                const creationDate = new Date(userCreationDate);
+                const today = new Date();
+                const diffTime = Math.abs(today.getTime() - creationDate.getTime());
+                daysSinceCreation = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            }
+
+            // Filter for achieved achievements and count them
+            const achievedAchievementsCount = achievementsData.filter(achievement => {
                 let isAchieved = false;
+                const currentTotalTasksCompleted = tasks.filter(t => t.completed).length;
+
                 if (achievement.type === 'level') {
                     const levelInfo = levelPointsThresholds.find(l => l.name === achievement.name);
                     if (levelInfo && zPoint >= levelInfo.points) {
@@ -2708,15 +2844,7 @@
                         isAchieved = true;
                     }
                 } else if (achievement.type === 'totalTasks') {
-                    if (completedTasksCount >= achievement.value) {
-                        isAchieved = true;
-                    }
-                } else if (achievement.type === 'importantTasks') {
-                    if (tasks.filter(t => t.completed && t.importance === 'important').length >= achievement.value) {
-                        isAchieved = true;
-                    }
-                } else if (achievement.type === 'customTasks') {
-                    if (totalCustomTasksCompleted >= achievement.value) {
+                    if (currentTotalTasksCompleted >= achievement.value) {
                         isAchieved = true;
                     }
                 } else if (achievement.type === 'points') {
@@ -2729,78 +2857,44 @@
                     }
                 }
                 return isAchieved;
-            }).sort((a, b) => {
-                // Sort by type (levels first, then others) and then by value/level
-                if (a.type === 'level' && b.type !== 'level') return -1;
-                if (a.type !== 'level' && b.type === 'level') return 1;
-                if (a.type === 'level' && b.type === 'level') return a.level - b.level;
-                return (a.value || 0) - (b.value || 0); // Sort other types by value
-            });
+            }).length;
 
+            const totalAchievements = achievementsData.length;
 
-            if (unlockedAchievementsForDisplay.length > 0) {
-                achievementsHtml = `
-                    <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2 mt-4">دستاوردها:</h4>
-                    <div class="flex flex-wrap gap-2">
-                        ${unlockedAchievementsForDisplay.map(ach => `
-                            <span class="flex items-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm clickable-item" data-type="${ach.type}" data-id="${ach.type === 'level' ? ach.level : ach.name}">
-                                <i class="${ach.icon} text-xl ml-2"></i><span>${ach.name}</span>
-                            </span>
-                        `).join('')}
+            // Prepare profile items as an array for dynamic rendering and responsive layout
+            const profileItems = [
+                { label: 'نام کاربری', value: userName || 'ناشناس', color: 'blue', icon: 'fa-user' },
+                { label: 'کل وظایف', value: totalTasks, color: 'green', icon: 'fa-list-check' },
+                { label: 'وظایف تکمیل شده', value: completedTasksCount, color: 'teal', icon: 'fa-check-double' },
+                { label: 'تعداد پوینت', value: zPoint, color: 'yellow', icon: 'fa-coins' },
+                { label: 'سطح', value: level, color: 'purple', icon: levelPointsThresholds[level - 1].icon.replace('fa-solid ', '') },
+                { label: 'زنجیره', value: `${dailyStreak} روز`, color: 'orange', icon: 'fa-fire' },
+                { label: 'بیشترین زنجیره', value: `${highestDailyStreak} روز`, color: 'pink', icon: 'fa-fire-alt' },
+                { label: 'عمر کاربری', value: `${daysSinceCreation} روز`, color: 'sky', icon: 'fa-calendar-days' },
+                { label: 'تعداد دستاوردها', value: `${achievedAchievementsCount}/${totalAchievements}`, color: 'indigo', icon: 'fa-trophy' }
+            ];
+
+            let profileItemsHtml = profileItems.map((item, index) => {
+                const isLastItem = index === profileItems.length - 1;
+                const isOddCount = profileItems.length % 2 !== 0;
+                // Apply sm:col-span-2 if it's the last item and the total count is odd (for desktop view)
+                const colSpanClass = isLastItem && isOddCount ? 'sm:col-span-2' : '';
+
+                return `
+                    <div class="p-3 rounded-lg bg-${item.color}-50 dark:bg-${item.color}-900 text-${item.color}-800 dark:text-${item.color}-200 flex items-center justify-between ${colSpanClass}">
+                        <span class="font-semibold"><i class="fa-solid ${item.icon} ml-2"></i> ${item.label}:</span>
+                        <span>${item.value}</span>
                     </div>
                 `;
-            } else {
-                achievementsHtml = `<p class="text-gray-500 dark:text-gray-400 mt-4">هنوز دستاوردی کسب نشده است.</p>`;
-            }
+            }).join('');
 
-            // Redesigned profile modal body
             profileModalBody.innerHTML = `
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-                    <div class="p-3 rounded-lg bg-blue-50 dark:bg-blue-900 text-blue-800 dark:text-blue-200 flex items-center justify-between">
-                        <span class="font-semibold">نام کاربری:</span>
-                        <span>${userName || 'ناشناس'}</span>
-                    </div>
-                    <div class="p-3 rounded-lg bg-green-50 dark:bg-green-900 text-green-800 dark:text-green-200 flex items-center justify-between">
-                        <span class="font-semibold">کل وظایف:</span>
-                        <span>${totalTasks}</span>
-                    </div>
-                    <div class="p-3 rounded-lg bg-teal-50 dark:bg-teal-900 text-teal-800 dark:text-teal-200 flex items-center justify-between">
-                        <span class="font-semibold">وظایف تکمیل شده:</span>
-                        <span>${completedTasksCount}</span>
-                    </div>
-                    <div class="p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 flex items-center justify-between">
-                        <span class="font-semibold">تعداد پوینت:</span>
-                        <span>${zPoint}</span>
-                    </div>
-                    <div class="p-3 rounded-lg bg-purple-50 dark:bg-purple-900 text-purple-800 dark:text-purple-200 flex items-center justify-between">
-                        <span class="font-semibold">سطح:</span>
-                        <span>${level}</span>
-                    </div>
-                    <div class="p-3 rounded-lg bg-orange-50 dark:bg-orange-900 text-orange-800 dark:text-orange-200 flex items-center justify-between">
-                        <span class="font-semibold">زنجیره:</span>
-                        <span>${dailyStreak} روز</span>
-                    </div>
-                    <div class="p-3 rounded-lg bg-pink-50 dark:bg-pink-900 text-pink-800 dark:text-pink-200 flex items-center justify-between">
-                        <span class="font-semibold">بیشترین زنجیره:</span>
-                        <span>${highestDailyStreak} روز</span>
-                    </div>
+                    ${profileItemsHtml}
                 </div>
-                ${achievementsHtml}
             `;
 
-            // Add event listener to newly created clickable items in profile modal
-            profileModalBody.querySelectorAll('.clickable-item').forEach(item => {
-                item.addEventListener('click', (event) => {
-                    const type = event.currentTarget.dataset.type;
-                    const id = event.currentTarget.dataset.id;
-                    const name = event.currentTarget.dataset.id; // Corrected to use data-id for name
-                    if (type === 'level') {
-                        showDetailModal('level', id);
-                    } else {
-                        showDetailModal(type, name);
-                    }
-                });
-            });
+            // No clickable items in profile modal anymore as full achievement list is removed
         });
 
         closeProfileModalBtn.addEventListener('click', () => {
@@ -2849,7 +2943,7 @@
         closeAchievementNotificationModalBtn.addEventListener('click', () => {
             achievementNotificationModalContent.classList.remove('opacity-100', 'scale-100');
             achievementNotificationModalContent.classList.add('opacity-0', 'scale-95');
-            
+
             // Use setTimeout to ensure modal is visually hidden before processing next
             // The transition duration for achievementNotificationModalContent is 0.3s
             setTimeout(() => {
@@ -2879,11 +2973,13 @@
                 <p class="mb-3 text-gray-700 dark:text-gray-300">این برنامه به شما کمک می‌کند تا وظایف خود را مدیریت کنید، پوینت کسب کنید، سطح خود را ارتقا دهید و از طریق گیمیفیکیشن به نقاط عطف مختلفی دست یابید.</p>
 
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">نحوه استفاده از برنامه</h3>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">افزودن وظیفه:</strong> نام وظیفه را وارد کرده و اهمیت آن (مهم/عادی/سفارشی) را انتخاب کنید. وظایف مهم و سفارشی پوینت بیشتری به شما می‌دهند.</p>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">تکمیل وظیفه:</strong> برای تکمیل یک وظیفه، کادر کنار آن را علامت بزنید. این به شما پوینت می‌دهد و وظیفه را به بخش "وظایف تکمیل شده" منتقل می‌کند.</p>
-                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">ویرایش وظیفه:</strong> برای ویرایش نام و اهمیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "ویرایش" را انتخاب کنید یا روی خود وظیفه کلیک کنید.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">افزودن وظیفه:</strong> نام وظیفه را وارد کرده و اهمیت آن (مهم/عادی/سفارشی/یادداشت) را انتخاب کنید. وظایف مهم و سفارشی پوینت بیشتری به شما می‌دهند.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">اهمیت "یادداشت":</strong> این نوع وظایف برای ثبت یادداشت‌ها و اطلاعات بدون نیاز به تکمیل شدن طراحی شده‌اند. آنها پوینت گیمیفیکیشن نمی‌دهند و چک‌باکس تکمیل ندارند. می‌توانید متنی تا ۱۵۰ کاراکتر برای عنوان آنها وارد کنید و همچنین قابلیت پین کردن و تغییر چیدمان برای آنها فعال است.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">تکمیل وظیفه:</strong> برای تکمیل یک وظیفه (به جز یادداشت‌ها)، کادر کنار آن را علامت بزنید. این به شما پوینت می‌دهد و وظیفه را به بخش "وظایف تکمیل شده" منتقل می‌کند.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">ویرایش وظیفه:</strong> برای ویرایش نام و اهمیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "ویرایش" را انتخاب کنید.</p>
                 <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">حذف وظیفه:</strong> برای حذف یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "حذف" را انتخاب کنید.</p>
                 <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">تغییر ترتیب دستی:</strong> برای تغییر دستی موقعیت یک وظیفه، روی آیکون سه نقطه کنار آن کلیک کرده و "تغییر چیدمان" را انتخاب کنید. سپس با فلش‌های بالا و پایین موقعیت آن را تغییر دهید.</p>
+                <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">پین کردن وظیفه:</strong> برای پین کردن یک وظیفه به بالای لیست وظایف فعال، روی آیکون سه نقطه کنار آن کلیک کرده و "پین کردن" را انتخاب کنید. با این کار، وظیفه همیشه در بالای لیست باقی می‌ماند. برای برداشتن پین، دوباره همین گزینه را انتخاب کنید.</p>
                 <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">وظایف تکمیل شده:</strong> روی دکمه کلیک کنید تا وظایف تکمیل شده خود را نمایش یا پنهان کنید.</p>
 
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">سیستم گیمیفیکیشن</h3>
@@ -2896,7 +2992,7 @@
                     </ul>
                 </p>
                 <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">زنجیره روزانه:</strong> تکمیل حداقل یک وظیفه در روزهای متوالی، زنجیره روزانه شما را افزایش می‌دهد و به شما امکان می‌دهد دستاوردهای ویژه‌ای کسب کنید.</p>
-                
+
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">سطوح</h3>
                 <p class="mb-2 text-gray-700 dark:text-gray-300">با کسب پوینت، به سطوح بالاتر صعود خواهید کرد. برای جزئیات بیشتر روی یک سطح کلیک کنید:</p>
                 <div class="flex flex-wrap gap-2 mb-3">
@@ -2925,6 +3021,9 @@
                 <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">امنیت داده‌ها:</strong> تمام داده‌های شما به صورت امن در حافظه محلی مرورگر شما ذخیره می‌شوند و هیچ اطلاعاتی به هیچ سروری ارسال نمی‌شود.</p>
                 <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">پشتیبان‌گیری (خروجی گرفتن):</strong> می‌توانید با کلیک بر روی دکمه "ذخیره داده‌ها"، یک فایل پشتیبان JSON از تمام داده‌های برنامه خود دانلود کنید. این فایل را در مکانی امن نگهداری کنید.</p>
                 <p class="mb-2"><strong class="text-gray-600 dark:text-gray-300">بازیابی (ورودی گرفتن):</strong> برای بازیابی داده‌ها، به سادگی فایل پشتیبان JSON را که قبلاً دانلود کرده‌اید از طریق بخش "انتخاب فایل" انتخاب کنید، سپس روی دکمه "بارگذاری از فایل" کلیک کنید. این کار داده‌های فعلی برنامه شما را با داده‌های موجود در فایل جایگزین می‌کند.</p>
+
+                <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">بروزرسانی برنامه</h3>
+                <p class="mb-2 text-gray-700 dark:text-gray-300">این برنامه از Service Worker برای ارائه تجربه آفلاین و بارگذاری سریع استفاده می‌کند. برای اطمینان از اینکه همیشه آخرین نسخه برنامه را دارید، می‌توانید روی گزینه "بروزرسانی برنامه" در منوی اصلی کلیک کنید. این کار کش برنامه را پاک کرده و آخرین نسخه را از سرور بارگذاری می‌کند.</p>
 
                 <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4 text-gray-600 dark:text-gray-300">حمایت مالی</h3>
                 <p class="mb-2 text-gray-700 dark:text-gray-300">این بخش در حال حاضر غیرفعال است. از علاقه شما سپاسگزاریم!</p>
@@ -3002,6 +3101,34 @@
             }, 50);
         });
 
+        // New: Update App menu item functionality
+        updateAppMenuItem.addEventListener('click', async (e) => {
+            e.preventDefault();
+            menuDropdown.classList.add('hidden'); // Hide dropdown
+
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.getRegistration();
+                    if (registration) {
+                        showMessageBox('بروزرسانی برنامه آغاز شد. لطفاً صبر کنید...', 'info');
+                        await registration.update();
+                        showMessageBox('برنامه بروزرسانی شد! صفحه در حال بارگذاری مجدد است.', 'success');
+                        setTimeout(() => {
+                            location.reload(true); // Force reload from server to get new service worker
+                        }, 1500); // Give some time for message to be seen
+                    } else {
+                        showMessageBox('Service Worker یافت نشد. بروزرسانی خودکار انجام می‌شود.', 'info');
+                    }
+                } catch (error) {
+                    console.error('Service Worker update failed:', error);
+                    showMessageBox('خطا در بروزرسانی برنامه. لطفاً دوباره امتحان کنید.', 'error');
+                }
+            } else {
+                showMessageBox('مرورگر شما از Service Worker پشتیبانی نمی‌کند.', 'info');
+            }
+        });
+
+
         donateMenuItem.addEventListener('click', (e) => {
             e.preventDefault();
             showMessageBox('این بخش در حال حاضر غیرفعال است. از علاقه شما سپاسگزاریم!', 'info');
@@ -3053,6 +3180,9 @@
             }
 
             userName = inputName;
+            if (!userCreationDate) { // Set user creation date only if it's not already set
+                userCreationDate = new Date().toISOString();
+            }
             saveToLocalStorage();
             welcomeModalContent.classList.remove('opacity-100', 'scale-100');
             welcomeModalContent.classList.add('opacity-0', 'scale-95');
@@ -3076,6 +3206,7 @@
                 lastCompletionDate: lastCompletionDate,
                 totalCustomTasksCompleted: totalCustomTasksCompleted,
                 userName: userName,
+                userCreationDate: userCreationDate, // Include user creation date in export
                 unlockedAchievements: unlockedAchievements, // Include unlocked achievements in export
                 achievementUnlockDates: achievementUnlockDates, // Include achievement unlock dates in export
                 hasPinnedTaskEver: hasPinnedTaskEver // Include new flag in export
@@ -3129,6 +3260,7 @@
                         (typeof importedData.lastCompletionDate === 'string' || importedData.lastCompletionDate === null) &&
                         typeof importedData.totalCustomTasksCompleted === 'number' &&
                         (typeof importedData.userName === 'string' || importedData.userName === null || importedData.userName === undefined) &&
+                        (typeof importedData.userCreationDate === 'string' || importedData.userCreationDate === null || importedData.userCreationDate === undefined) && // Validate new userCreationDate
                         (typeof importedData.unlockedAchievements === 'object' && Array.isArray(importedData.unlockedAchievements) || typeof importedData.unlockedAchievements === 'undefined') &&
                         (typeof importedData.achievementUnlockDates === 'object' || typeof importedData.achievementUnlockDates === 'undefined') &&
                         (typeof importedData.hasPinnedTaskEver === 'boolean' || typeof importedData.hasPinnedTaskEver === 'undefined')
@@ -3141,6 +3273,7 @@
                         lastCompletionDate = importedData.lastCompletionDate;
                         totalCustomTasksCompleted = importedData.totalCustomTasksCompleted;
                         userName = importedData.userName || null;
+                        userCreationDate = importedData.userCreationDate || null; // Load userCreationDate
                         unlockedAchievements = importedData.unlockedAchievements || [];
                         achievementUnlockDates = importedData.achievementUnlockDates || {};
                         hasPinnedTaskEver = importedData.hasPinnedTaskEver || false;
@@ -3154,7 +3287,7 @@
 
                         saveToLocalStorage(); // Save imported data to local storage
                         renderTasks(); // Re-render UI with new data
-                        
+
                         // Hide backup modal with animation
                         backupModalContent.classList.remove('opacity-100', 'scale-95');
                         backupModalContent.classList.add('opacity-0', 'scale-95');
@@ -3186,7 +3319,7 @@
             detailModalContent.classList.add('opacity-100', 'scale-100');
 
             let contentHtml = '';
-            let titleText = ''; 
+            let titleText = '';
 
             if (type === 'level') {
                 const levelNum = parseInt(identifier, 10);
@@ -3204,7 +3337,7 @@
                 }
             } else { // This else block now covers all non-level types like 'totalTasks', 'importantTasks', etc.
                 const achievement = achievementsData.find(ach => ach.name === identifier);
-                
+
                 if (achievement) {
                     titleText = `دستاورد: ${achievement.name}`;
                     contentHtml = `
@@ -3268,17 +3401,6 @@
                         }
                     }
                 }
-            }
-        });
-
-        // Event listener for importanceSelect to show/hide custom points input
-        importanceSelect.addEventListener('change', () => {
-            if (importanceSelect.value === 'custom') {
-                customPointsInput.classList.remove('hidden');
-                customPointsInput.focus();
-            } else {
-                customPointsInput.classList.add('hidden');
-                customPointsInput.value = ''; // Clear value if hidden
             }
         });
 
