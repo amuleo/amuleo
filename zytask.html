@@ -353,16 +353,15 @@
             body {
                 padding-left: 0 !important;
                 padding-right: 0 !important;
-                padding-top: 20px !important; /* Changed to 20px padding */
-                padding-bottom: 20px !important; /* Changed to 20px padding */
+                /* Removed padding-top and padding-bottom from body */
             }
             .container {
                 border-radius: 0 !important; /* Override rounded corners */
                 box-shadow: none !important; /* Override shadow */
                 padding-left: 0.5rem !important; /* Smaller padding on mobile */
                 padding-right: 0.5rem !important;
-                padding-top: 0 !important; /* Ensure no top padding from container itself */
-                padding-bottom: 0 !important; /* Ensure no bottom padding from container itself */
+                padding-top: 20px !important; /* Added 20px padding to container */
+                padding-bottom: 20px !important; /* Added 20px padding to container */
             }
             /* Header adjustments for mobile */
             .header-mobile-flex {
@@ -888,7 +887,7 @@
 
         // Points required to reach each level (Level 1 is zero points)
         const levelPointsThresholds = [
-            { name: 'نوب', points: 0, icon: 'fa-solid fa-child', motivational: 'شروع هر سفر با گام اول است. شما در ابتدای مسیر هستید و آماده برای کشف توانایی‌هایتان!' },
+            { name: 'نوب', points: 0, icon: 'fa-solid fa-ghost', motivational: 'شروع هر سفر با گام اول است. شما در ابتدای مسیر هستید و آماده برای کشف توانایی‌هایتان!' }, /* Changed icon to fa-ghost */
             { name: 'مبتدی', points: 50, icon: 'fa-solid fa-seedling', motivational: 'شما با تلاش و پشتکار، بذر موفقیت را کاشته‌اید. به رشد خود ادامه دهید!' },
             { name: 'جنگجو', points: 120, icon: 'fa-solid fa-hand-fist', motivational: 'شما با هر چالش، قوی‌تر و مصمم‌تر می‌شوید. روحیه جنگجویانه شما ستودنی است!' },
             { name: 'شوالیه', points: 220, icon: 'fa-solid fa-shield-halved', motivational: 'با هر وظیفه، زره‌ای از تجربه بر تن می‌کنید. شجاعت شما راهگشاست!' },
@@ -908,7 +907,7 @@
         // Achievement data with Font Awesome icons
         const achievementsData = [
             // Level Achievements (remain as is)
-            { level: 1, name: 'نوب', icon: 'fa-solid fa-child', type: 'level', description: 'شروع هر سفر با گام اول است. شما در ابتدای مسیر هستید و آماده برای کشف توانایی‌هایتان!' },
+            { level: 1, name: 'نوب', icon: 'fa-solid fa-ghost', type: 'level', description: 'شروع هر سفر با گام اول است. شما در ابتدای مسیر هستید و آماده برای کشف توانایی‌هایتان!' }, /* Changed icon to fa-ghost */
             { level: 2, name: 'مبتدی', icon: 'fa-solid fa-seedling', type: 'level', description: 'شما با تلاش و پشتکار، بذر موفقیت را کاشته‌اید. به رشد خود ادامه دهید!' },
             { level: 3, name: 'جنگجو', icon: 'fa-solid fa-hand-fist', type: 'level', description: 'شما با هر چالش، قوی‌تر و مصمم‌تر می‌شوید. روحیه جنگجویانه شما ستودنی است!' },
             { level: 4, name: 'شوالیه', icon: 'fa-solid fa-shield-halved', type: 'level', description: 'با هر وظیفه، زره‌ای از تجربه بر تن می‌کنید. شجاعت شما راهگشاست!' },
@@ -929,7 +928,7 @@
             { type: 'totalTasks', value: 10, name: 'ده وظیفه', icon: 'fa-solid fa-check-double', description: 'با تکمیل ۱۰ وظیفه، گام‌های محکم‌تری برداشته‌اید. این نشان از تعهد شماست و به شما کمک می‌کند تا به اهداف بزرگتر دست یابید.' },
             { type: 'totalTasks', value: 20, name: 'بیست وظیفه', icon: 'fa-solid fa-list-ol', description: 'بیست وظیفه را به پایان رساندید. این پیوستگی، پایه‌های موفقیت‌های آینده شما را بنا می‌نهد.' },
             { type: 'totalTasks', value: 50, name: 'پنجاه وظیفه', icon: 'fa-solid fa-clipboard-check', description: 'نیم قرن از وظایف را به اتمام رساندید! این حجم از کار، نشانگر توانایی شما در سازماندهی و پیگیری است.' },
-            { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: 'fa-solid fa-trophy', description: 'به باشگاه صدتایی‌ها خوش آمدید! شما در حال ساختن عادت‌های موفقیت‌آمیز هستید و این ثبات، مسیر را برایتان هموارتر می‌کند.' },
+            { type: 'totalTasks', value: 100, name: 'صد وظیفه', icon: 'fa-solid fa-trophy', description: 'به باشگاه صدتایی‌ها خوش آمدید! شما در حال ساختن عادت‌های موفقیت‌آمیز هستید و این ثبات, مسیر را برایتان هموارتر می‌کند.' },
             { type: 'totalTasks', value: 200, name: 'دویست وظیفه', icon: 'fa-solid fa-medal', description: 'دویست وظیفه تکمیل شده! این عدد، گواه رشد و پیشرفت مداوم شماست. به این روند ادامه دهید.' },
             { type: 'totalTasks', value: 300, name: 'سیصد وظیفه', icon: 'fa-solid fa-crown', description: 'سیصد وظیفه را با موفقیت پشت سر گذاشتید. شما در حال تسلط بر مدیریت زمان و بهره‌وری خود هستید.' },
             { type: 'totalTasks', value: 500, name: 'پانصد وظیفه', icon: 'fa-solid fa-award', description: 'پانصد وظیفه! این یک دستاورد بزرگ است که نشان می‌دهد شما در مسیر رسیدن به اهداف بزرگ، مصمم و قدرتمندید.' },
@@ -1434,6 +1433,8 @@
             // const currentImportantTasksCompleted = tasks.filter(t => t.completed && t.importance === 'important').length;
             // const currentCustomTasksCompleted = totalCustomTasksCompleted; // Direct use of counter
 
+            const newlyUnlockedAchievements = []; // Array to hold achievements newly unlocked in this call
+
             achievementsData.forEach(achievement => {
                 let isAchieved = false;
                 if (achievement.type === 'level') {
@@ -1464,12 +1465,18 @@
                 if (isAchieved && !unlockedAchievements.includes(achievement.name)) {
                     unlockedAchievements.push(achievement.name);
                     achievementUnlockDates[achievement.name] = new Date().toISOString(); // Store unlock date
-                    showMessageBox(`دستاورد: ${achievement.name}`, 'success', { // Changed to use showMessageBox for achievement type
-                        type: 'achievement',
-                        iconClass: achievement.icon,
-                        description: achievement.description
-                    });
+                    newlyUnlockedAchievements.push(achievement); // Add to the new list
                 }
+            });
+
+            // After all achievements are processed and unlockedAchievements is updated
+            saveToLocalStorage(); // Save unlocked achievements
+            newlyUnlockedAchievements.forEach(achievement => {
+                showMessageBox(`دستاورد: ${achievement.name}`, 'success', { // Changed to use showMessageBox for achievement type
+                    type: 'achievement',
+                    iconClass: achievement.icon,
+                    description: achievement.description
+                });
             });
 
             applyLevelTheme(level); // Apply theme for current level
