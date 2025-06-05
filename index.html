@@ -220,7 +220,7 @@
     }
 
     /* سبک بخش آخرین نوشته‌ها و کتاب‌ها */
-    #posts-container h2, #latestBooks h2 {
+    #latestBooks h2 {
       font-size: 1.5rem;
       margin-bottom: 15px;
       color: var(--text);
@@ -258,10 +258,6 @@
 
     .label {
       color: var(--span);
-    }
-
-    #posts-container {
-      margin-top: 10px;
     }
 
     #latestBooks {
@@ -515,11 +511,6 @@
       <a href="rtool.html" target="_blank">ابزار آنلاین گرافیکی من</a>
     </div>
 
-    <div id="posts-container">
-      <h2><i class="fa-solid fa-pen-nib"></i>&nbsp;آخرین نوشته هام</h2>
-      <div id="latestPostsContent"></div>
-    </div>
-
     <div id="latestBooks">
       <h2><i class="fa-solid fa-book"></i>&nbsp;آخرین کتابایی که خوندم</h2>
       <div id="latestBooksContainer"></div>
@@ -712,46 +703,6 @@
       }
     }
 
-    async function loadLatestPosts() {
-      const apiUrl = "https://blog-postviewer.immohammaddavoodi.workers.dev/";
-      const postsContent = document.getElementById("latestPostsContent");
-      // نمایش 3 کارت اسکلتون قبل از بارگذاری داده‌هاhttps://notepad.js.org/
-      for (let i = 0; i < 3; i++) {
-        postsContent.appendChild(createSkeletonCard());
-      }
-
-      try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error("خطا در دریافت داده‌های وبلاگ");
-
-        const postsData = await response.json();
-        const posts = Array.isArray(postsData) ? postsData.slice(-3) : [];
-
-        // حذف کارت‌های اسکلتون
-        postsContent.innerHTML = "";
-
-        posts.forEach(post => {
-          const postCard = document.createElement("div");
-          postCard.className = "card content-fade-in"; // اضافه کردن کلاس فید-این
-          postCard.addEventListener("click", () => {
-            window.open(post.link, "_blank");
-          });
-          const content = document.createElement("div");
-          content.className = "card-content";
-          content.innerHTML = `
-            <p style="font-weight: bold; font-size: 20px; color: var(--span)">${post.title}</p><br>
-            <p>${post.summary}</p>
-          `;
-          postCard.appendChild(content);
-          postsContent.appendChild(postCard);
-        });
-      } catch (error) {
-        console.error("خطا در دریافت داده‌های وبلاگ:", error.message);
-        // در صورت خطا، کارت‌های اسکلتون را پنهان کنید و پیام خطا نمایش دهید
-        postsContent.innerHTML = "<p style='text-align: center; color: var(--span);'><i class='fas fa-exclamation-circle'></i>&nbsp;خطا در بارگذاری نوشته‌ها.</p>";
-      }
-    }
-
     /*--------------------------
         یکپارچه‌سازی همه رویدادها پس از بارگذاری کامل DOM
     ---------------------------*/
@@ -828,7 +779,6 @@
 
       // بارگذاری آخرین کتاب‌ها و نوشته‌ها
       loadLatestBooks();
-      loadLatestPosts();
     });
   </script>
 </body>
