@@ -672,7 +672,7 @@
 
         // انتخاب ۳ کتاب آخر (ترتیب طبیعی)
         const readBooks = books.filter(book => book.stat === "re");
-        const latest = readBooks.slice(-3).reverse();
+        const latest = readBooks.slice(-5).reverse();
 
         // حذف کارت‌های اسکلتون
         latestBooksContainer.innerHTML = "";
