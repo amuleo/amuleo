@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ابزار آنلاین  گرد کننده گوشه‌ی مستطیل</title>
+    <style>
+        @font-face {
+            font-family: "Dana";
+            src: url("https://bayanbox.ir/download/2355506753372456582/Dana-Thin.woff2") format("woff2");
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #E3F2FD; /* آبی کمرنگ برای پس‌زمینه */
+            color: #000;
+            font-family: "Dana", Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding-top: 70px; /* ایجاد فاصله داخلی به اندازه ارتفاع هدر + فضای اضافی */
+
+        }
+        #rectangle {
+            width: 90%;
+            max-width: 350px;
+            height: 100px;
+            background-color: #42A5F5; /* آبی زنده برای مستطیل */
+            margin-bottom: 20px;
+            border-radius: 0;
+            transition: all 0.2s ease;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 90%;
+            max-width: 300px;
+        }
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #64B5F6; /* خط دور آبی روشن */
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: "Dana", Arial, sans-serif;
+            text-align: center;
+            background-color: #E3F2FD; /* پس‌زمینه مشابه اصلی */
+            width: 100%;
+            max-width: 150px;
+        }
+        .label-box {
+            padding: 10px;
+            border: 1px solid #64B5F6;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: "Dana", Arial, sans-serif;
+            text-align: center;
+            background-color: #42A5F5; /* رنگ پس‌زمینه زنده */
+            color: white;
+            width: 100px;
+            user-select: none; /* جلوگیری از انتخاب متن */
+            cursor: pointer; /* تغییر نشانگر به دست برای تاکید بر کلیک‌پذیری */
+        }
+        .label-box:hover {
+    background-color: #1565C0; /* تغییر رنگ پس‌زمینه */
+    color: white; /* تغییر رنگ متن */
+    transform: scale(1.05); /* کمی بزرگ‌تر شدن هنگام هاور */
+    transition: all 0.3s ease; /* انیمیشن نرم */
+        }
+        #radius-button {
+            padding: 10px;
+            border: 1px solid #64B5F6;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: "Dana", Arial, sans-serif;
+            text-align: center;
+            background-color: #1E88E5; /* رنگ آبی تیره‌تر */
+            color: white;
+            width: 150px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        #radius-button:hover {
+            background-color: #1565C0; /* تغییر رنگ در هاور */
+        }
+        input[type="range"] {
+            width: 210px; /* عرض جدید */
+            height: 18px;
+            background-color: #BBDEFB; /* رنگ آبی روشن */
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+        button {
+            background-color: #1E88E5;
+            color: white;
+            padding: 10px;
+            border: 1px solid #64B5F6;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: "Dana", Arial, sans-serif;
+            cursor: pointer;
+            width: 300px;
+            max-width: 300px;
+            transition: background-color 0.2s ease;
+        }
+        button:hover {
+            background-color: #1565C0;
+        }
+        /* واکنش‌گرایی */
+        @media (max-width: 768px) {
+            #rectangle {
+                height: auto;
+            }
+            input[type="text"], #radius-button, input[type="range"], button {
+                font-size: 14px;
+            }
+        }
+        .hidden {
+            display: none;
+        }
+
+
+/* پاپ‌آپ */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* پس‌زمینه شفاف */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px); /* ایجاد افکت بلور */
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 300px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.popup-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1565C0;
+    margin-bottom: 15px;
+}
+
+.control-group {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #64B5F6;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+}
+
+button {
+    background-color: #1E88E5;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 300px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #1565C0;
+}
+
+#close-popup {
+    background-color: #E53935;
+}
+
+#close-popup:hover {
+    background-color: #B71C1C;
+}
+#apply-corners {
+    background-color: #1E88E5; /* رنگ آبی */
+    color: white; /* رنگ متن سفید */
+    padding: 10px; /* فاصله داخلی */
+    border: none; /* حذف خطوط اطراف */
+    border-radius: 8px; /* گوشه‌های گرد */
+    font-size: 14px; /* اندازه فونت */
+    cursor: pointer; /* تغییر نشانگر به دست */
+    width: 100%;
+    max-width: 300px; /* حداکثر عرض */
+    transition: background-color 0.3s ease; /* انیمیشن تغییر رنگ */
+    margin-bottom: 10px;
+}
+
+#apply-corners:hover {
+    background-color: #1565C0; /* رنگ آبی تیره هنگام هاور */
+}
+
+
+/* استایل باکس عنوان */
+.title-box {
+    display: flex; /* ایجاد ساختار افقی */
+    align-items: center; /* ترازبندی عمودی در مرکز */
+    justify-content: space-between; /* فاصله مناسب بین عناصر */
+    background-color: #424242; /* رنگ خاکستری متناسب با تم */
+    color: white; /* رنگ متن سفید */
+    padding: 15px 20px; /* فاصله داخلی */
+    border-radius: 0px; /* گردی گوشه‌ها */
+    position: fixed; /* ثابت کردن در بالای صفحه */
+    top: 0; /* چسباندن به بالای صفحه */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* سایه ملایم */
+    margin-bottom: 20px; /* فاصله از عناصر پایین */
+    width: 100%;
+    direction: rtl;
+    z-index: 1000; /* اطمینان از قرارگیری بالاتر از سایر عناصر */
+}
+
+/* استایل متن عنوان */
+.title-text {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0; /* حذف فاصله اضافی */
+    font-family: "Dana", Arial, sans-serif; /* فونت متناسب */
+    padding-right: 10px;
+}
+
+/* استایل آیکون درباره */
+.about-icon {
+    font-size: 20px; /* اندازه آیکون */
+    cursor: pointer; /* تغییر نشانگر به دست */
+    margin-left: 10px; /* فاصله با متن عنوان */
+    transition: transform 0.2s ease, color 0.2s ease; /* انیمیشن ملایم */
+}
+
+.about-icon:hover {
+    transform: scale(1.2); /* بزرگ شدن هنگام هاور */
+    color: #FFEB3B; /* تغییر رنگ به زرد هنگام هاور */
+}
+
+.hidden {
+    display: none; /* مخفی کردن پاپ‌آپ */
+}
+
+#unique-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* پس‌زمینه نیمه‌شفاف */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* اطمینان از قرارگیری بالای سایر عناصر */
+    display: none; /* پاپ‌آپ مخفی در ابتدا */
+}
+
+.unique-popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 280px;
+    width: 90%;
+}
+
+#unique-popup .popup-link {
+    color: #1E88E5;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#unique-popup .popup-link:hover {
+    text-decoration: underline;
+}
+
+#close-unique-popup {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #1E88E5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#close-unique-popup:hover {
+    background-color: #1565C0;
+}
+
+    </style>
+</head>
+<body>
+    <div class="title-box">
+    <h1 class="title-text">ابزار گرد کننده گوشه‌ی مستطیل</h1>
+    <div class="about-icon" title="درباره">
+        &#9432; <!-- آیکون درباره (ℹ️) -->
+    </div>
+</div>
+
+<div id="unique-popup" class="hidden">
+    <div class="unique-popup-content">
+        <p>
+            نسخه ابزار: ۱.۰
+        </br>
+            تمامی حقوق برای عمو لئو محفوظ است. 
+            <a href="https://amuleo.ir" target="_blank" class="popup-link">بازدید از سایت من</a>
+        </p>
+        <button id="close-unique-popup">بستن</button>
+    </div>
+</div>
+
+
+
+    <div id="rectangle"></div>
+    <div class="controls">
+        <div class="control-group">
+            <input type="text" id="width" placeholder="طول (پیکسل)" value="300">
+            <div class="label-box width-label">طول</div>
+        </div>
+        <div class="control-group">
+            <input type="text" id="height" placeholder="عرض (پیکسل)" value="100">
+            <div class="label-box height-label">عرض</div>
+        </div>
+        <div class="control-group">
+            <input type="range" id="radius-slider" min="0" max="50" value="0">
+            <input type="text" id="radius-input" class="hidden" placeholder="گردی (پیکسل)" value="0">
+            <button id="radius-button">گردی</button>
+        </div>
+        <button id="download">دانلود خروجی نهایی</button>
+        <button id="download-high-quality">دانلود خروجی با کیفیت</button>
+    </div>
+
+<!-- پاپ‌آپ -->
+    <div id="popup" class="popup hidden">
+        <div class="popup-content">
+            <h2 class="popup-title">تنظیمات مستطیل</h2>
+            <div class="control-group">
+                <input type="text" id="top-left-radius" placeholder="گردی گوشه بالا-چپ (پیکسل)" value="0">
+                <input type="text" id="top-right-radius" placeholder="گردی گوشه بالا-راست (پیکسل)" value="0">
+            </div>
+            <div class="control-group">
+                <input type="text" id="bottom-left-radius" placeholder="گردی گوشه پایین-چپ (پیکسل)" value="0">
+                <input type="text" id="bottom-right-radius" placeholder="گردی گوشه پایین-راست (پیکسل)" value="0">
+            </div>
+            <button id="apply-corners">اعمال تغییرات</button>
+            <button id="close-popup">بستن</button>
+        </div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas"></script>
+
+
+<script>
+
+ const rectangle = document.getElementById('rectangle');
+    const widthInput = document.getElementById('width');
+    const heightInput = document.getElementById('height');
+    const radiusSlider = document.getElementById('radius-slider');
+    const radiusInput = document.getElementById('radius-input');
+    const radiusButton = document.getElementById('radius-button');
+    const downloadButton = document.getElementById('download');
+    const downloadHighQualityButton = document.getElementById('download-high-quality');
+    const topLeftInput = document.getElementById('top-left-radius');
+    const topRightInput = document.getElementById('top-right-radius');
+    const bottomLeftInput = document.getElementById('bottom-left-radius');
+    const bottomRightInput = document.getElementById('bottom-right-radius');
+    const applyButton = document.getElementById('apply-corners');
+    const popup = document.getElementById('popup'); // پاپ‌آپ
+    const closePopupButton = document.getElementById('close-popup'); // دکمه بستن پاپ‌آپ
+    const aboutIcon = document.querySelector('.about-icon');
+    const upopup = document.getElementById('unique-popup'); // عنصر اصلی پاپ‌آپ
+    const closeButton = document.getElementById('close-unique-popup')
+    const widthLabel = document.querySelector('.width-label');
+    const heightLabel = document.querySelector('.height-label');
+
+    // تنظیم سایز اولیه
+    rectangle.style.width = `${widthInput.value}px`;
+    rectangle.style.height = `${heightInput.value}px`;
+
+    widthInput.addEventListener('input', () => {
+        let width = parseInt(widthInput.value);
+        if (!isNaN(width)) {
+            width = Math.max(1, Math.min(300, width));
+            rectangle.style.width = `${width}px`;
+        } else {
+            width = 1;
+        }
+        widthInput.value = width;
+    });
+
+    heightInput.addEventListener('input', () => {
+        let height = parseInt(heightInput.value);
+        if (!isNaN(height)) {
+            height = Math.max(1, Math.min(300, height));
+            rectangle.style.height = `${height}px`;
+        } else {
+            height = 1;
+        }
+        heightInput.value = height;
+    });
+
+    radiusSlider.addEventListener('input', () => {
+        rectangle.style.borderRadius = `${radiusSlider.value}px`;
+    });
+
+    radiusButton.addEventListener('click', () => {
+        if (radiusSlider.classList.contains('hidden')) {
+            radiusSlider.classList.remove('hidden');
+            radiusInput.classList.add('hidden');
+            radiusSlider.value = radiusInput.value;
+            rectangle.style.borderRadius = `${radiusSlider.value}px`;
+        } else {
+            radiusSlider.classList.add('hidden');
+            radiusInput.classList.remove('hidden');
+            radiusInput.value = radiusSlider.value;
+            rectangle.style.borderRadius = `${radiusInput.value}px`;
+        }
+    });
+
+    radiusInput.addEventListener('input', () => {
+        let radius = Math.max(0, Math.min(50, parseInt(radiusInput.value) || 0));
+        radiusInput.value = radius;
+        rectangle.style.borderRadius = `${radius}px`;
+    });
+
+    applyButton.addEventListener('click', () => {
+        const topLeft = Math.max(0, parseInt(topLeftInput.value) || 0);
+        const topRight = Math.max(0, parseInt(topRightInput.value) || 0);
+        const bottomLeft = Math.max(0, parseInt(bottomLeftInput.value) || 0);
+        const bottomRight = Math.max(0, parseInt(bottomRightInput.value) || 0);
+
+        rectangle.style.borderRadius = `${topLeft}px ${topRight}px ${bottomRight}px ${bottomLeft}px`;
+    });
+
+    downloadButton.addEventListener('click', () => {
+        html2canvas(rectangle, { backgroundColor: null }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'rectangle.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    });
+
+    downloadHighQualityButton.addEventListener('click', () => {
+        html2canvas(rectangle, { scale: 10, backgroundColor: null }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'rectangle-high-quality.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    });
+
+   // نمایش پاپ‌آپ با دو بار کلیک روی مستطیل
+        rectangle.addEventListener('dblclick', () => {
+            popup.classList.remove('hidden'); // نمایش پاپ‌آپ
+        });
+
+        // بستن پاپ‌آپ با کلیک روی دکمه "بستن"
+        closePopupButton.addEventListener('click', () => {
+            popup.classList.add('hidden'); // مخفی کردن پاپ‌آپ
+        });
+
+      
+        aboutIcon.addEventListener('click', () => {
+        upopup.style.display = "flex"; // نمایش پاپ‌آپ
+    });
+
+    // بستن پاپ‌آپ
+    closeButton.addEventListener('click', () => {
+     upopup.style.display = "none"; // مخفی کردن پاپ‌آپ
+});
+
+// عملکرد برای دیو "طول"
+widthLabel.addEventListener('click', () => {
+    widthInput.focus(); // تمرکز روی تکست‌باکس
+    widthInput.select(); // انتخاب متن داخل تکست‌باکس
+});
+
+// عملکرد برای دیو "عرض"
+heightLabel.addEventListener('click', () => {
+    heightInput.focus();
+    heightInput.select();
+});
+
+</script>
+
+</body>
+</html>
