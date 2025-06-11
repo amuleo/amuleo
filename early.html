@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سحرخیزی</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="//fdn.fontcdn.ir">
+  <link rel="preconnect" href="//v1.fontapi.ir">
+  <link href="https://v1.fontapi.ir/css/Mikhak" rel="stylesheet">
+  <style>
+    /* فونت سراسری */
+    body {
+      font-family: 'Mikhak', sans-serif;
+    }
+    /* استایل آکاردئون */
+    .accordion-content {
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      overflow-y: hidden;
+    }
+    .accordion-content.open {
+      max-height: 9999px;
+      opacity: 1;
+    }
+    /* تنظیمات تم تاریک */
+    html.dark body {
+      background-image: linear-gradient(to bottom right, #1f2937, #374151);
+      color: #e5e7eb;
+    }
+    html.dark .bg-white { background-color: #111827; }
+    html.dark .border-gray-200 { border-color: #374151; }
+    html.dark .bg-gray-50 { background-color: #1f2937; }
+    html.dark .text-gray-700 { color: #d1d5db; }
+    html.dark .hover\:bg-gray-100:hover { background-color: #374151; }
+    html.dark .text-blue-700 { color: #60a5fa; }
+    html.dark .text-gray-600 { color: #9ca3af; }
+    html.dark .bg-blue-50 { background-color: #1f2937; }
+    html.dark .text-blue-600 { color: #60a5fa; }
+    html.dark .border-blue-300 { border-color: #4b5563; }
+    html.dark .bg-gray-700 { background-color: #374151; }
+    html.dark .text-gray-200 { color: #e5e7eb; }
+    html.dark .placeholder-gray-400::placeholder { color: #9ca3af; }
+    html.dark .hover\:bg-blue-100:hover { background-color: #374151; }
+    html.dark .bg-green-100 { background-color: #166534; }
+    html.dark .text-green-800 { color: #dcfce7; }
+    html.dark .text-blue-600 { color: #60a5fa; }
+    html.dark .bg-purple-50 { background-color: #1f2937; }
+    html.dark .text-purple-600 { color: #a78bfa; }
+    html.dark .border-purple-200 { border-color: #6d28d9; }
+    html.dark .text-gray-500 { color: #9ca3af; }
+    html.dark .bg-green-50 { background-color: #1f2937; }
+    html.dark .text-green-700 { color: #4ade80; }
+    html.dark .text-gray-300 { color: #d1d5db; }
+    html.dark .text-right { text-align: right; }
+    html.dark .text-justify { text-align: justify; }
+    html.dark .list-decimal { list-style-type: decimal; }
+    html.dark .list-inside { list-style-position: inside; }
+    html.dark .flex-row-reverse { flex-direction: row-reverse; }
+    html.dark .ml-3 { margin-left: 0.75rem; }
+    html.dark .mr-3 { margin-right: 0; }
+    /* استایل‌های جدول در حالت تاریک */
+    html.dark table {
+      background-color: #1f2937;
+      border-color: #374151;
+    }
+    html.dark th, html.dark td {
+      border-color: #374151;
+      color: #d1d5db;
+    }
+    html.dark thead tr {
+      background-color: #1e3a8a;
+      color: #bfdbfe;
+    }
+    html.dark tbody tr.bg-gray-50 {
+      background-color: #374151;
+    }
+    /* استایل‌های مدال */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    }
+    .modal.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background-color: #fff;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 500px;
+      position: relative;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease-in-out;
+    }
+    .modal.open .modal-content {
+      transform: translateY(0);
+    }
+    html.dark .modal-content {
+      background-color: #1f2937;
+      color: #e5e7eb;
+    }
+    .close-button {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #6b7280;
+    }
+    html.dark .close-button {
+      color: #9ca3af;
+    }
+    .modal-button {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      background-color: #6366f1;
+      color: white;
+      border-radius: 0.375rem;
+      text-align: center;
+      font-weight: 600;
+      transition: background-color 0.2s ease-in-out;
+    }
+    .modal-button:hover {
+      background-color: #4f46e5;
+    }
+    html.dark .modal-button {
+      background-color: #4f46e5;
+    }
+    html.dark .modal-button:hover {
+      background-color: #6366f1;
+    }
+    /* سفارشی‌سازی اسکرول برای مرورگرهای Webkit */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    html.dark .custom-scrollbar::-webkit-scrollbar-track {
+      background: #374151;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+    html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #9ca3af;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+    html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #6b7280;
+    }
+    /* استایل‌های اسلایدر نقل قول */
+    #quotes-slider-track {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+    #quotes-slider-track > div {
+      flex-shrink: 0;
+      flex-basis: 100%;
+      box-sizing: border-box;
+      padding-left: 3rem;
+      padding-right: 3rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+    /* دکمه‌های پیمایش اسلایدر (برای RTL) */
+    #slider #prev-quote {
+      left: auto;
+      right: 0.5rem;
+    }
+    #slider #next-quote {
+      right: auto;
+      left: 0.5rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen p-4 transition-colors duration-300 bg-gradient-to-br from-blue-100 to-purple-200 text-gray-800">
+  <!-- ظرف اصلی: استفاده از w-full در موبایل و max-w-4xl در دسکتاپ -->
+  <div class="w-full max-w-4xl mx-auto bg-white rounded-xl p-6 md:p-8 space-y-8" dir="rtl">
+    
+    <!-- نوار بالا: دکمه منو و تغییر تم -->
+    <div class="flex justify-between mb-4">
+      <button id="three-dot-menu-toggle"
+              class="p-2 rounded-full bg-gray-200 text-gray-800 hover:scale-105 transition-transform duration-200 focus:outline-none focus-visible:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"
+              aria-label="Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis">
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="19" cy="12" r="1" />
+          <circle cx="5" cy="12" r="1" />
+        </svg>
+      </button>
+      <button id="theme-toggle"
+              class="p-2 rounded-full bg-gray-200 text-gray-800 hover:scale-105 transition-transform duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 pointer-events-none"
+              aria-label="Toggle theme">
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             class="lucide lucide-sun">
+          <circle cx="12" cy="12" r="8" />
+          <path d="M12 2v2" />
+          <path d="M12 20v2" />
+          <path d="M4.93 4.93l1.41 1.41" />
+          <path d="M17.66 17.66l1.41 1.41" />
+          <path d="M2 12h2" />
+          <path d="M20 12h2" />
+          <path d="M4.93 19.07l1.41-1.41" />
+          <path d="M17.66 6.34l1.41-1.41" />
+        </svg>
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             class="lucide lucide-moon hidden">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+        </svg>
+      </button>
+    </div>
+    
+    <!-- هدر -->
+    <header class="text-center mb-8">
+      <h1 class="text-3xl md:text-5xl font-extrabold text-blue-700 dark:text-blue-400 mb-2">برنامه سحرخیزی</h1>
+      <p class="text-base md:text-xl text-gray-600 dark:text-gray-300">اهداف روزانه و نقل قول‌های انگیزشی</p>
+    </header>
+    
+    <!-- بخش پیشرفت سحرخیزی -->
+    <section class="bg-purple-50 p-6 rounded-lg dark:bg-gray-800">
+      <h2 class="text-2xl md:text-3xl font-bold text-purple-600 dark:text-purple-400 mb-4 text-center">پیشرفت سحرخیزی شما</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mb-6">
+        <div class="bg-white p-4 rounded-lg shadow-sm dark:bg-gray-700 dark:text-gray-200">
+          <p class="text-lg font-semibold">امتیازات: <span id="current-points" class="text-lg font-semibold text-blue-600 dark:text-blue-400">0</span></p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm dark:bg-gray-700 dark:text-gray-200">
+          <p class="text-lg font-semibold">سطح: <span id="current-level" class="text-lg font-semibold text-green-600 dark:text-green-400">1</span></p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm dark:bg-gray-700 dark:text-gray-200">
+          <p class="text-lg font-semibold">زنجیره: <span id="current-streak" class="text-lg font-semibold text-red-600 dark:text-red-400">0</span></p>
+        </div>
+      </div>
+      <div class="mb-4">
+        <p class="text-base font-medium text-gray-700 dark:text-gray-300 mb-2 text-right">پیشرفت به سطح بعدی: <span id="xp-progress-text">0/100</span></p>
+        <div class="w-full bg-gray-200 rounded-full h-4 dark:bg-gray-700">
+          <div id="progress-bar" class="bg-blue-500 h-4 rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- اهداف سحرخیزی -->
+    <section class="bg-blue-50 p-6 rounded-lg dark:bg-gray-800">
+      <h2 class="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4 text-center">اهداف سحرخیزی</h2>
+      <div class="mb-6">
+        <label for="sleepSetting" class="block text-base md:text-lg font-medium text-gray-700 dark:text-gray-300 mb-2 text-center">تنظیم خواب (مثال: ساعت بیداری هدف)</label>
+        <input type="text" id="sleepSetting" placeholder="مثال: ۶:۰۰ صبح" class="w-full p-3 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 text-right dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400 text-base" />
+      </div>
+      <ul id="morning-goals-list" class="space-y-3"></ul>
+    </section>
+    
+    <!-- اسلایدر نقل قول -->
+    <div id="quote-slider-placeholder"></div>
+    
+    <!-- راهنمای جامع مدیریت خواب -->
+    <section class="bg-green-50 p-6 rounded-lg dark:bg-gray-800">
+      <h2 class="text-2xl md:text-3xl font-bold text-green-700 dark:text-green-400 mb-4 text-center">راهنمای مدیریت خواب</h2>
+      <div id="guide-sections-container"></div>
+    </section>
+    
+    <!-- فوتر -->
+    <footer class="text-center text-gray-500 text-sm mt-8 dark:text-gray-400">
+      <div class="flex flex-col items-center">
+        <p>با آرزوی روزی پر از موفقیت و آرامش برای شما.</p>
+        <p>تمامی حقوق برای<strong> عمو لئو</strong> محفوظ است.</p>
+      </div>
+    </footer>
+  </div>
+  <!-- مدال منو -->
+  <div id="three-dot-menu-modal" class="modal">
+    <div class="modal-content">
+      <button class="close-button" id="close-three-dot-menu">&times;</button>
+      <h3 class="text-xl font-bold mb-4 text-center">منو</h3>
+      <button id="show-gamification-rules" class="modal-button">راهنما</button>
+      <button id="show-reset-confirmation" class="modal-button bg-red-500 hover:bg-red-600">بازنشانی</button>
+    </div>
+  </div>
+
+  <!-- مدال راهنمای گیمیفیکیشن -->
+  <div id="gamification-rules-modal" class="modal">
+    <div class="modal-content flex flex-col max-h-[55vh] md:h-[500px]">
+      <h3 class="text-xl font-bold mb-4 text-center">راهنمای سایت</h3>
+      <div class="flex-grow overflow-y-auto custom-scrollbar space-y-3 p-2">
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+          <p class="text-base text-right"><strong>امتیازات:</strong> با تکمیل هر هدف، ۱۰ امتیاز کسب می‌کنید.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+          <p class="text-base text-right"><strong>سطح‌بندی:</strong> برای ارتقاء سطح، باید امتیازات مشخصی کسب کنید:</p>
+          <ul class="list-decimal list-inside mr-4 text-base text-right">
+            <li>سطح ۱ (تازه کار): ۰ امتیاز</li>
+            <li>سطح ۲ (آماتور): ۱۰۰ امتیاز</li>
+            <li>سطح ۳ (مصمم): ۲۵۰ امتیاز</li>
+            <li>سطح ۴ (متعهد): ۴۰۰ امتیاز</li>
+            <li>سطح ۵ (پیشرو): ۶۰۰ امتیاز</li>
+            <li>سطح ۶ (استاد): ۸۵۰ امتیاز</li>
+            <li>سطح ۷ (قهرمان): ۱۱۰۰ امتیاز</li>
+            <li>سطح ۸ (افسانه‌ای): ۱۳۰۰ امتیاز</li>
+            <li>سطح ۹ (اسطوره‌ای): ۱۴۵۰ امتیاز</li>
+            <li>سطح ۱۰ (سیگما): ۱۵۰۰ امتیاز</li>
+          </ul>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+          <p class="text-base text-right"><strong>زنجیره (روزهای متوالی):</strong> برای حفظ زنجیره، باید حداقل <strong>۵ هدف</strong> را در هر روز تکمیل کنید.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+          <p class="text-base text-right">اگر یک روز را از دست بدهید و کمتر از ۵ هدف را تکمیل کنید، زنجیره شما صفر می‌شود.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+          <p class="text-base text-right">توجه: تمامی اطلاعات شما به صورت محلی در مرورگر ذخیره می‌شود.</p>
+        </div>
+      </div>
+      <button class="modal-button mt-4" id="close-gamification-rules">بستن</button>
+    </div>
+  </div>
+
+  <!-- مدال بازنشانی -->
+  <div id="reset-confirmation-modal" class="modal">
+    <div class="modal-content">
+      <button class="close-button" id="close-reset-confirmation">&times;</button>
+      <h3 class="text-xl font-bold mb-4 text-center">بازنشانی داده‌ها</h3>
+      <p class="mb-4 text-center">آیا مطمئن هستید که می‌خواهید تمام داده‌های خود را بازنشانی کنید؟ این عمل غیرقابل بازگشت است، در این صورت کلمه <strong>"تأیید"</strong> را در کادر زیر بنویسید:</p>
+      <input type="text" id="confirmation-input" placeholder="تأیید" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400" dir="rtl" />
+      <p id="reset-error-message" class="text-red-500 text-sm text-center m4-4 hidden">کلمه تأیید اشتباه است.</p>
+      <div class="flex justify-around gap-4 mt-4">
+        <button id="confirm-reset" class="modal-button bg-red-500 hover:bg-red-600 flex-1">بازنشانی</button>
+        <button id="cancel-reset" class="modal-button bg-gray-500 hover:bg-gray-600 flex-1">بستن</button>
+      </div>
+    </div>
+  </div>
+  <!-- اسکریپت‌ها -->
+  <script>
+    // اسلایدر نقل قول
+    (function() {
+      const quotes = [
+        "تنها راه انجام کارهای بزرگ، دوست داشتن کاری است که انجام می‌دهید. - استیو جابز",
+        "شادی به دست آوردن آنچه می‌خواهید نیست، بلکه خواستن آنچه به دست آورده‌اید است. - دالایی لاما",
+        "ذهن شما همه چیز است. آنچه فکر می‌کنید، همان می‌شوید. - بودا",
+        "موفقیت نهایی نیست، شکست کشنده نیست: این شجاعت ادامه دادن است که اهمیت دارد. - وینستون چرچیل",
+        "اگر می‌خواهید زندگی شادتری داشته باشید، آن را به یک هدف گره بزنید، نه به افراد یا اشیا. - آلبرت اینشتین",
+        "ما به وسیله آنچه هستیم شکل می‌گیریم، نه آنچه می‌گوییم. - استفان کاوی",
+        "بزرگترین افتخار در زندگی هرگز زمین نخوردن نیست، بلکه هر بار که زمین می‌خوریم، برخاستن است. - نلسون ماندلا",
+        "آینده متعلق به کسانی است که به زیبایی رویاهای خود ایمان دارند. - النور روزولت",
+        "تغییر دردناک است، اما هیچ چیز به اندازه درجا زدن دردناک نیست. - ماندلا",
+        "آنچه در ذهن خود پرورش می‌دهید، در زندگی خود برداشت می‌کنید. - جیم ران",
+        "هرگز برای شروع دوباره دیر نیست. هرگز برای شاد بودن دیر نیست. - جین فوندا",
+        "شما نمی‌توانید اقیانوس را عبور کنید مگر اینکه شجاعت از دست دادن دید ساحل را داشته باشید. - کریستوفر کلمب",
+        "باور کنید که می‌توانید و نیمی از راه را رفته‌اید. - تئودور روزولت",
+        "راز پیشرفت، شروع کردن است. - مارک تواین",
+        "زندگی ۱۰ درصد اتفاقاتی است که برای شما می‌افتد و ۹۰ درصد نحوه واکنش شما به آن است. - چارلز آر. سوئیندول"
+      ];
+      let currentQuoteIndex = 0;
+      let autoSlideInterval;
+      function $(selector, parent = document) {
+        return parent.querySelector(selector);
+      }
+      function $$(selector, parent = document) {
+        return parent.querySelectorAll(selector);
+      }
+      function startAutoSlide() {
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = setInterval(() => {
+          showQuote(currentQuoteIndex + 1);
+        }, 5000);
+      }
+      function stopAutoSlide() {
+        clearInterval(autoSlideInterval);
+      }
+      function showQuote(index) {
+        const sliderElement = $('#slider');
+        if (!sliderElement) {
+          console.error("عنصر #slider یافت نشد.");
+          return;
+        }
+        const sliderTrack = $('#quotes-slider-track', sliderElement);
+        const dots = $$('#quote-dots-container button', sliderElement);
+        if (index >= quotes.length) {
+          currentQuoteIndex = 0;
+        } else if (index < 0) {
+          currentQuoteIndex = quotes.length - 1;
+        } else {
+          currentQuoteIndex = index;
+        }
+        const offset = currentQuoteIndex * 100;
+        sliderTrack.style.transform = `translateX(${offset}%)`;
+        dots.forEach((dot, idx) => {
+          if (idx === currentQuoteIndex) {
+            dot.classList.add('bg-blue-500', 'dark:bg-blue-400');
+            dot.classList.remove('bg-gray-400', 'dark:bg-gray-600');
+          } else {
+            dot.classList.remove('bg-blue-500', 'dark:bg-blue-400');
+            dot.classList.add('bg-gray-400', 'dark:bg-gray-600');
+          }
+        });
+      }
+      window.initQuoteSlider = function(targetElementId) {
+        const targetElement = document.getElementById(targetElementId);
+        if (!targetElement) {
+          console.error(`عنصر هدف با ID "${targetElementId}" یافت نشد.`);
+          return;
+        }
+        targetElement.innerHTML = `
+          <section id="slider" class="bg-purple-50 p-6 rounded-lg dark:bg-gray-800">
+            <h2 class="text-2xl md:text-3xl font-bold text-purple-600 dark:text-purple-400 mb-4 text-center">
+              نقل قول‌های انگیزشی
+            </h2>
+            <div class="relative">
+              <div id="quotes-slider-container" class="overflow-hidden rounded-lg">
+                <div id="quotes-slider-track"></div>
+              </div>
+              <button id="prev-quote" class="absolute top-1/2 -translate-y-1/2 right-2 bg-gray-700 text-white p-0.8 rounded-full shadow-md z-10 opacity-70 hover:opacity-100 transition-opacity">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right">
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
+              </button>
+              <button id="next-quote" class="absolute top-1/2 -translate-y-1/2 left-2 bg-gray-700 text-white p-0.8 rounded-full shadow-md z-10 opacity-70 hover:opacity-100 transition-opacity">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left">
+                  <path d="m15 18-6-6 6-6"/>
+                </svg>
+              </button>
+            </div>
+            <div id="quote-dots-container" class="flex justify-center mt-4 gap-x-2"></div>
+          </section>
+        `;
+        const sliderElement = $('#slider', targetElement);
+        const sliderTrack = $('#quotes-slider-track', sliderElement);
+        const dotsContainer = $('#quote-dots-container', sliderElement);
+        const prevButton = $('#prev-quote', sliderElement);
+        const nextButton = $('#next-quote', sliderElement);
+        quotes.forEach((quote, index) => {
+          const quoteDiv = document.createElement('div');
+          quoteDiv.className = 'bg-white p-4 rounded-lg border border-purple-200 flex flex-row-reverse items-start dark:bg-gray-700 dark:border-purple-700 dark:text-gray-200 items-center';
+          quoteDiv.style.paddingLeft = '2rem';
+          quoteDiv.style.paddingRight = '2rem';
+          quoteDiv.style.paddingTop = '1rem';
+          quoteDiv.style.paddingBottom = '1rem';
+          const p = document.createElement('p');
+          p.className = 'text-base md:text-lg text-gray-700 italic text-center text-justify w-11/12 lg:w-max md:w-max max-w-xl mx-auto dark:text-gray-300';
+          p.textContent = quote;
+          quoteDiv.appendChild(p);
+          sliderTrack.appendChild(quoteDiv);
+          const dot = document.createElement('button');
+          dot.className = 'w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-600 transition-colors duration-200';
+          dot.addEventListener('click', () => {
+            stopAutoSlide();
+            showQuote(index);
+            startAutoSlide();
+          });
+          dotsContainer.appendChild(dot);
+        });
+        prevButton.addEventListener('click', () => {
+          stopAutoSlide();
+          showQuote(currentQuoteIndex - 1);
+          startAutoSlide();
+        });
+        nextButton.addEventListener('click', () => {
+          stopAutoSlide();
+          showQuote(currentQuoteIndex + 1);
+          startAutoSlide();
+        });
+        showQuote(currentQuoteIndex);
+        startAutoSlide();
+      };
+    })();
+    // داده‌ها و تنظیمات اصلی برنامه
+    let sleepSetting = '';
+    let morningGoals = [
+      { id: 1, text: 'بیداری در زمانی مشخص', completed: false, lastCompletionDate: null },
+      { id: 2, text: 'نوشیدن آب پس از بیداری', completed: false, lastCompletionDate: null },
+      { id: 3, text: 'انجام ۵ دقیقه نرمش سبک', completed: false, lastCompletionDate: null },
+      { id: 4, text: 'مرتب کردن سریع رختخواب', completed: false, lastCompletionDate: null },
+      { id: 5, text: 'مدیتیشن - ۱۰ دقیقه', completed: false, lastCompletionDate: null },
+      { id: 6, text: 'نوشتن سه مورد شکرگزاری', completed: false, lastCompletionDate: null },
+      { id: 7, text: 'نوتن سه کار مهم روز', completed: false, lastCompletionDate: null },
+      { id: 8, text: 'خواندن ۱۰ دقیقه کتاب', completed: false, lastCompletionDate: null },
+      { id: 9, text: 'گوش دادن به موسیقی بی‌کلام', completed: false, lastCompletionDate: null },
+      { id: 10, text: 'مرور اهداف بلندمدت', completed: false, lastCompletionDate: null }
+    ];
+    let points = 0;
+    let level = 1;
+    let streak = 0;
+    let lastAllGoalsCompletionDate = null;
+    const pointsPerGoal = 10;
+    const levelsConfig = [
+      { level: 1, xpNeeded: 0, name: "تازه کار" },
+      { level: 2, xpNeeded: 100, name: "آماتور" },
+      { level: 3, xpNeeded: 250, name: "مصمم" },
+      { level: 4, xpNeeded: 400, name: "متعهد" },
+      { level: 5, xpNeeded: 600, name: "پیشرو" },
+      { level: 6, xpNeeded: 850, name: "استاد" },
+      { level: 7, xpNeeded: 1100, name: "قهرمان" },
+      { level: 8, xpNeeded: 1300, name: "افسانه‌ای" },
+      { level: 9, xpNeeded: 1450, name: "اسطوره‌ای" },
+      { level: 10, xpNeeded: 1500, name: "سیگما" }
+    ];
+    const guideSections = [
+      {
+        title: "مقدمه: درک چالش خواب",
+        content: `
+          <p class="mb-2">بسیاری از افراد، ارتباط عمیقی بین افکار و الگوی خواب خود تجربه می‌کنند...</p>
+          <p class="mb-2">تجربیات کاربران به وضوح این احساس را تأیید می‌کند...</p>
+          <p class="mb-2">این بار ذهنی به طور مستقیم بر خواب تأثیر می‌گذارد...</p>
+        `
+      },
+      {
+        title: "چرا تغییر ساعت خواب مهمه؟",
+        content: `
+          <p class="mb-2">تغییر ساعت خواب یک هدف اساسی است...</p>
+          <p class="mb-2">بسیاری از افراد از سحرخیزی فواید بی‌شماری را تجربه کرده‌اند...</p>
+          <p class="mb-2">در مقابل، خواب کمتر از ۷-۹ ساعت توصیه شده برای بزرگسالان...</p>
+        `
+      },
+      {
+        title: "تنظیم تدریجی ساعت خواب",
+        content: `
+          <h3 class="mb-2">تجربه کاربران در تغییر زمان بیداری</h3>
+          <p class="mb-2">کلید تغییر برنامه خواب، به ویژه از ۲ بامداد به ۶ صبح، انجام تدریجی آن است...</p>
+          <p class="mb-2">تغییرات کوچک و تدریجی، مقاومت ذهنی را از بین می‌برد...</p>
+          <h3 class="mb-2">جدول: برنامه گام به گام تنظیم ساعت خواب</h3>
+          <div class="overflow-x-auto mb-4 rounded-lg">
+            <table class="min-w-full bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+              <thead>
+                <tr class="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                  <th class="py-2 px-4 border-b text-right">هفته/مرحله</th>
+                  <th class="py-2 px-4 border-b text-right">هدف زمان خواب</th>
+                  <th class="py-2 px-4 border-b text-right">هدف زمان بیداری</th>
+                  <th class="py-2 px-4 border-b text-right">میزان تغییر</th>
+                  <th class="py-2 px-4 border-b text-right">نکات کلیدی</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="py-2 px-4 border-b text-right">**شروع**</td>
+                  <td class="py-2 px-4 border-b text-right">۲:۰۰ بامداد</td>
+                  <td class="py-2 px-4 border-b text-right">۹:۰۰ صبح</td>
+                  <td class="py-2 px-4 border-b text-right">-</td>
+                  <td class="py-2 px-4 border-b text-right">نقطه شروع فعلی</td>
+                </tr>
+                <tr class="bg-gray-50 dark:bg-gray-700">
+                  <td class="py-2 px-4 border-b text-right">**هفته ۱**</td>
+                  <td class="py-2 px-4 border-b text-right">۱:۴۵ بامداد</td>
+                  <td class="py-2 px-4 border-b text-right">۸:۴۵ صبح</td>
+                  <td class="py-2 px-4 border-b text-right">۱۵ دقیقه زودتر</td>
+                  <td class="py-2 px-4 border-b text-right">هر روز، حتی تعطیلات، به این زمان پایبند باشید.</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4 border-b text-right">**هفته ۲**</td>
+                  <td class="py-2 px-4 border-b text-right">۱:۳۰ بامداد</td>
+                  <td class="py-2 px-4 border-b text-right">۸:۳۰ صبح</td>
+                  <td class="py-2 px-4 border-b text-right">۱۵ دقیقه زودتر</td>
+                  <td class="py-2 px-4 border-b text-right">به محض بیدار شدن، از تخت بیرون بیایید.</td>
+                </tr>
+                <tr class="bg-gray-50 dark:bg-gray-700">
+                  <td class="py-2 px-4 border-b text-right">**هفته ۳**</td>
+                  <td class="py-2 px-4 border-b text-right">۱:۱۵ بامداد</td>
+                  <td class="py-2 px-4 border-b text-right">۸:۱۵ صبح</td>
+                  <td class="py-2 px-4 border-b text-right">۱۵ دقیقه زودتر</td>
+                  <td class="py-2 px-4 border-b text-right">صبحانه را حذف نکنید.</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4 border-b text-right">**هفته ۴**</td>
+                  <td class="py-2 px-4 border-b text-right">۱:۰۰ بامداد</td>
+                  <td class="py-2 px-4 border-b text-right">۸:۰۰ صبح</td>
+                  <td class="py-2 px-4 border-b text-right">۱۵ دقیقه زودتر</td>
+                  <td class="py-2 px-4 border-b text-right">در طول روز از نور طبیعی خورشید بهره ببرید.</td>
+                </tr>
+                <tr class="bg-gray-50 dark:bg-gray-700">
+                  <td class="py-2 px-4 border-b text-right">**هفته ۵**</td>
+                  <td class="py-2 px-4 border-b text-right">۱۲:۴۵ بامداد</td>
+                  <td class="py-2 px-4 border-b text-right">۷:۴۵ صبح</td>
+                  <td class="py-2 px-4 border-b text-right">۱۵ دقیقه زودتر</td>
+                  <td class="py-2 px-4 border-b text-right">به تدریج به هدف ۶ صبح نزدیک شوید.</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4 border-b text-right">**هفته ۶**</td>
+                  <td class="py-2 px-4 border-b text-right">۱۲:۳۰ بامداد</td>
+                  <td class="py-2 px-4 border-b text-right">۷:۳۰ صبح</td>
+                  <td class="py-2 px-4 border-b text-right">۱۵ دقیقه زودتر</td>
+                  <td class="py-2 px-4 border-b text-right">در صورت عدم موفقیت، به مرحله قبل بازگردید و تمرین کنید.</td>
+                </tr>
+                <tr class="bg-gray-50 dark:bg-gray-700">
+                  <td class="py-2 px-4 border-b text-right">**... ادامه تا رسیدن به هدف ۶ صبح...**</td>
+                  <td class="py-2 px-4 border-b text-right"></td>
+                  <td class="py-2 px-4 border-b text-right"></td>
+                  <td class="py-2 px-4 border-b text-right"></td>
+                  <td class="py-2 px-4 border-b text-right"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h3 class="text-lg md:text-xl font-bold text-gray-700 mb-2 text-right">اهمیت ثبات، حتی در تعطیلات</h3>
+          <p class="mb-2">یکی از بزرگترین موانع در تنظیم خواب، رها کردن برنامه در تعطیلات است...</p>
+          <p class="mb-2">این ثبات به عنوان یک لنگر برای ریتم شبانه‌روزی عمل می‌کند...</p>
+        `
+      },
+      {
+        title: "ایجاد روتین شبانه",
+        content: `
+          <h3 class="text-lg md:text-xl font-bold text-gray-700 mb-2 text-right">فعالیت‌های آرامش‌بخش قبل از خواب</h3>
+          <p class="mb-2">ذهن، به ویژه قبل از خواب، بسیار فعال است. ایجاد یک روال ثابت و آرامش‌بخش به مغز و بدن کمک می‌کند تا سیگنال دریافت کنند که زمان استراحت فرا رسیده است...</p>
+          <p class="mb-2">این فعالیت‌ها به طور فعال فضای ذهنی را که نشخوار فکری معمولاً اشغال می‌کند، جایگزین می‌کنند...</p>
+          <p class="mb-2">علاوه بر این، این فعالیت‌ها بدن را از نظر فیزیولوژیکی برای خواب آماده می‌کنند...</p>
+        `
+      },
+      {
+        title: "پرهیز از محرک‌ها",
+        content: `
+          <h3 class="text-lg md:text-xl font-bold text-gray-700 mb-2 text-right">پرهیز از محرک‌ها</h3>
+          <p class="mb-2">همانطور که به دنبال آرامش هستید، باید از هر چیزی که ذهن یا بدن را بیش از حد تحریک می‌کند، اجتناب کنید...</p>
+          <p class="mb-2">همچنین، توصیه می‌شود از صفحه‌های نمایش حداقل یک ساعت قبل از خواب دور بمانید...</p>
+        `
+      },
+      {
+        title: "تنظیم سبک زندگی",
+        content: `
+          <h3 class="text-lg md:text-xl font-bold text-gray-700 mb-2 text-right">ورزش منظم</h3>
+          <p class="text-base text-right">ورزش یک درمان طبیعی و مؤثر برای اضطراب است...</p>
+          <h3 class="text-lg md:text-xl font-bold text-gray-700 mb-2 text-right">رژیم غذایی سالم</h3>
+          <p class="text-base text-right">داشتن یک رژیم غذایی سالم و متعادل نقش مهمی در تقویت سلامت روان و بهبود کیفیت خواب دارد...</p>
+          <h3 class="text-lg md:text-xl font-bold text-gray-700 mb-2 text-right">جستجوی حمایت حرفه‌ای و اجتماعی</h3>
+          <p class="text-base text-right">اگر نشخوار فکری به شدت زیاد شده و با راهکارهای بالا قابل کنترل نیست، مراجعه به روانشناس یا روانپزشک ضروری است...</p>
+        `
+      },
+      {
+        title: "نتیجه‌گیری و توصیه‌ها",
+        content: `
+          <p class="mb-2 text-base text-right">مدیریت وسواس فکری-عملی و نشخوار فکری، به ویژه در ارتباط با تنظیم خواب، نیازمند یک رویکرد جامع و تدریجی است...</p>
+          <ol class="list-decimal list-inside space-y-1 text-right">
+            <li>تنظیم تدریجی ساعت خواب</li>
+            <li>ثبات در برنامه خواب</li>
+            <li>ایجاد روتین شبانه آرامش‌بخش</li>
+            <li>پرهیز از محرک‌ها و بهینه‌سازی محیط خواب</li>
+            <li>مدیریت فعال نشخوار فکری</li>
+            <li>پذیرش و شفقت به خود</li>
+            <li>سبک زندگی سالم</li>
+            <li>جستجوی حمایت حرفه‌ای</li>
+          </ol>
+        `
+      }
+    ];
+    // توابع کمکی DOM
+    function $(selector) {
+      return document.querySelector(selector);
+    }
+    function $$(selector) {
+      return document.querySelectorAll(selector);
+    }
+
+    // --- مدیریت تم ---
+    let currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        $('#sun-icon').classList.add('hidden');
+        $('#moon-icon').classList.remove('hidden');
+      } else {
+        document.documentElement.classList.remove('dark');
+        $('#sun-icon').classList.remove('hidden');
+        $('#moon-icon').classList.add('hidden');
+      }
+      currentTheme = theme;
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      applyTheme(e.matches ? 'dark' : 'light');
+    });
+
+    // --- رندر اهداف سحرخیزی ---
+    function renderMorningGoals() {
+      const goalsList = $('#morning-goals-list');
+      goalsList.innerHTML = '';
+      morningGoals.forEach(goal => {
+        const listItem = document.createElement('li');
+        listItem.className = `flex flex-row-reverse items-center p-3 rounded-md transition duration-200 cursor-pointer ${
+          goal.completed
+            ? 'bg-green-100 text-green-800 line-through dark:bg-green-900 dark:text-green-200'
+            : 'bg-white hover:bg-blue-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200'
+        }`;
+        listItem.dataset.id = goal.id;
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = goal.completed;
+        checkbox.className = 'form-checkbox h-5 w-5 text-blue-600 rounded-sm ml-3 dark:text-blue-400';
+        checkbox.addEventListener('change', (event) => {
+          event.stopPropagation();
+          toggleGoalCompletion(goal.id);
+        });
+        const span = document.createElement('span');
+        span.className = 'text-base flex-grow text-right';
+        span.textContent = goal.text;
+        listItem.appendChild(checkbox);
+        listItem.appendChild(span);
+        goalsList.appendChild(listItem);
+        listItem.addEventListener('click', () => {
+          toggleGoalCompletion(goal.id);
+        });
+      });
+      checkAllGoalsCompletedForToday();
+    }
+    function toggleGoalCompletion(id) {
+      const oldGoal = morningGoals.find(goal => goal.id === id);
+      morningGoals = morningGoals.map(goal =>
+        goal.id === id ? { ...goal, completed: !goal.completed } : goal
+      );
+      const newGoal = morningGoals.find(goal => goal.id === id);
+      if (!oldGoal.completed && newGoal.completed) {
+        points += pointsPerGoal;
+        newGoal.lastCompletionDate = new Date().toISOString().split('T')[0];
+      } else if (oldGoal.completed && !newGoal.completed) {
+        points = Math.max(0, points - pointsPerGoal);
+        newGoal.lastCompletionDate = null;
+      }
+      updateLevel();
+      saveData();
+      renderMorningGoals();
+      renderGamificationStats();
+    }
+    function updateLevel() {
+      let newLevel = 1;
+      for (let i = 0; i < levelsConfig.length; i++) {
+        if (points >= levelsConfig[i].xpNeeded) {
+          newLevel = levelsConfig[i].level;
+        } else {
+          break;
+        }
+      }
+      level = newLevel;
+    }
+    function renderGamificationStats() {
+      $('#current-points').textContent = points;
+      const currentLevelConfig = levelsConfig.find(l => l.level === level);
+      $('#current-level').textContent = `${currentLevelConfig ? currentLevelConfig.name : 'نامشخص'}`;
+      $('#current-streak').textContent = streak;
+      const nextLevelConfig = levelsConfig.find(l => l.level === level + 1);
+      let xpForNextLevel = 0;
+      let xpProgress = 0;
+      if (nextLevelConfig) {
+        xpForNextLevel = nextLevelConfig.xpNeeded - currentLevelConfig.xpNeeded;
+        xpProgress = points - currentLevelConfig.xpNeeded;
+        const progressPercentage = (xpProgress / xpForNextLevel) * 100;
+        $('#progress-bar').style.width = `${progressPercentage}%`;
+        $('#xp-progress-text').textContent = `${xpProgress}/${xpForNextLevel}`;
+      } else {
+        $('#progress-bar').style.width = '100%';
+        $('#xp-progress-text').textContent = `حداکثر سطح!`;
+      }
+    }
+    function checkAllGoalsCompletedForToday() {
+      const today = new Date().toISOString().split('T')[0];
+      const completedGoalsTodayCount = morningGoals.filter(goal => goal.completed && goal.lastCompletionDate === today).length;
+      const acceptableCompletedGoals = 5;
+      if (completedGoalsTodayCount >= acceptableCompletedGoals) {
+        if (lastAllGoalsCompletionDate === null) {
+          streak = 1;
+        } else {
+          const lastDate = new Date(lastAllGoalsCompletionDate);
+          const todayDate = new Date(today);
+          const diffTime = Math.abs(todayDate - lastDate);
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          if (diffDays === 1) {
+            streak++;
+          } else if (diffDays > 1) {
+            streak = 1;
+          }
+        }
+        lastAllGoalsCompletionDate = today;
+      } else {
+        if (lastAllGoalsCompletionDate !== null) {
+          const lastDate = new Date(lastAllGoalsCompletionDate);
+          const todayDate = new Date(today);
+          const diffTime = Math.abs(todayDate - lastDate);
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          if (diffDays > 1) {
+            streak = 0;
+            lastAllGoalsCompletionDate = null;
+          }
+        }
+      }
+      saveData();
+      renderGamificationStats();
+    }
+    // --- بارگذاری و ذخیره داده‌ها ---
+    function loadData() {
+      const savedSleepSetting = localStorage.getItem('sleepSetting');
+      if (savedSleepSetting) {
+        sleepSetting = savedSleepSetting;
+        $('#sleepSetting').value = sleepSetting;
+      } else {
+        sleepSetting = '';
+        $('#sleepSetting').value = sleepSetting;
+      }
+      const savedGoals = localStorage.getItem('morningGoals');
+      if (savedGoals) {
+        morningGoals = JSON.parse(savedGoals);
+      }
+      const savedPoints = localStorage.getItem('points');
+      if (savedPoints) {
+        points = parseInt(savedPoints);
+      }
+      const savedLevel = localStorage.getItem('level');
+      if (savedLevel) {
+        level = parseInt(savedLevel);
+      }
+      const savedStreak = localStorage.getItem('streak');
+      if (savedStreak) {
+        streak = parseInt(savedStreak);
+      }
+      const savedLastAllGoalsCompletionDate = localStorage.getItem('lastAllGoalsCompletionDate');
+      if (savedLastAllGoalsCompletionDate) {
+        lastAllGoalsCompletionDate = savedLastAllGoalsCompletionDate;
+      }
+    }
+    function saveData() {
+      localStorage.setItem('sleepSetting', $('#sleepSetting').value);
+      localStorage.setItem('morningGoals', JSON.stringify(morningGoals));
+      localStorage.setItem('points', points);
+      localStorage.setItem('level', level);
+      localStorage.setItem('streak', streak);
+      localStorage.setItem('lastAllGoalsCompletionDate', lastAllGoalsCompletionDate);
+    }
+    // --- رندر بخش‌های راهنما (آکاردئون) ---
+    function renderGuideSections() {
+      const guideContainer = $('#guide-sections-container');
+      guideContainer.innerHTML = '';
+      guideSections.forEach((section, index) => {
+        const accordionDiv = document.createElement('div');
+        accordionDiv.className = 'border border-gray-200 rounded-lg overflow-hidden mb-4 dark:border-gray-700';
+        const button = document.createElement('button');
+        button.className = 'flex justify-between items-center w-full p-4 text-base md:text-lg font-semibold text-right text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75 rounded-t-lg dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700';
+        button.innerHTML = `
+          <span class="text-justify">${section.title}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-5 h-5 text-purple-500 transition-transform duration-200">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        `;
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'accordion-content';
+        contentDiv.innerHTML = `<div class="p-4 bg-white text-base md:text-lg text-gray-700 leading-relaxed dark:bg-gray-900 dark:text-gray-300">${section.content.replace(/<p class="/g, '<p class="text-justify ')}</div>`;
+        button.addEventListener('click', () => {
+          const chevronIcon = button.querySelector('svg');
+          if (contentDiv.classList.contains('open')) {
+            contentDiv.classList.remove('open');
+            chevronIcon.classList.remove('transform', 'rotate-180');
+          } else {
+            $$('.accordion-content.open').forEach(openContent => {
+              openContent.classList.remove('open');
+              openContent.previousElementSibling.querySelector('svg').classList.remove('transform', 'rotate-180');
+            });
+            contentDiv.classList.add('open');
+            chevronIcon.classList.add('transform', 'rotate-180');
+          }
+        });
+        accordionDiv.appendChild(button);
+        accordionDiv.appendChild(contentDiv);
+        guideContainer.appendChild(accordionDiv);
+      });
+    }
+    // --- مقداردهی اولیه برنامه ---
+    document.addEventListener('DOMContentLoaded', () => {
+      loadData();
+      applyTheme(currentTheme);
+      const today = new Date().toISOString().split('T')[0];
+      if (lastAllGoalsCompletionDate !== today) {
+        checkAllGoalsCompletedForToday();
+      }
+      renderMorningGoals();
+      renderGuideSections();
+      renderGamificationStats();
+      window.initQuoteSlider('quote-slider-placeholder');
+      $('#sleepSetting').addEventListener('input', saveData);
+
+      // --- Modal Logic ---
+      const threeDotMenuToggle = $('#three-dot-menu-toggle');
+      const threeDotMenuModal = $('#three-dot-menu-modal');
+      const closeThreeDotMenu = $('#close-three-dot-menu');
+      const showGamificationRules = $('#show-gamification-rules');
+      const gamificationRulesModal = $('#gamification-rules-modal');
+      const closeGamificationRules = $('#close-gamification-rules');
+      const showResetConfirmation = $('#show-reset-confirmation');
+      const resetConfirmationModal = $('#reset-confirmation-modal');
+      const closeResetConfirmation = $('#close-reset-confirmation');
+      const confirmResetButton = $('#confirm-reset');
+      const cancelResetButton = $('#cancel-reset');
+      const confirmationInput = $('#confirmation-input');
+      const resetErrorMessage = $('#reset-error-message');
+      
+      threeDotMenuToggle.addEventListener('click', () => {
+        threeDotMenuModal.classList.add('open');
+      });
+      closeThreeDotMenu.addEventListener('click', () => {
+        threeDotMenuModal.classList.remove('open');
+      });
+      showGamificationRules.addEventListener('click', () => {
+        threeDotMenuModal.classList.remove('open');
+        gamificationRulesModal.classList.add('open');
+      });
+      closeGamificationRules.addEventListener('click', () => {
+        gamificationRulesModal.classList.remove('open');
+      });
+      showResetConfirmation.addEventListener('click', () => {
+        threeDotMenuModal.classList.remove('open');
+        resetConfirmationModal.classList.add('open');
+        confirmationInput.value = '';
+        resetErrorMessage.classList.add('hidden');
+      });
+      closeResetConfirmation.addEventListener('click', () => {
+        resetConfirmationModal.classList.remove('open');
+      });
+      cancelResetButton.addEventListener('click', () => {
+        resetConfirmationModal.classList.remove('open');
+      });
+      confirmResetButton.addEventListener('click', () => {
+        const confirmationText = confirmationInput.value.trim();
+        if (confirmationText === 'تأیید' || confirmationText === 'تایید') {
+          localStorage.clear();
+          location.reload();
+        } else {
+          resetErrorMessage.classList.remove('hidden');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
