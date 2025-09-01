@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جهان روشن - جملات انگیزشی</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* تعیین متغیرهای رنگی برای تم روشن و تاریک */
+        :root {
+            --text-color-light: #333;
+            --bg-color-light: #f5f5f5;
+            --header-bg-light: #fff;
+            --menu-bg-light: #fff;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+
+            --text-color-dark: #f5f5f5;
+            --bg-color-dark: #121212;
+            --header-bg-dark: #1e1e1e;
+            --menu-bg-dark: #1e1e1e;
+            --shadow-dark: rgba(255, 255, 255, 0.05);
+
+            --transition-speed: 0.5s;
+        }
+
+        /* استایل‌های پایه بدنه و انتقال رنگ‌ها */
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color-light);
+            color: var(--text-color-light);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
+        /* استایل‌های هدر */
+        header {
+            background-color: var(--header-bg-light);
+            transition: background-color var(--transition-speed);
+        }
+
+        /* استایل‌های منو و سایه آن */
+        .menu {
+            background-color: var(--menu-bg-light);
+            box-shadow: 0 4px 6px -1px var(--shadow-light), 0 2px 4px -1px var(--shadow-light);
+            transition: background-color var(--transition-speed), box-shadow var(--transition-speed), max-height var(--transition-speed) ease-in-out;
+        }
+
+        /* تنظیمات برای تم تاریک بر اساس prefers-color-scheme */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: var(--bg-color-dark);
+                color: var(--text-color-dark);
+            }
+            header {
+                background-color: var(--header-bg-dark);
+            }
+            .menu {
+                background-color: var(--menu-bg-dark);
+                box-shadow: 0 4px 6px -1px var(--shadow-dark), 0 2px 4px -1px var(--shadow-dark);
+            }
+        }
+
+        /* استایل‌های انیمیشن محو شدن (Fade) */
+        .fade-out {
+            opacity: 0;
+            transition: opacity var(--transition-speed) ease-in-out;
+        }
+
+        .fade-in {
+            opacity: 1;
+            transition: opacity var(--transition-speed) ease-in-out;
+        }
+
+        /* تنظیم حداقل ارتفاع صفحه برای قرارگیری صحیح محتوا */
+        .min-h-screen-adjusted {
+            min-height: calc(100vh - 64px); /* ارتفاع هدر را در نظر می‌گیرد */
+        }
+
+        /* استایل دکمه منو (همبرگر) */
+        .menu-btn {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 50;
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: currentColor;
+            transition: transform var(--transition-speed), opacity var(--transition-speed);
+        }
+
+        .menu-btn.active span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
+        .menu-btn.active span:nth-child(2) { opacity: 0; }
+        .menu-btn.active span:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
+
+        /* استایل‌های منوی بازشونده */
+        .menu {
+            position: absolute;
+            right: 0;
+            width: 100%;
+            max-height: 0; /* ارتفاع صفر برای حالت بسته */
+            overflow: hidden;
+            z-index: 40;
+        }
+
+        .menu.open {
+            max-height: 500px; /* یک مقدار بزرگ برای نمایش کامل محتوا */
+        }
+
+        .menu-item {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(156, 163, 175, 0.2);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color var(--transition-speed);
+        }
+
+        .menu-item:hover {
+            background-color: rgba(156, 163, 175, 0.1);
+        }
+
+        /* استایل‌های مودال (پنجره پاپ‌آپ) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background-color: var(--bg-color-light);
+            color: var(--text-color-light);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            transition: background-color var(--transition-speed);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .modal-content {
+                background-color: var(--bg-color-dark);
+                color: var(--text-color-dark);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <!-- هدر با عنوان و دکمه منو -->
+    <header class="flex justify-between items-center py-4 px-4 border-b border-gray-200 dark:border-gray-700 w-full">
+        <h1 class="text-xl font-bold">جهان روشن</h1>
+        <button id="menu-btn" class="menu-btn focus:outline-none">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- منوی کشویی -->
+    <div id="main-menu" class="menu">
+        <div class="flex flex-col items-center">
+            <button id="about-btn" class="menu-item">درباره پروژه</button>
+            <a href="https://amuleo.ir" target="_blank" class="menu-item">سایت من</a>
+            <button id="close-menu-btn" class="menu-item border-none">بستن منو</button>
+        </div>
+    </div>
+
+    <!-- بخش اصلی نمایش جملات -->
+    <main class="flex flex-col items-center justify-center min-h-screen-adjusted">
+        <div class="max-w-xl mx-auto text-center px-4 relative">
+            <p id="quote-text" class="text-xl md:text-2xl lg:text-3xl font-light leading-relaxed fade-in text-justify">
+                <!-- جملات انگیزشی در اینجا قرار می‌گیرند -->
+            </p>
+        </div>
+    </main>
+
+    <!-- مودال "درباره" -->
+    <div id="about-modal" class="modal-overlay">
+        <div class="modal-content text-right">
+            <h2 class="text-2xl font-bold mb-4">درباره پروژه جهان روشن</h2>
+            <p class="text-sm leading-relaxed mb-6 text-justify">
+                این پروژه، یک پلتفرم ساده و مینیمال برای ارائه جملات انگیزشی است که با هر کلیک، یک جمله جدید به شما نمایش می‌دهد. این برنامه به صورت خودکار با تم روشن و تاریک دستگاه شما هماهنگ می‌شود و با تغییر جایگاه تصادفی جملات، تجربه کاربری تازه‌ای را برایتان فراهم می‌کند. لطفاً توجه داشته باشید که این نسخه از پروژه دیگر به‌روزرسانی نخواهد شد و برای استفاده‌های آینده برنامه‌ریزی نشده است.
+            </p>
+            <button id="close-modal-btn" class="absolute top-4 left-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            "باور کن و انجامش بده.",
+            "موفقیت به دست می‌آید.",
+            "تلاش، رمز موفقیت است.",
+            "هرگز تسلیم نشو.",
+            "رویاهاتو دنبال کن.",
+            "امروز، روز توست.",
+            "به خودت ایمان داشته باش.",
+            "قدرت در درون توست.",
+            "مهم نیست چقدر آهسته.",
+            "فقط به جلو برو.",
+            "شکست، پلی برای پیروزی است.",
+            "کاری که دوست داری، انجام بده.",
+            "هیچ‌وقت دیر نیست.",
+            "آینده در دستان توست.",
+            "همیشه بهترین خودت باش.",
+            "پشتکار، معجزه می‌کند.",
+            "از اشتباهاتت درس بگیر.",
+            "به سوی رویاهایت پرواز کن.",
+            "تغییر از درون آغاز می‌شود.",
+            "هر روز یک شروع تازه است.",
+            "لحظه‌ها را زندگی کن.",
+            "انگیزه، کلید حرکت است.",
+            "ترس را کنار بگذار.",
+            "شجاعت در عمل است.",
+            "زندگی یک سفر است.",
+            "فقط ادامه بده.",
+            "موفقیت نزدیک است.",
+            "همیشه امید داشته باش.",
+            "باور، قدرتمندترین ابزار است.",
+            "بهترین آینده را بساز.",
+            "خودت را کشف کن.",
+            "به اهدافت متعهد باش.",
+            "تغییر، تنها راه رشد است.",
+            "قدرت در سکوت است.",
+            "با مشکلات روبرو شو.",
+            "عاشق خودت باش.",
+            "هرگز ناامید نشو.",
+            "ذهن، قدرتمندترین عضو است.",
+            "یک قدم کوچک کافی است.",
+            "از فرصت‌ها استفاده کن.",
+            "همیشه مثبت فکر کن.",
+            "تلاش، نتیجه می‌دهد.",
+            "لذت ببر از لحظه حال.",
+            "برای رویاهات بجنگ.",
+            "ارزش خود را بدان.",
+            "جهان، منتظر توست.",
+            "از امروز شروع کن.",
+            "زندگی، هدیه است.",
+            "همیشه به جلو حرکت کن.",
+            "قوی‌تر از قبل.",
+            "فرصت‌ها را ببین.",
+            "موفقیت بهایی دارد.",
+            "هیچ‌وقت دست نکش.",
+            "ذهنت را پرورش بده.",
+            "باور داشته باش به خودت.",
+            "همیشه به ندای قلبت گوش کن.",
+            "هدف داشته باش.",
+            "به آینده نگاه کن.",
+            "هر لحظه، یک فرصت است.",
+            "برای خودت بجنگ.",
+            "قوی باش.",
+            "هیچ‌وقت متوقف نشو.",
+            "بهترین خودت را پیدا کن.",
+            "شجاعت، شروع همه چیز است.",
+            "باور به خودت.",
+            "تلاش کن، موفق شو.",
+            "روی موفقیت تمرکز کن.",
+            "به رویاهات ایمان داشته باش.",
+            "مهم اینه که شروع کنی.",
+            "فرصت‌ها، منتظر نمی‌مانند.",
+            "زندگی را دوست داشته باش.",
+            "هرگز از خودت دست نکش.",
+            "لحظه‌ها را خلق کن.",
+            "انگیزه، از درون می‌آید.",
+            "فقط یک بار زندگی می‌کنی.",
+            "موفقیت، نتیجه تلاش است.",
+            "همیشه در حال یادگیری باش.",
+            "ذهنت را آزاد کن.",
+            "موفقیت، در دستان توست.",
+            "برای رسیدن به اهدافت.",
+            "از هیچ چیز نترس.",
+            "به آینده فکر کن.",
+            "موفقیت، یک انتخاب است.",
+            "همیشه شجاع باش.",
+            "به خودت افتخار کن.",
+            "قوی‌تر از مشکلات.",
+            "برای رویاهایت بیدار شو.",
+            "تلاش‌های کوچک، نتیجه‌های بزرگ.",
+            "از شکست‌ها نترس.",
+            "موفقیت، در درون توست.",
+            "برای خودت زندگی کن.",
+            "بهترین روز توست.",
+            "باور کن که می‌توانی.",
+            "بزرگ فکر کن.",
+            "هیچ‌وقت جا نزن.",
+            "قدرت در توست.",
+            "از سختی‌ها نترس.",
+            "بهترین خودت باش.",
+            "یک قدم به جلو.",
+            "رویاهات را دنبال کن.",
+            "تلاش کن، موفق می‌شوی.",
+            "موفقیت، تنها یک قدم است.",
+            "بهترین روز توست.",
+            "عشق، همه چیز است.",
+            "همیشه به جلو حرکت کن.",
+            "از زندگی لذت ببر.",
+            "باور به خودت.",
+            "قدرت در توست.",
+            "بهترین خودت را بساز.",
+            "موفقیت، نزدیک است.",
+            "برای خودت زندگی کن.",
+            "رویاهات را خلق کن.",
+            "باور، قدرتمندترین ابزار است.",
+            "هیچ‌وقت ناامید نشو.",
+            "تلاش، نتیجه می‌دهد.",
+            "از اشتباهاتت درس بگیر.",
+            "بهترین آینده را بساز.",
+            "فقط به جلو برو.",
+            "همیشه مثبت فکر کن.",
+            "زندگی را دوست داشته باش.",
+            "هرگز تسلیم نشو.",
+            "رویاهاتو دنبال کن.",
+            "از امروز شروع کن.",
+            "تلاش کن، موفق می‌شوی.",
+            "قوی‌تر از قبل.",
+            "موفقیت، بهایی دارد.",
+            "همیشه امید داشته باش.",
+            "ذهن، قدرتمندترین عضو است.",
+            "به رویاهات پرواز کن.",
+            "بهترین خودت باش.",
+            "یک قدم کوچک کافی است.",
+            "از فرصت‌ها استفاده کن.",
+            "با مشکلات روبرو شو.",
+            "شجاعت در عمل است.",
+            "هیچ‌وقت دیر نیست.",
+            "زندگی یک سفر است.",
+            "موفقیت، نتیجه تلاش است.",
+            "همیشه در حال یادگیری باش.",
+            "ذهنت را آزاد کن.",
+            "موفقیت، در دستان توست.",
+            "برای رسیدن به اهدافت.",
+            "از هیچ چیز نترس.",
+            "به آینده فکر کن.",
+            "موفقیت، یک انتخاب است.",
+            "همیشه شجاع باش.",
+            "به خودت افتخار کن.",
+            "قوی‌تر از مشکلات.",
+            "برای رویاهایت بیدار شو.",
+            "تلاش‌های کوچک، نتیجه‌های بزرگ.",
+            "از شکست‌ها نترس.",
+            "موفقیت، در درون توست.",
+            "برای خودت زندگی کن.",
+            "بهترین روز توست.",
+            "باور کن که می‌توانی.",
+            "بزرگ فکر کن.",
+            "هیچ‌وقت جا نزن.",
+            "قدرت در توست.",
+            "از سختی‌ها نترس.",
+            "بهترین خودت باش.",
+            "یک قدم به جلو.",
+            "رویاهات را دنبال کن.",
+            "تلاش کن، موفق می‌شوی.",
+            "موفقیت، تنها یک قدم است.",
+            "بهترین روز توست.",
+            "عشق، همه چیز است.",
+            "همیشه به جلو حرکت کن.",
+            "از زندگی لذت ببر.",
+            "باور به خودت.",
+            "قدرت در توست.",
+            "بهترین خودت را بساز.",
+            "موفقیت، نزدیک است.",
+            "برای خودت زندگی کن.",
+            "رویاهات را خلق کن.",
+            "باور، قدرتمندترین ابزار است.",
+            "هیچ‌وقت ناامید نشو.",
+            "تلاش، نتیجه می‌دهد.",
+            "از اشتباهاتت درس بگیر.",
+            "بهترین آینده را بساز.",
+            "فقط به جلو برو.",
+            "همیشه مثبت فکر کن.",
+            "زندگی را دوست داشته باش.",
+            "هرگز تسلیم نشو.",
+            "رویاهاتو دنبال کن.",
+            "از امروز شروع کن.",
+            "تلاش کن، موفق می‌شوی.",
+            "قوی‌تر از قبل.",
+            "موفقیت، بهایی دارد.",
+            "همیشه امید داشته باش.",
+            "ذهن، قدرتمندترین عضو است.",
+            "به رویاهات پرواز کن.",
+            "بهترین خودت باش.",
+            "یک قدم کوچک کافی است.",
+            "از فرصت‌ها استفاده کن.",
+            "با مشکلات روبرو شو.",
+            "شجاعت در عمل است.",
+            "هیچ‌وقت دیر نیست.",
+            "زندگی یک سفر است.",
+            "موفقیت، نتیجه تلاش است.",
+            "همیشه در حال یادگیری باش.",
+            "ذهنت را آزاد کن.",
+            "موفقیت، در دستان توست.",
+            "برای رسیدن به اهدافت.",
+            "از هیچ چیز نترس.",
+            "به آینده فکر کن.",
+            "موفقیت، یک انتخاب است.",
+            "همیشه شجاع باش.",
+            "به خودت افتخار کن.",
+            "قوی‌تر از مشکلات.",
+            "برای رویاهایت بیدار شو.",
+            "تلاش‌های کوچک، نتیجه‌های بزرگ.",
+            "از شکست‌ها نترس.",
+            "موفقیت، در درون توست.",
+            "برای خودت زندگی کن.",
+            "بهترین روز توست.",
+            "باور کن که می‌توانی.",
+            "بزرگ فکر کن.",
+            "هیچ‌وقت جا نزن.",
+            "قدرت در توست.",
+            "از سختی‌ها نترس.",
+            "بهترین خودت باش.",
+            "یک قدم به جلو.",
+            "رویاهات را دنبال کن."
+        ];
+
+        const quoteText = document.getElementById('quote-text');
+        const menuBtn = document.getElementById('menu-btn');
+        const mainMenu = document.getElementById('main-menu');
+        const aboutBtn = document.getElementById('about-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const aboutModal = document.getElementById('about-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        let currentIndex = 0;
+        let clickTimeout = null;
+        const DBLCLICK_DELAY = 300; // تاخیر برای تشخیص دابل کلیک به میلی‌ثانیه
+
+        /**
+         * نمایش یا پنهان کردن یک مودال.
+         * @param {HTMLElement} modal - عنصر مودال.
+         * @param {boolean} show - اگر true باشد، نمایش داده می‌شود؛ در غیر این صورت پنهان می‌شود.
+         */
+        function toggleModal(modal, show) {
+            modal.style.display = show ? 'flex' : 'none';
+        }
+
+        /**
+         * نمایش یا پنهان کردن منوی کشویی.
+         */
+        function toggleMenu() {
+            menuBtn.classList.toggle('active');
+            mainMenu.classList.toggle('open');
+            // تنظیم موقعیت منو بر اساس ارتفاع هدر
+            const headerHeight = document.querySelector('header').offsetHeight;
+            mainMenu.style.top = `${headerHeight}px`;
+        }
+
+        /**
+         * به‌روزرسانی جمله نمایش داده شده با انیمیشن محو شدن.
+         * @param {number} direction - جهت حرکت (1 برای بعدی، -1 برای قبلی).
+         */
+        function updateQuote(direction) {
+            quoteText.classList.remove('fade-in');
+            quoteText.classList.add('fade-out');
+
+            setTimeout(() => {
+                const newIndex = (currentIndex + direction + quotes.length) % quotes.length;
+                currentIndex = newIndex;
+                quoteText.textContent = quotes[currentIndex];
+                saveRecentlySeenQuote(currentIndex); // ذخیره جمله جدید
+                quoteText.classList.remove('fade-out');
+                quoteText.classList.add('fade-in');
+            }, 500);
+        }
+
+        /**
+         * جملات را به‌صورت تصادفی جابه‌جا می‌کند و از تکرار جملات اخیر جلوگیری می‌نماید.
+         */
+        function shuffleQuotesOnLoad() {
+            const recentlySeenIndices = JSON.parse(localStorage.getItem('recentlySeenQuotes')) || [];
+            
+            // پیدا کردن جملاتی که اخیراً دیده نشده‌اند
+            let availableQuotes = quotes.map((quote, index) => index);
+            if (recentlySeenIndices.length > 0) {
+                availableQuotes = availableQuotes.filter(index => !recentlySeenIndices.includes(index));
+            }
+
+            // اگر همه جملات دیده شده‌اند، لیست را پاک کن
+            if (availableQuotes.length === 0) {
+                availableQuotes = quotes.map((quote, index) => index);
+                localStorage.setItem('recentlySeenQuotes', JSON.stringify([]));
+            }
+
+            // انتخاب تصادفی یک جمله از بین جملات موجود
+            const randomIndex = Math.floor(Math.random() * availableQuotes.length);
+            currentIndex = availableQuotes[randomIndex];
+            
+            quoteText.textContent = quotes[currentIndex];
+            saveRecentlySeenQuote(currentIndex); // ذخیره جمله ابتدایی
+        }
+
+        /**
+         * شماره جمله فعلی را در حافظه مرورگر ذخیره می‌کند تا از تکرار جلوگیری شود.
+         * @param {number} index - شماره جمله فعلی.
+         */
+        function saveRecentlySeenQuote(index) {
+            const recentlySeenIndices = JSON.parse(localStorage.getItem('recentlySeenQuotes')) || [];
+            
+            // اگر جمله قبلا در لیست نیست، آن را اضافه کن
+            if (!recentlySeenIndices.includes(index)) {
+                recentlySeenIndices.push(index);
+            }
+            
+            // لیست را به سه مورد آخر محدود کن
+            while (recentlySeenIndices.length > 3) {
+                recentlySeenIndices.shift();
+            }
+
+            localStorage.setItem('recentlySeenQuotes', JSON.stringify(recentlySeenIndices));
+        }
+
+        // نمایش اولین جمله در زمان بارگذاری صفحه
+        document.addEventListener('DOMContentLoaded', () => {
+            if (quotes.length > 0) {
+                shuffleQuotesOnLoad();
+            }
+        });
+
+        // اضافه کردن شنونده‌های رویداد برای دکمه‌ها و مودال‌ها
+        menuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+        aboutBtn.addEventListener('click', () => {
+            toggleModal(aboutModal, true);
+            toggleMenu(); // بستن منو پس از باز کردن مودال
+        });
+        closeModalBtn.addEventListener('click', () => toggleModal(aboutModal, false));
+        
+        // بستن مودال با کلیک در پس‌زمینه
+        aboutModal.addEventListener('click', (e) => {
+            if (e.target === aboutModal) toggleModal(aboutModal, false);
+        });
+
+        // منطق برای تغییر جمله با استفاده از کلیک و دابل کلیک
+        document.body.addEventListener('click', (e) => {
+            // نادیده گرفتن کلیک روی عناصر منو، هدر و مودال
+            if (e.target.closest('#main-menu') || e.target.closest('#about-modal') || e.target.closest('header')) {
+                return;
+            }
+
+            // پاک کردن تایمر قبلی برای جلوگیری از اجرای تکراری
+            clearTimeout(clickTimeout);
+
+            // شروع تایمر جدید برای تشخیص تک‌کلیک
+            clickTimeout = setTimeout(() => {
+                updateQuote(1); // حرکت به جمله بعدی
+            }, DBLCLICK_DELAY);
+        });
+
+        document.body.addEventListener('dblclick', (e) => {
+            // نادیده گرفتن دابل کلیک روی عناصر منو، هدر و مودال
+            if (e.target.closest('#main-menu') || e.target.closest('#about-modal') || e.target.closest('header')) {
+                return;
+            }
+
+            // اگر دابل کلیک رخ دهد، تایمر تک‌کلیک را پاک کن
+            clearTimeout(clickTimeout);
+            updateQuote(-1); // حرکت به جمله قبلی
+        });
+    </script>
+</body>
+</html>
