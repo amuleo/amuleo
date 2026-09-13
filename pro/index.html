@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+    <!-- ============ جلوگیری از ایندکس شدن ============ -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate, max-snippet:0, max-image-preview:none, max-video-preview:0">
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot-news" content="noindex, nofollow">
+    <meta name="bingbot" content="noindex, nofollow">
+    <meta name="slurp" content="noindex, nofollow">
+    <meta name="duckduckbot" content="noindex, nofollow">
+    <meta name="baiduspider" content="noindex, nofollow">
+    <meta name="yandex" content="noindex, nofollow">
+    <meta name="msnbot" content="noindex, nofollow">
+    <meta name="teoma" content="noindex, nofollow">
+    <meta name="archive" content="noindex, nofollow">
+    <meta name="cache" content="noindex, nofollow">
+    <meta name="nosnippet" content="noindex, nofollow">
+    <meta name="nofollow" content="noindex, nofollow">
+
+    <!-- ============ امنیت ============ -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' blob: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' blob: data:; connect-src 'self' blob: data:; worker-src 'self' blob:; manifest-src 'self' blob:; base-uri 'self'; form-action 'self'; object-src 'none';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="X-DNS-Prefetch-Control" content="off">
+    <meta name="referrer" content="no-referrer">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-TileColor" content="#229ED9">
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <!-- ============ PWA ============ -->
+    <meta name="theme-color" content="#229ED9">
+    <meta name="color-scheme" content="dark">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Cover Studio">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Cover Studio">
+    <link rel="manifest" id="manifest-link">
+    <link rel="icon" type="image/svg+xml" id="favicon-link">
+    <link rel="apple-touch-icon" id="apple-touch-icon">
+    <link rel="mask-icon" id="mask-icon" color="#229ED9">
+
+    <title>Cover Studio | ShopMember</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a0f;
+            --panel-bg: #14141f;
+            --panel-border: #232336;
+            --text-color: #e2e8f0;
+            --primary-color: #229ED9;
+            --accent-color: #6366f1;
+            --input-bg: #0d0d14;
+            --tab-active: #229ED9;
+            --tab-inactive: #4a4a5a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #0a0a0f 100%);
+            overflow-x: hidden;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1200px;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 80px;
+        }
+
+        @media (min-width: 992px) {
+            .app-container {
+                flex-direction: row;
+                padding: 20px;
+                gap: 20px;
+                min-height: auto;
+                padding-bottom: 20px;
+            }
+            .controls-panel {
+                flex: 1;
+                max-width: 400px;
+                max-height: 90vh;
+                overflow-y: auto;
+                border-radius: 20px;
+                background: rgba(20, 20, 31, 0.7);
+                backdrop-filter: blur(20px);
+                border: 1px solid var(--panel-border);
+                padding: 20px;
+            }
+            .mobile-tabs { display: none !important; }
+            .tab-content {
+                display: block !important;
+                animation: none !important;
+            }
+        }
+
+        .preview-panel {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            height: 45vh;
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        @media (min-width: 992px) {
+            .preview-panel {
+                position: relative;
+                height: auto;
+                min-height: 600px;
+                border-radius: 20px;
+                border: 1px solid var(--panel-border);
+                flex: 1.5;
+            }
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #64748b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .empty-state svg { width: 48px; height: 48px; opacity: 0.5; }
+
+        canvas.show {
+            display: block;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .mobile-tabs {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(20, 20, 31, 0.95);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 5px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom));
+            border-top: 1px solid var(--panel-border);
+            z-index: 100;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--tab-inactive);
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: var(--tab-active);
+            background: rgba(34, 158, 217, 0.1);
+        }
+
+        .tab-btn svg { width: 20px; height: 20px; }
+
+        .tab-content {
+            display: none;
+            padding: 20px 15px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .tab-content.active { display: block; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 16px;
+            background: linear-gradient(180deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(13, 13, 20, 0.6);
+            padding: 15px;
+            border-radius: 14px;
+            border: 1px solid var(--panel-border);
+            margin-bottom: 12px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group:focus-within { border-color: var(--primary-color); }
+
+        label {
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            display: block;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            user-select: none;
+        }
+
+        .label-row .label-text {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            pointer-events: none;
+        }
+
+        .value-display {
+            background: var(--panel-border);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            color: #cbd5e1;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .value-display.editable {
+            background: var(--primary-color);
+            color: white;
+            outline: 2px solid rgba(34, 158, 217, 0.4);
+            cursor: text;
+            user-select: text;
+            min-width: 40px;
+            text-align: center;
+            pointer-events: auto;
+        }
+
+        .lock-btn {
+            background: rgba(35, 35, 54, 0.9);
+            border: 1px solid var(--panel-border);
+            color: #94a3b8;
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s;
+            padding: 0;
+            flex-shrink: 0;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            pointer-events: auto;
+        }
+
+        .lock-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .lock-btn:active { transform: scale(0.9); }
+
+        .lock-btn.unlocked {
+            background: rgba(34, 158, 217, 0.2);
+            color: var(--primary-color);
+            border-color: rgba(34, 158, 217, 0.5);
+        }
+
+        .lock-btn svg {
+            width: 16px;
+            height: 16px;
+            pointer-events: none;
+        }
+
+        input[type="text"], select {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--panel-border);
+            background: var(--input-bg);
+            color: white;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        #watermarkText {
+            direction: ltr !important;
+            text-align: left !important;
+            font-family: Arial, sans-serif;
+            letter-spacing: 1px;
+            unicode-bidi: bidi-override;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(34, 158, 217, 0.2);
+        }
+
+        input[type="range"] {
+            padding: 8px 0;
+            height: 22px;
+            background: transparent;
+            border-radius: 5px;
+            -webkit-appearance: none;
+            margin-top: 5px;
+            touch-action: pan-y;
+            user-select: none;
+            -webkit-user-select: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 6px;
+            background: var(--panel-border);
+            border-radius: 5px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: -8px;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        input[type="range"]::-moz-range-track {
+            height: 6px;
+            background: var(--panel-border);
+            border-radius: 5px;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #fff;
+        }
+
+        input[type="range"]:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            touch-action: auto;
+        }
+        input[type="range"]:disabled::-webkit-slider-thumb {
+            cursor: not-allowed;
+            background: #666;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: var(--panel-border);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 700;
+            transition: background 0.3s;
+            margin-left: 10px;
+            font-size: 0.8rem;
+        }
+
+        .btn {
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-weight: 900;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #229ED9, #6366f1);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--panel-border);
+            color: white;
+        }
+
+        .btn-danger {
+            background: rgba(220, 38, 38, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(220, 38, 38, 0.4);
+        }
+
+        .btn:active { transform: scale(0.97); }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .radio-group { display: flex; gap: 15px; margin-top: 5px; flex-wrap: wrap; }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 400;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+        }
+        input[type="radio"] {
+            accent-color: var(--primary-color);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .settings-btn {
+            position: fixed;
+            top: calc(15px + env(safe-area-inset-top));
+            left: 15px;
+            z-index: 200;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(20, 20, 31, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--panel-border);
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        .settings-btn:hover {
+            transform: rotate(60deg);
+            border-color: var(--primary-color);
+        }
+        .settings-btn svg { width: 22px; height: 22px; }
+
+        /* دکمه نصب PWA */
+        .install-btn {
+            position: fixed;
+            top: calc(15px + env(safe-area-inset-top));
+            right: 15px;
+            z-index: 200;
+            padding: 0 16px;
+            height: 44px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #229ED9, #6366f1);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 12px rgba(34, 158, 217, 0.4);
+            transition: all 0.3s;
+            animation: slideDown 0.5s ease;
+        }
+        .install-btn.show { display: flex; }
+        .install-btn:active { transform: scale(0.95); }
+        .install-btn svg { width: 18px; height: 18px; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        .modal-overlay.show { display: flex; animation: fadeIn 0.3s; }
+
+        .modal {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--panel-border);
+        }
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #fff;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 24px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-close:hover { background: var(--panel-border); color: white; }
+
+        .setting-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--panel-border);
+            margin-bottom: 10px;
+            background: rgba(13, 13, 20, 0.4);
+        }
+
+        .setting-item .label-row { color: #cbd5e1; font-size: 0.85rem; }
+
+        .setting-item input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            background: var(--input-bg);
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--panel-border);
+            margin-bottom: 10px;
+            background: rgba(13, 13, 20, 0.4);
+            cursor: pointer;
+        }
+        .checkbox-wrapper label {
+            cursor: pointer;
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .setting-section-title {
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            margin: 20px 0 10px;
+            letter-spacing: 1px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(34, 158, 217, 0.95);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s;
+            pointer-events: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            text-align: center;
+            max-width: 90vw;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* حالت Standalone (نصب شده) */
+        @media (display-mode: standalone) {
+            .install-btn { display: none !important; }
+            body { padding-top: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- دکمه نصب PWA -->
+<button class="install-btn" id="installBtn" title="نصب اپلیکیشن">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v12m0 0l-4-4m4 4l4-4"/>
+        <path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
+    </svg>
+    نصب اپ
+</button>
+
+<button class="settings-btn" id="settingsOpenBtn" title="تنظیمات">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+    </svg>
+</button>
+
+<div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">⚙️ تنظیمات برنامه</div>
+            <button class="modal-close" id="settingsCloseBtn">✕</button>
+        </div>
+
+        <div class="setting-section-title">🎨 استایل پیش‌فرض</div>
+        
+        <div class="setting-item">
+            <label>پس‌زمینه پیش‌فرض:</label>
+            <select id="set-defaultGradient">
+                <option value="pureBlack">مشکی خالص</option>
+                <option value="darkYellow">زرد تیره</option>
+                <option value="telegram">تلگرام</option>
+                <option value="midnight">نیمه شب</option>
+                <option value="sunset">غروب</option>
+                <option value="ocean">اقیانوس</option>
+                <option value="neon">نئون</option>
+                <option value="purple">بنفش</option>
+                <option value="crimson">قرمز</option>
+            </select>
+        </div>
+
+        <div class="setting-item">
+            <label>تم پیش‌فرض برچسب:</label>
+            <select id="set-labelTheme">
+                <option value="dark">تیره</option>
+                <option value="light">روشن</option>
+            </select>
+        </div>
+
+        <div class="setting-item">
+            <div class="label-row">
+                <span class="label-text">شفافیت پس‌زمینه برچسب: <span id="val-labelBgOpacity">35%</span></span>
+                <button class="lock-btn" data-target="set-labelBgOpacity" data-key="labelBgOpacity"></button>
+            </div>
+            <input type="range" id="set-labelBgOpacity" min="0" max="100" value="35" disabled>
+        </div>
+
+        <div class="setting-item">
+            <div class="label-row">
+                <span class="label-text">شفافیت متن برچسب: <span id="val-labelTextOpacity">85%</span></span>
+                <button class="lock-btn" data-target="set-labelTextOpacity" data-key="labelTextOpacity"></button>
+            </div>
+            <input type="range" id="set-labelTextOpacity" min="0" max="100" value="85" disabled>
+        </div>
+
+        <div class="setting-item">
+            <div class="label-row">
+                <span class="label-text">سایز فونت برچسب: <span id="val-labelFontSize">42px</span></span>
+                <button class="lock-btn" data-target="set-labelFontSize" data-key="labelFontSize"></button>
+            </div>
+            <input type="range" id="set-labelFontSize" min="20" max="80" value="42" disabled>
+        </div>
+
+        <div class="setting-section-title">🖼️ اوت‌لاین تصاویر</div>
+
+        <div class="setting-item">
+            <div class="label-row">
+                <span class="label-text">ضخامت اوت‌لاین: <span id="val-outlineThickness">15px</span></span>
+                <button class="lock-btn" data-target="set-outlineThickness" data-key="outlineThickness"></button>
+            </div>
+            <input type="range" id="set-outlineThickness" min="2" max="40" value="15" disabled>
+        </div>
+
+        <div class="setting-item">
+            <div class="label-row">
+                <span class="label-text">شفافیت اوت‌لاین: <span id="val-outlineOpacity">40%</span></span>
+                <button class="lock-btn" data-target="set-outlineOpacity" data-key="outlineOpacity"></button>
+            </div>
+            <input type="range" id="set-outlineOpacity" min="0" max="100" value="40" disabled>
+        </div>
+
+        <div class="setting-item">
+            <label>رنگ اوت‌لاین:</label>
+            <input type="color" id="set-outlineColor" value="#ffffff">
+        </div>
+
+        <div class="setting-section-title">💧 واترمارک (۴ گوشه تصادفی)</div>
+
+        <div class="checkbox-wrapper">
+            <label for="set-showWatermark">نمایش واترمارک</label>
+            <input type="checkbox" id="set-showWatermark" checked>
+        </div>
+
+        <div class="setting-item">
+            <div class="label-row">
+                <span class="label-text">سایز فونت واترمارک: <span id="val-watermarkFontSize">70px</span></span>
+                <button class="lock-btn" data-target="set-watermarkFontSize" data-key="watermarkFontSize"></button>
+            </div>
+            <input type="range" id="set-watermarkFontSize" min="20" max="150" value="70" disabled>
+        </div>
+
+        <div class="setting-item">
+            <div class="label-row">
+                <span class="label-text">شفافیت واترمارک: <span id="val-watermarkOpacity">22%</span></span>
+                <button class="lock-btn" data-target="set-watermarkOpacity" data-key="watermarkOpacity"></button>
+            </div>
+            <input type="range" id="set-watermarkOpacity" min="0" max="100" value="22" disabled>
+        </div>
+
+        <div class="setting-section-title">📐 چیدمان و خروجی</div>
+
+        <div class="setting-item">
+            <div class="label-row">
+                <span class="label-text">فاصله پیش‌فرض بین تصاویر: <span id="val-defaultGap">80px</span></span>
+                <button class="lock-btn" data-target="set-defaultGap" data-key="defaultGap"></button>
+            </div>
+            <input type="range" id="set-defaultGap" min="10" max="200" value="80" disabled>
+        </div>
+
+        <div class="setting-item">
+            <div class="label-row">
+                <span class="label-text">کیفیت خروجی JPG: <span id="val-jpgQuality">98%</span></span>
+                <button class="lock-btn" data-target="set-jpgQuality" data-key="jpgQuality"></button>
+            </div>
+            <input type="range" id="set-jpgQuality" min="50" max="100" value="98" disabled>
+        </div>
+
+        <div class="setting-item">
+            <label>فرمت پیش‌فرض خروجی:</label>
+            <select id="set-defaultFormat">
+                <option value="jpg">JPG</option>
+                <option value="png">PNG</option>
+            </select>
+        </div>
+
+        <div class="setting-section-title">💾 پشتیبان‌گیری و بازیابی</div>
+
+        <div class="btn-group" style="margin-top: 10px;">
+            <button class="btn btn-secondary" id="exportSettingsBtn">📤 پشتیبان‌گیری</button>
+            <label class="btn btn-secondary" style="cursor: pointer;">
+                📥 بازیابی
+                <input type="file" id="importSettingsInput" accept=".json" style="display: none;">
+            </label>
+        </div>
+
+        <button class="btn btn-danger" id="resetSettingsBtn" style="margin-top: 10px;">
+            🗑️ بازنشانی تنظیمات به حالت پیش‌فرض
+        </button>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="app-container">
+    <div class="preview-panel">
+        <canvas id="canvas"></canvas>
+        <div class="empty-state" id="emptyState">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <p>برای شروع، دو تصویر را آپلود کنید</p>
+        </div>
+    </div>
+
+    <div class="mobile-tabs">
+        <button class="tab-btn active" data-tab="tab-images">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            تصاویر
+        </button>
+        <button class="tab-btn" data-tab="tab-text">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            متن‌ها
+        </button>
+        <button class="tab-btn" data-tab="tab-style">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+            استایل
+        </button>
+        <button class="tab-btn" data-tab="tab-export">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            خروجی
+        </button>
+    </div>
+
+    <div class="controls-panel">
+        
+        <div id="tab-images" class="tab-content active">
+            <div class="section-title">📸 آپلود تصاویر</div>
+            <div class="form-group">
+                <label>🖼️ تصویر اول (سمت چپ / بعد):</label>
+                <input type="file" id="image1" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>🖼️ تصویر دوم (سمت راست / قبل):</label>
+                <input type="file" id="image2" accept="image/*">
+            </div>
+            <div class="btn-group">
+                <button id="swapBtn" class="btn btn-secondary">🔄 جابجایی قبل و بعد</button>
+            </div>
+        </div>
+
+        <div id="tab-text" class="tab-content">
+            <div class="section-title">✍️ متن‌ها و واترمارک</div>
+            <div class="form-group">
+                <label>واترمارک (انگلیسی - چپ چین):</label>
+                <input type="text" id="watermarkText" value="@shopmember" placeholder="@shopmember" dir="ltr" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label>متن سمت چپ (بعد):</label>
+                <input type="text" id="label1" value="بعد" placeholder="مثلا: بعد" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label>متن سمت راست (قبل):</label>
+                <input type="text" id="label2" value="قبل" placeholder="مثلا: قبل" autocomplete="off">
+            </div>
+            <div class="btn-group">
+                <button id="regenerateBtn" class="btn btn-secondary">🎲 پخش مجدد واترمارک</button>
+            </div>
+        </div>
+
+        <div id="tab-style" class="tab-content">
+            <div class="section-title">🎨 استایل و چیدمان</div>
+            <div class="form-group">
+                <label>گرادیان پس‌زمینه:</label>
+                <select id="bgGradient">
+                    <option value="pureBlack">مشکی خالص با هاله (Pure Black)</option>
+                    <option value="darkYellow">زرد تیره و مینیمال (Dark Yellow)</option>
+                    <option value="telegram">تلگرامی (Telegram Blue - Dark)</option>
+                    <option value="midnight">نیمه شب (Midnight)</option>
+                    <option value="sunset">غروب آتشین (Sunset)</option>
+                    <option value="ocean">اقیانوس آرام (Ocean)</option>
+                    <option value="neon">نئون سایبری (Neon)</option>
+                    <option value="purple">بنفش سلطنتی (Purple)</option>
+                    <option value="crimson">قرمز یاقوتی (Crimson)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>تم رنگی برچسب‌ها (قبل و بعد):</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="labelTheme" value="dark" checked> تیره (مینیمال)</label>
+                    <label><input type="radio" name="labelTheme" value="light"> روشن (مینیمال)</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label-row">
+                    <span class="label-text">فاصله بین دو تصویر:</span>
+                    <span style="display: flex; align-items: center; gap: 6px; pointer-events: none;">
+                        <span class="value-display" id="gapValue" data-placeholder="80" style="pointer-events: auto;">80px</span>
+                    </span>
+                    <button class="lock-btn" id="lockBtn" data-target="gapSize" data-key="gapSize"></button>
+                </div>
+                <input type="range" id="gapSize" min="10" max="200" value="80" disabled>
+            </div>
+        </div>
+
+        <div id="tab-export" class="tab-content">
+            <div class="section-title">📥 خروجی نهایی</div>
+            <div class="form-group">
+                <label>فرمت خروجی:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="format" value="jpg" checked> JPG (کیفیت بالا)</label>
+                    <label><input type="radio" name="format" value="png"> PNG</label>
+                </div>
+            </div>
+            <button id="downloadBtn" class="btn btn-primary" style="margin-top: 10px;">
+                📥 دانلود کاور نهایی
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    //  🔒 امنیت: Frame Busting - جلوگیری از قرار گرفتن در iframe
+    // ============================================================
+    (function() {
+        try {
+            if (window.top !== window.self) {
+                // اگر در iframe باشیم، از آن خارج شو
+                if (window.top.location.href !== window.self.location.href) {
+                    window.top.location.href = window.self.location.href;
+                }
+            }
+        } catch (e) {
+            // اگر دسترسی به top ممکن نبود، محتوا را مخفی کن
+            document.documentElement.innerHTML = '<body style="background:#000;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">دسترسی غیرمجاز</body>';
+        }
+    })();
+
+    // جلوگیری از ایندکس شدن توسط ربات‌های جستجو (Noindex)
+    document.addEventListener('DOMContentLoaded', () => {
+        document.documentElement.setAttribute('translate', 'no');
+        document.body.setAttribute('translate', 'no');
+    });
+
+    // ============================================================
+    //  🎨 PWA: آیکون SVG با ایموجی 🎨 و Manifest
+    // ============================================================
+    const APP_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <defs>
+            <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#229ED9"/>
+                <stop offset="100%" stop-color="#6366f1"/>
+            </linearGradient>
+            <radialGradient id="glow" cx="50%" cy="30%" r="60%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+            </radialGradient>
+        </defs>
+        <rect width="512" height="512" rx="120" fill="url(#bgGrad)"/>
+        <rect width="512" height="512" rx="120" fill="url(#glow)"/>
+        <text x="50%" y="54%" font-size="290" text-anchor="middle" dominant-baseline="central" font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif">🎨</text>
+    </svg>`;
+
+    // تبدیل SVG به Data URL
+    const iconDataURL = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(APP_ICON_SVG)));
+
+    // ============================================================
+    //  🔍 جلوگیری از ایندکس: robots.txt داینامیک
+    // ============================================================
+    const ROBOTS_TXT = `User-agent: *
+Disallow: /
+Disallow: /index.html
+Disallow: /*.html$
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /api/
+Allow: /$ 
+
+User-agent: Googlebot
+Disallow: /
+
+User-agent: Googlebot-Image
+Disallow: /
+
+User-agent: Googlebot-News
+Disallow: /
+
+User-agent: Bingbot
+Disallow: /
+
+User-agent: Slurp
+Disallow: /
+
+User-agent: DuckDuckBot
+Disallow: /
+
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
+
+User-agent: Sogou
+Disallow: /
+
+User-agent: Exabot
+Disallow: /
+
+User-agent: facebot
+Disallow: /
+
+User-agent: ia_archiver
+Disallow: /
+
+Sitemap:`;
+
+    // ============================================================
+    //  📱 ساخت Manifest و لینک‌های آیکون
+    // ============================================================
+    function setupPWA() {
+        // آیکون‌ها
+        document.getElementById('favicon-link').href = iconDataURL;
+        document.getElementById('apple-touch-icon').href = iconDataURL;
+        document.getElementById('mask-icon').href = iconDataURL;
+
+        // Manifest
+        const manifest = {
+            name: 'Cover Studio | ShopMember',
+            short_name: 'Cover Studio',
+            description: 'استودیو حرفه‌ای ساخت کاور قبل و بعد',
+            start_url: './',
+            scope: './',
+            display: 'standalone',
+            display_override: ['standalone', 'minimal-ui', 'browser'],
+            background_color: '#0a0a0f',
+            theme_color: '#229ED9',
+            orientation: 'any',
+            lang: 'fa',
+            dir: 'rtl',
+            categories: ['photo', 'graphics', 'productivity'],
+            prefer_related_applications: false,
+            icons: [
+                { src: iconDataURL, sizes: '192x192', type: 'image/svg+xml', purpose: 'any' },
+                { src: iconDataURL, sizes: '256x256', type: 'image/svg+xml', purpose: 'any' },
+                { src: iconDataURL, sizes: '384x384', type: 'image/svg+xml', purpose: 'any' },
+                { src: iconDataURL, sizes: '512x512', type: 'image/svg+xml', purpose: 'any' },
+                { src: iconDataURL, sizes: '512x512', type: 'image/svg+xml', purpose: 'maskable' }
+            ]
+        };
+
+        const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        document.getElementById('manifest-link').href = manifestURL;
+
+        // ثبت Service Worker (اگر فایل sw.js موجود باشد)
+        registerServiceWorker();
+    }
+
+    // ============================================================
+    //  ⚙️ ثبت Service Worker
+    // ============================================================
+    function registerServiceWorker() {
+        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js', { scope: './' })
+                    .then(reg => {
+                        console.log('✅ Service Worker ثبت شد:', reg.scope);
+                    })
+                    .catch(err => {
+                        console.log('ℹ️ Service Worker ثبت نشد (اختیاری):', err.message);
+                    });
+            });
+        }
+    }
+
+    // ============================================================
+    //  📲 مدیریت دکمه نصب PWA
+    // ============================================================
+    let deferredPrompt = null;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.classList.add('show');
+    });
+
+    installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) {
+            showToast('برای نصب، از منوی مرورگر استفاده کنید');
+            return;
+        }
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            showToast('✅ اپلیکیشن نصب شد');
+            installBtn.classList.remove('show');
+        }
+        deferredPrompt = null;
+    });
+
+    window.addEventListener('appinstalled', () => {
+        showToast('🎉 Cover Studio نصب شد');
+        installBtn.classList.remove('show');
+        deferredPrompt = null;
+    });
+
+    // ============================================================
+    //  کدهای اصلی برنامه (بدون تغییر)
+    // ============================================================
+    const LOCK_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
+    const UNLOCK_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg>`;
+
+    const DEFAULT_SETTINGS = {
+        defaultGradient: 'pureBlack',
+        labelTheme: 'dark',
+        labelBgOpacity: 35,
+        labelTextOpacity: 85,
+        labelFontSize: 42,
+        outlineThickness: 15,
+        outlineOpacity: 40,
+        outlineColor: '#ffffff',
+        showWatermark: true,
+        watermarkFontSize: 70,
+        watermarkOpacity: 22,
+        defaultGap: 80,
+        jpgQuality: 98,
+        defaultFormat: 'jpg',
+        lockStates: {
+            gapSize: true, labelBgOpacity: true, labelTextOpacity: true,
+            labelFontSize: true, outlineThickness: true, outlineOpacity: true,
+            watermarkFontSize: true, watermarkOpacity: true, defaultGap: true, jpgQuality: true
+        }
+    };
+
+    let settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+
+    function loadSettings() {
+        try {
+            const saved = localStorage.getItem('shopmember_settings');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                settings = { ...DEFAULT_SETTINGS, ...parsed };
+                settings.lockStates = { ...DEFAULT_SETTINGS.lockStates, ...(parsed.lockStates || {}) };
+            }
+        } catch(e) { console.warn('خطا در بارگذاری تنظیمات', e); }
+    }
+
+    function saveSettings() {
+        try { localStorage.setItem('shopmember_settings', JSON.stringify(settings)); }
+        catch(e) { console.warn('خطا در ذخیره تنظیمات', e); }
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toast._t);
+        toast._t = setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    const image1Input = document.getElementById('image1');
+    const image2Input = document.getElementById('image2');
+    const watermarkTextInput = document.getElementById('watermarkText');
+    const label1Input = document.getElementById('label1');
+    const label2Input = document.getElementById('label2');
+    const bgGradientSelect = document.getElementById('bgGradient');
+    const gapSizeInput = document.getElementById('gapSize');
+    const gapValueDisplay = document.getElementById('gapValue');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const emptyState = document.getElementById('emptyState');
+    const swapBtn = document.getElementById('swapBtn');
+    const regenerateBtn = document.getElementById('regenerateBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabButtons.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+        });
+    });
+
+    let img1 = new Image();
+    let img2 = new Image();
+    let img1Loaded = false;
+    let img2Loaded = false;
+    let blurredCache = {};
+
+    function readFile(file, imageObj, isFirst) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imageObj.onload = function() {
+                if (isFirst) img1Loaded = true;
+                else img2Loaded = true;
+                blurredCache = {};
+                requestDraw();
+            };
+            imageObj.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    image1Input.addEventListener('change', (e) => { if (e.target.files[0]) readFile(e.target.files[0], img1, true); });
+    image2Input.addEventListener('change', (e) => { if (e.target.files[0]) readFile(e.target.files[0], img2, false); });
+
+    let isRendering = false;
+    function requestDraw() {
+        if (!isRendering) {
+            isRendering = true;
+            requestAnimationFrame(() => { drawCanvas(); isRendering = false; });
+        }
+    }
+
+    watermarkTextInput.addEventListener('input', requestDraw);
+    label1Input.addEventListener('input', requestDraw);
+    label2Input.addEventListener('input', requestDraw);
+    bgGradientSelect.addEventListener('change', requestDraw);
+    document.querySelectorAll('input[name="labelTheme"]').forEach(radio => radio.addEventListener('change', requestDraw));
+
+    function updateLockButton(btn, isLocked) {
+        btn.innerHTML = isLocked ? LOCK_ICON : UNLOCK_ICON;
+        btn.classList.toggle('unlocked', !isLocked);
+        btn.title = isLocked ? 'باز کردن قفل' : 'قفل کردن';
+    }
+
+    function applyLockState(key) {
+        const isLocked = settings.lockStates[key];
+        const btn = document.querySelector(`.lock-btn[data-key="${key}"]`);
+        if (btn) {
+            const input = document.getElementById(btn.dataset.target);
+            if (input) input.disabled = isLocked;
+            updateLockButton(btn, isLocked);
+        }
+        if (key === 'gapSize' && isLocked) closeGapEditing();
+    }
+
+    function toggleLock(key) {
+        settings.lockStates[key] = !settings.lockStates[key];
+        saveSettings();
+        applyLockState(key);
+    }
+
+    function initAllLocks() {
+        document.querySelectorAll('.lock-btn').forEach(btn => {
+            const key = btn.dataset.key;
+            applyLockState(key);
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (e.target.closest('.lock-btn') !== btn) return;
+                toggleLock(key);
+            });
+        });
+    }
+
+    function closeGapEditing() {
+        if (gapValueDisplay.contentEditable === 'true') {
+            gapValueDisplay.contentEditable = 'false';
+            gapValueDisplay.classList.remove('editable');
+            gapValueDisplay.textContent = gapSizeInput.value + 'px';
+        }
+    }
+
+    gapValueDisplay.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (settings.lockStates.gapSize) { showToast('🔒 ابتدا قفل را باز کنید'); return; }
+        if (gapValueDisplay.contentEditable === 'true') { gapValueDisplay.blur(); return; }
+        gapValueDisplay.textContent = gapSizeInput.value;
+        gapValueDisplay.contentEditable = 'true';
+        gapValueDisplay.classList.add('editable');
+        gapValueDisplay.focus();
+        const range = document.createRange();
+        range.selectNodeContents(gapValueDisplay);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    });
+
+    gapValueDisplay.addEventListener('blur', () => {
+        if (gapValueDisplay.contentEditable !== 'true') return;
+        const val = parseInt(gapValueDisplay.textContent.replace(/[^0-9]/g, ''));
+        gapValueDisplay.contentEditable = 'false';
+        gapValueDisplay.classList.remove('editable');
+        if (!isNaN(val) && val >= 10 && val <= 200) {
+            gapSizeInput.value = val;
+            gapValueDisplay.textContent = val + 'px';
+            requestDraw();
+        } else {
+            gapValueDisplay.textContent = gapSizeInput.value + 'px';
+        }
+    });
+
+    gapValueDisplay.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); gapValueDisplay.blur(); }
+        else if (e.key === 'Escape') {
+            e.preventDefault();
+            gapValueDisplay.textContent = gapSizeInput.value + 'px';
+            gapValueDisplay.contentEditable = 'false';
+            gapValueDisplay.classList.remove('editable');
+        } else if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+            e.preventDefault();
+        }
+    });
+
+    gapSizeInput.addEventListener('input', (e) => {
+        closeGapEditing();
+        gapValueDisplay.textContent = e.target.value + 'px';
+        requestDraw();
+    });
+
+    function drawImageCover(context, img, x, y, w, h) {
+        const imgRatio = img.width / img.height;
+        const targetRatio = w / h;
+        let sx, sy, sWidth, sHeight;
+        if (imgRatio > targetRatio) {
+            sHeight = img.height; sWidth = img.height * targetRatio;
+            sx = (img.width - sWidth) / 2; sy = 0;
+        } else {
+            sWidth = img.width; sHeight = img.width / targetRatio;
+            sx = 0; sy = (img.height - sHeight) / 2;
+        }
+        context.drawImage(img, sx, sy, sWidth, sHeight, x, y, w, h);
+    }
+
+    function getBlurredImage(img, w, h, key) {
+        if (blurredCache[key]) return blurredCache[key];
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = w; offCanvas.height = h;
+        const offCtx = offCanvas.getContext('2d');
+        const imgRatio = img.width / img.height;
+        const targetRatio = w / h;
+        let sx, sy, sWidth, sHeight;
+        if (imgRatio > targetRatio) {
+            sHeight = img.height; sWidth = img.height * targetRatio;
+            sx = (img.width - sWidth) / 2; sy = 0;
+        } else {
+            sWidth = img.width; sHeight = img.width / targetRatio;
+            sx = 0; sy = (img.height - sHeight) / 2;
+        }
+        offCtx.filter = 'blur(25px)';
+        offCtx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, w, h);
+        blurredCache[key] = offCanvas;
+        return offCanvas;
+    }
+
+    function hexToRgba(hex, alpha) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    function getGradient(context, type, width, height) {
+        let grad;
+        if (type === 'pureBlack') {
+            grad = context.createRadialGradient(width/2, height/2, 100, width/2, height/2, Math.max(width, height));
+            grad.addColorStop(0, '#2a2a2a'); grad.addColorStop(0.5, '#0a0a0a'); grad.addColorStop(1, '#000000');
+        } else if (type === 'darkYellow') {
+            grad = context.createLinearGradient(0, 0, width, height);
+            grad.addColorStop(0, '#1a1500'); grad.addColorStop(0.4, '#3a2e00'); grad.addColorStop(0.7, '#2a2200'); grad.addColorStop(1, '#0a0a05');
+        } else if (type === 'telegram') {
+            grad = context.createLinearGradient(0, 0, width, height);
+            grad.addColorStop(0, '#0a0a0f'); grad.addColorStop(0.35, '#0d1f2d'); grad.addColorStop(0.55, '#134b6e'); grad.addColorStop(0.75, '#1c7aad'); grad.addColorStop(1, '#0a0a0f');
+        } else if (type === 'midnight') {
+            grad = context.createLinearGradient(0, 0, width, height);
+            grad.addColorStop(0, '#0f0c29'); grad.addColorStop(0.5, '#302b63'); grad.addColorStop(1, '#24243e');
+        } else if (type === 'sunset') {
+            grad = context.createLinearGradient(0, 0, width, height);
+            grad.addColorStop(0, '#ff7e5f'); grad.addColorStop(0.5, '#feb47b'); grad.addColorStop(1, '#ff6a88');
+        } else if (type === 'ocean') {
+            grad = context.createLinearGradient(0, 0, width, height);
+            grad.addColorStop(0, '#2193b0'); grad.addColorStop(0.5, '#6dd5ed'); grad.addColorStop(1, '#00b4db');
+        } else if (type === 'neon') {
+            grad = context.createLinearGradient(0, 0, width, height);
+            grad.addColorStop(0, '#00f2fe'); grad.addColorStop(0.5, '#4facfe'); grad.addColorStop(1, '#7b2ff7');
+        } else if (type === 'purple') {
+            grad = context.createLinearGradient(0, 0, width, height);
+            grad.addColorStop(0, '#4c2882'); grad.addColorStop(0.5, '#1e0054'); grad.addColorStop(1, '#6a11cb');
+        } else if (type === 'crimson') {
+            grad = context.createLinearGradient(0, 0, width, height);
+            grad.addColorStop(0, '#870000'); grad.addColorStop(0.5, '#e52d27'); grad.addColorStop(1, '#b31217');
+        }
+        return grad;
+    }
+
+    function drawCanvas() {
+        if (!img1Loaded || !img2Loaded) {
+            emptyState.style.display = 'flex';
+            canvas.classList.remove('show');
+            return;
+        }
+        emptyState.style.display = 'none';
+        canvas.classList.add('show');
+
+        const bgGradientType = bgGradientSelect.value;
+        const gap = parseInt(gapSizeInput.value);
+        const padding = 80;
+        const labelTheme = document.querySelector('input[name="labelTheme"]:checked').value;
+
+        const baseHeight = 1000;
+        const w1 = img1.width * (baseHeight / img1.height);
+        const w2 = img2.width * (baseHeight / img2.height);
+
+        const logicalWidth = w1 + w2 + gap + (padding * 2);
+        const logicalHeight = baseHeight + (padding * 2);
+
+        const maxOutputWidth = 2000;
+        let scale = 1;
+        if (logicalWidth > maxOutputWidth) scale = maxOutputWidth / logicalWidth;
+
+        canvas.width = logicalWidth * scale;
+        canvas.height = logicalHeight * scale;
+
+        ctx.save();
+        ctx.scale(scale, scale);
+
+        ctx.fillStyle = getGradient(ctx, bgGradientType, logicalWidth, logicalHeight);
+        ctx.fillRect(0, 0, logicalWidth, logicalHeight);
+
+        const yOffset = padding;
+        const imgHeight = baseHeight;
+        const cornerRadius = 24;
+        const outlineThickness = settings.outlineThickness;
+        const outlineOpacity = settings.outlineOpacity / 100;
+        const outlineColor = settings.outlineColor;
+
+        function drawStyledImage(img, x, y, w, h, labelText, cacheKey) {
+            ctx.save();
+            ctx.strokeStyle = hexToRgba(outlineColor, outlineOpacity);
+            ctx.lineWidth = outlineThickness;
+            ctx.lineJoin = 'round';
+            const outerRadius = cornerRadius + (outlineThickness / 2);
+            ctx.beginPath();
+            ctx.roundRect(x - outlineThickness/2, y - outlineThickness/2, w + outlineThickness, h + outlineThickness, outerRadius);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.roundRect(x, y, w, h, cornerRadius);
+            ctx.clip();
+            drawImageCover(ctx, img, x, y, w, h);
+            ctx.restore();
+
+            if (labelText) {
+                const fontSize = settings.labelFontSize;
+                ctx.font = `900 ${fontSize}px Vazirmatn, sans-serif`;
+                const textWidth = ctx.measureText(labelText).width;
+                const labelPaddingX = 70, labelPaddingY = 18;
+                const labelBoxWidth = textWidth + (labelPaddingX * 2);
+                const labelBoxHeight = fontSize + (labelPaddingY * 2);
+                const labelX = x + (w - labelBoxWidth) / 2;
+                const labelY = y + h - labelBoxHeight - 30;
+
+                const blurredImg = getBlurredImage(img, w, h, cacheKey);
+                const cropX = labelX - x, cropY = labelY - y;
+                const bgOpacity = settings.labelBgOpacity / 100;
+                const textOpacity = settings.labelTextOpacity / 100;
+
+                let labelTint, labelTextColor, tintEnd;
+                if (labelTheme === 'dark') {
+                    labelTint = `rgba(0, 0, 0, ${bgOpacity})`;
+                    tintEnd = `rgba(0, 0, 0, ${bgOpacity * 0.6})`;
+                    labelTextColor = `rgba(255, 255, 255, ${textOpacity})`;
+                } else {
+                    labelTint = `rgba(255, 255, 255, ${bgOpacity})`;
+                    tintEnd = `rgba(255, 255, 255, ${bgOpacity * 0.6})`;
+                    labelTextColor = `rgba(0, 0, 0, ${textOpacity})`;
+                }
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.roundRect(labelX, labelY, labelBoxWidth, labelBoxHeight, 24);
+                ctx.clip();
+                ctx.drawImage(blurredImg, cropX, cropY, labelBoxWidth, labelBoxHeight, labelX, labelY, labelBoxWidth, labelBoxHeight);
+                const glassGrad = ctx.createLinearGradient(labelX, labelY, labelX, labelY + labelBoxHeight);
+                glassGrad.addColorStop(0, labelTint);
+                glassGrad.addColorStop(1, tintEnd);
+                ctx.fillStyle = glassGrad;
+                ctx.fillRect(labelX, labelY, labelBoxWidth, labelBoxHeight);
+                ctx.restore();
+
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.roundRect(labelX, labelY, labelBoxWidth, labelBoxHeight, 24);
+                ctx.stroke();
+
+                ctx.fillStyle = labelTextColor;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(labelText, x + w / 2, labelY + labelBoxHeight / 2);
+            }
+        }
+
+        drawStyledImage(img1, padding, yOffset, w1, imgHeight, label1Input.value, 'img1');
+        drawStyledImage(img2, padding + w1 + gap, yOffset, w2, imgHeight, label2Input.value, 'img2');
+
+        const watermarkText = watermarkTextInput.value;
+        if (watermarkText && settings.showWatermark) {
+            ctx.save();
+            ctx.direction = 'ltr';
+            ctx.font = `bold ${settings.watermarkFontSize}px Arial, sans-serif`;
+            const wmOpacity = settings.watermarkOpacity / 100;
+            ctx.fillStyle = `rgba(255, 255, 255, ${wmOpacity})`;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            const wmWidth = ctx.measureText(watermarkText).width;
+            const wmHeight = settings.watermarkFontSize;
+            const wmPadding = 50;
+
+            ctx.fillText(watermarkText, Math.random() * (logicalWidth/2 - wmWidth - wmPadding*2) + wmPadding, Math.random() * (logicalHeight/2 - wmHeight - wmPadding*2) + wmPadding);
+            ctx.fillText(watermarkText, Math.random() * (logicalWidth/2 - wmWidth - wmPadding*2) + (logicalWidth/2 + wmPadding), Math.random() * (logicalHeight/2 - wmHeight - wmPadding*2) + wmPadding);
+            ctx.fillText(watermarkText, Math.random() * (logicalWidth/2 - wmWidth - wmPadding*2) + wmPadding, Math.random() * (logicalHeight/2 - wmHeight - wmPadding*2) + (logicalHeight/2 + wmPadding));
+            ctx.fillText(watermarkText, Math.random() * (logicalWidth/2 - wmWidth - wmPadding*2) + (logicalWidth/2 + wmPadding), Math.random() * (logicalHeight/2 - wmHeight - wmPadding*2) + (logicalHeight/2 + wmPadding));
+
+            ctx.direction = 'inherit';
+            ctx.restore();
+        }
+
+        ctx.restore();
+    }
+
+    swapBtn.addEventListener('click', () => {
+        const tempImg = img1; img1 = img2; img2 = tempImg;
+        const tempLabel = label1Input.value;
+        label1Input.value = label2Input.value;
+        label2Input.value = tempLabel;
+        blurredCache = {};
+        requestDraw();
+    });
+
+    regenerateBtn.addEventListener('click', requestDraw);
+
+    downloadBtn.addEventListener('click', () => {
+        if (!img1Loaded || !img2Loaded) { showToast('لطفاً ابتدا هر دو تصویر را آپلود کنید!'); return; }
+        const format = document.querySelector('input[name="format"]:checked').value;
+        let dataURL;
+        let fileName = `ShopMember_${Date.now()}`;
+        if (format === 'jpg') {
+            dataURL = canvas.toDataURL('image/jpeg', settings.jpgQuality / 100);
+            fileName += '.jpg';
+        } else {
+            dataURL = canvas.toDataURL('image/png');
+            fileName += '.png';
+        }
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = dataURL;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => {
+            img1 = new Image(); img2 = new Image();
+            img1Loaded = false; img2Loaded = false;
+            blurredCache = {};
+            image1Input.value = ''; image2Input.value = '';
+            canvas.classList.remove('show');
+            emptyState.style.display = 'flex';
+            showToast('✅ کاور دانلود شد. آماده برای کاور جدید');
+        }, 800);
+    });
+
+    const settingsModal = document.getElementById('settingsModal');
+    document.getElementById('settingsOpenBtn').addEventListener('click', () => { applySettingsToUI(); settingsModal.classList.add('show'); });
+    document.getElementById('settingsCloseBtn').addEventListener('click', () => settingsModal.classList.remove('show'));
+    settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) settingsModal.classList.remove('show'); });
+
+    const settingInputs = {
+        defaultGradient: document.getElementById('set-defaultGradient'),
+        labelTheme: document.getElementById('set-labelTheme'),
+        labelBgOpacity: document.getElementById('set-labelBgOpacity'),
+        labelTextOpacity: document.getElementById('set-labelTextOpacity'),
+        labelFontSize: document.getElementById('set-labelFontSize'),
+        outlineThickness: document.getElementById('set-outlineThickness'),
+        outlineOpacity: document.getElementById('set-outlineOpacity'),
+        outlineColor: document.getElementById('set-outlineColor'),
+        showWatermark: document.getElementById('set-showWatermark'),
+        watermarkFontSize: document.getElementById('set-watermarkFontSize'),
+        watermarkOpacity: document.getElementById('set-watermarkOpacity'),
+        defaultGap: document.getElementById('set-defaultGap'),
+        jpgQuality: document.getElementById('set-jpgQuality'),
+        defaultFormat: document.getElementById('set-defaultFormat')
+    };
+
+    const valueDisplays = {
+        labelBgOpacity: document.getElementById('val-labelBgOpacity'),
+        labelTextOpacity: document.getElementById('val-labelTextOpacity'),
+        labelFontSize: document.getElementById('val-labelFontSize'),
+        outlineThickness: document.getElementById('val-outlineThickness'),
+        outlineOpacity: document.getElementById('val-outlineOpacity'),
+        watermarkFontSize: document.getElementById('val-watermarkFontSize'),
+        watermarkOpacity: document.getElementById('val-watermarkOpacity'),
+        defaultGap: document.getElementById('val-defaultGap'),
+        jpgQuality: document.getElementById('val-jpgQuality')
+    };
+
+    function applySettingsToUI() {
+        settingInputs.defaultGradient.value = settings.defaultGradient;
+        settingInputs.labelTheme.value = settings.labelTheme;
+        settingInputs.labelBgOpacity.value = settings.labelBgOpacity;
+        settingInputs.labelTextOpacity.value = settings.labelTextOpacity;
+        settingInputs.labelFontSize.value = settings.labelFontSize;
+        settingInputs.outlineThickness.value = settings.outlineThickness;
+        settingInputs.outlineOpacity.value = settings.outlineOpacity;
+        settingInputs.outlineColor.value = settings.outlineColor;
+        settingInputs.showWatermark.checked = settings.showWatermark;
+        settingInputs.watermarkFontSize.value = settings.watermarkFontSize;
+        settingInputs.watermarkOpacity.value = settings.watermarkOpacity;
+        settingInputs.defaultGap.value = settings.defaultGap;
+        settingInputs.jpgQuality.value = settings.jpgQuality;
+        settingInputs.defaultFormat.value = settings.defaultFormat;
+        updateValueDisplays();
+        Object.keys(settings.lockStates).forEach(key => applyLockState(key));
+    }
+
+    function updateValueDisplays() {
+        valueDisplays.labelBgOpacity.textContent = settings.labelBgOpacity + '%';
+        valueDisplays.labelTextOpacity.textContent = settings.labelTextOpacity + '%';
+        valueDisplays.labelFontSize.textContent = settings.labelFontSize + 'px';
+        valueDisplays.outlineThickness.textContent = settings.outlineThickness + 'px';
+        valueDisplays.outlineOpacity.textContent = settings.outlineOpacity + '%';
+        valueDisplays.watermarkFontSize.textContent = settings.watermarkFontSize + 'px';
+        valueDisplays.watermarkOpacity.textContent = settings.watermarkOpacity + '%';
+        valueDisplays.defaultGap.textContent = settings.defaultGap + 'px';
+        valueDisplays.jpgQuality.textContent = settings.jpgQuality + '%';
+    }
+
+    Object.keys(settingInputs).forEach(key => {
+        const el = settingInputs[key];
+        el.addEventListener('input', () => {
+            if (el.type === 'checkbox') settings[key] = el.checked;
+            else if (el.type === 'range') settings[key] = parseInt(el.value);
+            else settings[key] = el.value;
+            updateValueDisplays();
+            saveSettings();
+            if (key === 'defaultGradient') bgGradientSelect.value = settings.defaultGradient;
+            if (key === 'labelTheme') {
+                const radio = document.querySelector(`input[name="labelTheme"][value="${settings.labelTheme}"]`);
+                if (radio) radio.checked = true;
+            }
+            if (key === 'defaultGap' && !settings.lockStates.gapSize) {
+                gapSizeInput.value = settings.defaultGap;
+                gapValueDisplay.textContent = settings.defaultGap + 'px';
+            }
+            if (key === 'defaultFormat') {
+                const radio = document.querySelector(`input[name="format"][value="${settings.defaultFormat}"]`);
+                if (radio) radio.checked = true;
+            }
+            requestDraw();
+        });
+    });
+
+    document.getElementById('resetSettingsBtn').addEventListener('click', () => {
+        if (confirm('آیا از بازنشانی تمام تنظیمات به حالت پیش‌فرض مطمئن هستید؟')) {
+            settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+            saveSettings();
+            applySettingsToUI();
+            bgGradientSelect.value = settings.defaultGradient;
+            gapSizeInput.value = settings.defaultGap;
+            gapValueDisplay.textContent = settings.defaultGap + 'px';
+            document.querySelector(`input[name="labelTheme"][value="${settings.labelTheme}"]`).checked = true;
+            document.querySelector(`input[name="format"][value="${settings.defaultFormat}"]`).checked = true;
+            requestDraw();
+            showToast('✅ تنظیمات به حالت پیش‌فرض بازگشت');
+        }
+    });
+
+    document.getElementById('exportSettingsBtn').addEventListener('click', () => {
+        const dataStr = JSON.stringify(settings, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `shopmember-settings-${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('📤 فایل پشتیبان دانلود شد (شامل قفل‌ها)');
+    });
+
+    document.getElementById('importSettingsInput').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const imported = JSON.parse(event.target.result);
+                settings = { ...DEFAULT_SETTINGS, ...imported };
+                settings.lockStates = { ...DEFAULT_SETTINGS.lockStates, ...(imported.lockStates || {}) };
+                saveSettings();
+                applySettingsToUI();
+                bgGradientSelect.value = settings.defaultGradient;
+                gapSizeInput.value = settings.defaultGap;
+                gapValueDisplay.textContent = settings.defaultGap + 'px';
+                document.querySelector(`input[name="labelTheme"][value="${settings.labelTheme}"]`).checked = true;
+                document.querySelector(`input[name="format"][value="${settings.defaultFormat}"]`).checked = true;
+                requestDraw();
+                showToast('✅ تنظیمات و قفل‌ها بازیابی شدند');
+                settingsModal.classList.remove('show');
+            } catch (err) { showToast('❌ فایل نامعتبر است'); }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+    });
+
+    // ============================================================
+    //  🚀 راه‌اندازی برنامه
+    // ============================================================
+    loadSettings();
+    applySettingsToUI();
+    initAllLocks();
+    setupPWA();
+    
+    bgGradientSelect.value = settings.defaultGradient;
+    gapSizeInput.value = settings.defaultGap;
+    gapValueDisplay.textContent = settings.defaultGap + 'px';
+    document.querySelector(`input[name="labelTheme"][value="${settings.labelTheme}"]`).checked = true;
+    document.querySelector(`input[name="format"][value="${settings.defaultFormat}"]`).checked = true;
+
+    if (!CanvasRenderingContext2D.prototype.roundRect) {
+        CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+            if (w < 2 * r) r = w / 2;
+            if (h < 2 * r) r = h / 2;
+            this.beginPath();
+            this.moveTo(x + r, y);
+            this.arcTo(x + w, y, x + w, y + h, r);
+            this.arcTo(x + w, y + h, x, y + h, r);
+            this.arcTo(x, y + h, x, y, r);
+            this.arcTo(x, y, x + w, y, r);
+            this.closePath();
+            return this;
+        };
+    }
+</script>
+</body>
+</html>
