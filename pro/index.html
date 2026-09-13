@@ -41,7 +41,7 @@
     <link rel="manifest" id="manifest-link">
     <link rel="icon" type="image/svg+xml" id="favicon-link">
     <link rel="apple-touch-icon" id="apple-touch-icon">
-    <link rel="mask-icon" id="mask-icon" color="#229ED9">
+    <link rel="mask-icon" id="mask-icon" color="#ffffff">
 
     <title>Cover Studio | ShopMember</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -523,7 +523,6 @@
         }
         .settings-btn svg { width: 22px; height: 22px; }
 
-        /* دکمه نصب PWA */
         .install-btn {
             position: fixed;
             top: calc(15px + env(safe-area-inset-top));
@@ -688,7 +687,6 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* حالت Standalone (نصب شده) */
         @media (display-mode: standalone) {
             .install-btn { display: none !important; }
             body { padding-top: 0; }
@@ -697,7 +695,6 @@
 </head>
 <body>
 
-<!-- دکمه نصب PWA -->
 <button class="install-btn" id="installBtn" title="نصب اپلیکیشن">
     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 3v12m0 0l-4-4m4 4l4-4"/>
@@ -889,15 +886,19 @@
 
     <div class="controls-panel">
         
+        <!-- ===================================================== -->
+        <!-- 🔄 کارت‌های تصویر: جای تصویر اول و دوم عوض شد -->
+        <!-- حالا "تصویر دوم" بالاتر و "تصویر اول" پایین‌تر قرار دارد -->
+        <!-- ===================================================== -->
         <div id="tab-images" class="tab-content active">
             <div class="section-title">📸 آپلود تصاویر</div>
             <div class="form-group">
-                <label>🖼️ تصویر اول (سمت چپ / بعد):</label>
-                <input type="file" id="image1" accept="image/*">
-            </div>
-            <div class="form-group">
                 <label>🖼️ تصویر دوم (سمت راست / قبل):</label>
                 <input type="file" id="image2" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>🖼️ تصویر اول (سمت چپ / بعد):</label>
+                <input type="file" id="image1" accept="image/*">
             </div>
             <div class="btn-group">
                 <button id="swapBtn" class="btn btn-secondary">🔄 جابجایی قبل و بعد</button>
@@ -975,31 +976,28 @@
 </div>
 
 <script>
-    // ============================================================
-    //  🔒 امنیت: Frame Busting - جلوگیری از قرار گرفتن در iframe
-    // ============================================================
     (function() {
         try {
             if (window.top !== window.self) {
-                // اگر در iframe باشیم، از آن خارج شو
                 if (window.top.location.href !== window.self.location.href) {
                     window.top.location.href = window.self.location.href;
                 }
             }
         } catch (e) {
-            // اگر دسترسی به top ممکن نبود، محتوا را مخفی کن
             document.documentElement.innerHTML = '<body style="background:#000;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">دسترسی غیرمجاز</body>';
         }
     })();
 
-    // جلوگیری از ایندکس شدن توسط ربات‌های جستجو (Noindex)
     document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.setAttribute('translate', 'no');
         document.body.setAttribute('translate', 'no');
     });
 
     // ============================================================
-    //  🎨 PWA: آیکون SVG با ایموجی 🎨 و Manifest
+    //  🎨 PWA: آیکون SVG با ایموجی 🌱 سفید و دقیقاً وسط‌چین
+    //  - از <mask> برای جداسازی شکل ایموجی استفاده می‌شود
+    //  - feColorMatrix ایموجی را کاملاً سفید می‌کند
+    //  - text-anchor="middle" + dominant-baseline="central" برای مرکز دقیق
     // ============================================================
     const APP_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
         <defs>
@@ -1011,75 +1009,29 @@
                 <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
                 <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
             </radialGradient>
+            <filter id="whiteSilhouette" x="-20%" y="-20%" width="140%" height="140%">
+                <feColorMatrix type="matrix" values="0 0 0 0 1
+                                                      0 0 0 0 1
+                                                      0 0 0 0 1
+                                                      0 0 0 1 0"/>
+            </filter>
+            <mask id="sproutMask" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+                <rect width="512" height="512" fill="black"/>
+                <text x="256" y="256" font-size="290" text-anchor="middle" dominant-baseline="central" font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, 'Segoe UI Symbol', sans-serif" fill="white" filter="url(#whiteSilhouette)">🌱</text>
+            </mask>
         </defs>
         <rect width="512" height="512" rx="120" fill="url(#bgGrad)"/>
         <rect width="512" height="512" rx="120" fill="url(#glow)"/>
-        <text x="50%" y="54%" font-size="290" text-anchor="middle" dominant-baseline="central" font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif">🎨</text>
+        <rect width="512" height="512" rx="120" fill="#ffffff" mask="url(#sproutMask)"/>
     </svg>`;
 
-    // تبدیل SVG به Data URL
     const iconDataURL = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(APP_ICON_SVG)));
 
-    // ============================================================
-    //  🔍 جلوگیری از ایندکس: robots.txt داینامیک
-    // ============================================================
-    const ROBOTS_TXT = `User-agent: *
-Disallow: /
-Disallow: /index.html
-Disallow: /*.html$
-Disallow: /*.js$
-Disallow: /*.css$
-Disallow: /api/
-Allow: /$ 
-
-User-agent: Googlebot
-Disallow: /
-
-User-agent: Googlebot-Image
-Disallow: /
-
-User-agent: Googlebot-News
-Disallow: /
-
-User-agent: Bingbot
-Disallow: /
-
-User-agent: Slurp
-Disallow: /
-
-User-agent: DuckDuckBot
-Disallow: /
-
-User-agent: Baiduspider
-Disallow: /
-
-User-agent: YandexBot
-Disallow: /
-
-User-agent: Sogou
-Disallow: /
-
-User-agent: Exabot
-Disallow: /
-
-User-agent: facebot
-Disallow: /
-
-User-agent: ia_archiver
-Disallow: /
-
-Sitemap:`;
-
-    // ============================================================
-    //  📱 ساخت Manifest و لینک‌های آیکون
-    // ============================================================
     function setupPWA() {
-        // آیکون‌ها
         document.getElementById('favicon-link').href = iconDataURL;
         document.getElementById('apple-touch-icon').href = iconDataURL;
         document.getElementById('mask-icon').href = iconDataURL;
 
-        // Manifest
         const manifest = {
             name: 'Cover Studio | ShopMember',
             short_name: 'Cover Studio',
@@ -1105,33 +1057,20 @@ Sitemap:`;
         };
 
         const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
-        const manifestURL = URL.createObjectURL(manifestBlob);
-        document.getElementById('manifest-link').href = manifestURL;
-
-        // ثبت Service Worker (اگر فایل sw.js موجود باشد)
+        document.getElementById('manifest-link').href = URL.createObjectURL(manifestBlob);
         registerServiceWorker();
     }
 
-    // ============================================================
-    //  ⚙️ ثبت Service Worker
-    // ============================================================
     function registerServiceWorker() {
         if ('serviceWorker' in navigator && location.protocol !== 'file:') {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js', { scope: './' })
-                    .then(reg => {
-                        console.log('✅ Service Worker ثبت شد:', reg.scope);
-                    })
-                    .catch(err => {
-                        console.log('ℹ️ Service Worker ثبت نشد (اختیاری):', err.message);
-                    });
+                    .then(reg => console.log('✅ Service Worker ثبت شد:', reg.scope))
+                    .catch(err => console.log('ℹ️ Service Worker ثبت نشد:', err.message));
             });
         }
     }
 
-    // ============================================================
-    //  📲 مدیریت دکمه نصب PWA
-    // ============================================================
     let deferredPrompt = null;
     const installBtn = document.getElementById('installBtn');
 
@@ -1142,10 +1081,7 @@ Sitemap:`;
     });
 
     installBtn.addEventListener('click', async () => {
-        if (!deferredPrompt) {
-            showToast('برای نصب، از منوی مرورگر استفاده کنید');
-            return;
-        }
+        if (!deferredPrompt) { showToast('برای نصب، از منوی مرورگر استفاده کنید'); return; }
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         if (outcome === 'accepted') {
@@ -1767,9 +1703,6 @@ Sitemap:`;
         e.target.value = '';
     });
 
-    // ============================================================
-    //  🚀 راه‌اندازی برنامه
-    // ============================================================
     loadSettings();
     applySettingsToUI();
     initAllLocks();
