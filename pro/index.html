@@ -800,6 +800,20 @@
         </div>
 
         <div class="setting-item">
+            <label>رنگ واترمارک (پیش‌فرض: سفید):</label>
+            <select id="set-watermarkColor">
+                <option value="#ffffff">🤍 سفید (پیش‌فرض)</option>
+                <option value="#000000">🖤 مشکی تیره</option>
+                <option value="#1a1a1a">🌑 خاکستری خیلی تیره</option>
+                <option value="#2d2d2d">🌒 خاکستری تیره</option>
+                <option value="#4a4a4a">🌓 خاکستری متوسط تیره</option>
+                <option value="#003366">🌊 سرمه‌ای تیره</option>
+                <option value="#330000">🍷 شرابی تیره</option>
+                <option value="#003300">🌲 سبز تیره</option>
+            </select>
+        </div>
+
+        <div class="setting-item">
             <div class="label-row">
                 <span class="label-text">سایز فونت واترمارک: <span id="val-watermarkFontSize">70px</span></span>
                 <button class="lock-btn" data-target="set-watermarkFontSize" data-key="watermarkFontSize"></button>
@@ -1162,7 +1176,7 @@ Sitemap:`;
     });
 
     // ============================================================
-    //  کدهای اصلی برنامه (بدون تغییر)
+    //  کدهای اصلی برنامه
     // ============================================================
     const LOCK_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
     const UNLOCK_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg>`;
@@ -1177,6 +1191,7 @@ Sitemap:`;
         outlineOpacity: 40,
         outlineColor: '#ffffff',
         showWatermark: true,
+        watermarkColor: '#ffffff',   // ✅ جدید: رنگ واترمارک - پیش‌فرض سفید
         watermarkFontSize: 70,
         watermarkOpacity: 22,
         defaultGap: 80,
@@ -1564,7 +1579,8 @@ Sitemap:`;
             ctx.direction = 'ltr';
             ctx.font = `bold ${settings.watermarkFontSize}px Arial, sans-serif`;
             const wmOpacity = settings.watermarkOpacity / 100;
-            ctx.fillStyle = `rgba(255, 255, 255, ${wmOpacity})`;
+            // ✅ استفاده از رنگ واترمارک تنظیم‌شده (پیش‌فرض سفید)
+            ctx.fillStyle = hexToRgba(settings.watermarkColor || '#ffffff', wmOpacity);
             ctx.textAlign = 'left';
             ctx.textBaseline = 'top';
             const wmWidth = ctx.measureText(watermarkText).width;
@@ -1638,6 +1654,7 @@ Sitemap:`;
         outlineOpacity: document.getElementById('set-outlineOpacity'),
         outlineColor: document.getElementById('set-outlineColor'),
         showWatermark: document.getElementById('set-showWatermark'),
+        watermarkColor: document.getElementById('set-watermarkColor'), // ✅ جدید
         watermarkFontSize: document.getElementById('set-watermarkFontSize'),
         watermarkOpacity: document.getElementById('set-watermarkOpacity'),
         defaultGap: document.getElementById('set-defaultGap'),
@@ -1667,6 +1684,7 @@ Sitemap:`;
         settingInputs.outlineOpacity.value = settings.outlineOpacity;
         settingInputs.outlineColor.value = settings.outlineColor;
         settingInputs.showWatermark.checked = settings.showWatermark;
+        settingInputs.watermarkColor.value = settings.watermarkColor || '#ffffff'; // ✅ جدید
         settingInputs.watermarkFontSize.value = settings.watermarkFontSize;
         settingInputs.watermarkOpacity.value = settings.watermarkOpacity;
         settingInputs.defaultGap.value = settings.defaultGap;
@@ -1739,7 +1757,7 @@ Sitemap:`;
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        showToast('📤 فایل پشتیبان دانلود شد (شامل قفل‌ها)');
+        showToast('📤 فایل پشتیبان دانلود شد (شامل قفل‌ها و رنگ واترمارک)');
     });
 
     document.getElementById('importSettingsInput').addEventListener('change', (e) => {
@@ -1751,6 +1769,8 @@ Sitemap:`;
                 const imported = JSON.parse(event.target.result);
                 settings = { ...DEFAULT_SETTINGS, ...imported };
                 settings.lockStates = { ...DEFAULT_SETTINGS.lockStates, ...(imported.lockStates || {}) };
+                // اطمینان از وجود رنگ واترمارک (برای فایل‌های پشتیبان قدیمی)
+                if (!settings.watermarkColor) settings.watermarkColor = '#ffffff';
                 saveSettings();
                 applySettingsToUI();
                 bgGradientSelect.value = settings.defaultGradient;
@@ -1759,7 +1779,7 @@ Sitemap:`;
                 document.querySelector(`input[name="labelTheme"][value="${settings.labelTheme}"]`).checked = true;
                 document.querySelector(`input[name="format"][value="${settings.defaultFormat}"]`).checked = true;
                 requestDraw();
-                showToast('✅ تنظیمات و قفل‌ها بازیابی شدند');
+                showToast('✅ تنظیمات، قفل‌ها و رنگ واترمارک بازیابی شدند');
                 settingsModal.classList.remove('show');
             } catch (err) { showToast('❌ فایل نامعتبر است'); }
         };
