@@ -1,0 +1,2168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EAF2FA">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>برنامه هفتگی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   RESET
+============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none;user-select:none}
+body{
+  font-family:'Vazirmatn',Tahoma,system-ui,sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;line-height:1.6;font-size:14px;
+  overflow-x:hidden;
+  transition:background .2s ease,color .2s ease;
+  -webkit-font-smoothing:antialiased;
+}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:99px}
+::selection{background:var(--accent-bg);color:var(--text)}
+
+/* ============================================================
+   TOKENS
+============================================================ */
+:root{
+  --r-xs:6px;--r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:20px;
+  --ease:cubic-bezier(.4,0,.2,1);
+  --ease-bounce:cubic-bezier(.34,1.56,.64,1);
+}
+
+/* Light theme — Moonlight Blue */
+html[data-theme="light"]{
+  color-scheme:light;
+  --bg:#EAF2FA;
+  --surface:#FFFFFF;
+  --surface-2:#F4F8FC;
+  --surface-3:#E2EDF6;
+  --border:#D3E1EE;
+  --border-2:#B7C9DD;
+  --text:#152A42;
+  --text-2:#546D89;
+  --text-3:#8FA3BA;
+  --accent:#3E7CB1;
+  --accent-2:#5A96C9;
+  --accent-dark:#2E5E87;
+  --accent-bg:rgba(62,124,177,.08);
+  --accent-ring:rgba(62,124,177,.2);
+  --green:#1A7F37;
+  --green-dark:#0F5C25;
+  --green-bg:rgba(26,127,55,.08);
+  --red:#CF222E;
+  --red-dark:#A40E26;
+  --red-bg:rgba(207,34,46,.07);
+  --yellow:#9A6700;
+  --yellow-bg:rgba(154,103,0,.08);
+  --shadow-sm:0 1px 2px rgba(21,42,66,.05);
+  --shadow-md:0 4px 12px rgba(21,42,66,.08);
+  --shadow-lg:0 16px 40px rgba(21,42,66,.14);
+  --topbar:rgba(234,242,250,.85);
+}
+
+/* Dark theme — Deep Sea Blue */
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0A1628;
+  --surface:#122238;
+  --surface-2:#1A2E4A;
+  --surface-3:#223A5A;
+  --border:#1E3454;
+  --border-2:#2F4A6E;
+  --text:#E2EDF7;
+  --text-2:#93A9C4;
+  --text-3:#5C7499;
+  --accent:#5DA9D6;
+  --accent-2:#7BBEE0;
+  --accent-dark:#3D7FA6;
+  --accent-bg:rgba(93,169,214,.12);
+  --accent-ring:rgba(93,169,214,.3);
+  --green:#58CC02;
+  --green-dark:#46A302;
+  --green-bg:rgba(88,204,2,.12);
+  --red:#F85149;
+  --red-dark:#DA3633;
+  --red-bg:rgba(248,81,73,.1);
+  --yellow:#D29922;
+  --yellow-bg:rgba(210,153,34,.12);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.35);
+  --shadow-md:0 4px 12px rgba(0,0,0,.45);
+  --shadow-lg:0 16px 48px rgba(0,0,0,.6);
+  --topbar:rgba(10,22,40,.9);
+}
+
+/* ============================================================
+   TOPBAR — improved mobile padding & alignment
+============================================================ */
+.topbar{
+  position:sticky;top:0;z-index:60;
+  background:var(--topbar);
+  backdrop-filter:blur(16px) saturate(180%);
+  -webkit-backdrop-filter:blur(16px) saturate(180%);
+  border-bottom:1px solid var(--border);
+  padding:14px 18px 0;
+  padding-top:calc(14px + env(safe-area-inset-top,0));
+}
+.topbar-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;
+  max-width:1200px;margin:0 auto;
+  min-height:40px;
+}
+.brand{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.brand h1{
+  font-size:16px;font-weight:700;letter-spacing:-.3px;line-height:1.25;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.brand .sub{
+  font-size:11.5px;color:var(--text-2);font-weight:500;
+  line-height:1.4;margin-top:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.dirty-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 13px;border-radius:999px;
+  background:var(--yellow-bg);
+  color:var(--yellow);
+  border:1px solid color-mix(in srgb,var(--yellow) 30%,transparent);
+  font-size:12px;font-weight:600;line-height:1;
+  flex-shrink:0;
+  transition:background .15s var(--ease);
+}
+.dirty-pill::before{
+  content:'';width:7px;height:7px;border-radius:50%;
+  background:var(--yellow);
+  animation:pulse 2s ease-in-out infinite;
+  flex-shrink:0;
+}
+.dirty-pill:hover{background:color-mix(in srgb,var(--yellow) 15%,transparent)}
+.dirty-pill[hidden]{display:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.topbar-tabs{
+  display:none;
+  max-width:1200px;margin:12px auto 0;
+  gap:2px;border-bottom:1px solid var(--border);
+}
+.tab{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 14px;
+  font-size:13.5px;font-weight:600;color:var(--text-2);
+  transition:color .15s var(--ease);
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--text);border-bottom-color:var(--accent)}
+.tab .tab-icon{font-size:15px;opacity:.6}
+.tab.active .tab-icon{opacity:1}
+
+/* ============================================================
+   LAYOUT
+============================================================ */
+main{
+  max-width:1200px;margin:0 auto;
+  padding:20px 16px 100px;
+  padding-bottom:calc(100px + env(safe-area-inset-bottom,0));
+}
+.view{display:none}
+.view.active{display:block;animation:fadeIn .22s var(--ease)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.page-head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  gap:16px;flex-wrap:wrap;margin-bottom:20px;
+}
+.page-head h2{font-size:22px;font-weight:800;letter-spacing:-.4px;line-height:1.3}
+.page-head p{font-size:12.5px;color:var(--text-2);margin-top:3px;font-weight:500}
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:0 16px;height:38px;border-radius:var(--r-sm);
+  font-size:13px;font-weight:600;
+  transition:all .12s var(--ease);
+  white-space:nowrap;user-select:none;
+  border:1px solid transparent;
+}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent-dark);box-shadow:0 1px 0 var(--accent-dark)}
+.btn.primary:hover:not(:disabled){background:var(--accent-2)}
+.btn.success{background:var(--green);color:#fff;border-color:var(--green-dark);box-shadow:0 1px 0 var(--green-dark)}
+.btn.success:hover:not(:disabled){filter:brightness(1.06)}
+.btn.ghost{background:var(--surface);color:var(--text);border-color:var(--border-2)}
+.btn.ghost:hover{background:var(--surface-2);border-color:var(--text-3)}
+.btn.danger{background:var(--surface);color:var(--red);border-color:color-mix(in srgb,var(--red) 35%,transparent)}
+.btn.danger:hover{background:var(--red-bg)}
+.btn.sm{height:32px;padding:0 12px;font-size:12px;gap:4px;border-radius:var(--r-xs)}
+
+/* ============================================================
+   CLASS CARD (Today)
+============================================================ */
+.class-list{display:flex;flex-direction:column;gap:8px}
+
+.class-card{
+  position:relative;
+  padding:14px 16px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  transition:border-color .15s var(--ease);
+  display:flex;flex-direction:column;gap:8px;
+}
+.class-card:hover{border-color:var(--border-2)}
+.class-card.ongoing{border-color:color-mix(in srgb,var(--c) 45%,var(--border))}
+.class-card.done{opacity:.5}
+.class-card.done:hover{opacity:.85}
+
+.cc-head{
+  display:flex;align-items:center;gap:8px;
+  font-size:12.5px;color:var(--text-2);font-weight:500;
+}
+.cc-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--c);flex:0 0 auto;
+}
+.class-card.ongoing .cc-dot{
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 25%,transparent);
+  animation:dotPulse 1.8s ease-in-out infinite;
+}
+@keyframes dotPulse{
+  0%,100%{box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 25%,transparent)}
+  50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--c) 0%,transparent)}
+}
+.cc-time{font-variant-numeric:tabular-nums;font-weight:600;letter-spacing:-.1px}
+.cc-status{
+  margin-inline-start:auto;
+  font-size:11.5px;font-weight:600;
+  padding:3px 8px;border-radius:999px;white-space:nowrap;
+}
+.cc-status.ongoing{background:var(--green-bg);color:var(--green)}
+.cc-status.next{background:var(--surface-2);color:var(--text-2)}
+.cc-status.done{background:var(--surface-2);color:var(--text-3)}
+.cc-title{
+  font-size:14.5px;font-weight:600;
+  letter-spacing:-.2px;line-height:1.5;color:var(--text);
+}
+.cc-meta{
+  display:flex;gap:14px;flex-wrap:wrap;
+  font-size:12px;color:var(--text-2);line-height:1.5;
+}
+.cc-meta-item{
+  display:inline-flex;align-items:center;gap:5px;
+  max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.cc-meta-item svg{flex:0 0 auto;opacity:.6}
+.cc-note{
+  font-size:12px;color:var(--text-2);font-style:italic;
+  padding:8px 10px;background:var(--surface-2);border-radius:var(--r-xs);
+  border-inline-start:2px solid var(--border-2);
+}
+.cc-progress{
+  height:3px;background:var(--surface-3);border-radius:99px;
+  overflow:hidden;margin-top:2px;
+}
+.cc-progress i{display:block;height:100%;background:var(--c);border-radius:99px;transition:width 1s linear}
+
+/* ============================================================
+   BANNER
+============================================================ */
+.banner{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;border-radius:var(--r-md);
+  margin-bottom:14px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-inline-start:3px solid var(--bc,var(--accent));
+}
+.banner-icon{
+  width:36px;height:36px;flex:0 0 auto;
+  border-radius:10px;display:grid;place-items:center;
+  font-size:16px;
+  background:color-mix(in srgb,var(--bc) 12%,transparent);
+  color:var(--bc);
+}
+.banner-body{flex:1;min-width:0}
+.banner-label{
+  font-size:10.5px;font-weight:700;letter-spacing:.4px;
+  color:var(--bc);text-transform:uppercase;margin-bottom:2px;
+}
+.banner-title{
+  font-size:14px;font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  color:var(--text);
+}
+.banner-time{
+  font-size:12px;font-weight:600;color:var(--bc);
+  white-space:nowrap;font-variant-numeric:tabular-nums;
+  padding:6px 10px;background:var(--surface-2);
+  border-radius:var(--r-xs);border:1px solid var(--border);
+}
+
+/* ============================================================
+   MINI STATS
+============================================================ */
+.stats-strip{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  margin-bottom:16px;
+}
+.stat-mini{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:12px 14px;
+  display:flex;flex-direction:column;gap:2px;
+}
+.stat-mini .v{
+  font-size:18px;font-weight:800;letter-spacing:-.5px;
+  font-variant-numeric:tabular-nums;line-height:1.2;
+}
+.stat-mini .k{font-size:11px;font-weight:600;color:var(--text-2)}
+
+/* ============================================================
+   EMPTY
+============================================================ */
+.empty{
+  text-align:center;padding:56px 20px;
+  border-radius:var(--r-lg);
+  border:1px dashed var(--border-2);
+  background:var(--surface);
+}
+.empty-icon{font-size:44px;margin-bottom:12px;opacity:.6}
+.empty h3{font-size:16px;font-weight:700;margin-bottom:6px;letter-spacing:-.2px}
+.empty p{font-size:13px;color:var(--text-2);max-width:380px;margin:0 auto;line-height:1.7}
+
+/* ============================================================
+   WEEK VIEW
+============================================================ */
+.week-scroll{
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scroll-padding:0 16px;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  margin:0 -16px;
+  padding:2px 16px 12px;
+}
+.week-scroll::-webkit-scrollbar{display:none}
+
+.week-grid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(200px,1fr));
+  gap:10px;
+}
+.week-col{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  min-height:200px;
+  scroll-snap-align:center;
+  scroll-snap-stop:always;
+}
+.week-col.today{
+  border-color:color-mix(in srgb,var(--accent) 55%,var(--border));
+  box-shadow:0 0 0 1px var(--accent-bg);
+}
+.week-col-head{
+  padding:12px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  background:var(--surface-2);
+}
+.week-col.today .week-col-head{
+  background:var(--accent);
+  border-color:var(--accent-dark);
+}
+.week-col.today .week-col-head .wd,
+.week-col.today .week-col-head .wdate{color:#fff}
+.week-col.today .week-col-head .wcount{background:rgba(255,255,255,.22);color:#fff}
+.wd{font-size:13px;font-weight:700;letter-spacing:-.2px}
+.wdate{font-size:11px;color:var(--text-2);font-weight:500;font-variant-numeric:tabular-nums}
+.week-col-head-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.wcount{
+  font-size:10px;font-weight:700;
+  padding:1px 6px;border-radius:999px;
+  background:var(--surface-3);color:var(--text-2);
+  min-width:18px;text-align:center;
+}
+.week-col-body{
+  padding:8px;display:flex;flex-direction:column;gap:6px;flex:1;
+}
+.wcard{
+  padding:9px 10px 9px 12px;
+  background:var(--surface-2);
+  border-radius:var(--r-sm);
+  border:1px solid transparent;
+  border-inline-start:3px solid var(--c);
+  transition:background .12s var(--ease);
+}
+.wcard:hover{background:var(--surface-3)}
+.wcard.now{
+  background:color-mix(in srgb,var(--c) 10%,var(--surface-2));
+  border-color:color-mix(in srgb,var(--c) 35%,transparent);
+}
+.wc-time{
+  font-size:10.5px;font-weight:700;color:var(--c);
+  font-variant-numeric:tabular-nums;letter-spacing:-.1px;
+  margin-bottom:3px;
+}
+.wc-title{
+  font-size:12.5px;font-weight:500;line-height:1.5;
+  color:var(--text);word-break:break-word;
+}
+.wc-loc{
+  font-size:10.5px;color:var(--text-2);margin-top:3px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.wc-empty{
+  color:var(--text-3);font-size:18px;text-align:center;
+  padding:24px 0;margin:auto;opacity:.4;
+}
+
+/* Weekly stats */
+.stats-section{margin-top:24px}
+.stats-section h3{
+  font-size:14px;font-weight:700;margin-bottom:10px;
+  letter-spacing:-.2px;
+}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:14px 16px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.stat-card .v{
+  font-size:20px;font-weight:800;letter-spacing:-.6px;
+  font-variant-numeric:tabular-nums;line-height:1.15;
+}
+.stat-card .k{font-size:11px;font-weight:600;color:var(--text-2)}
+.stat-card.accent{border-color:color-mix(in srgb,var(--accent) 30%,var(--border))}
+.stat-card.accent .v{color:var(--accent)}
+
+/* ============================================================
+   MANAGE
+============================================================ */
+.search-wrap{position:relative;margin-bottom:18px}
+.search-icon{
+  position:absolute;inset-inline-start:12px;top:50%;transform:translateY(-50%);
+  font-size:13px;color:var(--text-3);pointer-events:none;
+}
+.search-input{
+  width:100%;height:42px;
+  padding:0 36px;
+  background:var(--surface);color:var(--text);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  font-size:13.5px;font-weight:500;
+  transition:all .15s var(--ease);outline:none;
+}
+.search-input::placeholder{color:var(--text-3);font-weight:400}
+.search-input:hover{border-color:var(--border-2)}
+.search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-ring)}
+.search-clear{
+  position:absolute;inset-inline-end:8px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:6px;
+  display:none;place-items:center;
+  font-size:13px;color:var(--text-2);
+}
+.search-clear:hover{background:var(--surface-3);color:var(--text)}
+.search-clear.show{display:grid}
+
+.manage-group{margin-bottom:20px}
+.manage-head{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:700;margin-bottom:8px;padding:0 2px;
+}
+.manage-head .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.manage-head .count{
+  font-size:11px;font-weight:600;color:var(--text-2);
+  padding:2px 8px;border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--border);
+}
+.manage-row{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;margin-bottom:6px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-md);
+  transition:border-color .15s var(--ease);
+}
+.manage-row:hover{border-color:var(--border-2)}
+.mr-dot{width:4px;height:32px;border-radius:2px;background:var(--c);flex:0 0 auto}
+.mr-main{flex:1;min-width:0}
+.mr-title{
+  font-size:13.5px;font-weight:600;letter-spacing:-.2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.4;
+}
+.mr-title mark{background:var(--yellow-bg);color:var(--yellow);padding:1px 2px;border-radius:3px}
+.mr-meta{
+  font-size:11.5px;color:var(--text-2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  margin-top:2px;font-weight:500;
+}
+.mr-actions{display:flex;gap:2px;flex:0 0 auto}
+.icon-btn{
+  width:32px;height:32px;border-radius:var(--r-xs);
+  display:grid;place-items:center;
+  font-size:14px;color:var(--text-2);
+  transition:all .12s var(--ease);
+  border:1px solid transparent;
+}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.icon-btn:active{transform:scale(.94)}
+.icon-btn.del:hover{background:var(--red-bg);color:var(--red)}
+.icon-btn.edit:hover{background:var(--accent-bg);color:var(--accent-2)}
+
+/* ============================================================
+   SETTINGS
+============================================================ */
+.settings-wrap{display:flex;flex-direction:column;gap:22px}
+.settings-group-title{
+  font-size:11.5px;font-weight:700;color:var(--text-2);
+  letter-spacing:.6px;text-transform:uppercase;
+  padding:0 4px;margin-bottom:8px;
+}
+.settings-group{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  overflow:hidden;
+}
+.settings-row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;
+  padding:14px 16px;
+  border-bottom:1px solid var(--border);
+  transition:background .12s var(--ease);
+  width:100%;text-align:right;
+  background:transparent;
+  cursor:default;
+}
+.settings-row:last-child{border-bottom:none}
+.settings-row.clickable{cursor:pointer}
+.settings-row.clickable:hover{background:var(--surface-2)}
+.settings-row.clickable:active{background:var(--surface-3)}
+.settings-row .label{min-width:0;flex:1}
+.settings-row .label .t{
+  font-size:13.5px;font-weight:600;letter-spacing:-.1px;
+  display:block;line-height:1.4;
+}
+.settings-row .label .d{
+  font-size:11.5px;color:var(--text-2);
+  display:block;line-height:1.5;margin-top:2px;
+}
+.settings-row .arrow{
+  color:var(--text-3);font-size:18px;flex:0 0 auto;
+  transition:transform .15s var(--ease);
+}
+.settings-row.clickable:hover .arrow{transform:translateX(-3px);color:var(--text-2)}
+.settings-row.danger .label .t{color:var(--red)}
+
+.switch{position:relative;display:inline-block;width:40px;height:24px;flex:0 0 auto}
+.switch input{opacity:0;width:0;height:0;position:absolute}
+.switch .track{
+  position:absolute;inset:0;
+  background:var(--surface-3);
+  border:1px solid var(--border-2);
+  border-radius:999px;cursor:pointer;
+  transition:all .2s var(--ease);
+}
+.switch .track::after{
+  content:'';position:absolute;
+  top:2px;inset-inline-start:2px;
+  width:18px;height:18px;
+  background:#fff;border-radius:50%;
+  box-shadow:0 1px 3px rgba(0,0,0,.15);
+  transition:all .2s var(--ease);
+}
+.switch input:checked + .track{background:var(--green);border-color:var(--green-dark)}
+.switch input:checked + .track::after{transform:translateX(-16px)}
+
+.segmented{
+  display:inline-flex;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  padding:2px;flex:0 0 auto;
+}
+.segmented button{
+  padding:5px 10px;border-radius:6px;
+  font-size:12px;font-weight:600;
+  color:var(--text-2);
+  transition:all .12s var(--ease);
+}
+.segmented button:hover{color:var(--text)}
+.segmented button.active{
+  background:var(--surface);color:var(--text);
+  box-shadow:var(--shadow-sm);
+}
+
+.select{
+  background:var(--surface-2);
+  border:1px solid var(--border-2);
+  color:var(--text);
+  padding:6px 10px;border-radius:var(--r-sm);
+  font-size:12.5px;font-weight:600;
+  outline:none;cursor:pointer;flex:0 0 auto;
+  min-height:32px;
+}
+.select:hover{border-color:var(--text-3)}
+.select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-ring)}
+select option{background:var(--surface);color:var(--text)}
+
+.settings-hint{
+  font-size:11.5px;color:var(--text-2);line-height:1.7;
+  padding:10px 14px;background:var(--surface-2);
+  border-radius:var(--r-sm);margin-top:8px;
+}
+.settings-hint strong{color:var(--text);font-weight:700}
+
+/* ============================================================
+   MODAL
+============================================================ */
+.modal-backdrop{
+  position:fixed;inset:0;z-index:200;
+  display:none;align-items:center;justify-content:center;
+  padding:16px;
+  background:rgba(10,22,40,.55);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+.modal-backdrop.open{display:flex;animation:fadeIn .18s var(--ease)}
+.modal{
+  width:min(480px,100%);
+  max-height:92vh;overflow-y:auto;
+  background:var(--surface);
+  border:1px solid var(--border-2);
+  border-radius:var(--r-lg);
+  box-shadow:var(--shadow-lg);
+  animation:modalIn .22s var(--ease-bounce);
+  display:flex;flex-direction:column;
+}
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.96) translateY(8px)}
+  to{opacity:1;transform:none}
+}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--surface);z-index:1;
+}
+.modal-head h3{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.modal-body{padding:20px}
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.field label{
+  display:block;font-size:12px;font-weight:600;
+  color:var(--text-2);margin-bottom:6px;
+}
+.field input,.field select,.field textarea{
+  width:100%;height:42px;
+  background:var(--surface-2);
+  border:1px solid var(--border-2);
+  color:var(--text);
+  padding:0 12px;
+  border-radius:var(--r-sm);
+  font-size:13.5px;font-weight:500;
+  outline:none;
+  transition:all .15s var(--ease);
+  display:block;
+}
+.field textarea{height:auto;padding:10px 12px;resize:vertical;line-height:1.6}
+.field input:hover,.field select:hover,.field textarea:hover{border-color:var(--text-3)}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-ring);
+  background:var(--surface);
+}
+.field input::placeholder,.field textarea::placeholder{color:var(--text-3);font-weight:400}
+.field input[type="time"]{direction:ltr;text-align:right;font-variant-numeric:tabular-nums}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.color-picker{display:flex;gap:8px;flex-wrap:wrap}
+.color-dot{
+  width:32px;height:32px;border-radius:var(--r-sm);
+  background:var(--c);
+  border:2px solid transparent;
+  transition:all .15s var(--ease);
+  box-shadow:0 1px 0 color-mix(in srgb,var(--c) 40%,#000);
+}
+.color-dot:hover{transform:translateY(-1px)}
+.color-dot:active{transform:translateY(1px);box-shadow:none}
+.color-dot.active{
+  border-color:var(--text);
+  box-shadow:0 0 0 3px var(--surface),0 0 0 5px var(--c);
+}
+.form-error{
+  color:var(--red);font-size:12px;font-weight:600;
+  min-height:16px;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.form-error:not(:empty)::before{content:'⚠';font-size:14px}
+.modal-foot{
+  display:flex;gap:8px;
+  padding:14px 20px;border-top:1px solid var(--border);
+  position:sticky;bottom:0;background:var(--surface);
+}
+.modal-foot .btn{flex:1}
+
+/* ============================================================
+   TOAST
+============================================================ */
+.toast{
+  position:fixed;bottom:88px;inset-inline-start:50%;
+  transform:translate(50%,120px);
+  background:var(--surface);
+  border:1px solid var(--border-2);
+  color:var(--text);
+  padding:11px 18px;border-radius:var(--r-md);
+  font-size:13px;font-weight:600;
+  box-shadow:var(--shadow-lg);
+  z-index:300;
+  transition:all .3s var(--ease-bounce);
+  opacity:0;pointer-events:none;
+  max-width:calc(100vw - 32px);
+}
+.toast.show{transform:translate(50%,0);opacity:1}
+
+/* ============================================================
+   BOTTOM NAV
+============================================================ */
+.bottom-nav{
+  display:grid;position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:var(--topbar);
+  backdrop-filter:blur(16px) saturate(180%);
+  -webkit-backdrop-filter:blur(16px) saturate(180%);
+  border-top:1px solid var(--border);
+  grid-template-columns:repeat(4,1fr);
+  padding-bottom:env(safe-area-inset-bottom,0);
+  height:64px;
+}
+.bnav-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;color:var(--text-2);font-size:10.5px;font-weight:600;
+  transition:color .15s var(--ease);position:relative;
+}
+.bnav-btn .ico{
+  font-size:20px;line-height:1;
+  transition:transform .25s var(--ease-bounce);
+}
+.bnav-btn.active{color:var(--accent)}
+.bnav-btn.active .ico{transform:translateY(-2px)}
+.bnav-btn:active .ico{transform:scale(.9)}
+.bnav-btn.active::before{
+  content:'';position:absolute;top:0;
+  width:24px;height:2px;border-radius:0 0 2px 2px;
+  background:var(--accent);
+}
+
+/* ============================================================
+   FAB
+============================================================ */
+.fab{
+  position:fixed;
+  bottom:calc(80px + env(safe-area-inset-bottom,0));
+  inset-inline-start:16px;
+  width:52px;height:52px;border-radius:50%;z-index:90;
+  background:var(--green);color:#fff;
+  font-size:24px;display:none;place-items:center;
+  font-weight:500;line-height:1;
+  box-shadow:0 2px 0 var(--green-dark),0 6px 18px rgba(0,0,0,.2);
+  transition:all .12s var(--ease);
+}
+.fab:active{transform:translateY(2px);box-shadow:0 0 0 var(--green-dark)}
+.fab.show{display:grid}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (min-width:820px){
+  .topbar{padding:14px 24px 0}
+  .topbar-tabs{display:flex}
+  .bottom-nav{display:none}
+  .fab{display:none !important}
+  main{padding:28px 24px 60px}
+  .page-head h2{font-size:26px}
+  .stats-strip{gap:12px}
+  .stat-mini .v{font-size:22px}
+  .stats-grid{grid-template-columns:repeat(4,1fr);gap:12px}
+  .stat-card .v{font-size:24px}
+  .week-scroll{margin:0;padding:0}
+  .week-grid{grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+  .week-col{min-height:240px}
+  .modal-backdrop{padding:24px}
+}
+
+@media (max-width:819px){
+  .modal-backdrop{padding:0;align-items:flex-end}
+  .modal{
+    width:100%;max-width:100%;
+    max-height:94vh;
+    border-radius:var(--r-xl) var(--r-xl) 0 0;
+    border-bottom:none;
+    animation:sheetUp .25s var(--ease-bounce);
+  }
+  @keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
+  .modal-head{padding:14px 18px}
+  .modal-body{padding:16px 18px}
+  .modal-foot{padding:12px 18px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0))}
+  .toast{bottom:calc(80px + env(safe-area-inset-bottom,0))}
+
+  .week-scroll{scroll-padding:0 16px}
+  .week-grid{
+    display:flex;gap:10px;padding-inline-end:16px;
+  }
+  .week-col{
+    flex:0 0 calc(100vw - 60px);
+    max-width:340px;
+    min-height:auto;
+    scroll-snap-align:center;
+  }
+}
+
+@media (max-width:480px){
+  body{font-size:13.5px}
+  .topbar{padding:12px 16px 0;padding-top:calc(12px + env(safe-area-inset-top,0))}
+  .topbar-inner{min-height:38px}
+  .brand h1{font-size:15px}
+  .brand .sub{font-size:11px}
+  .dirty-pill{font-size:11.5px;padding:6px 11px}
+  .page-head h2{font-size:19px}
+  .grid2{grid-template-columns:1fr}
+  .cc-title{font-size:14px}
+  main{padding:18px 14px 90px;padding-bottom:calc(90px + env(safe-area-inset-bottom,0))}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= TOPBAR ================= -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <h1 id="brandTitle">برنامه هفتگی</h1>
+      <span class="sub" id="brandSubtitle"></span>
+    </div>
+    <button class="dirty-pill" id="dirtyPill" type="button" hidden>ذخیره نشده</button>
+  </div>
+  <nav class="topbar-tabs" id="topbarTabs">
+    <button class="tab active" data-view="today"><span class="tab-icon">📅</span> امروز</button>
+    <button class="tab" data-view="week"><span class="tab-icon">🗓️</span> هفته</button>
+    <button class="tab" data-view="manage"><span class="tab-icon">📚</span> کلاس‌ها</button>
+    <button class="tab" data-view="settings"><span class="tab-icon">⚙️</span> تنظیمات</button>
+  </nav>
+</header>
+
+<!-- ================= MAIN ================= -->
+<main>
+  <section id="view-today" class="view active"></section>
+  <section id="view-week" class="view"></section>
+  <section id="view-manage" class="view"></section>
+  <section id="view-settings" class="view"></section>
+</main>
+
+<!-- ================= BOTTOM NAV ================= -->
+<nav class="bottom-nav">
+  <button class="bnav-btn active" data-view="today"><span class="ico">📅</span><span>امروز</span></button>
+  <button class="bnav-btn" data-view="week"><span class="ico">🗓️</span><span>هفته</span></button>
+  <button class="bnav-btn" data-view="manage"><span class="ico">📚</span><span>کلاس‌ها</span></button>
+  <button class="bnav-btn" data-view="settings"><span class="ico">⚙️</span><span>تنظیمات</span></button>
+</nav>
+
+<!-- ================= FAB ================= -->
+<button class="fab" id="fabAdd" type="button" title="افزودن کلاس">+</button>
+
+<!-- ================= MODAL: CLASS ================= -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle">افزودن کلاس</h3>
+      <button class="icon-btn" id="modalClose" type="button">✕</button>
+    </div>
+    <form id="classForm" novalidate>
+      <div class="modal-body">
+        <input type="hidden" id="fId">
+        <div class="field">
+          <label>نام درس *</label>
+          <input type="text" id="fTitle" placeholder="مثلاً: پرستاری بزرگسالان و سالمندان (۳)" autocomplete="off">
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label>استاد</label>
+            <input type="text" id="fInstructor" placeholder="نام استاد" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>مکان</label>
+            <input type="text" id="fLocation" placeholder="کلاس / دانشکده" autocomplete="off">
+          </div>
+        </div>
+        <div class="field">
+          <label>روز هفته</label>
+          <select id="fDay"></select>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label>ساعت شروع *</label>
+            <input type="time" id="fStart" value="08:00">
+          </div>
+          <div class="field">
+            <label>ساعت پایان *</label>
+            <input type="time" id="fEnd" value="10:00">
+          </div>
+        </div>
+        <div class="field">
+          <label>رنگ</label>
+          <div class="color-picker" id="colorPicker"></div>
+        </div>
+        <div class="field">
+          <label>توضیحات</label>
+          <textarea id="fNotes" rows="2" placeholder="یادداشت دلخواه..."></textarea>
+        </div>
+        <div class="form-error" id="formError"></div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn ghost" id="modalCancel">انصراف</button>
+        <button type="submit" class="btn primary">ذخیره</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= MODAL: TEXTS ================= -->
+<div class="modal-backdrop" id="textsBackdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>ویرایش متن‌های برنامه</h3>
+      <button class="icon-btn" id="textsClose" type="button">✕</button>
+    </div>
+    <form id="textsForm" novalidate>
+      <div class="modal-body">
+        <div class="field">
+          <label>عنوان برنامه</label>
+          <input type="text" id="tTitle" placeholder="برنامه هفتگی" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>زیرعنوان / نیمسال</label>
+          <input type="text" id="tSubtitle" placeholder="نیمسال اول ۱۴۰۵–۱۴۰۶" autocomplete="off">
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn ghost" id="textsCancel">انصراف</button>
+        <button type="submit" class="btn primary">ذخیره</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   بلوک داده — این بخش با هر بار «کپی کد کامل» به‌روز می‌شود
+   ============================================================ */
+/*@@DATA_START@@*/
+const DEFAULT_CLASSES = [
+  {"title":"کارآموزی پرستاری خانواده و محیط / کارآموزی پرستاری کودکان","instructor":"دکتر صادقی، آقای حسن‌زاده / زهرا طهماسبی، خانم نیکبخت","location":"","day":0,"start":"07:30","end":"12:30","color":5,"notes":""},
+  {"title":"کارآموزی پرستاری بیماری‌های روان","instructor":"دکتر فریدونی، محسن مرادی، بیاتی","location":"","day":0,"start":"13:00","end":"15:00","color":1,"notes":""},
+  {"title":"کارآموزی پرستاری خانواده / کارآموزی کودکان","instructor":"","location":"","day":1,"start":"07:30","end":"12:30","color":5,"notes":""},
+  {"title":"پرستاری بزرگسالان و سالمندان (۳) - نظری","instructor":"دکتر جوانبختیان، دکتر مولوی‌نژاد","location":"کلاس ۲۲۵","day":1,"start":"13:00","end":"15:00","color":0,"notes":""},
+  {"title":"تحقیق در پرستاری","instructor":"دکتر فرشاد حیدری","location":"کلاس ۲۲۵","day":2,"start":"08:00","end":"10:00","color":3,"notes":""},
+  {"title":"پرستاری بزرگسالان و سالمندان (۳)","instructor":"دکتر جوانبختیان، دکتر مولوی‌نژاد","location":"کلاس ۲۲۵","day":2,"start":"10:00","end":"12:00","color":0,"notes":""},
+  {"title":"اندیشه اسلامی ۲","instructor":"ابوالقاسم کاظمی","location":"کلاس ۶","day":2,"start":"13:30","end":"15:00","color":5,"notes":""},
+  {"title":"کارآموزی پرستاری بزرگسالان و سالمندان (۳)","instructor":"دکتر علی‌اکبری، دکتر داودوند، دکتر لله گانی","location":"","day":3,"start":"07:30","end":"12:30","color":6,"notes":""},
+  {"title":"پرستاری بیماری‌های کودکان","instructor":"زهرا طهماسبی","location":"کلاس ۲۲۵","day":3,"start":"10:00","end":"12:00","color":7,"notes":""},
+  {"title":"کارآموزی پرستاری بزرگسالان و سالمندان (۳)","instructor":"دکتر علی‌اکبری، دکتر داودوند، دکتر لله گانی","location":"","day":4,"start":"07:30","end":"12:30","color":6,"notes":""},
+  {"title":"فرهنگ و تمدن اسلام و ایران","instructor":"نازاب ظفریان، محسن گنجوی","location":"کلاس ۱۱۰","day":4,"start":"13:00","end":"15:00","color":2,"notes":""}
+];
+
+const DEFAULT_SETTINGS = {
+  "theme": "light",
+  "persianDigits": true,
+  "showPast": true,
+  "weekStart": 0,
+  "appTitle": "برنامه هفتگی ترم ۵",
+  "appSubtitle": "نیمسال اول ۱۴۰۵–۱۴۰۶"
+};
+/*@@DATA_END@@*/
+
+/* ============================================================
+   CONSTANTS
+============================================================ */
+const DAYS = ['شنبه','یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه'];
+
+const COLORS = [
+  { name:'آبی',      c:'#3E7CB1' },
+  { name:'بنفش',     c:'#8B5CF6' },
+  { name:'صورتی',    c:'#EC4899' },
+  { name:'قرمز',     c:'#EF4444' },
+  { name:'نارنجی',   c:'#F59E0B' },
+  { name:'سبز',      c:'#10B981' },
+  { name:'فیروزه',   c:'#06B6D4' },
+  { name:'خاکستری',  c:'#64748B' }
+];
+
+const DAY_OPTIONS_HTML = DAYS.map((d, i) => `<option value="${i}">${d}</option>`).join('');
+
+const ICONS = {
+  instructor:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  location:  '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'
+};
+
+/* ============================================================
+   STATE
+============================================================ */
+let classes = [];
+let settings = {};
+let editingId = null;
+let selectedColor = 0;
+let currentView = 'today';
+let dirty = false;
+let searchQuery = '';
+
+/* ============================================================
+   UTILS
+============================================================ */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, m =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+const toFa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+const fmt = v => settings.persianDigits ? toFa(v) : String(v);
+const locale = () => settings.persianDigits ? 'fa-IR' : 'fa-IR-u-nu-latn';
+const toMin = t => { const [h, m] = String(t).split(':').map(Number); return (h||0)*60 + (m||0); };
+const nowMin = () => { const d = new Date(); return d.getHours()*60 + d.getMinutes(); };
+const todayIndex = () => { try { return (new Date().getDay() + 1) % 7; } catch(e){ return 0; } };
+
+function fmtDate(date, opts){
+  try { return new Intl.DateTimeFormat(locale(), opts).format(date); }
+  catch(e){
+    try { return new Intl.DateTimeFormat('fa-IR', opts).format(date); }
+    catch(e2){ return ''; }
+  }
+}
+function jalaliShort(date){ return fmtDate(date, { day:'numeric', month:'long' }); }
+function fullDate(date){ return fmtDate(date, { day:'numeric', month:'long', year:'numeric' }); }
+function monthDay(date){ return fmtDate(date, { day:'numeric', month:'long' }); }
+
+function humanRemain(mins){
+  if (mins <= 0) return 'همین حالا';
+  if (mins < 60) return `${fmt(mins)} دقیقه`;
+  const h = Math.floor(mins/60), m = mins % 60;
+  return m ? `${fmt(h)} ساعت و ${fmt(m)} دقیقه` : `${fmt(h)} ساعت`;
+}
+function highlight(text, q){
+  const safe = esc(text);
+  if (!q) return safe;
+  const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  try { return safe.replace(new RegExp(`(${escapedQ})`, 'gi'), '<mark>$1</mark>'); }
+  catch(e){ return safe; }
+}
+
+/* ============================================================
+   DATA INIT
+============================================================ */
+function initData(){
+  classes = DEFAULT_CLASSES.map(c => ({ ...c, id: c.id || uid() }));
+  settings = { ...DEFAULT_SETTINGS };
+}
+
+function markDirty(){ dirty = true; updateDirtyPill(); }
+function updateDirtyPill(){
+  const pill = $('#dirtyPill');
+  if (!pill) return;
+  pill.hidden = !dirty;
+}
+
+/* ============================================================
+   THEME & BRAND
+============================================================ */
+function applyTheme(){
+  let t = settings.theme;
+  if (t === 'auto'){
+    t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+}
+
+function applyBrandTexts(){
+  const t = $('#brandTitle');
+  const s = $('#brandSubtitle');
+  if (t) t.textContent = settings.appTitle || 'برنامه هفتگی';
+  if (s) s.textContent = settings.appSubtitle || '';
+  document.title = settings.appTitle || 'برنامه هفتگی';
+}
+
+/* ============================================================
+   WEEK HELPER
+============================================================ */
+function getWeekDays(){
+  const today = todayIndex();
+  const ws = Number(settings.weekStart) || 0;
+  const daysFromStart = (today - ws + 7) % 7;
+  const now = new Date();
+  const weekStartDate = new Date(now);
+  weekStartDate.setDate(now.getDate() - daysFromStart);
+  weekStartDate.setHours(0,0,0,0);
+
+  const result = [];
+  for (let i = 0; i < 7; i++){
+    const dayIdx = (ws + i) % 7;
+    const d = new Date(weekStartDate);
+    d.setDate(weekStartDate.getDate() + i);
+    result.push({ dayIdx, date: d, isToday: dayIdx === today });
+  }
+  return result;
+}
+
+/* ============================================================
+   RENDER: TODAY
+============================================================ */
+function renderToday(){
+  const idx = todayIndex();
+  const now = nowMin();
+  const nowDate = new Date();
+
+  const list = classes
+    .filter(c => c.day === idx)
+    .sort((a, b) => toMin(a.start) - toMin(b.start));
+
+  let html = `
+    <div class="page-head">
+      <div>
+        <h2>${DAYS[idx]}</h2>
+        <p>${fullDate(nowDate)}</p>
+      </div>
+    </div>`;
+
+  const totalMin = list.reduce((s,c) => s + (toMin(c.end) - toMin(c.start)), 0);
+  const hours = (totalMin / 60).toFixed(1).replace(/\.0$/, '');
+  const upc = list.filter(c => toMin(c.end) > now).length;
+
+  html += `
+    <div class="stats-strip">
+      <div class="stat-mini">
+        <span class="v">${fmt(list.length)}</span>
+        <span class="k">کلاس امروز</span>
+      </div>
+      <div class="stat-mini">
+        <span class="v">${fmt(hours)}</span>
+        <span class="k">ساعت کلاس</span>
+      </div>
+      <div class="stat-mini">
+        <span class="v">${fmt(upc)}</span>
+        <span class="k">پیش‌رو</span>
+      </div>
+    </div>`;
+
+  if (!list.length){
+    const nx = findNext();
+    let msg = 'برای امروز کلاسی ثبت نشده است.';
+    if (nx){
+      const when = nx.offset === 0 ? 'امروز' : (nx.offset === 1 ? 'فردا' : DAYS[nx.c.day]);
+      msg = `کلاس بعدی: ${esc(nx.c.title)} — ${when} ساعت ${fmt(nx.c.start)}`;
+    }
+    html += `
+      <div class="empty">
+        <div class="empty-icon">${idx === 6 ? '🌴' : '☕'}</div>
+        <h3>${idx === 6 ? 'جمعه، روز تعطیل!' : 'امروز کلاسی نداری'}</h3>
+        <p>${msg}</p>
+      </div>`;
+    $('#view-today').innerHTML = html;
+    return;
+  }
+
+  const ongoing = list.find(c => toMin(c.start) <= now && now < toMin(c.end));
+  const nextCls = list.find(c => toMin(c.start) > now);
+
+  if (ongoing){
+    const col = COLORS[(ongoing.color || 0) % COLORS.length].c;
+    const left = toMin(ongoing.end) - now;
+    html += `
+      <div class="banner" style="--bc:${col}">
+        <div class="banner-icon">●</div>
+        <div class="banner-body">
+          <div class="banner-label">در حال برگزاری</div>
+          <div class="banner-title">${esc(ongoing.title)}</div>
+        </div>
+        <div class="banner-time">${humanRemain(left)} مانده</div>
+      </div>`;
+  } else if (nextCls){
+    const col = COLORS[(nextCls.color || 0) % COLORS.length].c;
+    const left = toMin(nextCls.start) - now;
+    html += `
+      <div class="banner" style="--bc:${col}">
+        <div class="banner-icon">◷</div>
+        <div class="banner-body">
+          <div class="banner-label">کلاس بعدی</div>
+          <div class="banner-title">${esc(nextCls.title)}</div>
+        </div>
+        <div class="banner-time">${humanRemain(left)} دیگر</div>
+      </div>`;
+  }
+
+  let visible = list;
+  if (!settings.showPast) visible = list.filter(c => toMin(c.end) > now);
+
+  if (!visible.length){
+    html += `
+      <div class="empty">
+        <div class="empty-icon">✓</div>
+        <h3>کلاس‌های امروز تمام شد</h3>
+        <p>امیدوارم روز خوبی داشته باشی.</p>
+      </div>`;
+  } else {
+    html += '<div class="class-list">';
+    visible.forEach(c => { html += todayCard(c, now); });
+    html += '</div>';
+  }
+
+  $('#view-today').innerHTML = html;
+}
+
+function todayCard(c, now){
+  const col = COLORS[(c.color || 0) % COLORS.length].c;
+  const s = toMin(c.start), e = toMin(c.end);
+
+  let status, statusClass, badge;
+  if (now >= e){
+    status = 'done'; statusClass = 'done';
+    badge = '<span class="cc-status done">گذشته</span>';
+  } else if (now >= s){
+    status = 'ongoing'; statusClass = 'ongoing';
+    badge = '<span class="cc-status ongoing">در حال برگزاری</span>';
+  } else {
+    status = 'next'; statusClass = '';
+    badge = `<span class="cc-status next">${humanRemain(s - now)} دیگر</span>`;
+  }
+
+  const prog = status === 'ongoing'
+    ? Math.min(100, Math.max(0, ((now - s) / (e - s)) * 100))
+    : 0;
+
+  return `
+    <article class="class-card ${statusClass}" style="--c:${col}">
+      <div class="cc-head">
+        <span class="cc-dot"></span>
+        <span class="cc-time">${fmt(c.start)} — ${fmt(c.end)}</span>
+        ${badge}
+      </div>
+      <h3 class="cc-title">${esc(c.title)}</h3>
+      ${(c.instructor || c.location) ? `
+        <div class="cc-meta">
+          ${c.instructor ? `<span class="cc-meta-item">${ICONS.instructor}${esc(c.instructor)}</span>` : ''}
+          ${c.location ? `<span class="cc-meta-item">${ICONS.location}${esc(c.location)}</span>` : ''}
+        </div>` : ''}
+      ${c.notes ? `<div class="cc-note">${esc(c.notes)}</div>` : ''}
+      ${status === 'ongoing' ? `<div class="cc-progress"><i style="width:${prog}%"></i></div>` : ''}
+    </article>`;
+}
+
+/* ============================================================
+   RENDER: WEEK
+============================================================ */
+function renderWeek(){
+  const now = nowMin();
+  const weekDays = getWeekDays();
+  const nowDate = new Date();
+
+  let html = `
+    <div class="page-head">
+      <div>
+        <h2>نمای هفتگی</h2>
+        <p>${monthDay(nowDate)}</p>
+      </div>
+    </div>
+    <div class="week-scroll"><div class="week-grid">`;
+
+  weekDays.forEach(({ dayIdx, date, isToday }) => {
+    const dayClasses = classes
+      .filter(c => c.day === dayIdx)
+      .sort((a, b) => toMin(a.start) - toMin(b.start));
+
+    html += `
+      <div class="week-col ${isToday ? 'today' : ''}">
+        <div class="week-col-head">
+          <span class="wd">${DAYS[dayIdx]}</span>
+          <div class="week-col-head-right">
+            <span class="wdate">${jalaliShort(date)}</span>
+            ${dayClasses.length ? `<span class="wcount">${fmt(dayClasses.length)}</span>` : ''}
+          </div>
+        </div>
+        <div class="week-col-body">`;
+
+    if (dayClasses.length){
+      dayClasses.forEach(c => {
+        const col = COLORS[(c.color || 0) % COLORS.length].c;
+        const isNow = isToday && now >= toMin(c.start) && now < toMin(c.end);
+        html += `
+          <div class="wcard ${isNow ? 'now' : ''}" style="--c:${col}">
+            <div class="wc-time">${fmt(c.start)} — ${fmt(c.end)}</div>
+            <div class="wc-title">${esc(c.title)}</div>
+            ${c.location ? `<div class="wc-loc">${esc(c.location)}</div>` : ''}
+          </div>`;
+      });
+    } else {
+      html += `<div class="wc-empty">—</div>`;
+    }
+
+    html += `</div></div>`;
+  });
+
+  html += `</div></div>`;
+
+  const stats = computeStats();
+  html += `
+    <div class="stats-section">
+      <h3>آمار هفتگی</h3>
+      <div class="stats-grid">
+        <div class="stat-card accent">
+          <span class="v">${fmt(stats.totalHours)}</span>
+          <span class="k">ساعت کل در هفته</span>
+        </div>
+        <div class="stat-card">
+          <span class="v">${fmt(stats.classCount)}</span>
+          <span class="k">کلاس در هفته</span>
+        </div>
+        <div class="stat-card">
+          <span class="v">${fmt(stats.teachers)}</span>
+          <span class="k">استاد</span>
+        </div>
+        <div class="stat-card">
+          <span class="v" style="font-size:16px">${stats.busiestDay}</span>
+          <span class="k">شلوغ‌ترین روز</span>
+        </div>
+      </div>
+    </div>`;
+
+  $('#view-week').innerHTML = html;
+}
+
+function computeStats(){
+  let totalMin = 0;
+  const perDay = {};
+  const teachers = new Set();
+
+  classes.forEach(c => {
+    const dur = toMin(c.end) - toMin(c.start);
+    totalMin += dur;
+    perDay[c.day] = (perDay[c.day] || 0) + dur;
+    if (c.instructor){
+      c.instructor.split(/[،,]/).forEach(t => {
+        const name = t.trim();
+        if (name) teachers.add(name);
+      });
+    }
+  });
+
+  const busiest = Object.entries(perDay).sort((a,b) => b[1]-a[1])[0];
+
+  return {
+    totalHours: (totalMin / 60).toFixed(1).replace(/\.0$/, ''),
+    classCount: classes.length,
+    teachers: teachers.size,
+    busiestDay: busiest ? DAYS[Number(busiest[0])] : '—'
+  };
+}
+
+/* ============================================================
+   RENDER: MANAGE
+============================================================ */
+function renderManage(){
+  const total = classes.length;
+  const q = searchQuery.trim().toLowerCase();
+  const filtered = q
+    ? classes.filter(c => {
+        return c.title.toLowerCase().includes(q)
+          || (c.instructor||'').toLowerCase().includes(q)
+          || (c.location||'').toLowerCase().includes(q);
+      })
+    : classes;
+
+  let html = `
+    <div class="page-head">
+      <div>
+        <h2>مدیریت کلاس‌ها</h2>
+        <p>${fmt(total)} کلاس ثبت شده</p>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="search" id="searchInput" class="search-input" placeholder="جستجو در نام، استاد یا مکان..." value="${esc(searchQuery)}">
+      <button class="search-clear ${searchQuery ? 'show' : ''}" id="searchClear" type="button" aria-label="پاک کردن">✕</button>
+    </div>`;
+
+  if (!filtered.length){
+    html += q
+      ? `<div class="empty">
+           <div class="empty-icon">🔍</div>
+           <h3>نتیجه‌ای پیدا نشد</h3>
+           <p>جستجو برای «${esc(searchQuery)}» نتیجه‌ای نداشت.</p>
+         </div>`
+      : `<div class="empty">
+           <div class="empty-icon">📚</div>
+           <h3>هنوز کلاسی اضافه نشده</h3>
+           <p>با دکمه «+» اولین درس برنامه‌ات رو ثبت کن.</p>
+         </div>`;
+  } else {
+    for (let d = 0; d < 7; d++){
+      const list = filtered
+        .filter(c => c.day === d)
+        .sort((a, b) => toMin(a.start) - toMin(b.start));
+      if (!list.length) continue;
+
+      html += `
+        <div class="manage-group">
+          <div class="manage-head">
+            <span class="dot"></span>${DAYS[d]}
+            <span class="count">${fmt(list.length)}</span>
+          </div>
+          ${list.map(c => manageRow(c, q)).join('')}
+        </div>`;
+    }
+  }
+
+  $('#view-manage').innerHTML = html;
+
+  const searchInput = $('#searchInput');
+  if (searchInput){
+    searchInput.addEventListener('input', e => {
+      searchQuery = e.target.value;
+      const cursor = e.target.selectionStart;
+      renderManage();
+      const newInput = $('#searchInput');
+      if (newInput){
+        newInput.focus();
+        try { newInput.setSelectionRange(cursor, cursor); } catch(_){}
+      }
+    });
+  }
+  const clearBtn = $('#searchClear');
+  if (clearBtn){
+    clearBtn.addEventListener('click', () => {
+      searchQuery = '';
+      renderManage();
+      setTimeout(() => $('#searchInput')?.focus(), 50);
+    });
+  }
+}
+
+function manageRow(c, q){
+  const col = COLORS[(c.color || 0) % COLORS.length].c;
+  const metaParts = [`${fmt(c.start)} - ${fmt(c.end)}`];
+  if (c.instructor) metaParts.push(esc(c.instructor));
+  if (c.location) metaParts.push(esc(c.location));
+
+  return `
+    <div class="manage-row" style="--c:${col}">
+      <div class="mr-dot"></div>
+      <div class="mr-main">
+        <div class="mr-title">${highlight(c.title, q)}</div>
+        <div class="mr-meta">${metaParts.join(' · ')}</div>
+      </div>
+      <div class="mr-actions">
+        <button class="icon-btn" data-dupe="${c.id}" title="کپی">⧉</button>
+        <button class="icon-btn edit" data-edit="${c.id}" title="ویرایش">✎</button>
+        <button class="icon-btn del" data-del="${c.id}" title="حذف">🗑</button>
+      </div>
+    </div>`;
+}
+
+/* ============================================================
+   RENDER: SETTINGS — bug fix: day options inline
+============================================================ */
+function renderSettings(){
+  const html = `
+    <div class="page-head">
+      <div>
+        <h2>تنظیمات</h2>
+        <p>شخصی‌سازی برنامه</p>
+      </div>
+    </div>
+    <div class="settings-wrap">
+
+      <div>
+        <div class="settings-group-title">شخصی‌سازی</div>
+        <div class="settings-group">
+          <button class="settings-row clickable" id="btnEditTexts" type="button">
+            <div class="label">
+              <span class="t">ویرایش متن‌های برنامه</span>
+              <span class="d">عنوان و زیرعنوان نمایش داده‌شده در بالای صفحه</span>
+            </div>
+            <span class="arrow">›</span>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="settings-group-title">ظاهر</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="label">
+              <span class="t">پوسته برنامه</span>
+              <span class="d">حالت رنگی رابط کاربری</span>
+            </div>
+            <div class="segmented" id="themeSeg">
+              <button data-val="dark">تاریک</button>
+              <button data-val="light">روشن</button>
+              <button data-val="auto">سیستم</button>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="label">
+              <span class="t">اعداد فارسی</span>
+              <span class="d">نمایش ساعت‌ها با ارقام فارسی</span>
+            </div>
+            <label class="switch"><input type="checkbox" id="setPersianDigits"><span class="track"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="settings-group-title">نمایش</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="label">
+              <span class="t">شروع هفته</span>
+              <span class="d">اولین روز در نمای هفتگی</span>
+            </div>
+            <select class="select" id="setWeekStart">${DAY_OPTIONS_HTML}</select>
+          </div>
+          <div class="settings-row">
+            <div class="label">
+              <span class="t">نمایش کلاس‌های گذشته</span>
+              <span class="d">کلاس‌های تمام‌شده امروز هم نمایش داده شوند</span>
+            </div>
+            <label class="switch"><input type="checkbox" id="setShowPast"><span class="track"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="settings-group-title">ذخیره و انتقال</div>
+        <div class="settings-group">
+          <button class="settings-row clickable" id="btnCopyCode" type="button">
+            <div class="label">
+              <span class="t">کپی کد کامل</span>
+              <span class="d">همه تغییرات (کلاس‌ها، متن‌ها، تنظیمات) در کد کپی می‌شود</span>
+            </div>
+            <span class="arrow">›</span>
+          </button>
+        </div>
+        <div class="settings-hint">
+          پس از زدن این دکمه، کد به‌روز در کلیپ‌بورد کپی می‌شود. آن را در فایل ذخیره کنید تا تغییرات دائمی شوند.
+        </div>
+      </div>
+
+      <div>
+        <div class="settings-group-title">مدیریت داده</div>
+        <div class="settings-group">
+          <button class="settings-row clickable" id="btnReload" type="button">
+            <div class="label">
+              <span class="t">بازگشت به حالت فایل</span>
+              <span class="d">لغو تغییرات ذخیره‌نشده</span>
+            </div>
+            <span class="arrow">›</span>
+          </button>
+          <button class="settings-row clickable danger" id="btnReset" type="button">
+            <div class="label">
+              <span class="t">حذف همه کلاس‌ها</span>
+              <span class="d">پاک کردن تمام داده‌ها از حافظه</span>
+            </div>
+            <span class="arrow">›</span>
+          </button>
+        </div>
+      </div>
+
+    </div>`;
+
+  $('#view-settings').innerHTML = html;
+  bindSettings();
+  renderSettingsValues();
+}
+
+function renderSettingsValues(){
+  $$('#themeSeg button').forEach(b => b.classList.toggle('active', b.dataset.val === settings.theme));
+  const pd = $('#setPersianDigits'); if (pd) pd.checked = settings.persianDigits;
+  const sp = $('#setShowPast'); if (sp) sp.checked = settings.showPast;
+  const ws = $('#setWeekStart'); if (ws) ws.value = String(settings.weekStart);
+}
+
+/* ============================================================
+   RENDER ALL
+============================================================ */
+function renderAll(){
+  renderToday();
+  renderWeek();
+  renderManage();
+  if (currentView === 'settings') renderSettings();
+  updateFab();
+}
+
+/* ============================================================
+   FIND NEXT
+============================================================ */
+function findNext(){
+  const idx = todayIndex();
+  const now = nowMin();
+  for (let d = 0; d < 7; d++){
+    const dayIdx = (idx + d) % 7;
+    const list = classes
+      .filter(c => c.day === dayIdx)
+      .sort((a, b) => toMin(a.start) - toMin(b.start));
+    for (const c of list){
+      if (d === 0 && toMin(c.end) <= now) continue;
+      return { c, offset: d };
+    }
+  }
+  return null;
+}
+
+/* ============================================================
+   CLASS MODAL
+============================================================ */
+function buildDaySelect(){
+  const fDay = $('#fDay');
+  if (fDay) fDay.innerHTML = DAY_OPTIONS_HTML;
+}
+
+function buildColorPicker(){
+  const cp = $('#colorPicker');
+  if (!cp) return;
+  cp.innerHTML = COLORS
+    .map((c, i) => `<button type="button" class="color-dot" data-color="${i}" style="--c:${c.c}" title="${c.name}"></button>`)
+    .join('');
+}
+
+function updateColorPicker(){
+  $$('#colorPicker .color-dot').forEach(b => {
+    b.classList.toggle('active', Number(b.dataset.color) === selectedColor);
+  });
+}
+
+function openModal(id){
+  editingId = id || null;
+  const c = id ? classes.find(x => x.id === id) : null;
+
+  buildDaySelect();
+  buildColorPicker();
+
+  $('#modalTitle').textContent = c ? 'ویرایش کلاس' : 'افزودن کلاس';
+  $('#fTitle').value      = c ? (c.title || '') : '';
+  $('#fInstructor').value = c ? (c.instructor || '') : '';
+  $('#fLocation').value   = c ? (c.location || '') : '';
+  $('#fDay').value        = String(c ? c.day : todayIndex());
+  $('#fStart').value      = c ? c.start : '08:00';
+  $('#fEnd').value        = c ? c.end : '10:00';
+  $('#fNotes').value      = c ? (c.notes || '') : '';
+  selectedColor           = c ? (c.color || 0) : 0;
+
+  updateColorPicker();
+  $('#formError').textContent = '';
+  $('#modalBackdrop').classList.add('open');
+  setTimeout(() => $('#fTitle').focus(), 120);
+}
+
+function closeModal(){
+  $('#modalBackdrop').classList.remove('open');
+  editingId = null;
+}
+
+function submitForm(e){
+  e.preventDefault();
+  const err = $('#formError');
+  const title = $('#fTitle').value.trim();
+  const start = $('#fStart').value;
+  const end   = $('#fEnd').value;
+
+  if (!title){ err.textContent = 'نام درس را وارد کنید.'; return; }
+  if (!start || !end){ err.textContent = 'ساعت شروع و پایان را وارد کنید.'; return; }
+  if (toMin(end) <= toMin(start)){ err.textContent = 'ساعت پایان باید بعد از شروع باشد.'; return; }
+
+  const data = {
+    title,
+    instructor: $('#fInstructor').value.trim(),
+    location:   $('#fLocation').value.trim(),
+    day:        Number($('#fDay').value),
+    start,
+    end,
+    color:      selectedColor,
+    notes:      $('#fNotes').value.trim()
+  };
+
+  if (editingId){
+    const i = classes.findIndex(c => c.id === editingId);
+    if (i > -1) classes[i] = { ...classes[i], ...data };
+    toast('کلاس ویرایش شد');
+  } else {
+    classes.push({ id: uid(), ...data });
+    toast('کلاس اضافه شد');
+  }
+
+  markDirty();
+  renderAll();
+  closeModal();
+}
+
+function deleteClass(id){
+  const c = classes.find(x => x.id === id);
+  if (!c) return;
+  if (!confirm(`کلاس «${c.title}» حذف شود؟`)) return;
+  classes = classes.filter(x => x.id !== id);
+  markDirty();
+  renderAll();
+  toast('کلاس حذف شد');
+}
+
+function duplicateClass(id){
+  const c = classes.find(x => x.id === id);
+  if (!c) return;
+  const copy = { ...c, id: uid() };
+  classes.push(copy);
+  markDirty();
+  renderAll();
+  toast('کلاس کپی شد');
+}
+
+/* ============================================================
+   TEXTS MODAL
+============================================================ */
+function openTextsModal(){
+  $('#tTitle').value = settings.appTitle || '';
+  $('#tSubtitle').value = settings.appSubtitle || '';
+  $('#textsBackdrop').classList.add('open');
+  setTimeout(() => $('#tTitle').focus(), 120);
+}
+function closeTextsModal(){
+  $('#textsBackdrop').classList.remove('open');
+}
+function submitTextsForm(e){
+  e.preventDefault();
+  settings.appTitle = $('#tTitle').value.trim() || 'برنامه هفتگی';
+  settings.appSubtitle = $('#tSubtitle').value.trim();
+  applyBrandTexts();
+  markDirty();
+  closeTextsModal();
+  toast('متن‌ها ذخیره شد');
+}
+
+/* ============================================================
+   TOAST
+============================================================ */
+let toastTimer = null;
+function toast(msg){
+  const el = $('#toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+/* ============================================================
+   STRIP ERUDA & EXTERNAL ARTIFACTS
+============================================================ */
+function stripExternalArtifacts(html){
+  // Remove eruda external script
+  html = html.replace(/<script src="\/eruda\.min\.js"><\/script>\s*/gi, '');
+  
+  // Remove eruda inline init script (multiline)
+  html = html.replace(/<script>\s*[\s\S]*?eruda\.init\([\s\S]*?<\/script>\s*/gi, '');
+  
+  // Remove any style tag containing eruda-related CSS
+  // Style blocks typically look like <style type="text/css"> ... eruda ... </style>
+  // Use a global replace that matches style tags containing eruda keywords
+  html = html.replace(/<style\b[^>]*>(?:(?!<\/style>)[\s\S])*?(?:eruda|luna-|__chobitsu)[\s\S]*?<\/style>\s*/gi, '');
+  
+  // Remove eruda DOM elements
+  html = html.replace(/<div id="eruda"[^>]*>[\s\S]*?<\/div>\s*/gi, '');
+  html = html.replace(/<div class="__chobitsu-hide__"[^>]*>[\s\S]*?<\/div>\s*/gi, '');
+  html = html.replace(/<div class="__chobitsu-hide__"[^>]*\/>\s*/gi, '');
+  
+  return html;
+}
+
+/* ============================================================
+   BUILD UPDATED SOURCE (clean & tidy)
+============================================================ */
+function buildUpdatedSource(){
+  // === Save current dynamic state ===
+  const backup = {
+    viewToday: $('#view-today').innerHTML,
+    viewWeek: $('#view-week').innerHTML,
+    viewManage: $('#view-manage').innerHTML,
+    viewSettings: $('#view-settings').innerHTML,
+    toastText: $('#toast').textContent,
+    toastClass: $('#toast').className,
+    modals: {},
+    brandTitle: $('#brandTitle').textContent,
+    brandSubtitle: $('#brandSubtitle').textContent,
+    htmlTheme: document.documentElement.getAttribute('data-theme'),
+    tabs: [],
+    bnavs: [],
+    views: [],
+    colorPickerHTML: $('#colorPicker') ? $('#colorPicker').innerHTML : null,
+    fDayHTML: $('#fDay') ? $('#fDay').innerHTML : null,
+  };
+  
+  $$('.modal-backdrop').forEach(m => { backup.modals[m.id] = m.className; });
+  $$('.tab').forEach(t => backup.tabs.push(t.className));
+  $$('.bnav-btn').forEach(t => backup.bnavs.push(t.className));
+  $$('.view').forEach(v => backup.views.push(v.className));
+  
+  // === Clean to fresh state ===
+  try {
+    $('#view-today').innerHTML = '';
+    $('#view-week').innerHTML = '';
+    $('#view-manage').innerHTML = '';
+    $('#view-settings').innerHTML = '';
+    
+    $('#toast').textContent = '';
+    $('#toast').className = 'toast';
+    
+    $$('.modal-backdrop').forEach(m => m.className = 'modal-backdrop');
+    
+    $('#brandTitle').textContent = 'برنامه هفتگی';
+    $('#brandSubtitle').textContent = '';
+    
+    $$('.tab').forEach((t, i) => t.className = i === 0 ? 'tab active' : 'tab');
+    $$('.bnav-btn').forEach((t, i) => t.className = i === 0 ? 'bnav-btn active' : 'bnav-btn');
+    $$('.view').forEach((v, i) => v.className = i === 0 ? 'view active' : 'view');
+    
+    document.documentElement.removeAttribute('data-theme');
+    
+    if ($('#colorPicker')) $('#colorPicker').innerHTML = '';
+    if ($('#fDay')) $('#fDay').innerHTML = '';
+    
+    // === Get HTML ===
+    let source = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+    
+    // === Restore state ===
+    restoreState(backup);
+    
+    // === Clean external artifacts ===
+    source = stripExternalArtifacts(source);
+    
+    // === Replace data block ===
+    const cleanClasses = classes.map(c => {
+      const { id, ...rest } = c;
+      return rest;
+    });
+    
+    const safeJSON = obj => JSON.stringify(obj, null, 2).replace(/<\//g, '<\\/');
+    
+    const MARK_START = '/*@@' + 'DATA_START@@*/';
+    const MARK_END   = '/*@@' + 'DATA_END@@*/';
+    
+    const startIdx = source.indexOf(MARK_START);
+    const endIdx = source.indexOf(MARK_END, startIdx + MARK_START.length);
+    
+    if (startIdx === -1 || endIdx === -1){
+      throw new Error('بلوک داده در سورس پیدا نشد');
+    }
+    
+    const dataBlock =
+      MARK_START + '\n' +
+      'const DEFAULT_CLASSES = ' + safeJSON(cleanClasses) + ';\n\n' +
+      'const DEFAULT_SETTINGS = ' + safeJSON(settings) + ';\n' +
+      MARK_END;
+    
+    const before = source.slice(0, startIdx);
+    const after  = source.slice(endIdx + MARK_END.length);
+    
+    return before + dataBlock + after;
+    
+  } catch (e) {
+    // Restore state even on error
+    restoreState(backup);
+    throw e;
+  }
+}
+
+function restoreState(backup){
+  try {
+    if ($('#view-today')) $('#view-today').innerHTML = backup.viewToday;
+    if ($('#view-week')) $('#view-week').innerHTML = backup.viewWeek;
+    if ($('#view-manage')) $('#view-manage').innerHTML = backup.viewManage;
+    if ($('#view-settings')) $('#view-settings').innerHTML = backup.viewSettings;
+    
+    if ($('#toast')){
+      $('#toast').textContent = backup.toastText;
+      $('#toast').className = backup.toastClass;
+    }
+    
+    Object.entries(backup.modals).forEach(([id, cls]) => {
+      const el = document.getElementById(id);
+      if (el) el.className = cls;
+    });
+    
+    if ($('#brandTitle')) $('#brandTitle').textContent = backup.brandTitle;
+    if ($('#brandSubtitle')) $('#brandSubtitle').textContent = backup.brandSubtitle;
+    
+    if (backup.htmlTheme){
+      document.documentElement.setAttribute('data-theme', backup.htmlTheme);
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    
+    $$('.tab').forEach((t, i) => { if (backup.tabs[i]) t.className = backup.tabs[i]; });
+    $$('.bnav-btn').forEach((t, i) => { if (backup.bnavs[i]) t.className = backup.bnavs[i]; });
+    $$('.view').forEach((v, i) => { if (backup.views[i]) v.className = backup.views[i]; });
+    
+    if ($('#colorPicker') && backup.colorPickerHTML !== null){
+      $('#colorPicker').innerHTML = backup.colorPickerHTML;
+    }
+    if ($('#fDay') && backup.fDayHTML !== null){
+      $('#fDay').innerHTML = backup.fDayHTML;
+    }
+  } catch(e){
+    console.error('restoreState error:', e);
+  }
+}
+
+/* ============================================================
+   COPY SOURCE
+============================================================ */
+async function copySource(){
+  let html;
+  try {
+    html = buildUpdatedSource();
+  } catch (e){
+    toast('خطا: ' + e.message);
+    console.error(e);
+    return;
+  }
+  
+  // Try clipboard first (more reliable for large content)
+  try {
+    await navigator.clipboard.writeText(html);
+    dirty = false;
+    updateDirtyPill();
+    toast('کد کامل کپی شد ✓');
+    return;
+  } catch (e){
+    console.warn('clipboard failed:', e);
+  }
+  
+  // Fallback: textarea + execCommand
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = html;
+    ta.style.position = 'fixed';
+    ta.style.top = '0';
+    ta.style.left = '0';
+    ta.style.width = '1px';
+    ta.style.height = '1px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    if (ok){
+      dirty = false;
+      updateDirtyPill();
+      toast('کد کامل کپی شد ✓');
+    } else {
+      toast('کپی ناموفق بود');
+    }
+  } catch (e){
+    toast('کپی ناموفق بود');
+    console.error(e);
+  }
+}
+
+/* ============================================================
+   BIND SETTINGS
+============================================================ */
+function bindSettings(){
+  const editTexts = $('#btnEditTexts');
+  if (editTexts) editTexts.addEventListener('click', openTextsModal);
+  
+  const copy = $('#btnCopyCode');
+  if (copy) copy.addEventListener('click', copySource);
+  
+  const themeSeg = $('#themeSeg');
+  if (themeSeg) themeSeg.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-val]');
+    if (!btn) return;
+    settings.theme = btn.dataset.val;
+    applyTheme();
+    renderSettingsValues();
+  });
+  
+  const pd = $('#setPersianDigits');
+  if (pd) pd.addEventListener('change', e => {
+    settings.persianDigits = e.target.checked;
+    renderAll();
+  });
+  
+  const sp = $('#setShowPast');
+  if (sp) sp.addEventListener('change', e => {
+    settings.showPast = e.target.checked;
+    renderToday();
+  });
+  
+  const ws = $('#setWeekStart');
+  if (ws) ws.addEventListener('change', e => {
+    settings.weekStart = Number(e.target.value);
+    renderWeek();
+  });
+  
+  const reload = $('#btnReload');
+  if (reload) reload.addEventListener('click', () => {
+    if (!confirm('تغییرات ذخیره‌نشده لغو شوند؟')) return;
+    initData();
+    applyTheme();
+    applyBrandTexts();
+    renderAll();
+    renderSettings();
+    dirty = false;
+    updateDirtyPill();
+    toast('به حالت فایل بازنشانی شد');
+  });
+  
+  const reset = $('#btnReset');
+  if (reset) reset.addEventListener('click', () => {
+    if (!confirm('همه کلاس‌ها حذف شوند؟')) return;
+    classes = [];
+    markDirty();
+    renderAll();
+    toast('همه کلاس‌ها حذف شدند');
+  });
+}
+
+/* ============================================================
+   FAB
+============================================================ */
+function updateFab(){
+  const fab = $('#fabAdd');
+  if (!fab) return;
+  fab.classList.toggle('show', currentView === 'manage');
+}
+
+/* ============================================================
+   EVENTS
+============================================================ */
+function bindEvents(){
+  document.addEventListener('click', e => {
+    const v = e.target.closest('[data-view]');
+    if (v){ switchView(v.dataset.view); return; }
+    
+    if (e.target.closest('#addClassBtn') || e.target.closest('#fabAdd')){
+      openModal(null); return;
+    }
+    
+    const ed = e.target.closest('[data-edit]');
+    if (ed){ openModal(ed.dataset.edit); return; }
+    
+    const del = e.target.closest('[data-del]');
+    if (del){ deleteClass(del.dataset.del); return; }
+    
+    const dupe = e.target.closest('[data-dupe]');
+    if (dupe){ duplicateClass(dupe.dataset.dupe); return; }
+  });
+  
+  const dirtyPill = $('#dirtyPill');
+  if (dirtyPill) dirtyPill.addEventListener('click', () => switchView('settings'));
+  
+  document.addEventListener('click', e => {
+    const dot = e.target.closest('#colorPicker .color-dot');
+    if (!dot) return;
+    selectedColor = Number(dot.dataset.color);
+    updateColorPicker();
+  });
+  
+  const cform = $('#classForm');
+  if (cform) cform.addEventListener('submit', submitForm);
+  const mClose = $('#modalClose');
+  if (mClose) mClose.addEventListener('click', closeModal);
+  const mCancel = $('#modalCancel');
+  if (mCancel) mCancel.addEventListener('click', closeModal);
+  const mBackdrop = $('#modalBackdrop');
+  if (mBackdrop) mBackdrop.addEventListener('click', e => {
+    if (e.target === mBackdrop) closeModal();
+  });
+  
+  const tform = $('#textsForm');
+  if (tform) tform.addEventListener('submit', submitTextsForm);
+  const tClose = $('#textsClose');
+  if (tClose) tClose.addEventListener('click', closeTextsModal);
+  const tCancel = $('#textsCancel');
+  if (tCancel) tCancel.addEventListener('click', closeTextsModal);
+  const tBackdrop = $('#textsBackdrop');
+  if (tBackdrop) tBackdrop.addEventListener('click', e => {
+    if (e.target === tBackdrop) closeTextsModal();
+  });
+  
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape'){
+      if ($('#modalBackdrop').classList.contains('open')) closeModal();
+      if ($('#textsBackdrop').classList.contains('open')) closeTextsModal();
+    }
+  });
+  
+  window.addEventListener('beforeunload', e => {
+    if (dirty){ e.preventDefault(); e.returnValue = ''; return ''; }
+  });
+  
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+    if (settings.theme === 'auto') applyTheme();
+  });
+  
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's'){
+      e.preventDefault();
+      copySource();
+    }
+  });
+  
+  setInterval(() => {
+    if (currentView === 'today') renderToday();
+    if (currentView === 'week')  renderWeek();
+  }, 60000);
+}
+
+function switchView(view){
+  currentView = view;
+  $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+  $$('.bnav-btn').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+  $$('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view));
+  
+  if (view === 'today') renderToday();
+  if (view === 'week')  renderWeek();
+  if (view === 'manage') renderManage();
+  if (view === 'settings') renderSettings();
+  
+  updateFab();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+function init(){
+  initData();
+  applyTheme();
+  applyBrandTexts();
+  buildDaySelect();
+  bindEvents();
+  renderAll();
+  updateFab();
+}
+
+init();
+</script>
+</body>
+</html>
